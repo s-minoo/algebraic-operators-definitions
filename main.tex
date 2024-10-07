@@ -1,0 +1,82 @@
+\documentclass[12 pt]{article}        	%sets the font to 12 pt and says this is an article (as opposed to book or other documents)
+\usepackage{amsfonts, amssymb, amsmath, amsthm}					% packages to get the fonts, symbols used in most math
+\usepackage[noabbrev]{cleveref}
+  
+%\usepackage{setspace}               		% Together with \doublespacing below allows for doublespacing of the document
+
+\oddsidemargin=-0.5cm                 	% These three commands create the margins required for class
+\setlength{\textwidth}{6.5in}         	%
+\addtolength{\voffset}{-20pt}        		%
+\addtolength{\headsep}{25pt}           	%
+
+
+
+\pagestyle{myheadings}                           	% tells LaTeX to allow you to enter information in the heading
+\markright{Sitt Min Oo\hfill October 7, 2024 \hfill} 	% put your name instead of Murphy Waggoner 
+																									% and put the proposition number from the book
+                                                	% LaTeX will put your name on the left, the date the paper 
+                                                	% is generated in the middle 
+                                                 	% and a page number on the right
+
+%%%%%%%%%%% Put your definitions here
+\newcounter{defn}
+\newcounter{exmp}
+\newcounter{thm}
+
+\theoremstyle{definition}
+\newtheorem{definition}[defn]{Definition}
+
+
+\newtheorem{theorem}[thm]{Theorem}
+\newtheorem{example}[exmp]{Example}
+
+%%%%%%%%%%% End of definitions
+
+
+
+\newcommand{\eqn}[0]{\begin{array}{rcl}}%begin an aligned equation - allows for aligning = or inequalities.  Always use with $$ $$
+\newcommand{\eqnend}[0]{\end{array} }  	%end the aligned equation
+
+\newcommand{\qed}[0]{$\square$}        	% make an unfilled square the default for ending a proof
+
+%\doublespacing                         	% Together with the package setspace above allows for doublespacing of the document
+
+\begin{document}												% end of preamble and beginning of text that will be printed
+\section{Definitions}%
+\label{sec:definitions}
+
+
+\begin{definition}
+	An infinite set $F$ consists of \emph{fragment variables} $f$.
+    $F$ is pairwise disjoint with the sets $V$ (SPARQL variables), $I$ (IRIs),
+    $B$ (blank nodes), and $L$ (literals).
+    There also exists one special fragment variable $f_0 \in F$ that is
+    designated as the default fragment variable.
+	\label{def:fragments}
+\end{definition}
+
+
+\begin{definition}
+	Let $\Omega$ be a multiset of solution mappings, and $P(\Omega)$ be the
+	powerset of the multiset $\Omega$.
+    A \emph{mapping tuple} $\xi^\Omega$ is a partial function which maps
+    \emph{fragment variables} to the sub-multisets of the multiset of solution
+    mapping $\Omega$, and it is defined as: $\xi^{\Omega}: F \rightarrow
+    P(\Omega)$.
+    Let $\Xi$ be a multiset of mapping tuples which we will use as the notation
+    throughout the rest of the definitions.
+    Note, from now on, we will use the notation $\omega$, as an element of the
+    powerset $P(\Omega)$ with $\omega \in P(\Omega)$, to make the definitions
+    of the algebraic operators more accessible to read. 
+    Here, $\omega$ is also a multiset of solution mappings.
+    Combined with Definition~\ref{def:fragments} on the default fragment
+    variable $f_0$, there is always a mapping tuple 
+    $\xi^{\Omega}_{0}: f_0 = \omega $ with $\omega \in P(\omega)$.
+	\label{def:mapping_tuple}
+\end{definition}
+
+
+
+
+
+\end{document}

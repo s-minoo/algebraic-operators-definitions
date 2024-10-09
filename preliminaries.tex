@@ -10,7 +10,8 @@ $\symAllLiterals$ (literals), and $\symFragSet$ (\fragment{} names).
 We define a set of terms $\symTermSet$ as $\symTermSet = \symAllIRIs \cup
 	\symAllBNodes \cup \symAllLiterals$.
 Furthermore, we also define a special value $\error$ with
-$\error \notin (\symTermSet \cup \symAttrUniverse \cup \symFragSet)$.
+$\error \notin (\symTermSet \cup \symAttrUniverse \cup \symFragSet)$,
+and we let $\fragAttr \in \symAttrUniverse$ be a designed attribute called the \emph{fragment attribute}.
 
 
 
@@ -45,3 +46,17 @@ follows:
 	\label{def:mapping_relation}
 \end{definition}
 
+
+\begin{definition}
+	A \emph{mapping relation} is a tuple $\mappingRel$, where
+	$\symAttrSubSet \subset \symAttrUniverse$ is a finite, non-empty set of attributes
+	such that $\fragAttr \in \symAttrSubSet$ and
+	$\mappingInst$ is a multiset of so-called \emph{mapping tuples}
+	where each such mapping tuple, $\mappingTuple$, is a partial function
+	$\mappingTuple: \symAttrUniverse \rightarrow \symFragSet \cup \symTermSet \cup
+		\{\error\} $ such that $\fctMappingTuple{\fragAttr} \in \symFragSet$ and
+	$\fctMappingTuple{a} \in \symTermSet \cup \{\error\}$ for all $a \in \symAttrSubSet \setminus \{\fragAttr\}$.
+	We call $\symAttrSubSet$ the \emph{schema} of the mapping relation
+	and $\mappingInst$ is the \emph{instance} of the mapping relation.
+	\label{def:mapping_relation}
+\end{definition}

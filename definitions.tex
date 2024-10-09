@@ -1,0 +1,40 @@
+\section{Definitions}%
+\label{sec:definitions}
+\begin{definition}
+	Given a solution mapping $\mu$.
+	A \emph{mapping tuple}, $\xi$, is an extension on the solution mapping
+	$\mu$ with a special variable, $v_{fragment}$, bound to a Literal value,
+	with the condition that $v_{fragment} \notin V$.
+	The special variable $v_{fragment}$ is used to store the information
+	about the \emph{fragment} a solution mapping belongs to.
+	A \emph{fragment}, in the context of this work, is an identifier used for
+	grouping the mapping tuples.
+    Since mapping tuple is an extension on top of the existing definition of
+    solution mappings, in Section~\ref{sec:preliminaries}, the operations
+    defined in Section~\ref{sec:preliminaries} also applies to the mapping
+    tuple.
+	\todoi{TODO: Check the following sentence again to make sure it can be called as a \emph{relation}}
+	Finally, a relation denoted as $\Xi$, is defined as a relation containing
+	a multi-set of mapping tuples.
+	\label{def:mapping_tuple}
+\end{definition}
+
+
+\newpage
+
+\todoi{TODO: Rework the following definitions of iterators according to the
+discussion}
+\begin{definition}
+	An \textbf{iterator}, $I$, consists of one or more \textbf{fields},
+	$\phi^{I}$, an iterator \emph{path}, and a \emph{reference formulation}.
+	An iterator extracts a list of records from the data source according to the
+	given iterator \emph{path}~\cite{delva2021RMLFields}, while the
+	\emph{reference formulation} determines the data format~\cite{dimou_ldow_2014}
+	of the data source.
+	This is the entry point to further extract nested data structures with \emph{fields}.
+	\label{def:iterator}
+\end{definition}
+
+
+
+

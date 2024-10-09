@@ -1,0 +1,28 @@
+\section{Preliminaries}
+\label{sec:preliminaries}
+In this section, we provide a preliminary definition of terms which will be
+used throughout the rest of this paper for use in the definitions of
+the algebraic mapping operators.
+
+We assume the following pairwise disjoint countably infinite sets: $\symAttrSet$
+(attribute names), $\symAllIRIs$ (IRIs), $\symAllBNodes$ (blank nodes),
+$\symAllLiterals$ (literals), and $\symFragSet$ (\fragment{} names).
+We define a set of terms $\symTermSet$ as $\symTermSet = \symAllIRIs \cup
+	\symAllBNodes \cup \symAllLiterals$.
+Furthermore, we also define a special value $\error$ with 
+$\error \notin (\symTermSet \cup \symAttrSet \cup \symFragSet)$. 
+
+
+The \emph{schema of a mapping relation} is a tuple $\schemaTuple$, where $A
+\subset \symAttrSet$ is a finite, non-empty set of attributes and $\fragAttr
+\notin A$. 
+An \emph{instance} for a schema of mapping relation, $\schemaTuple$, is a
+multiset of so-called \emph{mapping tuples} where each such mapping tuple,
+$\mappingTuple$, is a partial function 
+$\mappingTuple: \symAttrSet \rightarrow \symFragSet \cup \symTermSet \cup
+\{\error\} $ such that $\fctMappingTuple{\fragAttr} \in \symFragSet$ and 
+$\forall a \in A. \fctMappingTuple{a} \in \symTermSet \cup \{\error\}$. 
+A \emph{mapping relation} is a pair $\mappingRel$, where $\schema$ is a schema
+of a mapping relation and $\mappingInst$ is an instance of $\schema$. 
+
+

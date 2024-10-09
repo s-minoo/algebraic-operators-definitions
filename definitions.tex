@@ -1,39 +1,34 @@
-\section{Definitions}%
-\label{sec:definitions}
+\section{Algebraic Mapping Operators}%
+\label{sec:algebraic_mapping_operators}
+
+\subsection{Source Operator}%
+\label{sub:source_operator}
+\todoi{TODO: Define source operator using mapping relations}
+
+
+
+
+\subsection{Projection Operator}%
+\label{sub:projection_operator}
+
 \begin{definition}
-	Given a solution mapping $\mu$.
-	A \emph{mapping tuple}, $\xi$, is an extension on the solution mapping
-	$\mu$ with a special variable, $v_{fragment}$, bound to a Literal value,
-	with the condition that $v_{fragment} \notin V$.
-	The special variable $v_{fragment}$ is used to store the information
-	about the \emph{fragment} a solution mapping belongs to.
-	A \emph{fragment}, in the context of this work, is an identifier used for
-	grouping the mapping tuples.
-    Since mapping tuple is an extension on top of the existing definition of
-    solution mappings, in Section~\ref{sec:preliminaries}, the operations
-    defined in Section~\ref{sec:preliminaries} also applies to the mapping
-    tuple.
-	\todoi{TODO: Check the following sentence again to make sure it can be called as a \emph{relation}}
-	Finally, a relation denoted as $\Xi$, is defined as a relation containing
-	a multi-set of mapping tuples.
-	\label{def:mapping_tuple}
+    Given a mapping relation $\mappingRel$, with $\schema = \schemaTuple$, and
+    a \emph{non-empty} set of variables $\symProjSet \subset \symAttrSubSet$. 
+    The \textbf{projection} operator changes the schema of the mapping
+    relation, $\schemaTuple$,  by restricting  attributes in $\symAttrSubSet$ to those in
+    $\symProjSet \cap \symAttrSubSet$. In other words, it creates a new mapping relation
+    with the projected schema, $\schema_{projected}$ that is represented by the
+    tuple $(\symProjSet \cap \symAttrSubSet, \fragAttr)$
+	\label{def:projection}
 \end{definition}
 
-
-\newpage
-
-\todoi{TODO: Rework the following definitions of iterators according to the
-discussion}
-\begin{definition}
-	An \textbf{iterator}, $I$, consists of one or more \textbf{fields},
-	$\phi^{I}$, an iterator \emph{path}, and a \emph{reference formulation}.
-	An iterator extracts a list of records from the data source according to the
-	given iterator \emph{path}~\cite{delva2021RMLFields}, while the
-	\emph{reference formulation} determines the data format~\cite{dimou_ldow_2014}
-	of the data source.
-	This is the entry point to further extract nested data structures with \emph{fields}.
-	\label{def:iterator}
-\end{definition}
+\begin{equation}
+	\begin{split}
+        \text{Project}(\schema, \symProjSet) &= ( \symProjSet \cap \symAttrSubSet , \fragAttr) \\
+        \text{Project}(\mappingRel, \symProjSet)    & =  (\text{Project}(\schema, \symProjSet), \mappingInst)
+    \end{split}
+	\label{eq:projection}
+\end{equation}
 
 
 

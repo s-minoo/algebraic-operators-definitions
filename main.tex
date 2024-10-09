@@ -1,7 +1,15 @@
-\documentclass[12 pt]{article}        	%sets the font to 12 pt and says this is an article (as opposed to book or other documents)
+\documentclass[12 pt, dvipsnames]{article}        	%sets the font to 12 pt and says this is an article (as opposed to book or other documents)
 \usepackage{amsfonts, amssymb, amsmath, amsthm}					% packages to get the fonts, symbols used in most math
-\usepackage[noabbrev]{cleveref}
+%\usepackage{dcolumn}
+\usepackage[english]{babel}
+\usepackage{latexsym}
+\DeclareRobustCommand{\ojoin}{\rule[0.10ex]{.3em}{.4pt}\llap{\rule[1.40ex]{.3em}{.4pt}}}
+\newcommand{\leftouterjoin}{\mathrel{\ojoin\mkern-6.5mu\Join}}
+\newcommand{\rightouterjoin}{\mathrel{\Join\mkern-6.5mu\ojoin}}
+\newcommand{\fullouterjoin}{\mathrel{\ojoin\mkern-6.5mu\Join\mkern-6.5mu\ojoin}}
+
   
+\input{_reviewing.tex}
 %\usepackage{setspace}               		% Together with \doublespacing below allows for doublespacing of the document
 
 \oddsidemargin=-0.5cm                 	% These three commands create the margins required for class
@@ -42,41 +50,93 @@
 %\doublespacing                         	% Together with the package setspace above allows for doublespacing of the document
 
 \begin{document}												% end of preamble and beginning of text that will be printed
+
+
+\section{Preliminaries}
+\label{sec:preliminaries}
+Given the following pairwise disjoint infinite sets: $V$ (variables), $I$
+(IRIs), $B$ (RDF blank nodes), and $L$ (RDF literals).
+Following the definitions in SPARQL,
+a \emph{solution mapping} $\mu$ is a mapping from variables $V$ to
+associated data values of type $I \cup B \cup L$.
+More formally, it is defined as a partial function $\mu: V \rightarrow T$, with
+$T = I \cup B \cup L$.
+
+Two solution mappings $\mu_1$ and $\mu_2$ are \textit{compatible}, if and only if,
+$\forall v \in dom(\mu_1) \cap dom(\mu_2), \mu_{1}(v) = \mu_{2}(v)$; extending
+this, the union of $\mu_1$ and $\mu_2$, $\mu_1 \cup \mu_2$, is also a
+solution mapping.
+Given two multisets of solution mappings $\Omega_1$ and $\Omega_2$, SPARQL
+algebra~\cite{Perez2009SPARQLSemantics} defined the \textit{join} ($\Join$),
+the \textit{union} ($\cup$), and the \textit{difference}  ($ \setminus $)
+between $\Omega_1$ and $\Omega_2$ as follows~\cite{Perez2009SPARQLSemantics}:
+
+\begin{align}
+	\label{eq:sparql_union}
+	\Omega_1 \cup \Omega_2           & = \{ \mu \  |\   \mu \in \Omega_1 \text{ or }  \mu \in \Omega_2\}                                                        \\
+	\label{eq:sparql_join}
+	\Omega_1 \Join \Omega_2          & = \{ \mu_1 \cup \mu_2 \ | \  \mu_1 \in \Omega_1, \mu_2 \in \Omega_2 \text{ and } \mu_1, \mu_2 \text{ are compatible. }\} \\
+	\label{eq:sparql_diff}
+	\Omega_1 \setminus \Omega_2      & = \{ \mu_1 \in \Omega_1 \ | \ \forall \mu_2 \in \Omega_2, \mu_1 \text{ and } \mu_2 \text{ are not compatible. }\}       
+\end{align}
+
+
+
+When writing sequences of the join and the union operators, parentheses can be
+avoided since both operators are associative and
+commutative~\cite{Perez2009SPARQLSemantics}:
+
+\begin{align}
+	\label{eq:asso_comm}
+	\Omega_1 \Join \Omega_2 \cup \Omega_3 = \Omega_1 \Join (\Omega_2 \cup \Omega_3)
+\end{align}
+
+
+
 \section{Definitions}%
 \label{sec:definitions}
-
-
 \begin{definition}
-	An infinite set $F$ consists of \emph{fragment variables} $f$.
-    $F$ is pairwise disjoint with the sets $V$ (SPARQL variables), $I$ (IRIs),
-    $B$ (blank nodes), and $L$ (literals).
-    There also exists one special fragment variable $f_0 \in F$ that is
-    designated as the default fragment variable.
-	\label{def:fragments}
-\end{definition}
-
-
-\begin{definition}
-	Let $\Omega$ be a multiset of solution mappings, and $P(\Omega)$ be the
-	powerset of the multiset $\Omega$.
-    A \emph{mapping tuple} $\xi^\Omega$ is a partial function which maps
-    \emph{fragment variables} to the sub-multisets of the multiset of solution
-    mapping $\Omega$, and it is defined as: $\xi^{\Omega}: F \rightarrow
-    P(\Omega)$.
-    Let $\Xi$ be a multiset of mapping tuples which we will use as the notation
-    throughout the rest of the definitions.
-    Note, from now on, we will use the notation $\omega$, as an element of the
-    powerset $P(\Omega)$ with $\omega \in P(\Omega)$, to make the definitions
-    of the algebraic operators more accessible to read. 
-    Here, $\omega$ is also a multiset of solution mappings.
-    Combined with Definition~\ref{def:fragments} on the default fragment
-    variable $f_0$, there is always a mapping tuple 
-    $\xi^{\Omega}_{0}: f_0 = \omega $ with $\omega \in P(\omega)$.
+	Given a solution mapping $\mu$.
+	A \emph{mapping tuple}, $\xi$, is an extension on the solution mapping
+	$\mu$ with a special variable, $v_{fragment}$, bound to a Literal value,
+	with the condition that $v_{fragment} \notin V$.
+	The special variable $v_{fragment}$ is used to store the information
+	about the \emph{fragment} a solution mapping belongs to.
+	A \emph{fragment}, in the context of this work, is an identifier used for
+	grouping the mapping tuples.
+    Since mapping tuple is an extension on top of the existing definition of
+    solution mappings, in Section~\ref{sec:preliminaries}, the operations
+    defined in Section~\ref{sec:preliminaries} also applies to the mapping
+    tuple.
+	\todoi{TODO: Check the following sentence again to make sure it can be called as a \emph{relation}}
+	Finally, a relation denoted as $\Xi$, is defined as a relation containing
+	a multi-set of mapping tuples.
 	\label{def:mapping_tuple}
 \end{definition}
 
 
+\newpage
 
+\todoi{TODO: Rework the following definitions of iterators according to the
+discussion}
+\begin{definition}
+	An \textbf{iterator}, $I$, consists of one or more \textbf{fields},
+	$\phi^{I}$, an iterator \emph{path}, and a \emph{reference formulation}.
+	An iterator extracts a list of records from the data source according to the
+	given iterator \emph{path}~\cite{delva2021RMLFields}, while the
+	\emph{reference formulation} determines the data format~\cite{dimou_ldow_2014}
+	of the data source.
+	This is the entry point to further extract nested data structures with \emph{fields}.
+	\label{def:iterator}
+\end{definition}
+
+
+
+
+
+
+\bibliographystyle{ios1}           % Style BST file.
+\bibliography{bibliography}        % Bibliography file (usually '*.bib')
 
 
 \end{document}

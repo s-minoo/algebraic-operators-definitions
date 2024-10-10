@@ -11,6 +11,19 @@
 \subsection{Projection Operator}%
 \label{sub:projection_operator}
 
+
+{\color{blue}
+\begin{definition}
+	Let $r = \mappingRel$ be a mapping relation
+	and
+	$\symProjSet \subseteq \symAttrSubSet \setminus \{\fragAttr\}$ be a non-empty subset of the attributes of $r$.
+	The \emph{$\symProjSet$-specific projection of $r$}, denoted by $\text{Project}^\symProjSet(r)$, is the mapping relation $(\symAttrSubSet', \mappingInst')$ such that
+	$\symAttrSubSet' = \symProjSet \cup \{\fragAttr\}$
+	and $\mappingInst' = 
+	\{ \mappingTuple[\symAttrSubSet'] \ | \ \mappingTuple \in \mappingInst \}$.
+\end{definition}
+}
+
 \begin{definition}
 	Given a mapping relation $\mappingRel$, and a \emph{non-empty} set of
 	variables \break $\symProjSet \subseteq \symAttrSubSet \setminus \{\fragAttr\}$.

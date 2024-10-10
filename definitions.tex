@@ -12,20 +12,25 @@
 \label{sub:projection_operator}
 
 \begin{definition}
-	Given a mapping relation $\mappingRel$, with $\schema = \schemaTuple$, and
-	a \emph{non-empty} set of variables $\symProjSet \subset \symAttrSubSet$.
-	The \textbf{projection} operator changes the schema of the mapping
-	relation, $\schemaTuple$,  by restricting  attributes in $\symAttrSubSet$ to those in
-	$\symProjSet \cap \symAttrSubSet$. In other words, it creates a new mapping relation
-	with the projected schema, $\schema_{projected}$ that is represented by the
-	tuple $(\symProjSet \cap \symAttrSubSet, \fragAttr)$
+	Given a mapping relation $\mappingRel$, and a \emph{non-empty} set of
+	variables \break $\symProjSet \subseteq \symAttrSubSet \setminus \{\fragAttr\}$.
+	The \textbf{projection} operator restricts the attributes in
+	$\symAttrSubSet$ to $\mappingTuple[\symProjSet \cup \{\fragAttr\}]$
+	and for all mapping tuples~$\mappingTuple$ in $\mappingInst$, it creates
+	mapping tuples~$\mappingTuple'$ such that $\mappingTuple' = \mappingTuple[\symProjSet
+			\cup \{\fragAttr\}]$.
+	The restricted mapping tuples form a set of mapping tuples~$\mappingInst'$.
+	The projection operator creates a new mapping relation $(\symProjSet \cup
+		\{\fragAttr\}, \mappingInst'$).
 	\label{def:projection}
 \end{definition}
 
 \begin{equation}
 	\begin{split}
-		\text{Project}(\schema, \symProjSet)     & = ( \symProjSet \cap \symAttrSubSet , \fragAttr)        \\
-		\text{Project}(\mappingRel, \symProjSet) & =  (\text{Project}(\schema, \symProjSet), \mappingInst)
+		\mappingInst' & =
+        \{\mappingTuple' \ | \ \forall \mappingTuple \in \mappingInst.\ \mappingTuple[\symProjSet \cup\{\fragAttr\}] = \mappingTuple' \} \\
+		\text{Project}(\mappingRel, \symProjSet)  & =  ( \symProjSet \cup \{\fragAttr\} ,
+		\mappingInst' )
 	\end{split}
 	\label{eq:projection}
 \end{equation}
@@ -67,7 +72,7 @@
 \begin{equation}
 	\begin{split}
 		\text{Rename}(\symAttrSubSet, s_{aliased}) & = \{ s_{aliased} \ \Vert \ a \ |\ \forall a \in \symAttrSubSet.\ s_{aliased} \ \Vert \ a \notin \symAttrSubSet \} \\
-		\text{Rename}(\schema, s_{aliased})        & = (\text{Rename}(\symAttrSubSet, s_{alaised}), \fragAttr)                                                        \\
+		\text{Rename}(\schema, s_{aliased})        & = (\text{Rename}(\symAttrSubSet, s_{alaised}), \fragAttr)                                                         \\
 		\text{Rename}(\mappingRel, s_{aliased})    & =  (\text{Rename}(\schema, s_{aliased}), \mappingInst)
 	\end{split}
 	\label{eq:rename_alias}

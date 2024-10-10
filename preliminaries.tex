@@ -1,56 +1,28 @@
 \section{Preliminaries}
 \label{sec:preliminaries}
 In this section, we provide a preliminary definition of terms which will be
-used throughout the rest of this paper for use in the definitions of
+used throughout the rest of this paper in the definitions of
 the algebraic mapping operators.
 
-We assume the following pairwise disjoint countably infinite sets: $\symAttrUniverse$
-(attribute names), $\symAllIRIs$ (IRIs), $\symAllBNodes$ (blank nodes),
-$\symAllLiterals$ (literals), and $\symFragSet$ (\fragment{} names).
+We assume the following pairwise disjoint countably infinite sets:
+$\symAttrUniverse$ (attribute names), $\symAllIRIs$ (IRIs), $\symAllBNodes$
+(blank nodes), $\symAllLiterals$ (literals), and $\symFragSet$ (\fragment{}
+names).
 We define a set of terms $\symTermSet$ as $\symTermSet = \symAllIRIs \cup
 	\symAllBNodes \cup \symAllLiterals$.
 Furthermore, we also define a special value $\error$ with
 $\error \notin (\symTermSet \cup \symAttrUniverse \cup \symFragSet)$,
 and we let $\fragAttr \in \symAttrUniverse$ be a designed attribute called the \emph{fragment attribute}.
 
-
-
 Using the aforementioned sets, we define the data model on which our algebraic
 mapping operators work: \emph{a mapping relation}.
-We build up the definition of a mapping relation step-by-step as follows:
+We build up the definition of a mapping relation in two steps as follows:
+
 
 \begin{definition}
-	The \emph{schema of a mapping relation} is a tuple $\schemaTuple$, where $
-		\symAttrSubSet \subset \symAttrUniverse$ is a finite, non-empty set of attributes and
-	$\fragAttr \notin \symAttrSubSet$.
-	\label{def:mapping_schema}
-\end{definition}
-
-\begin{definition}
-	An \emph{instance} for a schema of mapping relation, $\schemaTuple$, is a
-	multiset of so-called \emph{mapping tuples} where each such mapping tuple,
-	$\mappingTuple$, is a partial function
-	$\mappingTuple: \symAttrUniverse \rightarrow \symFragSet \cup \symTermSet \cup
-		\{\error\} $ such that $\fctMappingTuple{\fragAttr} \in \symFragSet$ and
-	$\forall a \in \symAttrSubSet. \fctMappingTuple{a} \in \symTermSet \cup \{\error\}$.
-	\label{def:mapping_instance}
-\end{definition}
-
-Finally, utilizing Definition~\ref{def:mapping_schema} and
-Definition~\ref{def:mapping_instance}, we define our mapping relation as
-follows:
-\begin{definition}
-	A \emph{mapping relation} is a pair $\mappingRel$, where $\schema$ is a
-	schema of a mapping relation and $\mappingInst$ is an instance of
-	$\schema$.
-	\label{def:mapping_relation}
-\end{definition}
-
-{\color{blue}
-\begin{definition}
-	A \emph{mapping tuple} is a partial function
-	$\mappingTuple: \symAttrUniverse \rightarrow \symFragSet \cup \symTermSet \cup
-		\{\error\} $.
+	A \emph{mapping tuple} is a partial function $\mappingTuple:
+		\symAttrUniverse \rightarrow \symFragSet \cup \symTermSet \cup \{\error\}
+	$.
 \end{definition}
 
 \begin{definition}
@@ -66,6 +38,3 @@ follows:
 	\label{def:mapping_relation}
 \end{definition}
 
-Given a mapping tuple $\mappingTuple$ and a subset $A \subseteq \mathrm{dom}(\mappingTuple)$ of attributes for which $\mappingTuple$ is defined, we write $\mappingTuple[A]$ to denote the mapping tuple $\mappingTuple'$ that is the restriction of $\mappingTuple$ to $A$; i.e., $\mathrm{dom}(\mappingTuple') = A$ and $\mappingTuple'(a) = \mappingTuple(a)$ for all $a \in A$.
-
-}

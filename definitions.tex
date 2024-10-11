@@ -11,39 +11,28 @@
 \subsection{Projection Operator}%
 \label{sub:projection_operator}
 
-
-{\color{blue}
-\begin{definition}
-	Let $r = \mappingRel$ be a mapping relation
-	and
-	$\symProjSet \subseteq \symAttrSubSet \setminus \{\fragAttr\}$ be a non-empty subset of the attributes of $r$.
-	The \emph{$\symProjSet$-specific projection of $r$}, denoted by $\text{Project}^\symProjSet(r)$, is the mapping relation $(\symAttrSubSet', \mappingInst')$ such that
-	$\symAttrSubSet' = \symProjSet \cup \{\fragAttr\}$
-	and $\mappingInst' = 
-	\{ \mappingTuple[\symAttrSubSet'] \ | \ \mappingTuple \in \mappingInst \}$.
-\end{definition}
-}
+The \textbf{projection} operator restricts the mapping tuples in a mapping
+relation, $\mappingRel$, to a set of attributes $\symProjSet \subseteq
+	\symAttrSubSet$ as defined in Definition~\ref{def:tuple_restrict}.
 
 \begin{definition}
-	Given a mapping relation $\mappingRel$, and a \emph{non-empty} set of
-	variables \break $\symProjSet \subseteq \symAttrSubSet \setminus \{\fragAttr\}$.
-	The \textbf{projection} operator restricts the attributes in
-	$\symAttrSubSet$ to $\mappingTuple[\symProjSet \cup \{\fragAttr\}]$
-	and for all mapping tuples~$\mappingTuple$ in $\mappingInst$, it creates
-	mapping tuples~$\mappingTuple'$ such that $\mappingTuple' = \mappingTuple[\symProjSet
-			\cup \{\fragAttr\}]$.
-	The restricted mapping tuples form a set of mapping tuples~$\mappingInst'$.
-	The projection operator creates a new mapping relation $(\symProjSet \cup
-		\{\fragAttr\}, \mappingInst'$).
 	\label{def:projection}
+	Let $r = \mappingRel$ be a mapping relation and $\symProjSet \subseteq
+		\symAttrSubSet \setminus \{\fragAttr\}$ be a non-empty subset of the
+	attributes of $r$.
+	The \emph{$\symProjSet$-specific projection of $r$}, denoted by
+	$\text{Project}^\symProjSet(r)$, is the mapping relation $(\symAttrSubSet',
+		\mappingInst')$ such that $\symAttrSubSet' = \symProjSet \cup
+		\{\fragAttr\}$ and $\mappingInst' = \{ \mappingTuple[\symAttrSubSet'] \ | \
+		\mappingTuple \in \mappingInst \}$.
 \end{definition}
 
 \begin{equation}
 	\begin{split}
-		\mappingInst' & =
-        \{\mappingTuple' \ | \ \forall \mappingTuple \in \mappingInst.\ \mappingTuple[\symProjSet \cup\{\fragAttr\}] = \mappingTuple' \} \\
-		\text{Project}(\mappingRel, \symProjSet)  & =  ( \symProjSet \cup \{\fragAttr\} ,
-		\mappingInst' )
+		\mappingInst'                             & =
+		\{\mappingTuple' \ | \ \forall \mappingTuple \in \mappingInst.\ \mappingTuple[\symProjSet \cup\{\fragAttr\}] = \mappingTuple' \} \\
+		\symAttrSubSet'                           & =  \symProjSet \cup \{\fragAttr\}                                                    \\
+		\text{Project}^{\symProjSet}(\mappingRel) & =  ( \symAttrSubSet', \mappingInst' )
 	\end{split}
 	\label{eq:projection}
 \end{equation}
@@ -52,45 +41,54 @@
 
 \subsection{Rename Operator}%
 \label{sub:rename_operator}
+Given a mapping relation $\mappingRel$, and set of pairs of attributes
+$\symRenameSet$ with $\{(a_{1}, b_{1}),..(a_{n}, b_{n})\}$ where all $a$'s and
+$b$'s are unique.
+A \textbf{rename operator} renames the attributes in the mapping relations,
+$\mappingRel$,  according to set of the pairs of attributes, $\symRenameSet$.
+It creates a new mapping relation $(\symAttrSubSet', \mappingInst')$
+such that $\symAttrSubSet'$ is a set of attributes where,
+given a pair of attributes $(a_{old},b) \in \symRenameSet$, all
+attributes $a \in \symAttrSubSet$ is replaced with $b$ if $a = a_{old}$ otherwise
+$a$ is kept in $\symAttrSubSet'$.
+For the \emph{renamed mapping tuples}~$\mappingTuple'$, it is the result of
+restricting the mapping tuple~$\mappingTuple$ to $\symAttrSubSet'$ as
+$\mappingTuple[\symAttrSubSet']$ with the condition that for each
+pair $(a,b) \in \symRenameSet$, $\mappingTuple(b) = \mappingTuple(a)$, thus,
+$\mappingTuple'$ is defined for all attributes in $\symAttrSubSet'$.
 
 \begin{definition}
-	\label{def:rename}
-	Given a set of pairs of variables $\{(a_{a1}, a_{b1})..(a_{an},a_{bn})\}
-		\in \symRenameSet$ where $a_n \in \symAttrUniverse$.
-	The \textbf{rename} operator, applied on a mapping relation $\mappingRel$,
-	renames the attributes of the schema of the mapping relation, $\schema =
-		\schemaTuple$ using the attribute pairs in $\symRenameSet$.
-	It creates a mapping relation, with a new schema containing a new non-empty
-	attribute set $\symAttrSubSet_{renamed}$ as follows:
-	$\symAttrSubSet_{renamed} = \{ a_{new} \ | \  \forall a \in \symAttrSubSet.
-		\forall (a_{old}, a_{new}) \in \symRenameSet.\ a = a_{old} \} $
-	If the rename operator is configured with an alias string $s_{alias}$
-	instead of $\symRenameSet$, the rename operator will concatenate
-	$s_{alias}$ as the prefix $\forall a \in \symAttrSubSet$ where $s_{alias} \
-		\Vert \ a \notin \symAttrSubSet$ as $s_{alias}\ \Vert \ a$.
-
+	Let $r = \mappingRel$ be a mapping relation, $\symRenameSet = \{(a,b) \in \symAttrSubSet \times \symAttrUniverse : a \neq  b \neq \fragAttr\}$
+	a non-empty countably finite set of pairs of attributes,
+	$\symRenameSet_{first} = \{ a \ | \ \forall (a,b) \in \symRenameSet \}$.
+	The \emph{$\symRenameSet$-specific rename of $r$}, denoted by $\text{Rename}^R(r)$,
+	is the mapping relation $(\symAttrSubSet', \mappingInst')$ such that:
+	$\symAttrSubSet'=  \{ a \ | \  a \in \symAttrSubSet.\ a \notin
+		\symRenameSet_{first} \}  \cup \{ b \ | \ \forall a  \in \symAttrSubSet.\
+		\exists (a_{old}, b) \in \symRenameSet.\ a = a_{old}\}$.
+	$\mappingTuple[\symAttrSubSet']$ is such that for~all~$a_{new} \in
+		\symAttrSubSet'$, if there exists $(a_{old},b) \in \symRenameSet$ and $a_{new} =
+		b$, then $\mappingTuple(b) = \mappingTuple(a_{old})$.
+	$\mappingInst' = \{ \mappingTuple' \ | \ \mappingTuple \in \mappingInst.\
+		\mappingTuple' = \mappingTuple[\symAttrSubSet'] \}$.
 \end{definition}
+
+
 
 \begin{equation}
 	\begin{split}
-		\text{Rename}(\symAttrSubSet, \symRenameSet) & =
-		\{ a_{new} \ | \  \forall a \in \symAttrSubSet.
-		\forall (a_{old}, a_{new}) \in \symRenameSet.\ a = a_{old} \}                                              \\
-		\text{Rename}(\schema, \symRenameSet)        & = (\text{Rename}(\symAttrSubSet, \symRenameSet), \fragAttr) \\
-		\text{Rename}(\mappingRel, \symRenameSet)    & = (\text{Rename}(\schema, \symRenameSet), I)
+		\symAttrSubSet'                & = \{ a \ | \  a \in \symAttrSubSet \setminus \symRenameSet_{first} \}  \cup \{ b \ | \ \forall a  \in \symAttrSubSet.\ \exists (a_{old}, b) \in \symRenameSet.\ a = a_{old}\} \\
+		\mappingTuple[\symAttrSubSet'] & = \left\{
+		\begin{array}{rcl}
+        \mappingTuple(a)       & \mbox{for} & \forall a \in \symAttrSubSet \setminus \symRenameSet_{first} \\
+            \mappingTuple(a_{old}) & \mbox{for} & \forall a_{new} \in \symAttrSubSet'.\ \exists (a_{old}, b) \in \symRenameSet.\  a_{new} = b
+		\end{array}
+		\right.                                                                                                                                                                                                        \\
+		\mappingInst'                  & = \{\mappingTuple[\symAttrSubSet'] \ | \ \mappingTuple \in \mappingInst\}                                                                                                     \\
+		\text{Rename}_{R}(\mappingRel) & = (\symAttrSubSet', \mappingInst')
 	\end{split}
 	\label{eq:rename}
 \end{equation}
-
-\begin{equation}
-	\begin{split}
-		\text{Rename}(\symAttrSubSet, s_{aliased}) & = \{ s_{aliased} \ \Vert \ a \ |\ \forall a \in \symAttrSubSet.\ s_{aliased} \ \Vert \ a \notin \symAttrSubSet \} \\
-		\text{Rename}(\schema, s_{aliased})        & = (\text{Rename}(\symAttrSubSet, s_{alaised}), \fragAttr)                                                         \\
-		\text{Rename}(\mappingRel, s_{aliased})    & =  (\text{Rename}(\schema, s_{aliased}), \mappingInst)
-	\end{split}
-	\label{eq:rename_alias}
-\end{equation}
-
 
 
 

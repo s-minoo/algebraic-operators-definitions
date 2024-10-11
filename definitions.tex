@@ -3,7 +3,55 @@
 
 \subsection{Source Operator}%
 \label{sub:source_operator}
-\todoi{TODO: Define source operator using mapping relations}
+A mapping process maps heterogeneous datasets to RDF graphs. 
+Thus, an operator needs to be defined for the generation of mapping
+relations~(Definition~\ref{def:mapping_relation}) from heterogeneous datasets
+containing heterogeneous data objects.
+
+The first step in the source operator is the generation of \emph{data objects}
+from the input dataset.
+These data objects are the result of querying the input dataset using a 
+query in the relevant \emph{data access language}.
+For example, an expression from JSONPath, a data access language, is used to
+query the JSON dataset to extract JSON data objects. 
+Furthermore, a data object can be queried again using another suitable 
+data access language. 
+Table~\ref{tab:nested_data_objects} shows such a situation where a CSV data object
+contains a JSON data object in one of its columns. 
+The nested JSON data object can be further queried using a JSONPath expression 
+to extract attributes such as \emph{phone}. 
+
+\begin{table}[thb]
+	\centering
+	\caption{A CSV data object containing a column \textbf{contact info} which has 
+    a JSON data object as value.}
+	\label{tab:nested_data_objects}
+	\begin{tabular}{lll}
+        ID  &  name & contact info \\
+		\hline
+        1 & John & \{ ``phone'': 3, ``age'': 23\} \\
+        2 & Sam & \{ ``phone'': 4, ``age'': 30\} \\
+	\end{tabular}
+\end{table}
+
+In order to make the definition of the source operator more accessible for the 
+readers, we define the different components of the source operator as follows:
+
+
+
+
+
+
+\subsubsection{Data Source}%
+\label{ssub:data_source}
+
+
+\subsubsection{Source Type}%
+\label{ssub:source_type}
+
+
+
+
 
 
 

@@ -4,12 +4,16 @@
 \newcommand{\symAttrSubSet}{A}
 \newcommand{\symProjSet}{P}
 \newcommand{\symMappingTupleSet}{M}
-\newcommand{\symTermSet}{\mathcal{T}}
+\newcommand{\symTermUniverse}{\mathcal{T}}
 \newcommand{\symAllIRIs}{\mathcal{I}} % the symbol for the set of all IRIs
 \newcommand{\symAllLiterals}{\mathcal{L}} % the symbol for the set of all literals
 \newcommand{\symAllBNodes}{\mathcal{B}} % the symbol for the set of all blank nodes
 \newcommand{\symRenameSet}{R}
 \newcommand{\symDatasetUni}{\mathcal{D}}
+\newcommand{\symDataset}{D}
+\newcommand{\symDataAccUni}{\mathcal{Q}}
+\newcommand{\symDataAcc}{Q}
+\newcommand{\symDataSeq}{D^{seq}}
 
 
 % Special values % 
@@ -22,12 +26,19 @@
 \newcommand{\mappingTuple}{t}
 \newcommand{\mappingInst}{I}
 \newcommand{\mappingRel}{(\symAttrSubSet, \mappingInst)}
+\newcommand{\queryExpr}{q}
+\newcommand{\rootIt}{rit}
+\newcommand{\cobit}{cobit}
+\newcommand{\dataObject}{d}
+\newcommand{\eval}{eval}
 
 % Functions % 
 \newcommand{\fctMappingTuple}[1]{\mappingTuple(#1)}
 \newcommand{\fctsymVars}{\mathrm{vars}} % the function that maps SPARQL expressions to the set of query variables mentioned in them
 \newcommand{\fctVars}[1]{\fctsymVars(#1)}
 \newcommand{\fctCard}[2]{\card[#1](#2)}
+\newcommand{\fctRootIt}[2]{\rootIt(#1, #2)}
+\newcommand{\fctCobit}[3]{\cobit(#1, #2, #3)}
 
 
 

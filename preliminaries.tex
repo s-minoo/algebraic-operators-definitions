@@ -8,10 +8,10 @@ We assume the following pairwise disjoint countably infinite sets:
 $\symAttrUniverse$ (attribute names), $\symAllIRIs$ (IRIs), $\symAllBNodes$
 (blank nodes), $\symAllLiterals$ (literals), and $\symFragSet$ (\fragment{}
 names).
-We define a set of terms $\symTermSet$ as $\symTermSet = \symAllIRIs \cup
+We define a set of terms $\symTermUniverse$ as $\symTermUniverse = \symAllIRIs \cup
 	\symAllBNodes \cup \symAllLiterals$.
 Furthermore, we also define a special value $\error$ with
-$\error \notin (\symTermSet \cup \symAttrUniverse \cup \symFragSet)$,
+$\error \notin (\symTermUniverse \cup \symAttrUniverse \cup \symFragSet)$,
 and we let $\fragAttr \in \symAttrUniverse$ be a designed attribute called the \emph{fragment attribute}.
 
 Using the aforementioned sets, we define the data model on which our algebraic
@@ -21,7 +21,7 @@ We build up the definition of a mapping relation in two steps as follows:
 
 \begin{definition}
 	A \emph{mapping tuple} is a partial function $\mappingTuple:
-		\symAttrUniverse \rightarrow \symFragSet \cup \symTermSet \cup \{\error\}
+		\symAttrUniverse \rightarrow \symFragSet \cup \symTermUniverse \cup \{\error\}
 	$.
 \end{definition}
 
@@ -32,7 +32,7 @@ We build up the definition of a mapping relation in two steps as follows:
 	$\mappingInst$ is a set of mapping tuples such that
 	$\mathrm{dom}(\mappingTuple) = \symAttrSubSet$ for every $\mappingTuple$ in $\mappingInst$, % i.e., each mapping tuple in $\mappingInst$ is defined for $\symAttrSubSet$
 	$\fctMappingTuple{\fragAttr} \in \symFragSet$, and
-	$\fctMappingTuple{a} \in \symTermSet \cup \{\error\}$ for all $a \in \symAttrSubSet \setminus \{\fragAttr\}$.
+	$\fctMappingTuple{a} \in \symTermUniverse \cup \{\error\}$ for all $a \in \symAttrSubSet \setminus \{\fragAttr\}$.
 	We call $\symAttrSubSet$ the \emph{schema} of the mapping relation
 	and $\mappingInst$ is the \emph{instance} of the mapping relation.
 	\label{def:mapping_relation}

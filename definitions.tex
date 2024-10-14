@@ -97,6 +97,7 @@ data objects, with the requirement that $\queryExpr$ is defined for querying
 data objects in $\symDataset$.
 There are two types of iterators defined in this work: i) \emph{root iterator},
 and ii) \emph{context-based object iterator}.
+We define them respectively as follows: 
 
 \begin{definition}
 	\label{def:root_iterator}
@@ -117,24 +118,16 @@ and ii) \emph{context-based object iterator}.
 	defined for accessing the data objects in~$\symDataset$.
 	We write $\fctCobit{\symDataset}{\dataObject}{\queryExpr}$ to denote
     the evaluation of 
-    $\eval(\dataObject, \queryExpr)\ ||\ \forall i \in \symDataset \setminus \{ \dataObject \} \ \eval(i, \queryExpr)$ such that
-    a sequence of data objects $\symDataSeq$ where $\symDataSeq =  \symDataSeq_{context} \ || \ \symDataSeq_{relative}$
-    provided that $\symDataSeq_{context} = \evalu(\dataObject, \queryExpr)$, and 
+    $\eval(\dataObject, \queryExpr)\ ||\ \forall i \in \symDataset \setminus \{ \dataObject \} \ \eval(i, \queryExpr)$
+    such that a sequence of data objects $\symDataSeq$ is generated, where 
+    $\symDataSeq =  \symDataSeq_{context} \ || \ \symDataSeq_{relative}$
+    provided that $\symDataSeq_{context} = \eval(\dataObject, \queryExpr)$, and 
     $\symDataSeq_{relative} = \forall i \in \symDataset \setminus \{ \dataObject \} \ \eval(i, \queryExpr)$.
     We denote $\symDataSeq_{context} \ || \ \symDataSeq_{relative}$ as appending the 
     two sequences $\symDataSeq_{context}$ and $\symDataSeq_{relative}$ in order.
 
 \end{definition}
 
-
-
-
-
-
-
-
-\subsubsection{Data Source}%
-\label{ssub:data_source}
 
 
 \subsubsection{Source Type}%

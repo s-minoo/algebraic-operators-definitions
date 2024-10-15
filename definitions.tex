@@ -81,10 +81,6 @@ data access language.
 		with $\iterConfig$}, denoted by
 	$\fctSourceOp{\dataSource}{\iterConfig}$, is the mapping relation
 	$\mappingRel$ derived as follows:
-	$\symAttrSubSet = \{ \attr \ | \ \forall \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}$.
-	$\mappingInst = \{\mappingTuple_{i} \}_{i=1}^{N}$ such that
-	$\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$,
-	$\mappingInst'= \{(a, \Gamma) \ | \ \forall \dataObject \in \symDataSeq_{root}.  \forall \attrQueryPair \in \symAttrQueryPairs.\ \symDataSeq = \fctCbeval{\symDataset}{\dataObject}{\queryExpr}.\ \Gamma =  \typeCast[\symDataSeq]\}$,
 \end{definition}
 
 
@@ -95,7 +91,7 @@ data access language.
         \symDataSeq_{root}& = (\dataObject_i)_{i=1}^{n} = \fctEval{\symDataset}{\queryExpr_{root}} \\
         \mappingInst^{map} &= \{(a, \Gamma, i) \ | \ \dataObject_i \in \symDataSeq_{root}.\  \forall \attrQueryPair \in \symAttrQueryPairs.\ \symDataSeq = \fctCbeval{\symDataset}{\dataObject_i}{\queryExpr}.\ \Gamma =  \typeCast[\symDataSeq]\} \\
         \mappingInst^{map}[a, i] &= \{\Gamma \ | \ (a, \Gamma, i) \in \mappingInst^{map}\}  \\ 
-        \mappingInst^{flattened} &=  \{ (a, \times \I) ??? \}
+        \mappingInst^{flattened} &=  \{ (a, \times \I) \text{???} \}
 	\end{split}
     \label{eq:source_operator}
 \end{equation}

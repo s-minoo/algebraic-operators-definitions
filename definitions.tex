@@ -1,6 +1,104 @@
 \section{Algebraic Mapping Operators}%
 \label{sec:algebraic_mapping_operators}
 
+\subsection{Source Operator}%
+\label{sub:source_operator}
+
+\subsubsection{Notations}%
+\label{ssub:notations}
+
+We assume the following pairwise disjoint countably infinite sets:
+$\symDatasetUni$ (datasets), $\symDataObjUni$ (data objects) and
+$\symDataAccUni$ (data access languages).
+
+\begin{definition}
+	\label{def:data_access_lang}
+	A data access language $\symDataAcc$ is a set of query expression, $\queryExpr$, such
+	that $\queryExpr \in \symDataAcc$, and $\symDataAcc \in \symDataAccUni$.
+\end{definition}
+
+
+\begin{definition}
+	\label{def:dataset}
+	A dataset, $\symDataset$,  is a set of data objects~$\dataObject$ such that
+	$\dataObject \in \symDataObjUni$, $\symDataset \in \symDatasetUni$, and
+	$\dataObject \in \symDataset$.
+\end{definition}
+
+Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
+entity that could be queried using a query expression to extract
+one or more data objects \textbf{which can, in turn, be accessible by different data access languages}.
+For example, a JSON object is considered a data object with JSONPath as the data
+access language, and it can be further queried using JSONPath expressions to
+extract JSON arrays (also data objects) or a JSON field containing a string
+representation of CSV rows, which can be further queried using a CSV specific
+data access language.
+
+
+
+
+
+\subsubsection{Source Type}%
+\label{ssub:source_type}
+
+\begin{definition}
+	\label{def:source_type}
+	A source type is a tuple $\sourceType = \sourceTypeTuple$ such that
+	$\symSetDataset \subset \symDatasetUni$, $\symDataAcc \in \symDataAccUni$.
+	We define two partial functions $\eval: \symSetDataset \times \symDataAcc \rightarrow \symDataSeq$
+	and $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeq $
+	with $\symDataSeq$ a sequence of data objects.
+
+\end{definition}
+
+
+\begin{definition}
+	\label{def:data_source}
+	A data source is a tuple, $\dataSource = \dataSourceTuple$ such that $\symDataset$ is
+	a dataset containing a set of data objects~$\dataObject$, and $\sourceType$ a
+	source type (Definition~\ref{def:source_type})
+\end{definition}
+
+
+\begin{definition}
+	\label{def:cast_function}
+	A \textbf{type-cast} function is a partial function,
+	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals \cup \{\error\}$.
+    For ease of reading, we denote 
+    $\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}$
+	provided that $\symDataSeqCard{m}$ is a sequence, with cardinality $m$, of data objects.
+\end{definition}
+
+\begin{definition}
+	\label{def:source_operator}
+	Let $\sourceType=\sourceTypeTuple$ be a source type,
+	$\dataSource = \dataSourceTuple$ be a data source (Definition~\ref{def:data_source}),
+	$\iterConfig = \iterConfigTuple$ be the source type configurations,
+	and  $\symAttrQueryPairs: \symAttrSubSet \times \symDataAcc$ be the set of
+	pairs $\attrQueryPair \in \symAttrQueryPairs$.
+	The \emph{generation of mapping relations from the source~$\dataSource$ configured
+		with $\iterConfig$}, denoted by
+	$\fctSourceOp{\dataSource}{\iterConfig}$, is the mapping relation
+	$\mappingRel$ derived as follows:
+	$\symAttrSubSet = \{ \attr \ | \ \forall \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}$.
+	$\mappingInst = \{\mappingTuple_{i} \}_{i=1}^{N}$ such that
+	$\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$,
+	\break
+    $\mappingInst'= \{(a, \Gamma) \ | \ \forall \dataObject \in \symDataSeq_{root}.  \forall \attrQueryPair \in \symAttrQueryPairs.\ \symDataSeq = \fctCbeval{\symDataset}{\dataObject}{\queryExpr}.\ \Gamma =  \typeCast[\symDataSeq]\}$,
+
+
+
+
+
+
+\end{definition}
+
+
+
+
+
+
+
 \subsection{Projection Operator}%
 \label{sub:projection_operator}
 

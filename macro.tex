@@ -11,17 +11,20 @@
 \newcommand{\symRenameSet}{R}
 \newcommand{\symDatasetUni}{\mathcal{D}}
 \newcommand{\symDataset}{D}
+\newcommand{\symSetDataset}{\symDataset^{sub}}
+\newcommand{\symDataObjUni}{\mathcal{O}}
 \newcommand{\symDataAccUni}{\mathcal{Q}}
-\newcommand{\symDataAcc}{Q}
+\newcommand{\symDataAcc}{L}
 \newcommand{\symDataSeq}{D^{seq}}
+\newcommand{\symDataSeqCard}[1]{D^{seq,#1}}
+\newcommand{\symAttrQueryPairs}{\mathbb{P}}
 
 
 % Special values % 
 \newcommand{\card}{card}
 \newcommand{\fragAttr}{a_\mathrm{frag}}
+\newcommand{\attr}{a}
 \newcommand{\fragment}[0]{fragment}
-\newcommand{\schema}{s}
-\newcommand{\schemaTuple}{(\symAttrSubSet, \fragAttr)}
 \newcommand{\error}{\epsilon}
 \newcommand{\mappingTuple}{t}
 \newcommand{\mappingInst}{I}
@@ -31,6 +34,19 @@
 \newcommand{\cobit}{cobit}
 \newcommand{\dataObject}{d}
 \newcommand{\eval}{eval}
+\newcommand{\cbeval}{cbeval}
+\newcommand{\sourceType}{s_{type}}
+\newcommand{\sourceTypeTuple}{(\symSetDataset, \symDataAcc, \eval, \cbeval)}
+\newcommand{\dataSource}{s}
+\newcommand{\dataSourceTuple}{(\symDataset, \sourceType)}
+\newcommand{\iterConfig}{\mathbb{C}}
+\newcommand{\iterConfigTuple}{(\queryExpr_{root}, \symAttrQueryPairs)}
+\newcommand{\sourceOp}{Source}
+\newcommand{\sourceOpTuple}{(\dataSource, \iterConfig)}
+\newcommand{\attrQueryPair}{(\attr, \queryExpr)}
+\newcommand{\typeCast}{cast}
+\newcommand{\length}{len}
+
 
 % Functions % 
 \newcommand{\fctMappingTuple}[1]{\mappingTuple(#1)}
@@ -39,6 +55,13 @@
 \newcommand{\fctCard}[2]{\card[#1](#2)}
 \newcommand{\fctRootIt}[2]{\rootIt(#1, #2)}
 \newcommand{\fctCobit}[3]{\cobit(#1, #2, #3)}
+\newcommand{\fctEval}[2]{\eval(#1,#2)}
+\newcommand{\fctEvalLang}[3]{\eval^{#3}(#1,#2)}
+\newcommand{\fctCbeval}[3]{\cbeval(#1,#2,#3)}
+\newcommand{\fctCbevalLang}[4]{\cbeval^{#4}(#1,#2,#3)}
+\newcommand{\fctSourceOp}[2]{\text{\sourceOp}^{#2}(#1)}
+\newcommand{\fctTypeCast}[1]{\typeCast(#1)}
+\newcommand{\fctLength}[1]{\length(#1)}
 
 
 

@@ -102,13 +102,13 @@ We define them respectively as follows:
 
 \begin{definition}
 	\label{def:root_iterator}
-	Given a data object~$\dataObject^{root}$, and a query expression $\queryExpr$
-	defined for querying the data object~$\dataObject^{root}$.
-	We write $\fctRootIt{\dataObject^{root}}{\queryExpr}$ to denote the
-	evaluation of $\eval(\dataObject^{root}, \queryExpr)$ such that
-	a sequence of data objects~$\symDataSeq$ is generated, and  $\symDataSeq =
-		(\dataObject_1, ... , \dataObject_n)$, where $\dataObject_n$ is the
-	$n$-iteration of evaluating $\eval(\dataObject^{root}, \queryExpr)$.
+	Given a set of data objects~$\symDataset$, and a query expression $\queryExpr$
+	defined for querying $\symDataset$.
+	We write $\fctRootIt{\symDataset}{\queryExpr}$ to denote the
+	evaluation of $\eval(\symDataset, \queryExpr)$ such that
+    a finite set of data objects~$\symDataset^{context}$ is generated, and  $\symDataset^{context} =
+        \{\dataObject_1, ... , \dataObject_n\}$, where $\dataObject_n$ is the
+    $n^{th}$-iteration of evaluating $\eval(\symDataset, \queryExpr)$.
 \end{definition}
 
 

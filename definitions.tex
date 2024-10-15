@@ -76,12 +76,13 @@ source operator: \textbf{iterators}.
 
 We assume the following two pairwise disjoint countably infinite sets:
 $\symDatasetUni$ (datasets), and  $\symDataAccUni$ (data access languages).
-A set of data objects~$\symDataset$ is an element of $\symDatasetUni$, with
+A set of data objects~$\symDataset$ is subset of $\symDatasetUni$, with
 $\dataObject$ a data object in $\symDataset$, and a query
 expression~$\queryExpr$ is an element of $\symDataAccUni$.
 We also define an evaluation function $\eval(\dataObject, \queryExpr)$ to
 denote the evaluation of the query expression $\queryExpr$ on the given data
-object $\dataObject$ for which $\queryExpr$ is defined.
+object $\dataObject$ for which $\queryExpr$ is a valid expression for querying 
+$\dataObject$.
 The result of such an evaluation is a finite sequence of data objects denoted
 as $\symDataSeq$ which can be empty.
 
@@ -128,14 +129,9 @@ We define them respectively as follows:
 
 \end{definition}
 
-
-
 \subsubsection{Source Type}%
 \label{ssub:source_type}
-
-
-
-
+A \textbf{source type} is defined as a tuple~$(\symDataset, )$
 
 
 

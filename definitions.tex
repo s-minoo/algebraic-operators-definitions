@@ -64,18 +64,18 @@ data access language.
 	\label{def:cast_function}
 	A \textbf{type-cast} function is a partial function,
 	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals \cup \{\error\}$.
-    For ease of reading, we denote 
-    $\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}_{i=1}^{m}$
-    provided that $\symDataSeqCard{m}$ is a sequence, with
-    $|\symDataSeqCard{m}| = m$, of data objects.
-    The order of the data objects is preserved. 
+	For ease of reading, we denote
+	$\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}_{i=1}^{m}$
+	provided that $\symDataSeqCard{m}$ is a sequence, with
+	$|\symDataSeqCard{m}| = m$, of data objects.
+	The order of the data objects is preserved.
 \end{definition}
 
 \begin{definition}
 	\label{def:source_operator}
 	Let $\dataSource = \dataSourceTuple$ be a data source (Definition~\ref{def:data_source}),
 	$\sourceType=\sourceTypeTuple$ be a source type,
-	 $\symAttrQueryPairs: \symAttrSubSet \times \symDataAcc$ be the set of pairs $\attrQueryPair \in \symAttrQueryPairs$,
+	$\symAttrQueryPairs: \symAttrSubSet \times \symDataAcc$ be the set of pairs $\attrQueryPair \in \symAttrQueryPairs$,
 	and $\iterConfig = \iterConfigTuple$ be the source configurations.
 	The \emph{generation of mapping relations from the source~$\dataSource$ configured
 		with $\iterConfig$}, denoted by
@@ -84,11 +84,21 @@ data access language.
 	$\symAttrSubSet = \{ \attr \ | \ \forall \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}$.
 	$\mappingInst = \{\mappingTuple_{i} \}_{i=1}^{N}$ such that
 	$\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$,
-    $\mappingInst'= \{(a, \Gamma) \ | \ \forall \dataObject \in \symDataSeq_{root}.  \forall \attrQueryPair \in \symAttrQueryPairs.\ \symDataSeq = \fctCbeval{\symDataset}{\dataObject}{\queryExpr}.\ \Gamma =  \typeCast[\symDataSeq]\}$,
+	$\mappingInst'= \{(a, \Gamma) \ | \ \forall \dataObject \in \symDataSeq_{root}.  \forall \attrQueryPair \in \symAttrQueryPairs.\ \symDataSeq = \fctCbeval{\symDataset}{\dataObject}{\queryExpr}.\ \Gamma =  \typeCast[\symDataSeq]\}$,
 \end{definition}
 
 
 
+\begin{equation}
+	\begin{split}
+		\symAttrSubSet & = \{ \attr \ | \ \forall \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\} \\
+        \symDataSeq_{root}& = (\dataObject_i)_{i=1}^{n} = \fctEval{\symDataset}{\queryExpr_{root}} \\
+        \mappingInst^{map} &= \{(a, \Gamma, i) \ | \ \dataObject_i \in \symDataSeq_{root}.\  \forall \attrQueryPair \in \symAttrQueryPairs.\ \symDataSeq = \fctCbeval{\symDataset}{\dataObject_i}{\queryExpr}.\ \Gamma =  \typeCast[\symDataSeq]\} \\
+        \mappingInst^{map}[a, i] &= \{\Gamma \ | \ (a, \Gamma, i) \in \mappingInst^{map}\}  \\ 
+        \mappingInst^{flattened} &=  \{ (a, \times \I) ??? \}
+	\end{split}
+    \label{eq:source_operator}
+\end{equation}
 
 
 

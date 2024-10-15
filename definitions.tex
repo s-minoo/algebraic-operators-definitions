@@ -65,17 +65,18 @@ data access language.
 	A \textbf{type-cast} function is a partial function,
 	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals \cup \{\error\}$.
     For ease of reading, we denote 
-    $\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}$
-	provided that $\symDataSeqCard{m}$ is a sequence, with cardinality $m$, of data objects.
+    $\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}_{i=1}^{m}$
+    provided that $\symDataSeqCard{m}$ is a sequence, with
+    $|\symDataSeqCard{m}| = m$, of data objects.
+    The order of the data objects are preserved. 
 \end{definition}
 
 \begin{definition}
 	\label{def:source_operator}
-	Let $\sourceType=\sourceTypeTuple$ be a source type,
-	$\dataSource = \dataSourceTuple$ be a data source (Definition~\ref{def:data_source}),
-	$\iterConfig = \iterConfigTuple$ be the source type configurations,
-	and  $\symAttrQueryPairs: \symAttrSubSet \times \symDataAcc$ be the set of
-	pairs $\attrQueryPair \in \symAttrQueryPairs$.
+	Let $\dataSource = \dataSourceTuple$ be a data source (Definition~\ref{def:data_source}),
+	$\sourceType=\sourceTypeTuple$ be a source type,
+	 $\symAttrQueryPairs: \symAttrSubSet \times \symDataAcc$ be the set of pairs $\attrQueryPair \in \symAttrQueryPairs$,
+	and $\iterConfig = \iterConfigTuple$ be the source configurations.
 	The \emph{generation of mapping relations from the source~$\dataSource$ configured
 		with $\iterConfig$}, denoted by
 	$\fctSourceOp{\dataSource}{\iterConfig}$, is the mapping relation
@@ -83,15 +84,9 @@ data access language.
 	$\symAttrSubSet = \{ \attr \ | \ \forall \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}$.
 	$\mappingInst = \{\mappingTuple_{i} \}_{i=1}^{N}$ such that
 	$\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$,
-	\break
     $\mappingInst'= \{(a, \Gamma) \ | \ \forall \dataObject \in \symDataSeq_{root}.  \forall \attrQueryPair \in \symAttrQueryPairs.\ \symDataSeq = \fctCbeval{\symDataset}{\dataObject}{\queryExpr}.\ \Gamma =  \typeCast[\symDataSeq]\}$,
-
-
-
-
-
-
 \end{definition}
+
 
 
 

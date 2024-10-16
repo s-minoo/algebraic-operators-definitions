@@ -10,34 +10,21 @@
 We assume the following pairwise disjoint countably infinite sets:
 $\symDatasetUni$ (datasets), $\symDataObjUni$ (data objects) and
 $\symDataAccUni$ (data access languages).
-{\color{blue}
-Each dataset in $\symDatasetUni$ is a collection of data objects. To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in such a dataset~$\symDataset \in \symDatasetUni$, we write $\dataObject \in \symDataset$.
-As for the languages in $\symDataAccUni$, we consider each such language~$\symDataAcc \in \symDataAccUni$ as a set where every element~$\queryExpr \in \symDataAcc$ is one of the expressions of the language.
-}
-
-{\color{red}
-\begin{definition}
-	\label{def:data_access_lang}
-	A data access language $\symDataAcc$ is a set of query expression, $\queryExpr$, such
-	that $\queryExpr \in \symDataAcc$, and $\symDataAcc \in \symDataAccUni$.
-\end{definition}
-
-
-\begin{definition}
-	\label{def:dataset}
-	A dataset, $\symDataset$,  is a set of data objects~$\dataObject$ such that
-	$\dataObject \in \symDataObjUni$, $\symDataset \in \symDatasetUni$, and
-	$\dataObject \in \symDataset$.
-\end{definition}
-}
+Each dataset in $\symDatasetUni$ is a collection of data objects. 
+To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in
+such a dataset~$\symDataset \in \symDatasetUni$, we write $\dataObject \in
+\symDataset$.
+As for the languages in $\symDataAccUni$, we consider each such
+language~$\symDataAcc \in \symDataAccUni$ as a set where every
+element~$\queryExpr \in \symDataAcc$ is one of the expressions of the language.
 
 Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
 entity that could be queried using a query expression to extract
 one or more data objects \textbf{which can, in turn, be accessible by different data access languages}.
 For example, a JSON object is considered a data object with JSONPath as the data
 access language, and it can be further queried using JSONPath expressions to
-extract JSON arrays (also data objects) or a JSON field containing a string
-representation of CSV rows, which can be further queried using a CSV specific
+extract JSON arrays (data objects) or a JSON field containing a string
+representation of CSV rows (data objects), which can be further queried using a CSV specific
 data access language.
 
 

@@ -10,10 +10,10 @@
 We assume the following pairwise disjoint countably infinite sets:
 $\symDatasetUni$ (datasets), $\symDataObjUni$ (data objects) and
 $\symDataAccUni$ (data access languages).
-Each dataset in $\symDatasetUni$ is a collection of data objects. 
+Each dataset in $\symDatasetUni$ is a collection of data objects.
 To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in
 such a dataset~$\symDataset \in \symDatasetUni$, we write $\dataObject \in
-\symDataset$.
+	\symDataset$.
 As for the languages in $\symDataAccUni$, we consider each such
 language~$\symDataAcc \in \symDataAccUni$ as a set where every
 element~$\queryExpr \in \symDataAcc$ is one of the expressions of the language.
@@ -37,39 +37,45 @@ data access language.
 \begin{definition}
 	\label{def:source_type}
 	A source type is a tuple $\sourceType = \sourceTypeTuple$ such that
-	$\symSetDataset \subset \symDatasetUni$, $\symDataAcc \in \symDataAccUni$.
-	We define two partial functions $\eval: \symSetDataset \times \symDataAcc \rightarrow \symDataSeq$
-	and $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeq $
-	with $\symDataSeq$ a sequence of data objects.
-
+	$\symSetDataset \subseteq \symDatasetUni$, $\symDataAcc \in \symDataAccUni$,
+	$\eval$ is a partial function $\eval: \symSetDataset \times \symDataAcc \rightarrow \symDataSeq$,
+	$\cbeval$ is a partial function $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeq $
+	where $\symDataSeq$ is the set of all possible sequences of data objects in $\symDatasetUni$.
 \end{definition}
 
 
 \begin{definition}
 	\label{def:data_source}
-	A data source is a tuple, $\dataSource = \dataSourceTuple$ such that $\symDataset$ is
-	a dataset containing a set of data objects~$\dataObject$, and $\sourceType$ a
-	source type (Definition~\ref{def:source_type})
+	A data source is a tuple~$\dataSource = \dataSourceTuple$ such that $\symDataset \in \symSetDataset$
+	and \break $\sourceType = \sourceTypeTuple$.
 \end{definition}
 
 
 \begin{definition}
 	\label{def:cast_function}
-	A \textbf{type-cast} function is a partial function,
-	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals \cup \{\error\}$.
-	For ease of reading, we denote
-	$\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}_{i=1}^{m}$
-	provided that $\symDataSeqCard{m}$ is a sequence, with
-	$|\symDataSeqCard{m}| = m$, of data objects.
+	A \textbf{type-cast} function, $\typeCast$ is a partial function
+	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals$.
+    For every sequence $\symDataSeq$ of data objects, we write
+    $\typeCast[\symDataSeq]$ to denote the sequence of literals and error
+    values~$\error$ such that the $i$-th element in $\typeCast[\symDataSeq]$
+    is $\fctTypeCast{\dataObject_i}$, if $\dataObject_i \in dom(\typeCast)$, 
+    and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in 
+    $\symDataSeq$, for all $i \in  \{1,\dots,|\symDataSeq|\}$.
+    %we denote
+	%$\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}_{i=1}^{m}$
+	%provided that $\symDataSeqCard{m}$ is a sequence, with
+	%$|\symDataSeqCard{m}| = m$, of data objects.
 	The order of the data objects is preserved.
 \end{definition}
 
 \begin{definition}
 	\label{def:source_operator}
-	Let $\dataSource = \dataSourceTuple$ be a data source (Definition~\ref{def:data_source}),
-	$\sourceType=\sourceTypeTuple$ be a source type,
-	$\symAttrQueryPairs: \symAttrSubSet \times \symDataAcc$ be the set of pairs $\attrQueryPair \in \symAttrQueryPairs$,
-	and $\iterConfig = \iterConfigTuple$ be the source configurations.
+    Let $\dataSource = \dataSourceTuple$ be a data source with
+    $\sourceType=\sourceTypeTuple$,
+    $\symAttrQueryPairs \subseteq \symAttrSubSet \times \symDataAcc$ be a set
+    of pairs $\attrQueryPair \in \symAttrQueryPairs$,
+    $\queryExpr_{root} \in \symDataAcc$,
+	and the source configurations be a tuple~$\iterConfig = \iterConfigTuple$.
 	The \emph{generation of mapping relations from the source~$\dataSource$ configured
 		with $\iterConfig$}, denoted by
 	$\fctSourceOp{\dataSource}{\iterConfig}$, is the mapping relation
@@ -80,13 +86,13 @@ data access language.
 
 \begin{equation}
 	\begin{split}
-		\symAttrSubSet & = \{ \attr \ | \ \forall \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\} \\
-        \symDataSeq_{root}& = (\dataObject_i)_{i=1}^{n} = \fctEval{\symDataset}{\queryExpr_{root}} \\
-        \mappingInst^{map} &= \{(a, \Gamma, i) \ | \ \dataObject_i \in \symDataSeq_{root}.\  \forall \attrQueryPair \in \symAttrQueryPairs.\ \symDataSeq = \fctCbeval{\symDataset}{\dataObject_i}{\queryExpr}.\ \Gamma =  \typeCast[\symDataSeq]\} \\
-        \mappingInst^{map}[a, i] &= \{\Gamma \ | \ (a, \Gamma, i) \in \mappingInst^{map}\}  \\ 
-        \mappingInst^{flattened} &=  \{ (a, \times \I) \text{???} \}
+		\symAttrSubSet           & = \{ \attr \ | \ \forall \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}                                                                                                                                    \\
+		\symDataSeq_{root}       & = (\dataObject_i)_{i=1}^{n} = \fctEval{\symDataset}{\queryExpr_{root}}                                                                                                                                                 \\
+		\mappingInst^{map}       & = \{(a, \Gamma, i) \ | \ \dataObject_i \in \symDataSeq_{root}.\  \forall \attrQueryPair \in \symAttrQueryPairs.\ \symDataSeq = \fctCbeval{\symDataset}{\dataObject_i}{\queryExpr}.\ \Gamma =  \typeCast[\symDataSeq]\} \\
+		\mappingInst^{map}[a, i] & = \{\Gamma \ | \ (a, \Gamma, i) \in \mappingInst^{map}\}                                                                                                                                                               \\
+		\mappingInst^{flattened} & =  \{ (a, \times \I) \text{???} \}
 	\end{split}
-    \label{eq:source_operator}
+	\label{eq:source_operator}
 \end{equation}
 
 

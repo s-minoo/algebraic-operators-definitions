@@ -10,7 +10,12 @@
 We assume the following pairwise disjoint countably infinite sets:
 $\symDatasetUni$ (datasets), $\symDataObjUni$ (data objects) and
 $\symDataAccUni$ (data access languages).
+{\color{blue}
+Each dataset in $\symDatasetUni$ is a collection of data objects. To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in such a dataset~$\symDataset \in \symDatasetUni$, we write $\dataObject \in \symDataset$.
+As for the languages in $\symDataAccUni$, we consider each such language~$\symDataAcc \in \symDataAccUni$ as a set where every element~$\queryExpr \in \symDataAcc$ is one of the expressions of the language.
+}
 
+{\color{red}
 \begin{definition}
 	\label{def:data_access_lang}
 	A data access language $\symDataAcc$ is a set of query expression, $\queryExpr$, such
@@ -24,6 +29,7 @@ $\symDataAccUni$ (data access languages).
 	$\dataObject \in \symDataObjUni$, $\symDataset \in \symDatasetUni$, and
 	$\dataObject \in \symDataset$.
 \end{definition}
+}
 
 Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
 entity that could be queried using a query expression to extract

@@ -40,14 +40,15 @@ data access language.
 	$\symSetDataset \subseteq \symDatasetUni$, $\symDataAcc \in \symDataAccUni$,
 	$\eval$ is a partial function $\eval: \symSetDataset \times \symDataAcc \rightarrow \symDataSeqUni$,
 	$\cbeval$ is a partial function $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeqUni $
-	where $\symDataSeqUni$ is the set of all possible sequences of data objects in $\symDatasetUni$.
+	where $\symDataSeqUni$ is the set of all possible sequences of data objects in $\symDataObjUni$.
 \end{definition}
 
 
 \begin{definition}
 	\label{def:data_source}
-	A data source is a tuple~$\dataSource = \dataSourceTuple$ such that $\symDataset \in \symSetDataset$
-	and \break $\sourceType = \sourceTypeTuple$.
+	A data source is a tuple~$\dataSource = \dataSourceTuple$ such that
+	$\sourceType = \sourceTypeTuple$ is a source type and
+	$\symDataset \in \symSetDataset$.
 \end{definition}
 
 
@@ -55,7 +56,7 @@ data access language.
 	\label{def:cast_function}
 	A \textbf{type-cast} function, $\typeCast$ is a partial function
 	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals$.
-    For every sequence $\dataSeq \in \symDataSeqUni$ of data objects, we write
+    For every sequence $\dataSeq$ of data objects, we write
     $\typeCast[\dataSeq]$ to denote the sequence of literals and error
     values~$\error$ such that the $i$-th element in $\typeCast[\dataSeq]$
     is $\fctTypeCast{\dataObject_i}$, if $\dataObject_i \in dom(\typeCast)$, 
@@ -71,13 +72,11 @@ data access language.
 \begin{definition}
 	\label{def:source_operator}
     Let $\dataSource = \dataSourceTuple$ be a data source with
-    $\sourceType=\sourceTypeTuple$,
-    $\symAttrQueryPairs \subseteq \symAttrSubSet \times \symDataAcc$ be a set
-    of pairs $\attrQueryPair \in \symAttrQueryPairs$,
-    $\queryExpr_{root} \in \symDataAcc$,
-	and the source configurations be a tuple~$\iterConfig = \iterConfigTuple$.
-	The \emph{generation of mapping relations from the source~$\dataSource$ configured
-		with $\iterConfig$}, denoted by
+    $\sourceType=\sourceTypeTuple$.
+    Given a tuple~$\iterConfig = \iterConfigTuple$, where
+    $\queryExpr_{root} \in \symDataAcc$ and
+    $\symAttrQueryPairs \subseteq \symAttrSubSet \times \symDataAcc$,
+	the \emph{$\iterConfig$-specific mapping relation obtained from $\dataSource$}, denoted by
 	$\fctSourceOp{\dataSource}{\iterConfig}$, is the mapping relation
 	$\mappingRel$ derived as follows:
 \end{definition}

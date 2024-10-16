@@ -38,9 +38,9 @@ data access language.
 	\label{def:source_type}
 	A source type is a tuple $\sourceType = \sourceTypeTuple$ such that
 	$\symSetDataset \subseteq \symDatasetUni$, $\symDataAcc \in \symDataAccUni$,
-	$\eval$ is a partial function $\eval: \symSetDataset \times \symDataAcc \rightarrow \symDataSeq$,
-	$\cbeval$ is a partial function $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeq $
-	where $\symDataSeq$ is the set of all possible sequences of data objects in $\symDatasetUni$.
+	$\eval$ is a partial function $\eval: \symSetDataset \times \symDataAcc \rightarrow \symDataSeqUni$,
+	$\cbeval$ is a partial function $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeqUni $
+	where $\symDataSeqUni$ is the set of all possible sequences of data objects in $\symDatasetUni$.
 \end{definition}
 
 
@@ -55,12 +55,12 @@ data access language.
 	\label{def:cast_function}
 	A \textbf{type-cast} function, $\typeCast$ is a partial function
 	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals$.
-    For every sequence $\symDataSeq$ of data objects, we write
-    $\typeCast[\symDataSeq]$ to denote the sequence of literals and error
-    values~$\error$ such that the $i$-th element in $\typeCast[\symDataSeq]$
+    For every sequence $\dataSeq \in \symDataSeqUni$ of data objects, we write
+    $\typeCast[\dataSeq]$ to denote the sequence of literals and error
+    values~$\error$ such that the $i$-th element in $\typeCast[\dataSeq]$
     is $\fctTypeCast{\dataObject_i}$, if $\dataObject_i \in dom(\typeCast)$, 
     and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in 
-    $\symDataSeq$, for all $i \in  \{1,\dots,|\symDataSeq|\}$.
+    $\dataSeq$, for all $i \in  \{1,\dots,|\dataSeq|\}$.
     %we denote
 	%$\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}_{i=1}^{m}$
 	%provided that $\symDataSeqCard{m}$ is a sequence, with
@@ -87,8 +87,8 @@ data access language.
 \begin{equation}
 	\begin{split}
 		\symAttrSubSet           & = \{ \attr \ | \ \forall \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}                                                                                                                                    \\
-		\symDataSeq_{root}       & = (\dataObject_i)_{i=1}^{n} = \fctEval{\symDataset}{\queryExpr_{root}}                                                                                                                                                 \\
-		\mappingInst^{map}       & = \{(a, \Gamma, i) \ | \ \dataObject_i \in \symDataSeq_{root}.\  \forall \attrQueryPair \in \symAttrQueryPairs.\ \symDataSeq = \fctCbeval{\symDataset}{\dataObject_i}{\queryExpr}.\ \Gamma =  \typeCast[\symDataSeq]\} \\
+        \dataSeq_{root}       & = (\dataObject_i)_{i=1}^{|\dataSeq_{root}|} = \fctEval{\symDataset}{\queryExpr_{root}}                                                                                                                                                 \\
+		\mappingInst^{map}       & = \{(a, \Gamma, i) \ | \ \dataObject_i \in \dataSeq_{root}.\  \forall \attrQueryPair \in \symAttrQueryPairs.\ \dataSeq = \fctCbeval{\symDataset}{\dataObject_i}{\queryExpr}.\ \Gamma =  \typeCast[\dataSeq]\} \\
 		\mappingInst^{map}[a, i] & = \{\Gamma \ | \ (a, \Gamma, i) \in \mappingInst^{map}\}                                                                                                                                                               \\
 		\mappingInst^{flattened} & =  \{ (a, \times \I) \text{???} \}
 	\end{split}

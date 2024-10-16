@@ -55,13 +55,13 @@ data access language.
 	\label{def:cast_function}
 	A \textbf{type-cast} function, $\typeCast$ is a partial function
 	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals$.
-    For every sequence $\dataSeq \in \symDataSeqUni$ of data objects, we write
-    $\typeCast[\dataSeq]$ to denote the sequence of literals and error
-    values~$\error$ such that the $i$-th element in $\typeCast[\dataSeq]$
-    is $\fctTypeCast{\dataObject_i}$, if $\dataObject_i \in dom(\typeCast)$, 
-    and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in 
-    $\dataSeq$, for all $i \in  \{1,\dots,|\dataSeq|\}$.
-    %we denote
+	For every sequence $\dataSeq \in \symDataSeqUni$ of data objects, we write
+	$\typeCast[\dataSeq]$ to denote the sequence of literals and error
+	values~$\error$ such that the $i$-th element in $\typeCast[\dataSeq]$
+	is $\fctTypeCast{\dataObject_i}$, if $\dataObject_i \in dom(\typeCast)$,
+	and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in
+	$\dataSeq$, for all $i \in  \{1,\dots,|\dataSeq|\}$.
+	%we denote
 	%$\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}_{i=1}^{m}$
 	%provided that $\symDataSeqCard{m}$ is a sequence, with
 	%$|\symDataSeqCard{m}| = m$, of data objects.
@@ -70,11 +70,11 @@ data access language.
 
 \begin{definition}
 	\label{def:source_operator}
-    Let $\dataSource = \dataSourceTuple$ be a data source with
-    $\sourceType=\sourceTypeTuple$,
-    $\symAttrQueryPairs \subseteq \symAttrSubSet \times \symDataAcc$ be a set
-    of pairs $\attrQueryPair \in \symAttrQueryPairs$,
-    $\queryExpr_{root} \in \symDataAcc$,
+	Let $\dataSource = \dataSourceTuple$ be a data source with
+	$\sourceType=\sourceTypeTuple$,
+	$\symAttrQueryPairs \subseteq \symAttrSubSet \times \symDataAcc$ be a set
+	of pairs $\attrQueryPair \in \symAttrQueryPairs$,
+	$\queryExpr_{root} \in \symDataAcc$,
 	and the source configurations be a tuple~$\iterConfig = \iterConfigTuple$.
 	The \emph{generation of mapping relations from the source~$\dataSource$ configured
 		with $\iterConfig$}, denoted by
@@ -86,11 +86,15 @@ data access language.
 
 \begin{equation}
 	\begin{split}
-		\symAttrSubSet           & = \{ \attr \ | \ \forall \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}                                                                                                                                    \\
-        \dataSeq_{root}       & = (\dataObject_i)_{i=1}^{|\dataSeq_{root}|} = \fctEval{\symDataset}{\queryExpr_{root}}                                                                                                                                                 \\
-		\mappingInst^{map}       & = \{(a, \Gamma, i) \ | \ \dataObject_i \in \dataSeq_{root}.\  \forall \attrQueryPair \in \symAttrQueryPairs.\ \dataSeq = \fctCbeval{\symDataset}{\dataObject_i}{\queryExpr}.\ \Gamma =  \typeCast[\dataSeq]\} \\
-		\mappingInst^{map}[a, i] & = \{\Gamma \ | \ (a, \Gamma, i) \in \mappingInst^{map}\}                                                                                                                                                               \\
-		\mappingInst^{flattened} & =  \{ (a, \times \I) \text{???} \}
+		\dataSeq_{root}          & = \fctEval{\symDataset}{\queryExpr_{root}}                                                                                                                                                                    \\
+        \mappingInst^{a}_{i} &=  \{(\attr, \typeCast[\fctCbeval{\symDataset}{\dataObject_i}{\queryExpr'}]) \ | \ (\attr', \queryExpr) \in \symAttrQueryPairs \text{ such that } \attr' = \attr\} \\
+        & \qquad \parbox{30em}{with $\dataObject_i$ being the $i$-th element in $\dataSeq_{root}$ for every $i \in \{1,\dots,|\dataSeq_{root}|\}$ $\attrQueryPair \in \symAttrQueryPairs$ }
+        \\
+        X_i &= \bigtimes_{\attrQueryPair \in \symAttrQueryPairs} \mappingInst_i^{a} \quad
+        \parbox{30em}{for every $i \in \{1,\dots,|\dataSeq_{root}|\}$}\\ 
+        \mappingInst &= \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \ i \in \{1,\dots,|\dataSeq_{root}|\}.\ (\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n) \in X_i\right\}  \\ 
+		\symAttrSubSet           & = \{ \attr \ | \ \forall \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}                                                                                                                           \\
+        \text{\sourceOp}^{\iterConfig}(\dataSource) &= (\symAttrSubSet, \mappingInst)
 	\end{split}
 	\label{eq:source_operator}
 \end{equation}

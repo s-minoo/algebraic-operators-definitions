@@ -204,8 +204,8 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 			}
 		}
 	\end{equation*}
-    where $\extExpr_i$ is the $i$-th expression element in $\symExtExprSeq$
-    for every $i \in \{1,\dots,|\symExtExprSeq|\}$.
+	where $\extExpr_i$ is the $i$-th expression element in $\symExtExprSeq$
+	for every $i \in \{1,\dots,|\symExtExprSeq|\}$.
 \end{definition}
 
 
@@ -217,13 +217,22 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 	$\symAttrSubSet' = \symAttrSubSet \cup \{ a \ | \ (a, \symExtExprSeq) \in \symExtPairs\}$
 	and
 	\begin{equation*}
-		\symMappingInst' = \{ \mappingTuple' \ | \ \mappingTuple \in \symMappingInst  \text{ and }
-		a \in dom(\mappingTuple) \text{ and }
-		(b, \symExtExprSeq) \in  \symExtPairs  \text{ such that }
-		\mappingTuple'(a) = \mappingTuple(a) \text{ and }
-        \mappingTuple'(b) = \fctExtEvalSeq{\symExtExprSeq}{\mappingTuple}
-		\}
+		\symMappingInst' =  \left\{ \{a_1 \rightarrow v_1, \dots,a_n \rightarrow v_n \} \ |\
+		\mappingTuple \in \symMappingInst \text{ and }
+        ((a_1 \rightarrow v_1), \dots,(a_n \rightarrow v_n) ) \in X_{\mappingTuple}
+		\right\}
 	\end{equation*}
+    where 
+	\begin{equation*}
+        X_{\mappingTuple}=  \bigtimes_{\attr \in \symAttrSubSet'} \symMappingInst_{\mappingTuple}^{\attr}
+	\end{equation*}
+    such that 
+    \begin{equation*}
+        \symMappingInst_{\mappingTuple}^{\attr} = \{ (a \rightarrow v) \ | \ 
+        \text{ if } \attr \in dom(\mappingTuple) \text{ then } v = \mappingTuple(a)
+        \text{ else } (\attr, \symExtExprSeq) \in \symExtPairs \text{ and } v \in \fctExtEvalSeq{\symExtExprSeq}{\mappingTuple}
+        \}
+    \end{equation*}
 
 
 \end{definition}

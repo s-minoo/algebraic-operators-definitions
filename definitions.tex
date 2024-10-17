@@ -10,6 +10,7 @@
 We assume the following pairwise disjoint countably infinite sets:
 $\symDatasetUni$ (datasets), $\symDataObjUni$ (data objects) and
 $\symDataAccUni$ (data access languages).
+	\todo{Split this part into separate paragraphs such that you first only introduce $\symDatasetUni$ and $\symDataObjUni$, plus the intuition behind these notions, and afterwards you introduce $\symDataAccUni$ and the things related to that.}
 Each dataset in $\symDatasetUni$ is a collection of data objects.
 To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in
 such a dataset~$\symDataset \in \symDatasetUni$, we write $\dataObject \in
@@ -39,7 +40,8 @@ data access language.
 	A source type is a tuple $\sourceTypeTuple$ such that
 	$\symSetDataset \subseteq \symDatasetUni$, $\symDataAcc \in \symDataAccUni$,
 	$\eval$ is a partial function $\eval: \symSetDataset \times \symDataAcc \rightarrow \symDataSeqUni$,
-	$\cbeval$ is a partial function $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeqUni $
+	$\cbeval$ is a partial function $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeqUni$
+\todo{For both $\eval$ and $\cbeval$, I wonder whether they should really be partial functions? Not total? Perhaps partial is okay for both: for $\cbeval$ it may be argued that some of the expressions in $\symDataAcc$ are not meant to be used as "global" (context object independent) queries, and the same type of argument can be used for $\cbeval$ as well. Moreover, for $\cbeval$ we may additional argue that likely not all data objects in $\symDataObjUni$ would be possible input parameters.}
 	where $\symDataSeqUni$ is the set of all possible sequences of data objects in $\symDataObjUni$.
 \end{definition}
 

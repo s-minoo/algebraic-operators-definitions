@@ -240,6 +240,28 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 
 
 
+\subsection{Fragmenter Operator}%
+\label{sub:fragmenter_operator}
+
+
+\begin{definition}
+    \label{def:fragmenter_operator}
+    Let $r=\mappingRel$ be a mapping relation, and a set of pairs
+    $\symFragmentPairs: \symFragmentUniverse \times \symFragmentUniverse$.
+    The \emph{$\symFragmentPairs$-specific fragmentation of $r$} is  
+    a mapping relation $(\symAttrSubSet', \symMappingInst')$ such that 
+    $\symAttrSubSet' =  \symAttrSubSet$ and 
+    \begin{equation*}
+        \symMappingInst'= \symMappingInst \cup \{ \mappingTuple' \ | \ \mappingTuple \in \symMappingInst \text{ and }
+        (\mappingTuple(\fragAttr), f_{new}) \in \symFragmentPairs \text{ and }
+        \attr \in \symAttrSubSet \setminus \{\fragAttr\} \text{ such that } 
+        \mappingTuple'(\attr) = \mappingTuple(\attr) \text{ and }
+        \mappingTuple'(\fragAttr) = f_{new} \}
+    \end{equation*}
+\end{definition}
+
+
+
 
 
 

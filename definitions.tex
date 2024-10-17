@@ -41,8 +41,8 @@ data access language.
 	$\symSetDataset \subseteq \symDatasetUni$, $\symDataAcc \in \symDataAccUni$,
 	$\eval$ is a partial function $\eval: \symSetDataset \times \symDataAcc \rightarrow \symDataSeqUni$,
 	$\cbeval$ is a partial function $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeqUni$
-\todo{For both $\eval$ and $\cbeval$, I wonder whether they should really be partial functions? Not total? Perhaps partial is okay for both: for $\cbeval$ it may be argued that some of the expressions in $\symDataAcc$ are not meant to be used as "global" (context object independent) queries, and the same type of argument can be used for $\cbeval$ as well. Moreover, for $\cbeval$ we may additional argue that likely not all data objects in $\symDataObjUni$ would be possible input parameters.}
 	where $\symDataSeqUni$ is the set of all possible sequences of data objects in $\symDataObjUni$.
+\todo[inline]{For both $\eval$ and $\cbeval$, I wonder whether they should really be partial functions? Not total? Perhaps partial is okay for both: for $\cbeval$ it may be argued that some of the expressions in $\symDataAcc$ are not meant to be used as "global" (context object independent) queries, and the same type of argument can be used for $\cbeval$ as well. Moreover, for $\cbeval$ we may additional argue that likely not all data objects in $\symDataObjUni$ would be possible input parameters.}
 \end{definition}
 
 
@@ -77,8 +77,8 @@ data access language.
 	$\sourceType=\sourceTypeTuple$.
 	Given a tuple~$\iterConfig = \iterConfigTuple$, where
 	$\queryExpr_{root} \in \symDataAcc$ and
+\todo{I just realize that we assume an additional constraint here, namely that all $(\attr, \var)$-pairs in $\symAttrQueryPairs$ have a different $\attr$. Right? If yes, we need to make this constraint explicit. Essentially, $\symAttrQueryPairs$ actually is a partial function from $(\symAttrUniverse \setminus \{\fragAttr\})$ to $\symDataAcc$.}
 	$\symAttrQueryPairs \subseteq (\symAttrUniverse \setminus \{\fragAttr\}) \times \symDataAcc$,
-\todo{I just realize that we assume an additional constraint here, namely that all $(\attr, \var)$ pairs in $\symAttrQueryPairs$ have a different $\attr$. Right? If yes, we need to make this constraint explicit. Essentially, $\symAttrQueryPairs$ actually is a partial function from $(\symAttrUniverse \setminus \{\fragAttr\})$ to $\symDataAcc$.}
 	the \emph{$\iterConfig$-specific mapping relation obtained from
 		$\dataSource$} is the mapping relation $\mappingRel$ such that
 	\begin{align*}
@@ -91,7 +91,8 @@ data access language.
 	with $\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$, and
 	$X_i = \bigtimes_{\attrQueryPair \in \symAttrQueryPairs} \symMappingInst_i^{a}$
 	for every $i \in \indexSeq$ with:
-\todo{I think we can simplify the overall definition by getting rid of $\symMappingInst^{a}_{i}$ and, instead, inlining its definition directly into the definition of $X_i$.}
+\todo[inline]{I think we can simplify the overall definition by getting rid of $\symMappingInst^{a}_{i}$ and, instead, inlining its definition directly into the definition of $X_i$.}
+\todo[inline]{In fact, we can simplify even further: I believe our definition doesn't need to explicitly iterate over $\symDataSeq_{root}$ using $i$ (and thus $\indexSeq$). Instead, we may simply define $X_d$ for every data object $d \in \symDataSeq_{root}$.}
 	\begin{equation*}
 		\symMappingInst^{a}_{i} =  \{(\attr, \var) \ | \ (\attr', \queryExpr') \in \symAttrQueryPairs \text{ such that } \attr' = \attr \text{ and }
 		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject_i}{\queryExpr'}]\}

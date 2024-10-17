@@ -80,21 +80,21 @@ data access language.
 		$\dataSource$}, is the mapping relation $\mappingRel$ such that
 	$\symAttrSubSet = \{ \attr \ | \  \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}$,
 	and
-    \begin{equation*}
-        \mappingInst = \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \ 
-        i \in \indexSeq \text{ and }((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_i\right\}   
-    \end{equation*}
+	\begin{equation*}
+		\mappingInst = \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \
+		i \in \indexSeq \text{ and }((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_i\right\}
+	\end{equation*}
 	where $\indexSeq = \{1,\dots,|\dataSeq_{root}|\}$
 	with $\dataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$, and
 	$X_i = \bigtimes_{\attrQueryPair \in \symAttrQueryPairs} \mappingInst_i^{a}$
 	for every $i \in \indexSeq$ with:
 	\begin{equation*}
-        \mappingInst^{a}_{i} =  \{(\attr, \var) \ | \ (\attr', \queryExpr') \in \symAttrQueryPairs \text{ such that } \attr' = \attr \text{ and }
-        \var \in \typeCast[\fctCbeval{\symDataset}{\dataObject_i}{\queryExpr'}]\}
+		\mappingInst^{a}_{i} =  \{(\attr, \var) \ | \ (\attr', \queryExpr') \in \symAttrQueryPairs \text{ such that } \attr' = \attr \text{ and }
+		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject_i}{\queryExpr'}]\}
 	\end{equation*}
-    for every $\attrQueryPair \in \symAttrQueryPairs$
-    and $\dataObject_i$ being the $i$-th element in $\dataSeq_{root}$ for
-    every $i \in \indexSeq$.
+	for every $\attrQueryPair \in \symAttrQueryPairs$
+	and $\dataObject_i$ being the $i$-th element in $\dataSeq_{root}$ for
+	every $i \in \indexSeq$.
 \end{definition}
 
 
@@ -122,15 +122,6 @@ relation, $\mappingRel$, to a set of attributes $\symProjSet \subseteq
 		\mappingTuple \in \mappingInst \}$.
 \end{definition}
 
-\begin{equation}
-	\begin{split}
-		\mappingInst'                             & =
-		\{\mappingTuple' \ | \ \forall \mappingTuple \in \mappingInst.\ \mappingTuple[\symProjSet \cup\{\fragAttr\}] = \mappingTuple' \} \\
-		\symAttrSubSet'                           & =  \symProjSet \cup \{\fragAttr\}                                                    \\
-		\text{Project}^{\symProjSet}(\mappingRel) & =  ( \symAttrSubSet', \mappingInst' )
-	\end{split}
-	\label{eq:projection}
-\end{equation}
 
 
 
@@ -140,50 +131,42 @@ Given a mapping relation $\mappingRel$, and set of pairs of attributes
 $\symRenameSet$ with $\{(a_{1}, b_{1}),..(a_{n}, b_{n})\}$ where all $a$'s and
 $b$'s are unique.
 A \textbf{rename operator} renames the attributes in the mapping relations,
-$\mappingRel$,  according to set of the pairs of attributes, $\symRenameSet$.
+$\mappingRel$,  according to set of the pairs of attributes~$\symRenameSet$.
 It creates a new mapping relation $(\symAttrSubSet', \mappingInst')$
 such that $\symAttrSubSet'$ is a set of attributes where,
-given a pair of attributes $(a_{old},b) \in \symRenameSet$, all
+given a pair of attributes $(a_{old},b) \in \symRenameSet$, for all
 attributes $a \in \symAttrSubSet$ is replaced with $b$ if $a = a_{old}$ otherwise
-$a$ is kept in $\symAttrSubSet'$.
+$a$ from is kept in $\symAttrSubSet'$.
 For the \emph{renamed mapping tuples}~$\mappingTuple'$, it is the result of
 restricting the mapping tuple~$\mappingTuple$ to $\symAttrSubSet'$ as
-$\mappingTuple[\symAttrSubSet']$ with the condition that for each
-pair $(a,b) \in \symRenameSet$, $\mappingTuple(b) = \mappingTuple(a)$, thus,
-$\mappingTuple'$ is defined for all attributes in $\symAttrSubSet'$.
+$\mappingTuple[\symAttrSubSet']$ with the condition such that for each
+pair $(a_{old},b) \in \symRenameSet$, we have $\mappingTuple'(b) = \mappingTuple(a_{old})$,
+and for every $a$ in $A$ that did not get renamed, we have $\mappingTuple'(a) =
+\mappingTuple(a)$, thus, $dom(\mappingTuple') = \symAttrSubSet'$.
 
 \begin{definition}
 	Let $r = \mappingRel$ be a mapping relation, $\symRenameSet = \{(a,b) \in \symAttrSubSet \times \symAttrUniverse : a \neq  b \neq \fragAttr\}$
-	a non-empty countably finite set of pairs of attributes,
-	$\symRenameSet_{first} = \{ a \ | \ \forall (a,b) \in \symRenameSet \}$.
+	a non-empty countably finite set of pairs of attributes, and 
+    $\symRenameSet_{first} = \{ a \ | \ (a,b) \in \symRenameSet\}$.
 	The \emph{$\symRenameSet$-specific rename of $r$}, denoted by $\text{Rename}^R(r)$,
-	is the mapping relation $(\symAttrSubSet', \mappingInst')$ such that:
-	$\symAttrSubSet'=  \{ a \ | \  a \in \symAttrSubSet.\ a \notin
-		\symRenameSet_{first} \}  \cup \{ b \ | \ \forall a  \in \symAttrSubSet.\
-		\exists (a_{old}, b) \in \symRenameSet.\ a = a_{old}\}$.
-	$\mappingTuple[\symAttrSubSet']$ is such that for~all~$a_{new} \in
-		\symAttrSubSet'$, if there exists $(a_{old},b) \in \symRenameSet$ and $a_{new} =
-		b$, then $\mappingTuple(b) = \mappingTuple(a_{old})$.
-	$\mappingInst' = \{ \mappingTuple' \ | \ \mappingTuple \in \mappingInst.\
-		\mappingTuple' = \mappingTuple[\symAttrSubSet'] \}$.
+	is the mapping relation $(\symAttrSubSet', \mappingInst')$ such that
+    \begin{equation*}
+        \symAttrSubSet'  =  (\symAttrSubSet \setminus \symRenameSet_{first}) \cup \{ c \ | \ a \in \symAttrSubSet \text{ and } (b,c) \in \symRenameSet \text{ such that } a = b\}
+    \end{equation*}
+    and
+    \begin{equation*}
+        \mappingInst' = \{ \mappingTuple' \ | \ 
+        \mappingTuple \in \mappingInst \text{ and } 
+        a \in \symAttrSubSet \text{ and } 
+        (b, c) \in \symRenameSet \text{ such that }
+        \text{if } a = b,\ \mappingTuple'(c) = \mappingTuple(a)
+        \text{ else } \mappingTuple'(a) = \mappingTuple(a)
+        \}
+    \end{equation*}
 \end{definition}
 
 
 
-\begin{equation}
-	\begin{split}
-		\symAttrSubSet'                & = \{ a \ | \  a \in \symAttrSubSet \setminus \symRenameSet_{first} \}  \cup \{ b \ | \ \forall a  \in \symAttrSubSet.\ \exists (a_{old}, b) \in \symRenameSet.\ a = a_{old}\} \\
-		\mappingTuple[\symAttrSubSet'] & = \left\{
-		\begin{array}{rcl}
-			\mappingTuple(a)       & \mbox{for} & \forall a \in \symAttrSubSet \setminus \symRenameSet_{first}                                \\
-			\mappingTuple(a_{old}) & \mbox{for} & \forall a_{new} \in \symAttrSubSet'.\ \exists (a_{old}, b) \in \symRenameSet.\  a_{new} = b
-		\end{array}
-		\right.                                                                                                                                                                                                        \\
-		\mappingInst'                  & = \{\mappingTuple[\symAttrSubSet'] \ | \ \mappingTuple \in \mappingInst\}                                                                                                     \\
-		\text{Rename}_{R}(\mappingRel) & = (\symAttrSubSet', \mappingInst')
-	\end{split}
-	\label{eq:rename}
-\end{equation}
 
 
 

@@ -37,7 +37,7 @@ data access language.
 
 \begin{definition}
 	\label{def:source_type}
-	A source type is a tuple $\sourceTypeTuple$ such that
+	A \textbf{source type} is a tuple $\sourceTypeTuple$ such that
 	$\symSetDataset \subseteq \symDatasetUni$, $\symDataAcc \in \symDataAccUni$,
 	$\eval$ is a partial function $\eval: \symSetDataset \times \symDataAcc \rightarrow \symDataSeqUni$,
 	$\cbeval$ is a partial function $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeqUni$
@@ -48,7 +48,7 @@ data access language.
 
 \begin{definition}
 	\label{def:data_source}
-	A data source is a tuple~$\dataSource = \dataSourceTuple$ such that
+	A \textbf{data source} is a tuple~$\dataSource = \dataSourceTuple$ such that
 	$\sourceType = \sourceTypeTuple$ is a source type and
 	$\symDataset \in \symSetDataset$.
 \end{definition}
@@ -56,12 +56,12 @@ data access language.
 
 \begin{definition}
 	\label{def:cast_function}
-	A \textbf{type-cast} function, $\typeCast$ is a partial function
+	A \textbf{type-cast} function is a partial function
 	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals$.
-	For every sequence $\symDataSeq$ of data objects, we write
+	For such a type-cast function~$\typeCast$ and every sequence $\symDataSeq$ of data objects, we write
 	$\typeCast[\symDataSeq]$ to denote the sequence of literals and error
 	values~$\error$ such that the $i$-th element in $\typeCast[\symDataSeq]$
-	is $\fctTypeCast{\dataObject_i}$, if $\dataObject_i \in dom(\typeCast)$,
+	is $\fctTypeCast{\dataObject_i}$ if $\dataObject_i \in dom(\typeCast)$,
 	and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in
 	$\symDataSeq$, for all $i \in  \{1,\dots,|\symDataSeq|\}$.
 	%we denote
@@ -78,18 +78,20 @@ data access language.
 	Given a tuple~$\iterConfig = \iterConfigTuple$, where
 	$\queryExpr_{root} \in \symDataAcc$ and
 	$\symAttrQueryPairs \subseteq (\symAttrUniverse \setminus \{\fragAttr\}) \times \symDataAcc$,
+\todo{I just realize that we assume an additional constraint here, namely that all $(\attr, \var)$ pairs in $\symAttrQueryPairs$ have a different $\attr$. Right? If yes, we need to make this constraint explicit. Essentially, $\symAttrQueryPairs$ actually is a partial function from $(\symAttrUniverse \setminus \{\fragAttr\})$ to $\symDataAcc$.}
 	the \emph{$\iterConfig$-specific mapping relation obtained from
-		$\dataSource$}, is the mapping relation $\mappingRel$ such that
-	$\symAttrSubSet = \{ \attr \ | \  \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}$,
-	and
-	\begin{equation*}
-		\symMappingInst = \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \
+		$\dataSource$} is the mapping relation $\mappingRel$ such that
+	\begin{align*}
+		\symAttrSubSet &= \{ \attr \ | \  \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}
+		\; \text{ and} \\
+		\symMappingInst &= \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \
 		i \in \indexSeq \text{ and }((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_i\right\}
-	\end{equation*}
+	\end{align*}
 	where $\indexSeq = \{1,\dots,|\symDataSeq_{root}|\}$
 	with $\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$, and
 	$X_i = \bigtimes_{\attrQueryPair \in \symAttrQueryPairs} \symMappingInst_i^{a}$
 	for every $i \in \indexSeq$ with:
+\todo{I think we can simplify the overall definition by getting rid of $\symMappingInst^{a}_{i}$ and, instead, inlining its definition directly into the definition of $X_i$.}
 	\begin{equation*}
 		\symMappingInst^{a}_{i} =  \{(\attr, \var) \ | \ (\attr', \queryExpr') \in \symAttrQueryPairs \text{ such that } \attr' = \attr \text{ and }
 		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject_i}{\queryExpr'}]\}

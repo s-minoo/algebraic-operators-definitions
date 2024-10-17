@@ -229,13 +229,12 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 	\end{equation*}
 	where
 	\begin{equation*}
-		X_{\mappingTuple}=  \bigtimes_{\attr \in \symAttrSubSet'} \symMappingInst_{\mappingTuple}^{\attr}
+        X_{\mappingTuple}= \mappingTuple \cup \left(\bigtimes_{\attr \in \symAttrSubSet' \setminus \symAttrSubSet} \symMappingInst_{\mappingTuple}^{\attr}\right)
 	\end{equation*}
 	such that
 	\begin{equation*}
 		\symMappingInst_{\mappingTuple}^{\attr} = \{ (a \rightarrow v) \ | \
-		\text{ if } \attr \in dom(\mappingTuple) \text{ then } v = \mappingTuple(a)
-		\text{ else } (\attr, \symExtExprSeq) \in \symExtPairs \text{ and } v \in \fctExtEvalSeq{\symExtExprSeq}{\mappingTuple}
+		(\attr, \symExtExprSeq) \in \symExtPairs \text{ and } v \in \fctExtEvalSeq{\symExtExprSeq}{\mappingTuple}
 		\}
 	\end{equation*}
 

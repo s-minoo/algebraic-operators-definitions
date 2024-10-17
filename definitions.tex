@@ -65,10 +65,6 @@ data access language.
 	is $\fctTypeCast{\dataObject_i}$ if $\dataObject_i \in dom(\typeCast)$,
 	and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in
 	$\symDataSeq$, for all $i \in  \{1,\dots,|\symDataSeq|\}$.
-	%we denote
-	%$\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}_{i=1}^{m}$
-	%provided that $\symDataSeqCard{m}$ is a sequence, with
-	%$|\symDataSeqCard{m}| = m$, of data objects.
 	The order of the data objects is preserved.
 \end{definition}
 
@@ -86,21 +82,14 @@ data access language.
 		\symAttrSubSet &= \{ \attr \ | \  \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}
 		\; \text{ and} \\
 		\symMappingInst &= \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \
-		i \in \indexSeq \text{ and }((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_i\right\}
+        \dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
 	\end{align*}
-	where $\indexSeq = \{1,\dots,|\symDataSeq_{root}|\}$
-	with $\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$, and
-	$X_i = \bigtimes_{\attrQueryPair \in \symAttrQueryPairs} \symMappingInst_i^{a}$
-	for every $i \in \indexSeq$ with:
-\todo[inline]{I think we can simplify the overall definition by getting rid of $\symMappingInst^{a}_{i}$ and, instead, inlining its definition directly into the definition of $X_i$.}
-\todo[inline]{In fact, we can simplify even further: I believe our definition doesn't need to explicitly iterate over $\symDataSeq_{root}$ using $i$ (and thus $\indexSeq$). Instead, we may simply define $X_d$ for every data object $d \in \symDataSeq_{root}$.}
-	\begin{equation*}
-		\symMappingInst^{a}_{i} =  \{(\attr, \var) \ | \ (\attr', \queryExpr') \in \symAttrQueryPairs \text{ such that } \attr' = \attr \text{ and }
-		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject_i}{\queryExpr'}]\}
-	\end{equation*}
-	for every $\attrQueryPair \in \symAttrQueryPairs$
-	and $\dataObject_i$ being the $i$-th element in $\symDataSeq_{root}$ for
-	every $i \in \indexSeq$.
+	where 
+    \begin{equation*}
+	X_d = \bigtimes_{\attrQueryPair \in \symAttrQueryPairs} 
+        \{(\attr, \var) \ | \ 
+		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject}{\queryExpr}]\}
+    \end{equation*}
 \end{definition}
 
 

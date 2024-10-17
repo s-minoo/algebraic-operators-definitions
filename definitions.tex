@@ -219,20 +219,20 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 	\begin{equation*}
 		\symMappingInst' =  \left\{ \{a_1 \rightarrow v_1, \dots,a_n \rightarrow v_n \} \ |\
 		\mappingTuple \in \symMappingInst \text{ and }
-        ((a_1 \rightarrow v_1), \dots,(a_n \rightarrow v_n) ) \in X_{\mappingTuple}
+		((a_1 \rightarrow v_1), \dots,(a_n \rightarrow v_n) ) \in X_{\mappingTuple}
 		\right\}
 	\end{equation*}
-    where 
+	where
 	\begin{equation*}
-        X_{\mappingTuple}=  \bigtimes_{\attr \in \symAttrSubSet'} \symMappingInst_{\mappingTuple}^{\attr}
+		X_{\mappingTuple}=  \bigtimes_{\attr \in \symAttrSubSet'} \symMappingInst_{\mappingTuple}^{\attr}
 	\end{equation*}
-    such that 
-    \begin{equation*}
-        \symMappingInst_{\mappingTuple}^{\attr} = \{ (a \rightarrow v) \ | \ 
-        \text{ if } \attr \in dom(\mappingTuple) \text{ then } v = \mappingTuple(a)
-        \text{ else } (\attr, \symExtExprSeq) \in \symExtPairs \text{ and } v \in \fctExtEvalSeq{\symExtExprSeq}{\mappingTuple}
-        \}
-    \end{equation*}
+	such that
+	\begin{equation*}
+		\symMappingInst_{\mappingTuple}^{\attr} = \{ (a \rightarrow v) \ | \
+		\text{ if } \attr \in dom(\mappingTuple) \text{ then } v = \mappingTuple(a)
+		\text{ else } (\attr, \symExtExprSeq) \in \symExtPairs \text{ and } v \in \fctExtEvalSeq{\symExtExprSeq}{\mappingTuple}
+		\}
+	\end{equation*}
 
 
 \end{definition}
@@ -245,19 +245,44 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 
 
 \begin{definition}
-    \label{def:fragmenter_operator}
-    Let $r=\mappingRel$ be a mapping relation, and a set of pairs
-    $\symFragmentPairs: \symFragmentUniverse \times \symFragmentUniverse$.
-    The \emph{$\symFragmentPairs$-specific fragmentation of $r$} is  
-    a mapping relation $(\symAttrSubSet', \symMappingInst')$ such that 
-    $\symAttrSubSet' =  \symAttrSubSet$ and 
-    \begin{equation*}
-        \symMappingInst'= \symMappingInst \cup \{ \mappingTuple' \ | \ \mappingTuple \in \symMappingInst \text{ and }
-        (\mappingTuple(\fragAttr), f_{new}) \in \symFragmentPairs \text{ and }
-        \attr \in \symAttrSubSet \setminus \{\fragAttr\} \text{ such that } 
-        \mappingTuple'(\attr) = \mappingTuple(\attr) \text{ and }
-        \mappingTuple'(\fragAttr) = f_{new} \}
-    \end{equation*}
+	\label{def:fragmenter_operator}
+	Let $r=\mappingRel$ be a mapping relation, and a set of pairs
+	$\symFragmentPairs: \symFragmentUniverse \times \symFragmentUniverse$.
+	The \emph{$\symFragmentPairs$-specific fragmentation of $r$} is
+	a mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
+	$\symAttrSubSet' =  \symAttrSubSet$ and
+	\begin{equation*}
+		\symMappingInst'= \symMappingInst \cup \{ \mappingTuple' \ | \ \mappingTuple \in \symMappingInst \text{ and }
+		(\mappingTuple(\fragAttr), f_{new}) \in \symFragmentPairs \text{ and }
+		\attr \in \symAttrSubSet \setminus \{\fragAttr\} \text{ such that }
+		\mappingTuple'(\attr) = \mappingTuple(\attr) \text{ and }
+		\mappingTuple'(\fragAttr) = f_{new} \}
+	\end{equation*}
+\end{definition}
+
+
+\subsection{$\theta$-join Operator}%
+\label{sub:theta_join_operator}
+
+\begin{definition}
+	\label{def:theta_join_operator}
+	Given two mapping relations $r_{left} = \mappingRelSpec{left}$ and
+	$r_{right} = \mappingRelSpec{right}$, and a set of pairs of attributes
+	$\symJoinAttrPairs: \symAttrSubSet_{left} \times \symAttrSubSet_{right}$.
+	We assume that $\symAttrSubSet_{left} \cap \symAttrSubSet_{right} = \{\fragAttr\}$.
+	The \emph{$\symJoinAttrPairs$-specific join of mapping relations $r_{left}$ and
+		$r_{right}$} is the mapping relation $(\symAttrSubSet', \symMappingInst')$
+	such that $\symAttrSubSet' = \symAttrSubSet_{left} \cup \symAttrSubSet_{right}$
+	and
+	\begin{equation*}
+		\symMappingInst' =  \{ \mappingTuple' \cup \mappingTuple'' \ | \
+		\mappingTuple' \in \symMappingInst_{left} \text { and }
+		\mappingTuple'' \in \symMappingInst_{right} \text{ such that }
+        \mappingTuple'(\fragAttr) = \mappingTuple''(\fragAttr) \text { and }
+        \mappingTuple'(\attr') = \mappingTuple''(\attr'') \text{ for all }
+        (\attr',\attr'') \in \symJoinAttrPairs
+		\}
+	\end{equation*}
 \end{definition}
 
 

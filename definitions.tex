@@ -74,19 +74,18 @@ data access language.
 	$\sourceType=\sourceTypeTuple$.
 	Given a tuple~$\iterConfig = \iterConfigTuple$, where
 	$\queryExpr_{root} \in \symDataAcc$ and
-\todo{I just realize that we assume an additional constraint here, namely that all $(\attr, \var)$-pairs in $\symAttrQueryPairs$ have a different $\attr$. Right? If yes, we need to make this constraint explicit. Essentially, $\symAttrQueryPairs$ actually is a partial function from $(\symAttrUniverse \setminus \{\fragAttr\})$ to $\symDataAcc$.}
-	$\symAttrQueryPairs \subseteq (\symAttrUniverse \setminus \{\fragAttr\}) \times \symDataAcc$,
+    a partial function $\symAttrQueryMap : \symAttrUniverse \setminus \{\fragAttr\} \rightarrow \symDataAcc$,
 	the \emph{$\iterConfig$-specific mapping relation obtained from
 		$\dataSource$} is the mapping relation $\mappingRel$ such that
 	\begin{align*}
-		\symAttrSubSet &= \{ \attr \ | \  \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}
+		\symAttrSubSet &= \{ \attr \ | \  \attrQueryPair \in \symAttrQueryMap\} \cup \{\fragAttr\}
 		\; \text{ and} \\
 		\symMappingInst &= \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \
         \dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
 	\end{align*}
 	where 
     \begin{equation*}
-	X_d = \bigtimes_{\attrQueryPair \in \symAttrQueryPairs} 
+	X_d = \bigtimes_{\attrQueryPair \in \symAttrQueryMap} 
         \{(\attr, \var) \ | \ 
 		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject}{\queryExpr}]\}
     \end{equation*}

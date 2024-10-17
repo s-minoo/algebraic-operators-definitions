@@ -5,7 +5,7 @@
 \label{sub:source_operator}
 
 \subsubsection{Notations}%
-\label{ssub:notations}
+\label{ssub:source_notations}
 
 We assume the following pairwise disjoint countably infinite sets:
 $\symDatasetUni$ (datasets), $\symDataObjUni$ (data objects) and
@@ -56,12 +56,12 @@ data access language.
 	\label{def:cast_function}
 	A \textbf{type-cast} function, $\typeCast$ is a partial function
 	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals$.
-	For every sequence $\dataSeq$ of data objects, we write
-	$\typeCast[\dataSeq]$ to denote the sequence of literals and error
-	values~$\error$ such that the $i$-th element in $\typeCast[\dataSeq]$
+	For every sequence $\symDataSeq$ of data objects, we write
+	$\typeCast[\symDataSeq]$ to denote the sequence of literals and error
+	values~$\error$ such that the $i$-th element in $\typeCast[\symDataSeq]$
 	is $\fctTypeCast{\dataObject_i}$, if $\dataObject_i \in dom(\typeCast)$,
 	and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in
-	$\dataSeq$, for all $i \in  \{1,\dots,|\dataSeq|\}$.
+	$\symDataSeq$, for all $i \in  \{1,\dots,|\symDataSeq|\}$.
 	%we denote
 	%$\typeCast[\symDataSeqCard{m}] = \{ \gamma_i \ | \ \dataObject_i \in \symDataSeqCard{m}.\ \gamma_i = \fctTypeCast{\dataObject_i} \}_{i=1}^{m}$
 	%provided that $\symDataSeqCard{m}$ is a sequence, with
@@ -81,19 +81,19 @@ data access language.
 	$\symAttrSubSet = \{ \attr \ | \  \attrQueryPair \in \symAttrQueryPairs\} \cup \{\fragAttr\}$,
 	and
 	\begin{equation*}
-		\mappingInst = \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \
+		\symMappingInst = \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \
 		i \in \indexSeq \text{ and }((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_i\right\}
 	\end{equation*}
-	where $\indexSeq = \{1,\dots,|\dataSeq_{root}|\}$
-	with $\dataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$, and
-	$X_i = \bigtimes_{\attrQueryPair \in \symAttrQueryPairs} \mappingInst_i^{a}$
+	where $\indexSeq = \{1,\dots,|\symDataSeq_{root}|\}$
+	with $\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$, and
+	$X_i = \bigtimes_{\attrQueryPair \in \symAttrQueryPairs} \symMappingInst_i^{a}$
 	for every $i \in \indexSeq$ with:
 	\begin{equation*}
-		\mappingInst^{a}_{i} =  \{(\attr, \var) \ | \ (\attr', \queryExpr') \in \symAttrQueryPairs \text{ such that } \attr' = \attr \text{ and }
+		\symMappingInst^{a}_{i} =  \{(\attr, \var) \ | \ (\attr', \queryExpr') \in \symAttrQueryPairs \text{ such that } \attr' = \attr \text{ and }
 		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject_i}{\queryExpr'}]\}
 	\end{equation*}
 	for every $\attrQueryPair \in \symAttrQueryPairs$
-	and $\dataObject_i$ being the $i$-th element in $\dataSeq_{root}$ for
+	and $\dataObject_i$ being the $i$-th element in $\symDataSeq_{root}$ for
 	every $i \in \indexSeq$.
 \end{definition}
 
@@ -111,15 +111,15 @@ relation, $\mappingRel$, to a set of attributes $\symProjSet \subseteq
 	\symAttrSubSet$ as defined in Definition~\ref{def:tuple_restrict}.
 
 \begin{definition}
-	\label{def:projection}
+	\label{def:projection_operator}
 	Let $r = \mappingRel$ be a mapping relation and $\symProjSet \subseteq
 		\symAttrSubSet \setminus \{\fragAttr\}$ be a non-empty subset of the
 	attributes of $r$.
 	The \emph{$\symProjSet$-specific projection of $r$}, denoted by
 	$\text{Project}^\symProjSet(r)$, is the mapping relation $(\symAttrSubSet',
-		\mappingInst')$ such that $\symAttrSubSet' = \symProjSet \cup
-		\{\fragAttr\}$ and $\mappingInst' = \{ \mappingTuple[\symAttrSubSet'] \ | \
-		\mappingTuple \in \mappingInst \}$.
+		\symMappingInst')$ such that $\symAttrSubSet' = \symProjSet \cup
+		\{\fragAttr\}$ and $\symMappingInst' = \{ \mappingTuple[\symAttrSubSet'] \ | \
+		\mappingTuple \in \symMappingInst \}$.
 \end{definition}
 
 
@@ -132,7 +132,7 @@ $\symRenameSet$ with $\{(a_{1}, b_{1}),..(a_{n}, b_{n})\}$ where all $a$'s and
 $b$'s are unique.
 A \textbf{rename operator} renames the attributes in the mapping relations,
 $\mappingRel$,  according to set of the pairs of attributes~$\symRenameSet$.
-It creates a new mapping relation $(\symAttrSubSet', \mappingInst')$
+It creates a new mapping relation $(\symAttrSubSet', \symMappingInst')$
 such that $\symAttrSubSet'$ is a set of attributes where,
 given a pair of attributes $(a_{old},b) \in \symRenameSet$, for all
 attributes $a \in \symAttrSubSet$ is replaced with $b$ if $a = a_{old}$ otherwise
@@ -142,28 +142,92 @@ restricting the mapping tuple~$\mappingTuple$ to $\symAttrSubSet'$ as
 $\mappingTuple[\symAttrSubSet']$ with the condition such that for each
 pair $(a_{old},b) \in \symRenameSet$, we have $\mappingTuple'(b) = \mappingTuple(a_{old})$,
 and for every $a$ in $A$ that did not get renamed, we have $\mappingTuple'(a) =
-\mappingTuple(a)$, thus, $dom(\mappingTuple') = \symAttrSubSet'$.
+	\mappingTuple(a)$, thus, $dom(\mappingTuple') = \symAttrSubSet'$.
 
 \begin{definition}
+	\label{def:rename_operator}
 	Let $r = \mappingRel$ be a mapping relation, $\symRenameSet = \{(a,b) \in \symAttrSubSet \times \symAttrUniverse : a \neq  b \neq \fragAttr\}$
-	a non-empty countably finite set of pairs of attributes, and 
-    $\symRenameSet_{first} = \{ a \ | \ (a,b) \in \symRenameSet\}$.
+	a non-empty countably finite set of pairs of attributes, and
+	$\symRenameSet_{first} = \{ a \ | \ (a,b) \in \symRenameSet\}$.
 	The \emph{$\symRenameSet$-specific rename of $r$}, denoted by $\text{Rename}^R(r)$,
-	is the mapping relation $(\symAttrSubSet', \mappingInst')$ such that
-    \begin{equation*}
-        \symAttrSubSet'  =  (\symAttrSubSet \setminus \symRenameSet_{first}) \cup \{ c \ | \ a \in \symAttrSubSet \text{ and } (b,c) \in \symRenameSet \text{ such that } a = b\}
-    \end{equation*}
-    and
-    \begin{equation*}
-        \mappingInst' = \{ \mappingTuple' \ | \ 
-        \mappingTuple \in \mappingInst \text{ and } 
-        a \in \symAttrSubSet \text{ and } 
-        (b, c) \in \symRenameSet \text{ such that }
-        \text{if } a = b,\ \mappingTuple'(c) = \mappingTuple(a)
-        \text{ else } \mappingTuple'(a) = \mappingTuple(a)
-        \}
-    \end{equation*}
+	is the mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
+	\begin{equation*}
+		\symAttrSubSet'  =  (\symAttrSubSet \setminus \symRenameSet_{first}) \cup \{ c \ | \ a \in \symAttrSubSet \text{ and } (b,c) \in \symRenameSet \text{ such that } a = b\}
+	\end{equation*}
+	and
+	\begin{equation*}
+		\symMappingInst' = \{ \mappingTuple' \ | \
+		\mappingTuple \in \symMappingInst \text{ and }
+		a \in \symAttrSubSet' \text{ and }
+		(b, c) \in \symRenameSet \text{ such that }
+		\text{if } a = c,\ \mappingTuple'(c) = \mappingTuple(b)
+		\text{ else } \mappingTuple'(a) = \mappingTuple(a)
+		\}
+	\end{equation*}
 \end{definition}
+
+\subsection{Extend Operator}%
+\label{sub:extend_operator}
+
+\subsubsection{Extend expressions}%
+\label{ssub:extend_expressions}
+We assume a countably infinite set $\symExtExprUni$ (extend expressions) which is
+pairwise disjoint with the countably infinite sets defined in
+Section~\ref{ssub:source_notations} and Section~\ref{sec:preliminaries}.
+We also denote $\symExtExprSeqUni$ as a countably infinite set of all possible
+sequences of \emph{extend expressions} in $\symExtExprUni$.
+
+\begin{definition}
+	\label{def:extend_expression}
+	Given a mapping instance $\symMappingInst$.
+	An element $\extExpr \in \symExtExprUni$ is an expression which can be
+	evaluated by the partial functions
+	\begin{equation*}
+		\extExprTupleEval : \symExtExprUni \times \symMappingInst \rightarrow \symTermSeqUniverse \cup \{ \error \}
+	\end{equation*}
+	and
+	\begin{equation*}
+		\extExprInEval: \symExtExprUni \times (\symTermSeqUniverse \cup \{\error\}) \rightarrow \symTermSeqUniverse \cup \{\error\}
+	\end{equation*}
+	where $\symTermSeqUniverse$ is a set of all possible sequences of terms in $\symTermUniverse$.
+	We also denote an evaluation of expression sequence~$\symExtExprSeq$ on
+	a mapping tuple~$\mappingTuple$ as a partial function
+	$\extEvalSeq: \symExtExprSeqUni \times \symMappingInst \rightarrow \symTermSeqUniverse \cup \{\error\}$
+	such that
+	\begin{equation*}
+		\fctExtEvalSeq{\symExtExprSeq}{\mappingTuple} =
+		\fctExtExprInEval{\extExpr_n}{
+			\fctExtExprInEval{\dots}{
+				\fctExtExprInEval{\extExpr_2}{
+					\fctExtExprTupleEval{\extExpr_1}{\symMappingInst}
+				}
+			}
+		}
+	\end{equation*}
+    where $\extExpr_i$ is the $i$-th expression element in $\symExtExprSeq$
+    for every $i \in \{1,\dots,|\symExtExprSeq|\}$.
+\end{definition}
+
+
+\begin{definition}
+	\label{def:extend_operator}
+	Let $r = \mappingRel$ be a mapping relation, a set of pairs $\symExtPairs: \extPairsType$.
+	The \emph{$\symExtPairs$-specific extension of $r$} is a
+	mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
+	$\symAttrSubSet' = \symAttrSubSet \cup \{ a \ | \ (a, \symExtExprSeq) \in \symExtPairs\}$
+	and
+	\begin{equation*}
+		\symMappingInst' = \{ \mappingTuple' \ | \ \mappingTuple \in \symMappingInst  \text{ and }
+		a \in dom(\mappingTuple) \text{ and }
+		(b, \symExtExprSeq) \in  \symExtPairs  \text{ such that }
+		\mappingTuple'(a) = \mappingTuple(a) \text{ and }
+        \mappingTuple'(b) = \fctExtEvalSeq{\symExtExprSeq}{\mappingTuple}
+		\}
+	\end{equation*}
+
+
+\end{definition}
+
 
 
 

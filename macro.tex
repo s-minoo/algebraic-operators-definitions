@@ -1,23 +1,30 @@
 % Set symbols % 
 \newcommand{\symFragUniverse}{\mathcal{F}}
 \newcommand{\symAttrUniverse}{\mathcal{A}}
-\newcommand{\symAttrSubSet}{A}
-\newcommand{\symProjSet}{P}
-\newcommand{\symMappingTupleSet}{M}
 \newcommand{\symTermUniverse}{\mathcal{T}}
 \newcommand{\symAllIRIs}{\mathcal{I}} % the symbol for the set of all IRIs
 \newcommand{\symAllLiterals}{\mathcal{L}} % the symbol for the set of all literals
 \newcommand{\symAllBNodes}{\mathcal{B}} % the symbol for the set of all blank nodes
-\newcommand{\symRenameSet}{R}
 \newcommand{\symDatasetUni}{\mathcal{D}}
-\newcommand{\symDataset}{D}
-\newcommand{\symSetDataset}{\symDatasetUni_{sub}}
 \newcommand{\symDataObjUni}{\mathcal{O}}
 \newcommand{\symDataAccUni}{\mathcal{Q}}
-\newcommand{\symDataAcc}{L}
 \newcommand{\symDataSeqUni}{\bar{\mathcal{O}}}
+\newcommand{\symExtExprUni}{\mathcal{E}}
+\newcommand{\symExtExprSeqUni}{\bar{\mathcal{E}}}
+\newcommand{\symAttrSubSet}{A}
+\newcommand{\symProjSet}{P}
+\newcommand{\symMappingTupleSet}{M}
+\newcommand{\symRenameSet}{R}
+\newcommand{\symDataset}{D}
+\newcommand{\symSetDataset}{\symDatasetUni_{sub}}
+\newcommand{\symDataAcc}{L}
 \newcommand{\symDataSeqCard}[1]{D^{seq,#1}}
 \newcommand{\symAttrQueryPairs}{\mathbb{P}}
+\newcommand{\symDataSeq}{\bar{O}}
+\newcommand{\symExtExprSet}{E}
+\newcommand{\symExtExprSeq}{\bar{\symExtExprSet}}
+\newcommand{\symExtPairs}{\symExtExprSet}
+\newcommand{\symTermSeqUniverse}{\bar{\symTermUniverse}}
 
 
 % Special values % 
@@ -28,8 +35,8 @@
 \newcommand{\fragment}[0]{fragment}
 \newcommand{\error}{\epsilon}
 \newcommand{\mappingTuple}{t}
-\newcommand{\mappingInst}{I}
-\newcommand{\mappingRel}{(\symAttrSubSet, \mappingInst)}
+\newcommand{\symMappingInst}{I}
+\newcommand{\mappingRel}{(\symAttrSubSet, \symMappingInst)}
 \newcommand{\queryExpr}{q}
 \newcommand{\rootIt}{rit}
 \newcommand{\cobit}{cobit}
@@ -40,7 +47,6 @@
 \newcommand{\sourceTypeTuple}{(\symSetDataset, \symDataAcc, \eval, \cbeval)}
 \newcommand{\dataSource}{s}
 \newcommand{\dataSourceTuple}{(\sourceType,\symDataset)}
-\newcommand{\dataSeq}{\bar{O}}
 \newcommand{\iterConfig}{\mathbb{C}}
 \newcommand{\iterConfigTuple}{(\queryExpr_{root}, \symAttrQueryPairs)}
 \newcommand{\sourceOp}{Source}
@@ -50,6 +56,11 @@
 \newcommand{\length}{len}
 \newcommand{\var}{v}
 \newcommand{\indexSeq}{M}
+\newcommand{\extExpr}{e}
+\newcommand{\extExprTupleEval}{ei\eval}
+\newcommand{\extExprInEval}{et\eval}
+\newcommand{\extEvalSeq}{Eeval}
+\newcommand{\extPairsType}{(\symAttrUniverse \setminus \symAttrSubSet) \times \symExtExprSeqUni}
 
 
 % Functions % 
@@ -65,6 +76,9 @@
 \newcommand{\fctSourceOp}[2]{\text{\sourceOp}^{#2}(#1)}
 \newcommand{\fctTypeCast}[1]{\typeCast(#1)}
 \newcommand{\fctLength}[1]{\length(#1)}
+\newcommand{\fctExtEvalSeq}[2]{\extEvalSeq(#1,#2)}
+\newcommand{\fctExtExprTupleEval}[2]{\extExprTupleEval(#1,#2)}
+\newcommand{\fctExtExprInEval}[2]{\extExprInEval(#1,#2)}
 
 
 

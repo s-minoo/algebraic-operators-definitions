@@ -7,17 +7,21 @@
 \subsubsection{Notations}%
 \label{ssub:source_notations}
 
+
 We assume the following pairwise disjoint countably infinite sets:
-$\symDatasetUni$ (datasets), $\symDataObjUni$ (data objects) and
-$\symDataAccUni$ (data access languages).
-\todo{Split this part into separate paragraphs such that you first only introduce $\symDatasetUni$ and $\symDataObjUni$, plus the intuition behind these notions, and afterwards you introduce $\symDataAccUni$ and the things related to that.}
+$\symDatasetUni$ (datsets), and  $\symDataObjUni$ (data objects).
 Each dataset in $\symDatasetUni$ is a collection of data objects.
 To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in
-such a dataset~$\symDataset \in \symDatasetUni$, we write $\dataObject \in
-	\symDataset$.
-As for the languages in $\symDataAccUni$, we consider each such
-language~$\symDataAcc \in \symDataAccUni$ as a set where every
-element~$\queryExpr \in \symDataAcc$ is one of the expressions of the language.
+such a dataset~$\symDataset \in \symDatasetUni$, we write
+$\dataObject \in \symDataset$. 
+
+Furthermore, we introduce a countably infinite set $\symDataAccUni$ (data
+access languages) in order to query the aforementioned data objects $\symDataObjUni$. 
+$\symDataAccUni$ is pairwise disjoint with $\symDataObjUni$ and $\symDatasetUni$. 
+Each data access language  $\symDataAcc \in \symDataAccUni$ is a set, where 
+every element $\queryExpr \in \symDataAcc$ is a one of the expressions of the 
+language. 
+
 
 Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
 entity that could be queried using a query expression to extract

@@ -7,17 +7,21 @@
 \subsubsection{Notations}%
 \label{ssub:source_notations}
 
+
 We assume the following pairwise disjoint countably infinite sets:
-$\symDatasetUni$ (datasets), $\symDataObjUni$ (data objects) and
-$\symDataAccUni$ (data access languages).
-	\todo{Split this part into separate paragraphs such that you first only introduce $\symDatasetUni$ and $\symDataObjUni$, plus the intuition behind these notions, and afterwards you introduce $\symDataAccUni$ and the things related to that.}
+$\symDatasetUni$ (datsets), and  $\symDataObjUni$ (data objects).
 Each dataset in $\symDatasetUni$ is a collection of data objects.
 To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in
-such a dataset~$\symDataset \in \symDatasetUni$, we write $\dataObject \in
-	\symDataset$.
-As for the languages in $\symDataAccUni$, we consider each such
-language~$\symDataAcc \in \symDataAccUni$ as a set where every
-element~$\queryExpr \in \symDataAcc$ is one of the expressions of the language.
+such a dataset~$\symDataset \in \symDatasetUni$, we write
+$\dataObject \in \symDataset$. 
+
+Furthermore, we introduce a countably infinite set $\symDataAccUni$ (data
+access languages) in order to query the aforementioned data objects $\symDataObjUni$. 
+$\symDataAccUni$ is pairwise disjoint with $\symDataObjUni$ and $\symDatasetUni$. 
+Each data access language  $\symDataAcc \in \symDataAccUni$ is a set, where 
+every element $\queryExpr \in \symDataAcc$ is a one of the expressions of the 
+language. 
+
 
 Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
 entity that could be queried using a query expression to extract
@@ -43,7 +47,7 @@ data access language.
 	$\cbeval$ is a partial function $\cbeval: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeqUni$
 	where $\symDataSeqUni$ is the set of all possible sequences of data objects in $\symDataObjUni$.
 
-\todo[inline]{For both $\eval$ and $\cbeval$, I wonder whether they should really be partial functions? Not total? Perhaps partial is okay for both: for $\cbeval$ it may be argued that some of the expressions in $\symDataAcc$ are not meant to be used as "global" (context object independent) queries, and the same type of argument can be used for $\cbeval$ as well. Moreover, for $\cbeval$ we may additional argue that likely not all data objects in $\symDataObjUni$ would be possible input parameters.}
+	\todo[inline]{For both $\eval$ and $\cbeval$, I wonder whether they should really be partial functions? Not total? Perhaps partial is okay for both: for $\cbeval$ it may be argued that some of the expressions in $\symDataAcc$ are not meant to be used as "global" (context object independent) queries, and the same type of argument can be used for $\cbeval$ as well. Moreover, for $\cbeval$ we may additional argue that likely not all data objects in $\symDataObjUni$ would be possible input parameters.}
 \end{definition}
 
 
@@ -85,9 +89,7 @@ data access language.
 		\symMappingInst &= \left\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n}, \fragAttr \rightarrow \fragDefault \} \ | \
         \dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
 	\end{align*}
-	where
-\todo{TODO (you forgot to keep the definition of this one)}
-	{\color{blue} $\symDataSeq_{root}$ is ... (?) and}
+	where $\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$ and
 	\begin{equation*}
 		X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap}}
 		\{(\attr, \var) \ | \ 
@@ -107,6 +109,7 @@ data access language.
 
 The \textbf{projection} operator restricts the mapping tuples in a mapping
 relation to a subset of the attributes of that relation.
+
 
 \begin{definition}
 	\label{def:tuple_restrict}
@@ -232,7 +235,7 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 	\end{equation*}
 	where
 	\begin{equation*}
-        X_{\mappingTuple}= \mappingTuple \times \left(\bigtimes_{\attr \in \symAttrSubSet' \setminus \symAttrSubSet} \symMappingInst_{\mappingTuple}^{\attr}\right)
+		X_{\mappingTuple}= \mappingTuple \times \left(\bigtimes_{\attr \in \symAttrSubSet' \setminus \symAttrSubSet} \symMappingInst_{\mappingTuple}^{\attr}\right)
 	\end{equation*}
 	such that
 	\begin{equation*}
@@ -254,10 +257,10 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 \begin{definition}
 	\label{def:fragmenter_operator}
 	Let $r=\mappingRel$ be a mapping relation, and a set of pairs
-    $\symFragmentPairs: \symFragmentSet_{old} \times \symFragmentSet_{new}$
-    where $\symFragmentSet_{old} \subseteq \symFragmentUniverse$, 
-     $\symFragmentSet_{new} \subseteq \symFragmentUniverse$, and 
-     $\symFragmentSet_{old} \cap \symFragmentSet_{new} = \emptyset$.
+	$\symFragmentPairs: \symFragmentSet_{old} \times \symFragmentSet_{new}$
+	where $\symFragmentSet_{old} \subseteq \symFragmentUniverse$,
+	$\symFragmentSet_{new} \subseteq \symFragmentUniverse$, and
+	$\symFragmentSet_{old} \cap \symFragmentSet_{new} = \emptyset$.
 	The \emph{$\symFragmentPairs$-specific fragmentation of $r$} is
 	a mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
 	$\symAttrSubSet' =  \symAttrSubSet$ and
@@ -288,9 +291,9 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 		\symMappingInst' =  \{ \mappingTuple' \cup \mappingTuple'' \ | \
 		\mappingTuple' \in \symMappingInst_{left} \text { and }
 		\mappingTuple'' \in \symMappingInst_{right} \text{ such that }
-        \mappingTuple'(\fragAttr) = \mappingTuple''(\fragAttr) \text { and }
-        \mappingTuple'(\attr') = \mappingTuple''(\attr'') \text{ for all }
-        (\attr',\attr'') \in \symJoinAttrPairs
+		\mappingTuple'(\fragAttr) = \mappingTuple''(\fragAttr) \text { and }
+		\mappingTuple'(\attr') = \mappingTuple''(\attr'') \text{ for all }
+		(\attr',\attr'') \in \symJoinAttrPairs
 		\}
 	\end{equation*}
 \end{definition}

@@ -13,14 +13,14 @@ $\symDatasetUni$ (datasets), and  $\symDataObjUni$ (data objects).
 Each dataset in $\symDatasetUni$ is a collection of data objects.
 To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in
 such a dataset~$\symDataset \in \symDatasetUni$, we write
-$\dataObject \in \symDataset$. 
+$\dataObject \in \symDataset$.
 
 Furthermore, we introduce a countably infinite set $\symDataAccUni$ (data
-access languages) in order to query the aforementioned data objects $\symDataObjUni$. 
-$\symDataAccUni$ is pairwise disjoint with $\symDataObjUni$ and $\symDatasetUni$. 
-Each data access language  $\symDataAcc \in \symDataAccUni$ is a set, where 
-every element $\queryExpr \in \symDataAcc$ is a one of the expressions of the 
-language. 
+access languages) in order to query the aforementioned data objects $\symDataObjUni$.
+$\symDataAccUni$ is pairwise disjoint with $\symDataObjUni$ and $\symDatasetUni$.
+Each data access language  $\symDataAcc \in \symDataAccUni$ is a set, where
+every element $\queryExpr \in \symDataAcc$ is a one of the expressions of the
+language.
 
 
 Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
@@ -63,13 +63,13 @@ data access language.
 	\label{def:cast_function}
 	A \textbf{type-cast} function is a partial function
 	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals$.
-%	For such a type-cast function~$\typeCast$ and every sequence $\symDataSeq$ of data objects, we write
-%	$\typeCast[\symDataSeq]$ to denote the sequence of literals and error
-%	values~$\error$ such that the $i$-th element in $\typeCast[\symDataSeq]$
-%	is $\fctTypeCast{\dataObject_i}$ if $\dataObject_i \in dom(\typeCast)$,
-%	and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in
-%	$\symDataSeq$, for all $i \in  \{1,\dots,|\symDataSeq|\}$.
-%	The order of the data objects is preserved.
+	%	For such a type-cast function~$\typeCast$ and every sequence $\symDataSeq$ of data objects, we write
+	%	$\typeCast[\symDataSeq]$ to denote the sequence of literals and error
+	%	values~$\error$ such that the $i$-th element in $\typeCast[\symDataSeq]$
+	%	is $\fctTypeCast{\dataObject_i}$ if $\dataObject_i \in dom(\typeCast)$,
+	%	and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in
+	%	$\symDataSeq$, for all $i \in  \{1,\dots,|\symDataSeq|\}$.
+	%	The order of the data objects is preserved.
 \end{definition}
 
 \begin{definition}
@@ -81,19 +81,19 @@ data access language.
 	$\symAttrQueryMap$ is a partial function
 	$\symAttrQueryMap \!: \symAttrUniverse \setminus \{\fragAttr\} \rightarrow \symDataAcc$,
 	the \textbf{$\iterConfig$-specific mapping relation obtained from
-	$\dataSource$} is the mapping relation $\mappingRel$ such that
+		$\dataSource$} is the mapping relation $\mappingRel$ such that
 	\begin{align*}
-		\symAttrSubSet &= \fctDom{\symAttrQueryMap} \cup \{\fragAttr\}
+		\symAttrSubSet  & = \fctDom{\symAttrQueryMap} \cup \{\fragAttr\}
 		\; \text{ and}
 		\\
-		\symMappingInst &= \left\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n}, \fragAttr \rightarrow \fragDefault \} \ | \
-        \dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
+		\symMappingInst & = \left\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n}, \fragAttr \rightarrow \fragDefault \} \ | \
+		\dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
 	\end{align*}
 	where $\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$ and
 	\begin{equation*}
 		X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap}}
-		\{(\attr, \var) \ | \ 
-			\var \in \fctCbeval{\symDataset}{\dataObject}{\queryExpr} \text{ with }  q = \symAttrQueryMap(\attr)\}
+		\{(\attr, \var) \ | \
+		\var \in \fctCbeval{\symDataset}{\dataObject}{\queryExpr} \text{ with }  q = \symAttrQueryMap(\attr)\}
 		.
 	\end{equation*}
 \end{definition}
@@ -138,43 +138,44 @@ relation to a subset of the attributes of that relation.
 
 \subsection{Rename Operator}%
 \label{sub:rename_operator}
-Given a mapping relation $\mappingRel$, and set of pairs of attributes
-$\symRenameSet$ with $\{(a_{1}, b_{1}),..(a_{n}, b_{n})\}$ where all $a$'s and
-$b$'s are unique.
-A \textbf{rename operator} renames the attributes in the mapping relations,
-$\mappingRel$,  according to set of the pairs of attributes~$\symRenameSet$.
-It creates a new mapping relation $(\symAttrSubSet', \symMappingInst')$
-such that $\symAttrSubSet'$ is a set of attributes where,
-given a pair of attributes $(a_{old},b) \in \symRenameSet$, for all
-attributes $a \in \symAttrSubSet$ is replaced with $b$ if $a = a_{old}$ otherwise
-$a$ from is kept in $\symAttrSubSet'$.
-For the \emph{renamed mapping tuples}~$\mappingTuple'$, it is the result of
-restricting the mapping tuple~$\mappingTuple$ to $\symAttrSubSet'$ as
-$\mappingTuple[\symAttrSubSet']$ with the condition such that for each
-pair $(a_{old},b) \in \symRenameSet$, we have $\mappingTuple'(b) = \mappingTuple(a_{old})$,
-and for every $a$ in $A$ that did not get renamed, we have $\mappingTuple'(a) =
-	\mappingTuple(a)$, thus, $dom(\mappingTuple') = \symAttrSubSet'$.
+
+{\color{red}
+	\todoi{Change the following paragraph according to the definition - SMO}
+	Given a mapping relation $\mappingRel$, and set of pairs of attributes
+	$\symRenamePFunc$ with $\{(a_{1}, b_{1}),..(a_{n}, b_{n})\}$ where all $a$'s and
+	$b$'s are unique.
+	A \textbf{rename operator} renames the attributes in the mapping relations,
+	$\mappingRel$,  according to set of the pairs of attributes~$\symRenamePFunc$.
+	It creates a new mapping relation $(\symAttrSubSet', \symMappingInst')$
+	such that $\symAttrSubSet'$ is a set of attributes where,
+	given a pair of attributes $(a_{old},b) \in \symRenamePFunc$, for all
+	attributes $a \in \symAttrSubSet$ is replaced with $b$ if $a = a_{old}$ otherwise
+	$a$ from is kept in $\symAttrSubSet'$.
+	For the \emph{renamed mapping tuples}~$\mappingTuple'$, it is the result of
+	restricting the mapping tuple~$\mappingTuple$ to $\symAttrSubSet'$ as
+	$\mappingTuple[\symAttrSubSet']$ with the condition such that for each
+	pair $(a_{old},b) \in \symRenamePFunc$, we have $\mappingTuple'(b) = \mappingTuple(a_{old})$,
+	and for every $a$ in $A$ that did not get renamed, we have $\mappingTuple'(a) =
+		\mappingTuple(a)$, thus, $dom(\mappingTuple') = \symAttrSubSet'$.
+}
 
 \begin{definition}
 	\label{def:rename_operator}
-	Let $r = \mappingRel$ be a mapping relation, $\symRenameSet = \{(a,b) \in \symAttrSubSet \times \symAttrUniverse : a \neq  b \neq \fragAttr\}$
-	a non-empty countably finite set of pairs of attributes, and
-	$\symRenameSet_{first} = \{ a \ | \ (a,b) \in \symRenameSet\}$.
-	The \emph{$\symRenameSet$-specific rename of $r$}, denoted by $\text{Rename}^R(r)$,
+	Let $r = \mappingRel$ be a mapping relation,
+	$\symRenamePFunc: \symAttrSubSet \setminus \{\fragAttr\} \rightarrow \symAttrUniverse \setminus \{\fragAttr\} $
+	a partial function that is injective.
+	The \emph{$\symRenamePFunc$-specific renaming of $r$}
 	is the mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
-	\begin{equation*}
-		\symAttrSubSet'  =  (\symAttrSubSet \setminus \symRenameSet_{first}) \cup \{ c \ | \ a \in \symAttrSubSet \text{ and } (b,c) \in \symRenameSet \text{ such that } a = b\}
-	\end{equation*}
-	and
-	\begin{equation*}
-		\symMappingInst' = \{ \mappingTuple' \ | \
-		\mappingTuple \in \symMappingInst \text{ and }
-		a \in \symAttrSubSet' \text{ and }
-		(b, c) \in \symRenameSet \text{ such that }
-		\text{if } a = c,\ \mappingTuple'(a) = \mappingTuple(b)
-		\text{ else } \mappingTuple'(a) = \mappingTuple(a)
-		\}
-	\end{equation*}
+	\begin{align*}
+		\symAttrSubSet'  & =  (\symAttrSubSet \setminus dom(\symRenamePFunc)) \cup
+        \{ f(a) \ | f \in \symRenamePFunc \text{ and } \ a \in \symAttrSubSet \cap dom(\symRenamePFunc) \} \text{ and }       \\
+		\symMappingInst' & = \{ \fctRenameTuple{\symRenamePFunc}{\mappingTuple}\ | \ \mappingTuple \in \symMappingInst\}
+	\end{align*}
+
+    where we denote $\fctRenameTuple{\symRenamePFunc}{\mappingTuple} = \mappingTuple'$ 
+    such that $\mappingTuple'(a) = \mappingTuple(a)$ for all $a \in dom(\mappingTuple) \setminus dom(\symRenamePFunc)$,
+    and $\mappingTuple'(f(a)) = \mappingTuple(a)$ for all $a \in dom(\mappingTuple) \cap dom(\symRenamePFunc)$. 
+    It is evident that $dom(\mappingTuple') = \symAttrSubSet'$.
 \end{definition}
 
 \subsection{Extend Operator}%

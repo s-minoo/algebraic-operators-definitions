@@ -78,17 +78,49 @@ data access language.
 	the \emph{$\iterConfig$-specific mapping relation obtained from
 		$\dataSource$} is the mapping relation $\mappingRel$ such that
 	\begin{align*}
-		\symAttrSubSet &= \{ \attr \ | \  \attrQueryPair \in \symAttrQueryMap\} \cup \{\fragAttr\}
-		\; \text{ and} \\
+{\color{red}
+		\symAttrSubSet
+}
+		&= \{ \attr \ | \  \attrQueryPair \in \symAttrQueryMap\} \cup \{\fragAttr\}
+		\; \text{ and}
+		\\
+{\color{blue}
+		\symAttrSubSet
+}
+		&= \fctDom{\symAttrQueryMap} \cup \{\fragAttr\}
+		\; \text{ and}
+		\\
 		\symMappingInst &= \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \
         \dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
+		\\
+{\color{cyan}
+		\symMappingInst &= \left\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n}, \fragAttr \rightarrow \fragDefault \} \ | \
+        \dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
+}
 	\end{align*}
 	where 
-    \begin{equation*}
+	{\color{blue} $\symDataSeq_{root}$ is ... (?) and}
+{\color{red}
+	\begin{equation*}
 	X_d = \bigtimes_{\attrQueryPair \in \symAttrQueryMap} 
         \{(\attr, \var) \ | \ 
 		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject}{\queryExpr}]\}
-    \end{equation*}
+	\end{equation*}
+}
+{\color{blue}
+	\begin{equation*}
+	X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap} }
+        \{(\attr, \var) \ | \ 
+		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject}{\queryExpr}] \text{ with }  q = \symAttrQueryMap(\attr)\}
+	\end{equation*}
+}
+{\color{cyan}
+	\begin{equation*}
+	X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap} }
+        \{(\attr, \var) \ | \ 
+		\var \in \fctCbeval{\symDataset}{\dataObject}{\queryExpr} \text{ with }  q = \symAttrQueryMap(\attr)\}
+	\end{equation*}
+}
 \end{definition}
 
 

@@ -161,21 +161,37 @@ relation to a subset of the attributes of that relation.
 
 \begin{definition}
 	\label{def:rename_operator}
-	Let $r = \mappingRel$ be a mapping relation,
-	$\symRenamePFunc: \symAttrSubSet \setminus \{\fragAttr\} \rightarrow \symAttrUniverse \setminus \{\fragAttr\} $
-	a partial function that is injective.
-	The \emph{$\symRenamePFunc$-specific renaming of $r$}
-	is the mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
+	Let $r = \mappingRel$ be a mapping relation.
+	Given a partial function
+	$\symRenamePFunc: (\symAttrSubSet \setminus \{\fragAttr\}) \rightarrow (\symAttrUniverse \setminus \{\fragAttr\})$
+	that is injective,
+	the \emph{$\symRenamePFunc$-specific renaming of $r$}
+	is the mapping relation $(\symAttrSubSet'\!, \symMappingInst')$ such that
+\todo[inline]{I don't see why you have $a \in \symAttrSubSet \cap dom(\symRenamePFunc)$ in the definition of $A'$. Why not $a \in dom(\symRenamePFunc)$?}
+\todo[inline]{Also, what is $f$? $\symRenamePFunc$ itself is the function!}
+\todo[inline]{By the way, I had introduced a macro for the dom function.}
 	\begin{align*}
-		\symAttrSubSet'  & =  (\symAttrSubSet \setminus dom(\symRenamePFunc)) \cup
-        \{ f(a) \ | f \in \symRenamePFunc \text{ and } \ a \in \symAttrSubSet \cap dom(\symRenamePFunc) \} \text{ and }       \\
+		\symAttrSubSet'  & =  (\symAttrSubSet \setminus dom(\symRenamePFunc)) \; \cup \;
+        \{ f(a) \ | f \in \symRenamePFunc \text{ and } a \in \symAttrSubSet \cap dom(\symRenamePFunc) \} \; \text{ and }       \\
 		\symMappingInst' & = \{ \fctRenameTuple{\symRenamePFunc}{\mappingTuple}\ | \ \mappingTuple \in \symMappingInst\}
 	\end{align*}
-
+\todo[inline]{Regarding the text below, you do not actually say what kind of thing $t'$ is; you don't say what $f$ is (which you can drop anyways); and to define $t'$ you need to explicitly state what its domain is (there is nothing evident about that in your definition; instead, the domain of $t'$ may also contain other attributes unless you explicitly say that this is not the case); and you need to explicitly define what every attribute in the domain of $t'$ is mapped to by $t'$. The blue version below fixes all these issues.}
+{\color{red}
     where we denote $\fctRenameTuple{\symRenamePFunc}{\mappingTuple} = \mappingTuple'$ 
     such that $\mappingTuple'(a) = \mappingTuple(a)$ for all $a \in dom(\mappingTuple) \setminus dom(\symRenamePFunc)$,
     and $\mappingTuple'(f(a)) = \mappingTuple(a)$ for all $a \in dom(\mappingTuple) \cap dom(\symRenamePFunc)$. 
     It is evident that $dom(\mappingTuple') = \symAttrSubSet'$.
+}
+{\color{blue} \\
+    where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, we write $\fctRenameTuple{\symRenamePFunc}{\mappingTuple}$ to denote the mapping tuple~$\mappingTuple'$ for which it holds that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and, for every attribute~$\attr \in \fctDom{\mappingTuple'}$,
+	\begin{equation*}
+		\mappingTuple'(\attr) =
+		\begin{cases}
+			\mappingTuple(\symRenamePFunc^{-1}(a)) & \text{if $\attr \in \mathrm{img}(\symRenamePFunc)$,}\\
+			\mappingTuple(a) & \text{else.}
+		\end{cases}
+    \end{equation*}
+}
 \end{definition}
 
 \subsection{Extend Operator}%

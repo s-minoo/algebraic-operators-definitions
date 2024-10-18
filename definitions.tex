@@ -59,13 +59,13 @@ data access language.
 	\label{def:cast_function}
 	A \textbf{type-cast} function is a partial function
 	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals$.
-	For such a type-cast function~$\typeCast$ and every sequence $\symDataSeq$ of data objects, we write
-	$\typeCast[\symDataSeq]$ to denote the sequence of literals and error
-	values~$\error$ such that the $i$-th element in $\typeCast[\symDataSeq]$
-	is $\fctTypeCast{\dataObject_i}$ if $\dataObject_i \in dom(\typeCast)$,
-	and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in
-	$\symDataSeq$, for all $i \in  \{1,\dots,|\symDataSeq|\}$.
-	The order of the data objects is preserved.
+%	For such a type-cast function~$\typeCast$ and every sequence $\symDataSeq$ of data objects, we write
+%	$\typeCast[\symDataSeq]$ to denote the sequence of literals and error
+%	values~$\error$ such that the $i$-th element in $\typeCast[\symDataSeq]$
+%	is $\fctTypeCast{\dataObject_i}$ if $\dataObject_i \in dom(\typeCast)$,
+%	and $\error$ otherwise, where $\dataObject_i$ is the $i$-th element in
+%	$\symDataSeq$, for all $i \in  \{1,\dots,|\symDataSeq|\}$.
+%	The order of the data objects is preserved.
 \end{definition}
 
 \begin{definition}
@@ -74,53 +74,26 @@ data access language.
 	$\sourceType=\sourceTypeTuple$.
 	Given a tuple~$\iterConfig = \iterConfigTuple$, where
 	$\queryExpr_{root} \in \symDataAcc$ and
-    a partial function $\symAttrQueryMap : \symAttrUniverse \setminus \{\fragAttr\} \rightarrow \symDataAcc$,
-	the \emph{$\iterConfig$-specific mapping relation obtained from
-		$\dataSource$} is the mapping relation $\mappingRel$ such that
+	$\symAttrQueryMap$ is a partial function
+	$\symAttrQueryMap \!: \symAttrUniverse \setminus \{\fragAttr\} \rightarrow \symDataAcc$,
+	the \textbf{$\iterConfig$-specific mapping relation obtained from
+	$\dataSource$} is the mapping relation $\mappingRel$ such that
 	\begin{align*}
-{\color{red}
-		\symAttrSubSet
-}
-		&= \{ \attr \ | \  \attrQueryPair \in \symAttrQueryMap\} \cup \{\fragAttr\}
+		\symAttrSubSet &= \fctDom{\symAttrQueryMap} \cup \{\fragAttr\}
 		\; \text{ and}
 		\\
-{\color{blue}
-		\symAttrSubSet
-}
-		&= \fctDom{\symAttrQueryMap} \cup \{\fragAttr\}
-		\; \text{ and}
-		\\
-		\symMappingInst &= \left\{ \{\attr_1 \rightarrow \var_1, \dots, \attr_n \rightarrow \var_n, \fragAttr \rightarrow \fragDefault \} \ | \
-        \dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
-		\\
-{\color{cyan}
 		\symMappingInst &= \left\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n}, \fragAttr \rightarrow \fragDefault \} \ | \
         \dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
-}
 	\end{align*}
-	where 
+	where
+\todo{TODO (you forgot to keep the definition of this one)}
 	{\color{blue} $\symDataSeq_{root}$ is ... (?) and}
-{\color{red}
 	\begin{equation*}
-	X_d = \bigtimes_{\attrQueryPair \in \symAttrQueryMap} 
-        \{(\attr, \var) \ | \ 
-		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject}{\queryExpr}]\}
+		X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap}}
+		\{(\attr, \var) \ | \ 
+			\var \in \fctCbeval{\symDataset}{\dataObject}{\queryExpr} \text{ with }  q = \symAttrQueryMap(\attr)\}
+		.
 	\end{equation*}
-}
-{\color{blue}
-	\begin{equation*}
-	X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap} }
-        \{(\attr, \var) \ | \ 
-		\var \in \typeCast[\fctCbeval{\symDataset}{\dataObject}{\queryExpr}] \text{ with }  q = \symAttrQueryMap(\attr)\}
-	\end{equation*}
-}
-{\color{cyan}
-	\begin{equation*}
-	X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap} }
-        \{(\attr, \var) \ | \ 
-		\var \in \fctCbeval{\symDataset}{\dataObject}{\queryExpr} \text{ with }  q = \symAttrQueryMap(\attr)\}
-	\end{equation*}
-}
 \end{definition}
 
 
@@ -133,13 +106,12 @@ data access language.
 \label{sub:projection_operator}
 
 The \textbf{projection} operator restricts the mapping tuples in a mapping
-relation, $\mappingRel$, to a set of attributes $\symProjSet \subseteq
-\symAttrSubSet$.
+relation to a subset of the attributes of that relation.
 
 \begin{definition}
 	\label{def:tuple_restrict}
 	Given a mapping tuple $\mappingTuple$ and a subset $A \subseteq
-		\mathrm{dom}(\mappingTuple)$ of attributes for which $\mappingTuple$ is
+		\mathrm{dom}(\mappingTuple)$ of the attributes for which $\mappingTuple$ is
 	defined, we write $\mappingTuple[A]$ to denote the mapping tuple
 	$\mappingTuple'$ that is the restriction of $\mappingTuple$ to $A$;
 	i.e., $\mathrm{dom}(\mappingTuple') = A$ and $\mappingTuple'(a) =

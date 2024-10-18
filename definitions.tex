@@ -282,7 +282,10 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 \begin{definition}
 	\label{def:fragmenter_operator}
 	Let $r=\mappingRel$ be a mapping relation, and a set of pairs
-	$\symFragmentPairs: \symFragmentUniverse \times \symFragmentUniverse$.
+    $\symFragmentPairs: \symFragmentSet_{old} \times \symFragmentSet_{new}$
+    where $\symFragmentSet_{old} \subseteq \symFragmentUniverse$, 
+     $\symFragmentSet_{new} \subseteq \symFragmentUniverse$, and 
+     $\symFragmentSet_{old} \cap \symFragmentSet_{new} = \emptyset$.
 	The \emph{$\symFragmentPairs$-specific fragmentation of $r$} is
 	a mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
 	$\symAttrSubSet' =  \symAttrSubSet$ and

@@ -1,5 +1,5 @@
 \documentclass[12 pt, dvipsnames]{article}        	%sets the font to 12 pt and says this is an article (as opposed to book or other documents)
-\usepackage{mathabx, amssymb, amsthm}					% packages to get the fonts, symbols used in most math
+\usepackage{amssymb, amsthm, amsmath}					% packages to get the fonts, symbols used in most math
 %\usepackage{dcolumn}
 \usepackage[english]{babel}
 \usepackage{multirow}
@@ -7,6 +7,15 @@
 \usepackage{listings}
 \usepackage{booktabs}
 \usepackage[dvipsnames,svgnames, table]{xcolor} % text color
+\DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathx}{m}{n}{
+      <5> <6> <7> <8> <9> <10>
+      <10.95> <12> <14.4> <17.28> <20.74> <24.88>
+      mathx10
+      }{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareMathSymbol{\bigtimes}{1}{mathx}{"91}
+
 
 
 \DeclareRobustCommand{\ojoin}{\rule[0.10ex]{.3em}{.4pt}\llap{\rule[1.40ex]{.3em}{.4pt}}}

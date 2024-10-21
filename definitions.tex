@@ -169,92 +169,54 @@ relation to a subset of the attributes of that relation.
 	is the mapping relation $(\symAttrSubSet'\!, \symMappingInst')$ such that
 	\begin{align*}
 		\symAttrSubSet'  & =  (\symAttrSubSet \setminus dom(\symRenamePFunc)) \; \cup \;
-        \{ \symRenamePFunc(a) \ |  \ a \in dom(\symRenamePFunc) \} \; \text{ and }       \\
+		\{ \symRenamePFunc(a) \ |  \ a \in dom(\symRenamePFunc) \} \; \text{ and }                                       \\
 		\symMappingInst' & = \{ \fctRenameTuple{\symRenamePFunc}{\mappingTuple}\ | \ \mappingTuple \in \symMappingInst\}
 	\end{align*}
-\todo[inline]{Regarding the text below, you do not actually say what kind of thing $t'$ is; you don't say what $f$ is (which you can drop anyways); and to define $t'$ you need to explicitly state what its domain is (there is nothing evident about that in your definition; instead, the domain of $t'$ may also contain other attributes unless you explicitly say that this is not the case); and you need to explicitly define what every attribute in the domain of $t'$ is mapped to by $t'$. The blue version below fixes all these issues.}
-{\color{blue}
-    where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, we write $\fctRenameTuple{\symRenamePFunc}{\mappingTuple}$ to denote the mapping tuple~$\mappingTuple'$ for which it holds that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and, for every attribute~$\attr \in \fctDom{\mappingTuple'}$,
-	\begin{equation*}
-		\mappingTuple'(\attr) =
-		\begin{cases}
-			\mappingTuple(\symRenamePFunc^{-1}(a)) & \text{if $\attr \in \mathrm{img}(\symRenamePFunc)$,}\\
-			\mappingTuple(a) & \text{else.}
-		\end{cases}
-    \end{equation*}
-}
+	\todo[inline]{Regarding the text below, you do not actually say what kind of thing $t'$ is; you don't say what $f$ is (which you can drop anyways); and to define $t'$ you need to explicitly state what its domain is (there is nothing evident about that in your definition; instead, the domain of $t'$ may also contain other attributes unless you explicitly say that this is not the case); and you need to explicitly define what every attribute in the domain of $t'$ is mapped to by $t'$. The blue version below fixes all these issues.}
+	{\color{blue}
+		where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, we write $\fctRenameTuple{\symRenamePFunc}{\mappingTuple}$ to denote the mapping tuple~$\mappingTuple'$ for which it holds that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and, for every attribute~$\attr \in \fctDom{\mappingTuple'}$,
+		\begin{equation*}
+			\mappingTuple'(\attr) =
+			\begin{cases}
+				\mappingTuple(\symRenamePFunc^{-1}(a)) & \text{if $\attr \in \mathrm{img}(\symRenamePFunc)$,} \\
+				\mappingTuple(a)                       & \text{else.}
+			\end{cases}
+		\end{equation*}
+	}
 \end{definition}
 
 \subsection{Extend Operator}%
 \label{sub:extend_operator}
 
-\subsubsection{Extend expressions}%
-\label{ssub:extend_expressions}
-We assume a countably infinite set $\symExtExprUni$ (extend expressions) which is
-pairwise disjoint with the countably infinite sets defined in
-Section~\ref{ssub:source_notations} and Section~\ref{sec:preliminaries}.
-We also denote $\symExtExprSeqUni$ as a set of all possible
-sequences of \emph{extend expressions} in $\symExtExprUni$.
+\begin{definition}
+	An \emph{extension function} is a function $\extFunc: \extFuncType \times \dots \times \extFuncType \rightarrow \extFuncType$.
+	We denote the set of all possible \emph{extension function} as $\symExtFuncUni$.
+\end{definition}
 
 \begin{definition}
-	\label{def:extend_expression}
-	Given a mapping instance $\symMappingInst$.
-	An element $\extExpr \in \symExtExprUni$ is an expression which can be
-	evaluated by the partial functions
+	An \emph{extend-expression}~$\extExpr$ is an expression that is defined recursively as
+	follows:
+	\begin{enumerate}
+		\item  Every RDF term in $\symTermUniverse$ is an \emph{extend-expression}.
+		\item  Every attribute in $\symAttrUniverse$ is an \emph{extend-expression}.
+		\item  Every tuple of the form $\extFuncTuple$ with $\extFunc \in
+			      \symExtFuncUni$ and a sequence of
+		      sub-\emph{extend-expression}~$\extExpr_1,\dots,\extExpr_n$,  is
+		      in-turn an \emph{extend-expression}.
+	\end{enumerate}
+	Thus, a grammar that accepts such extend-expression $\extExpr$ is defined as
+	follows where $x \in \symTermUniverse$, $a \in \symAttrUniverse$, and
+	$\extFunc \in \symExtFuncUni$:
 	\begin{equation*}
-		\extExprTupleEval : \symExtExprUni \times \symMappingInst \rightarrow \symTermSeqUniverse \cup \{ \error \}
+		\extExpr ::= x \ |\ a \ |\  (\extFunc, \extExpr, \dots, \extExpr)
 	\end{equation*}
-	and
-	\begin{equation*}
-		\extExprInEval: \symExtExprUni \times (\symTermSeqUniverse \cup \{\error\}) \rightarrow \symTermSeqUniverse \cup \{\error\}
-	\end{equation*}
-	where $\symTermSeqUniverse$ is a set of all possible sequences of terms in $\symTermUniverse$.
-	We also denote an evaluation of expression sequence~$\symExtExprSeq$ on
-	a mapping tuple~$\mappingTuple$ as a partial function
-	$\extEvalSeq: \symExtExprSeqUni \times \symMappingInst \rightarrow \symTermSeqUniverse \cup \{\error\}$
-	such that
-	\begin{equation*}
-		\fctExtEvalSeq{\symExtExprSeq}{\mappingTuple} =
-		\fctExtExprInEval{\extExpr_n}{
-			\fctExtExprInEval{\dots}{
-				\fctExtExprInEval{\extExpr_2}{
-					\fctExtExprTupleEval{\extExpr_1}{\symMappingInst}
-				}
-			}
-		}
-	\end{equation*}
-	where $\extExpr_i$ is the $i$-th expression element in $\symExtExprSeq$
-	for every $i \in \{1,\dots,|\symExtExprSeq|\}$.
 \end{definition}
 
 
 \begin{definition}
-	\label{def:extend_operator}
-	Let $r = \mappingRel$ be a mapping relation, a set of pairs $\symExtPairs: \extPairsType$.
-	The \emph{$\symExtPairs$-specific extension of $r$} is a
-	mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
-	$\symAttrSubSet' = \symAttrSubSet \cup \{ a \ | \ (a, \symExtExprSeq) \in \symExtPairs\}$
-	and
-	\begin{equation*}
-		\symMappingInst' =  \left\{ \mappingTuple' \ |\
-		\mappingTuple \in \symMappingInst \text{ and }
-		\mappingTuple' \in X_{\mappingTuple}
-		\right\}
-	\end{equation*}
-	where
-	\begin{equation*}
-		X_{\mappingTuple}= \mappingTuple \times \left(\bigtimes_{\attr \in \symAttrSubSet' \setminus \symAttrSubSet} \symMappingInst_{\mappingTuple}^{\attr}\right)
-	\end{equation*}
-	such that
-	\begin{equation*}
-		\symMappingInst_{\mappingTuple}^{\attr} = \{ (a \rightarrow v) \ | \
-		(\attr, \symExtExprSeq) \in \symExtPairs \text{ and } v \in \fctExtEvalSeq{\symExtExprSeq}{\mappingTuple}
-		\}
-	\end{equation*}
-
+	Let $r = \mappingRel$
 
 \end{definition}
-
 
 
 
@@ -266,29 +228,29 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 	\label{def:fragmenter_operator}
 	Let $r=\mappingRel$ be a mapping relation, and a set of pairs
 	$\symFragmentPFunc:  \symFragmentSet \rightarrow \symFragmentSet$
-    where $\fctDom{\symFragmentPFunc} \cap \mathrm{img}(\symFragmentPFunc) = \emptyset$.
+	where $\fctDom{\symFragmentPFunc} \cap \mathrm{img}(\symFragmentPFunc) = \emptyset$.
 	The \emph{$\symFragmentPFunc$-specific fragmentation of $r$} is
 	a mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
 	$\symAttrSubSet' =  \symAttrSubSet$ and
 	\begin{equation*}
-		\symMappingInst'= 
-        \{ \mathrm{fragment}^{\symFragmentPFunc}(\mappingTuple) \ | \ 
-        \mappingTuple \in \symMappingInst
-        \}
+		\symMappingInst'=
+		\{ \mathrm{fragment}^{\symFragmentPFunc}(\mappingTuple) \ | \
+		\mappingTuple \in \symMappingInst
+		\}
 	\end{equation*}
-    where, for every mapping tuple $\mappingTuple \in \symMappingInst$, 
-    we write $\mathrm{fragment}^{\symFragmentPFunc}(\mappingTuple)$
-    to denote the mapping tuple $\mappingTuple'$ for which it holds 
-    that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and, 
-    for every attribute $a \in \fctDom{\mappingTuple'}$,
-    \begin{equation*}
-        \mappingTuple'(a) =  
-        \begin{cases}
-            \symFragmentPFunc(\mappingTuple(a)) & \text{ if } a = \fragAttr, 
-            \mappingTuple(a) \in \fctDom{\symFragmentPFunc}\\
-            \mappingTuple(a) 
-        \end{cases}
-    \end{equation*}
+	where, for every mapping tuple $\mappingTuple \in \symMappingInst$,
+	we write $\mathrm{fragment}^{\symFragmentPFunc}(\mappingTuple)$
+	to denote the mapping tuple $\mappingTuple'$ for which it holds
+	that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and,
+	for every attribute $a \in \fctDom{\mappingTuple'}$,
+	\begin{equation*}
+		\mappingTuple'(a) =
+		\begin{cases}
+			\symFragmentPFunc(\mappingTuple(a)) & \text{ if } a = \fragAttr,
+			\mappingTuple(a) \in \fctDom{\symFragmentPFunc}                  \\
+			\mappingTuple(a)
+		\end{cases}
+	\end{equation*}
 \end{definition}
 
 
@@ -322,26 +284,26 @@ sequences of \emph{extend expressions} in $\symExtExprUni$.
 
 
 \begin{definition}
-    Let $r=\mappingRel$ a mapping relation, and a basic graph
-    pattern\citeneeded~$\bgp$. 
-    The \emph{$\bgp$-specific RDF serializing of $r$} is a 
-    mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
-    \begin{align*}
-        \symAttrSubSet' &= \{ \fragAttr, \serdeAttr \} \text{ and } \\
-        \symMappingInst' &= \{ \fctSubst{\bgp}{\mappingTuple} \ | \ 
-        \mappingTuple \in \symMappingInst
-        \}
-    \end{align*}
-    where for all mapping tuple $\mappingTuple \in \symMappingInst$, 
-    we write $\fctSubst{\bgp}{\mappingTuple}$  for a mapping tuple
-    $\mappingTuple'$, such that 
-    $\fctDom{\mappingTuple'} =  \{ \fragAttr, \serdeAttr \}$, and 
-    $\mappingTuple'(\fragAttr)  = \mappingTuple(\fragAttr)$, and  
-    $\mappingTuple'(\serdeAttr)$ is the literal value containing the 
-    basic graph pattern $\bgp$ where all variables $v$ in $\bgp$ is replaced
-    with the value $\mappingTuple(v)$. 
-    
-    
+	Let $r=\mappingRel$ a mapping relation, and a basic graph
+	pattern\citeneeded~$\bgp$.
+	The \emph{$\bgp$-specific RDF serializing of $r$} is a
+	mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
+	\begin{align*}
+		\symAttrSubSet'  & = \{ \fragAttr, \serdeAttr \} \text{ and } \\
+		\symMappingInst' & = \{ \fctSubst{\bgp}{\mappingTuple} \ | \
+		\mappingTuple \in \symMappingInst
+		\}
+	\end{align*}
+	where for all mapping tuple $\mappingTuple \in \symMappingInst$,
+	we write $\fctSubst{\bgp}{\mappingTuple}$  for a mapping tuple
+	$\mappingTuple'$, such that
+	$\fctDom{\mappingTuple'} =  \{ \fragAttr, \serdeAttr \}$, and
+	$\mappingTuple'(\fragAttr)  = \mappingTuple(\fragAttr)$, and
+	$\mappingTuple'(\serdeAttr)$ is the literal value containing the
+	basic graph pattern $\bgp$ where all variables $v$ in $\bgp$ is replaced
+	with the value $\mappingTuple(v)$.
+
+
 \end{definition}
 
 

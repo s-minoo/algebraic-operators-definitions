@@ -9,8 +9,6 @@
 \newcommand{\symDataObjUni}{\mathcal{O}}
 \newcommand{\symDataAccUni}{\mathcal{Q}}
 \newcommand{\symDataSeqUni}{\bar{\mathcal{O}}}
-\newcommand{\symExtExprUni}{\mathcal{E}}
-\newcommand{\symExtExprSeqUni}{\bar{\mathcal{E}}}
 \newcommand{\symAttrSubSet}{A}
 \newcommand{\symProjSet}{P}
 \newcommand{\symMappingTupleSet}{M}
@@ -28,6 +26,7 @@
 \newcommand{\symFragmentPFunc}{\mathbb{F}}
 \newcommand{\symFragmentSet}{F}
 \newcommand{\symJoinAttrPairs}{\mathbb{J}}
+\newcommand{\symExtFuncUni}{\mathcal{E}}
 
 % Special values % 
 \newcommand{\card}{card}
@@ -59,13 +58,14 @@
 \newcommand{\length}{len}
 \newcommand{\var}{v}
 \newcommand{\indexSeq}{M}
-\newcommand{\extExpr}{e}
-\newcommand{\extExprTupleEval}{ei\eval}
-\newcommand{\extExprInEval}{et\eval}
-\newcommand{\extEvalSeq}{Eeval}
+\newcommand{\extExpr}{\gamma}
+\newcommand{\extEval}{eval}
 \newcommand{\extPairsType}{(\symAttrUniverse \setminus \symAttrSubSet) \times \symExtExprSeqUni}
 \newcommand{\serdeAttr}{a_{serialized}}
 \newcommand{\bgp}{\mathbb{B}}
+\newcommand{\extFunc}{f}
+\newcommand{\extFuncType}{(\symTermUniverse \cup \{\error\})}
+\newcommand{\extFuncTuple}{(\extFunc,\extExpr_1,\dots,\extExpr_n)}
 
 
 % Functions % 

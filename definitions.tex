@@ -214,7 +214,45 @@ relation to a subset of the attributes of that relation.
 
 
 \begin{definition}
-	Let $r = \mappingRel$
+	Let $r = \mappingRel$ be a mapping relation, $\attr \in \symAttrUniverse$ an
+	attribute such that $\attr \notin \symAttrSubSet$, and
+	an extend-expression $\extExpr$.
+	The \emph{$\extExpr$-specific extension of $r$ for $\attr$} is the mapping tuple
+	$(\symAttrSubSet',\symMappingInst')$ where
+	\begin{align*}
+		\symAttrSubSet'  & = \symAttrSubSet \cup \{ \attr \} \text{ and }                                       \\
+		\symMappingInst' & = \{\mappingTuple \cup \{\attr \rightarrow \fctEval{\extExpr}{\mappingTuple}\} \ | \
+		\mappingTuple \in \symMappingInst\}
+	\end{align*}
+	where the evaluation of $\fctEval{\extExpr}{\mappingTuple}$ is an RDF term or an
+	error $\error$ with the recursive evaluation defined as follows:
+
+    \begin{enumerate}
+        \item If $\extExpr$ is an RDF term $x$, then $\fctEval{\extExpr}{\mappingTuple} = x$
+        \item If $\extExpr$ is an attribute $\attr$ and $\attr \in \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \mappingTuple(\attr)$
+        \item If $\extExpr$ is an attribute $\attr$ and $\attr \notin \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \error$
+        \item if $\extExpr$ is a tuple $\extFuncTuple$ with $\extFunc \in \symExtFuncUni$ and $\extFunc$ is an $n$-ary extend function, then 
+            $\fctEval{\extExpr}{\mappingTuple} =  \fctExtFuncEvalN{\extExpr}{\mappingTuple}$
+        \item if $\extExpr$ is a tuple $\extFuncTuple$ with $\extFunc \in \symExtFuncUni$ and $\extFunc$ is \textbf{not} an $n$-ary extend function, then 
+            $\fctEval{\extExpr}{\mappingTuple} =  \error$
+    \end{enumerate}
+
+    {\color{red}
+        \begin{equation*}
+            \fctEval{\extExpr}{\mappingTuple} = 
+            \begin{cases}
+                x, & \text{ if $\extExpr$ is an RDF term $x$} \\ 
+                \mappingTuple(\attr), & \text{ if $\extExpr = \attr$ and $\attr \in \fctDom{\mappingTuple}$ } \\ 
+                \error, & \text{ if $\extExpr = \attr$ and $\attr \notin \fctDom{\mappingTuple}$ } \\ 
+                \fctExtFuncEvalN{\extExpr}{\mappingTuple},  &\ \parbox{15em}{if $\extExpr = \extFuncTuple$ with $\extFunc \in \symExtFuncUni$ and the 
+                $\extFunc$ is an $n$-ary extend function}  \\ 
+                \\
+                \error, &\ \parbox{15em}{if $\extExpr = \extFuncTuple$ with $\extFunc \in \symExtFuncUni$ and the 
+                $\extFunc$ is \textbf{not} an $n$-ary extend function}  
+            \end{cases}
+        \end{equation*}
+    }
+
 
 \end{definition}
 

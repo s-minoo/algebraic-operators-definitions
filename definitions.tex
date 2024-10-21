@@ -172,17 +172,14 @@ relation to a subset of the attributes of that relation.
 		\{ \symRenamePFunc(a) \ |  \ a \in dom(\symRenamePFunc) \} \; \text{ and }                                       \\
 		\symMappingInst' & = \{ \fctRenameTuple{\symRenamePFunc}{\mappingTuple}\ | \ \mappingTuple \in \symMappingInst\}
 	\end{align*}
-	\todo[inline]{Regarding the text below, you do not actually say what kind of thing $t'$ is; you don't say what $f$ is (which you can drop anyways); and to define $t'$ you need to explicitly state what its domain is (there is nothing evident about that in your definition; instead, the domain of $t'$ may also contain other attributes unless you explicitly say that this is not the case); and you need to explicitly define what every attribute in the domain of $t'$ is mapped to by $t'$. The blue version below fixes all these issues.}
-	{\color{blue}
-		where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, we write $\fctRenameTuple{\symRenamePFunc}{\mappingTuple}$ to denote the mapping tuple~$\mappingTuple'$ for which it holds that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and, for every attribute~$\attr \in \fctDom{\mappingTuple'}$,
-		\begin{equation*}
-			\mappingTuple'(\attr) =
-			\begin{cases}
-				\mappingTuple(\symRenamePFunc^{-1}(a)) & \text{if $\attr \in \mathrm{img}(\symRenamePFunc)$,} \\
-				\mappingTuple(a)                       & \text{else.}
-			\end{cases}
-		\end{equation*}
-	}
+	where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, we write $\fctRenameTuple{\symRenamePFunc}{\mappingTuple}$ to denote the mapping tuple~$\mappingTuple'$ for which it holds that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and, for every attribute~$\attr \in \fctDom{\mappingTuple'}$,
+	\begin{equation*}
+		\mappingTuple'(\attr) =
+		\begin{cases}
+			\mappingTuple(\symRenamePFunc^{-1}(a)) & \text{if $\attr \in \mathrm{img}(\symRenamePFunc)$,} \\
+			\mappingTuple(a)                       & \text{else.}
+		\end{cases}
+	\end{equation*}
 \end{definition}
 
 \subsection{Extend Operator}%
@@ -196,59 +193,60 @@ relation to a subset of the attributes of that relation.
 \begin{definition}
 	An \emph{extend-expression}~$\extExpr$ is an expression that is defined recursively as
 	follows:
+\todo[inline]{The hyphen (-) in "extend-expression" is not correct English. In contrast, in English you don't need a hyphen there; i.e., it should just be "extend expression".}
+\todo[inline]{Another general thing for all definitions: I see that you are using 'emph' to highlight the term that is being defined. I prefer to use 'textbf' instead because that makes the term stand out even more. 'emph' makes the text italic, but many of the math symbols in a definition are usually also in italic, which makes it a bit more difficult to immediately spot the defined term among all the italic text. With 'textbf' this problem goes away (assuming that usually nothing else in the definitions is presented in bold font).}
 	\begin{enumerate}
-		\item  Every RDF term in $\symTermUniverse$ is an \emph{extend-expression}.
-		\item  Every attribute in $\symAttrUniverse$ is an \emph{extend-expression}.
-		\item  Every tuple of the form $\extFuncTuple$ with $\extFunc \in
-			      \symExtFuncUni$ and a sequence of
-		      sub-\emph{extend-expression}~$\extExpr_1,\dots,\extExpr_n$,  is
-		      in-turn an \emph{extend-expression}.
+		\item
+		Every RDF term in $\symTermUniverse$ is an \emph{extend-expression}.
+		\item
+		Every attribute in $\symAttrUniverse$ is an \emph{extend-expression}.
+\todo{Actually, we should rule out the fragment attribute, right?}
+		\item
+		If $\extExpr_1,\dots,\extExpr_n$ are extend expressions and
+		$\extFunc \in \symExtFuncUni$, then the tuple $\extFuncTuple$ is an
+		extend expression.
 	\end{enumerate}
-	Thus, a grammar that accepts such extend-expression $\extExpr$ is defined as
-	follows where $x \in \symTermUniverse$, $a \in \symAttrUniverse$, and
-	$\extFunc \in \symExtFuncUni$:
-	\begin{equation*}
-		\extExpr ::= x \ |\ a \ |\  (\extFunc, \extExpr, \dots, \extExpr)
-	\end{equation*}
+% 	Thus, a grammar that accepts such extend-expression $\extExpr$ is defined as
+% 	follows where $x \in \symTermUniverse$, $a \in \symAttrUniverse$, and
+% 	$\extFunc \in \symExtFuncUni$:
+% 	\begin{equation*}
+% 		\extExpr ::= x \ |\ a \ |\  (\extFunc, \extExpr, \dots, \extExpr)
+% 	\end{equation*}
 \end{definition}
 
 
 \begin{definition}
-	Let $r = \mappingRel$ be a mapping relation, $\attr \in \symAttrUniverse$ an
-	attribute such that $\attr \notin \symAttrSubSet$, and
-	an extend-expression $\extExpr$.
+	Let $r = \mappingRel$ be a mapping relation, $\attr \in \symAttrUniverse$ be
+	an attribute such that $\attr \notin \symAttrSubSet$, and
+	$\extExpr$ be an extend expression.
 	The \emph{$\extExpr$-specific extension of $r$ for $\attr$} is the mapping tuple
-	$(\symAttrSubSet',\symMappingInst')$ where
+	$(\symAttrSubSet'\!,\symMappingInst')$ where
 	\begin{align*}
 		\symAttrSubSet'  & = \symAttrSubSet \cup \{ \attr \} \text{ and }                                       \\
-		\symMappingInst' & = \{\mappingTuple \cup \{\attr \rightarrow \fctEval{\extExpr}{\mappingTuple}\} \ | \
-		\mappingTuple \in \symMappingInst\}
+		\symMappingInst' & = \bigl\{\mappingTuple \cup \{\attr \rightarrow \fctEval{\extExpr}{\mappingTuple}\} \ | \
+		\mappingTuple \in \symMappingInst \bigr\}
 	\end{align*}
-	where the evaluation of $\fctEval{\extExpr}{\mappingTuple}$ is an RDF term or an
-	error $\error$ with the recursive evaluation defined as follows:
+	where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, $\fctEval{\extExpr}{\mappingTuple}$ is either an RDF term or the
+	error value ($\error$), which is determined recursively as follows:
 
     \begin{enumerate}
-        \item If $\extExpr$ is an RDF term $x$, then $\fctEval{\extExpr}{\mappingTuple} = x$
-        \item If $\extExpr$ is an attribute $\attr$ and $\attr \in \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \mappingTuple(\attr)$
-        \item If $\extExpr$ is an attribute $\attr$ and $\attr \notin \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \error$
-        \item if $\extExpr$ is a tuple $\extFuncTuple$ with $\extFunc \in \symExtFuncUni$ and $\extFunc$ is an $n$-ary extend function, then 
-            $\fctEval{\extExpr}{\mappingTuple} =  \fctExtFuncEvalN{\extExpr}{\mappingTuple}$
-        \item if $\extExpr$ is a tuple $\extFuncTuple$ with $\extFunc \in \symExtFuncUni$ and $\extFunc$ is \textbf{not} an $n$-ary extend function, then 
-            $\fctEval{\extExpr}{\mappingTuple} =  \error$
+        \item If $\extExpr$ is an RDF term $x$, then $\fctEval{\extExpr}{\mappingTuple} = x$.
+        \item If $\extExpr$ is an attribute $\attr$ and $\attr \in \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \mappingTuple(\attr)$.
+        \item If $\extExpr$ is an attribute $\attr$ and $\attr \notin \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \error$.
+        \item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is an $n$-ary function, then
+            $\fctEval{\extExpr}{\mappingTuple} =  \fctExtFuncEvalN{\extExpr}{\mappingTuple}$.
+        \item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is not an $n$-ary function, then
+            $\fctEval{\extExpr}{\mappingTuple} =  \error$.
     \end{enumerate}
 
     {\color{red}
         \begin{equation*}
             \fctEval{\extExpr}{\mappingTuple} = 
             \begin{cases}
-                x, & \text{ if $\extExpr$ is an RDF term $x$} \\ 
-                \mappingTuple(\attr), & \text{ if $\extExpr = \attr$ and $\attr \in \fctDom{\mappingTuple}$ } \\ 
-                \error, & \text{ if $\extExpr = \attr$ and $\attr \notin \fctDom{\mappingTuple}$ } \\ 
-                \fctExtFuncEvalN{\extExpr}{\mappingTuple},  &\ \parbox{15em}{if $\extExpr = \extFuncTuple$ with $\extFunc \in \symExtFuncUni$ and the 
-                $\extFunc$ is an $n$-ary extend function}  \\ 
-                \\
-                \error, &\ \parbox{15em}{if $\extExpr = \extFuncTuple$ with $\extFunc \in \symExtFuncUni$ and the 
-                $\extFunc$ is \textbf{not} an $n$-ary extend function}  
+                \extExpr & \text{if $\extExpr$ is an RDF term;} \\
+                \mappingTuple(\extExpr) & \text{if $\extExpr \in \symAttrUniverse$ and $\extExpr \in \fctDom{\mappingTuple}$;} \\
+                \fctExtFuncEvalN{\extExpr}{\mappingTuple}  &\ \parbox{15em}{if $\extExpr = \extFuncTuple$ such that $\extFunc$ is an $n$-ary function;} \\ 
+                \error & \text{else.}
             \end{cases}
         \end{equation*}
     }

@@ -126,7 +126,7 @@ relation to a subset of the attributes of that relation.
 	Let $r = \mappingRel$ be a mapping relation and $\symProjSet \subseteq
 		\symAttrSubSet \setminus \{\fragAttr\}$ be a non-empty subset of the
 	attributes of $r$.
-	The \emph{$\symProjSet$-specific projection of $r$}, denoted by
+	The \textbf{$\symProjSet$-specific projection of $r$}, denoted by
 	$\text{Project}^\symProjSet(r)$, is the mapping relation $(\symAttrSubSet',
 		\symMappingInst')$ such that $\symAttrSubSet' = \symProjSet \cup
 		\{\fragAttr\}$ and $\symMappingInst' = \{ \mappingTuple[\symAttrSubSet'] \ | \
@@ -151,7 +151,7 @@ relation to a subset of the attributes of that relation.
 	given a pair of attributes $(a_{old},b) \in \symRenamePFunc$, for all
 	attributes $a \in \symAttrSubSet$ is replaced with $b$ if $a = a_{old}$ otherwise
 	$a$ from is kept in $\symAttrSubSet'$.
-	For the \emph{renamed mapping tuples}~$\mappingTuple'$, it is the result of
+	For the \textbf{renamed mapping tuples}~$\mappingTuple'$, it is the result of
 	restricting the mapping tuple~$\mappingTuple$ to $\symAttrSubSet'$ as
 	$\mappingTuple[\symAttrSubSet']$ with the condition such that for each
 	pair $(a_{old},b) \in \symRenamePFunc$, we have $\mappingTuple'(b) = \mappingTuple(a_{old})$,
@@ -165,7 +165,7 @@ relation to a subset of the attributes of that relation.
 	Given a partial function
 	$\symRenamePFunc: (\symAttrSubSet \setminus \{\fragAttr\}) \rightarrow (\symAttrUniverse \setminus \{\fragAttr\})$
 	that is injective,
-	the \emph{$\symRenamePFunc$-specific renaming of $r$}
+	the \textbf{$\symRenamePFunc$-specific renaming of $r$}
 	is the mapping relation $(\symAttrSubSet'\!, \symMappingInst')$ such that
 	\begin{align*}
 		\symAttrSubSet'  & =  (\symAttrSubSet \setminus dom(\symRenamePFunc)) \; \cup \;
@@ -186,27 +186,24 @@ relation to a subset of the attributes of that relation.
 \label{sub:extend_operator}
 
 \begin{definition}
-	An \emph{extension function} is a function $\extFunc: \extFuncType \times \dots \times \extFuncType \rightarrow \extFuncType$.
-	We denote the set of all possible \emph{extension function} as $\symExtFuncUni$.
+	An \textbf{extension function} is a function $\extFunc: \extFuncType \times \dots \times \extFuncType \rightarrow \extFuncType$.
+	We denote the set of all possible \textbf{extension function} as $\symExtFuncUni$.
 \end{definition}
 
 \begin{definition}
-	An \emph{extend-expression}~$\extExpr$ is an expression that is defined recursively as
+	An \textbf{extend expression}~$\extExpr$ is an expression that is defined recursively as
 	follows:
-\todo[inline]{The hyphen (-) in "extend-expression" is not correct English. In contrast, in English you don't need a hyphen there; i.e., it should just be "extend expression".}
-\todo[inline]{Another general thing for all definitions: I see that you are using 'emph' to highlight the term that is being defined. I prefer to use 'textbf' instead because that makes the term stand out even more. 'emph' makes the text italic, but many of the math symbols in a definition are usually also in italic, which makes it a bit more difficult to immediately spot the defined term among all the italic text. With 'textbf' this problem goes away (assuming that usually nothing else in the definitions is presented in bold font).}
 	\begin{enumerate}
 		\item
-		Every RDF term in $\symTermUniverse$ is an \emph{extend-expression}.
+		Every RDF term in $\symTermUniverse$ is an \textbf{extend expression}.
 		\item
-		Every attribute in $\symAttrUniverse$ is an \emph{extend-expression}.
-\todo{Actually, we should rule out the fragment attribute, right?}
+		Every attribute in $\symAttrUniverse$ is an \textbf{extend expression}.
 		\item
 		If $\extExpr_1,\dots,\extExpr_n$ are extend expressions and
 		$\extFunc \in \symExtFuncUni$, then the tuple $\extFuncTuple$ is an
 		extend expression.
 	\end{enumerate}
-% 	Thus, a grammar that accepts such extend-expression $\extExpr$ is defined as
+% 	Thus, a grammar that accepts such extend expression $\extExpr$ is defined as
 % 	follows where $x \in \symTermUniverse$, $a \in \symAttrUniverse$, and
 % 	$\extFunc \in \symExtFuncUni$:
 % 	\begin{equation*}
@@ -219,7 +216,7 @@ relation to a subset of the attributes of that relation.
 	Let $r = \mappingRel$ be a mapping relation, $\attr \in \symAttrUniverse$ be
 	an attribute such that $\attr \notin \symAttrSubSet$, and
 	$\extExpr$ be an extend expression.
-	The \emph{$\extExpr$-specific extension of $r$ for $\attr$} is the mapping tuple
+	The \textbf{$\extExpr$-specific extension of $r$ for $\attr$} is the mapping tuple
 	$(\symAttrSubSet'\!,\symMappingInst')$ where
 	\begin{align*}
 		\symAttrSubSet'  & = \symAttrSubSet \cup \{ \attr \} \text{ and }                                       \\
@@ -239,7 +236,6 @@ relation to a subset of the attributes of that relation.
             $\fctEval{\extExpr}{\mappingTuple} =  \error$.
     \end{enumerate}
 
-    {\color{red}
         \begin{equation*}
             \fctEval{\extExpr}{\mappingTuple} = 
             \begin{cases}
@@ -249,7 +245,6 @@ relation to a subset of the attributes of that relation.
                 \error & \text{else.}
             \end{cases}
         \end{equation*}
-    }
 
 
 \end{definition}
@@ -274,7 +269,7 @@ relation to a subset of the attributes of that relation.
 	We assume
 \todo{You cannot state this as an assumption (we are not making assumptions as part of formal definitions). Instead, you must state this as a condition for the pair $r_{left}$ and $r_{right}$.}
 	that $\symAttrSubSet_{left} \cap \symAttrSubSet_{right} = \{\fragAttr\}$.
-	The \emph{$\symJoinAttrPairs$-specific join of mapping relations $r_{left}$ and
+	The \textbf{$\symJoinAttrPairs$-specific join of mapping relations $r_{left}$ and
 		$r_{right}$} is the mapping relation $(\symAttrSubSet', \symMappingInst')$
 	such that $\symAttrSubSet' = \symAttrSubSet_{left} \cup \symAttrSubSet_{right}$
 	and

@@ -60,12 +60,16 @@
 	\caption{Source operator translation}
 	\label{alg:rml_source_op}
 	\begin{algorithmic}[1]
-		\Require $\symRMLGraph$ an RDF graph of RML document
-		\State $p \gets $ rml:logicalSource
-		\State $tm_{iris}, ls_{iris} \gets $ subjects and objects in $\symRMLGraph$ with predicate $p$
-		\For{$tm_{current} \gets tm_{iris} $}
-        \State $\symAttrQueryMap \gets $ \Call{QueryInTriplesMap}{$tm_{current}$,$\symRMLGraph$}
-        \State  $tm_{current}$
-		\EndFor
+        \Require $\symRMLGraph$ an RDF graph of RML document, 
+        $tm_{iri}$ subject IRI of the triples map to translate the source operator for
+        \Ensure $(\queryExpr_{root}, \symAttrQueryMap)$
+        \Procedure{TranslateSourceOperator}{$tm_{iri},\symRMLGraph$}
+            \State $p_{ls} \gets $ rml:logicalSource
+            \State $p_{iter} \gets $ rml:iterator
+            \State $ls_{iri} \gets $ object IRI of the triple with the subject~$tm_{iri}$ and the predicate~$p_{ls}$ 
+            \State $\queryExpr_{root} \gets $ object literal of the triple with subject $ls_{iri}$ and predicate~$p_{iter}$
+            \State $\symAttrQueryMap \gets$ \Call{QueryInTriplesMap}{$tm_{iri}, \symRMLGraph$}
+            \State \Return  $(\queryExpr_{root}, \symAttrQueryMap)$
+        \EndProcedure
 	\end{algorithmic}
 \end{algorithm}

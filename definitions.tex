@@ -259,10 +259,14 @@ relation to a subset of the attributes of that relation.
 \subsection{Fragmenter Operator}%
 \label{sub:fragmenter_operator}
 
+\todo[inline]{For simplicity, I would replace the function $\symFragmentPFunc$ by just a single such pair. This doesn't loose expressiveness because multiple fragmenter operators with different pairs may be stacked on top of one another.}
+\todo[inline]{In any case, I wonder whether this definition is really capturing what you have in mind. The problem that I see is that, with this definition (and the other operators that we have so far), you cannot actually partition a mapping relation and say that some tuples go to some target and other go to a different target.}
+\todo[inline]{And then I still find the name very confusing/misleading. For instance, without knowing anything, if I see $\mathrm{fragment}^{\symFragmentPFunc}(\mappingTuple)$, I would assume that this function somehow returns a fragment of the given tuple $\mappingTuple$, not that it changes a value in that tuple.}
 
 \begin{definition}
 	\label{def:fragmenter_operator}
 	Let $r=\mappingRel$ be a mapping relation, and a set of pairs
+\todo{Instead of "set of pairs", shouldn't that be "partial function"?}
 	$\symFragmentPFunc:  \symFragmentSet \rightarrow \symFragmentSet$
 	where $\fctDom{\symFragmentPFunc} \cap \mathrm{img}(\symFragmentPFunc) = \emptyset$.
 	The \emph{$\symFragmentPFunc$-specific fragmentation of $r$} is
@@ -293,12 +297,21 @@ relation to a subset of the attributes of that relation.
 \subsection{$\theta$-join Operator}%
 \label{sub:theta_join_operator}
 
+\todo[inline]{It is not actually a $\theta$-join if the only comparison operator between the join variables is equivalence. Then, it is just an equijoin (which is a special case of $\theta$-joins). See the Wikipedia link in the LaTeX comment here:} % https://en.wikipedia.org/wiki/Relational_algebra#%CE%B8-join_and_equijoin
+
+
 \begin{definition}
 	\label{def:theta_join_operator}
-	Given two mapping relations $r_{left} = \mappingRelSpec{left}$ and
+	Given
+\todo{This is not a complete English sentence. Sentences that start with "Given" are always of the form: "Given x, y." You have the "x" part here, but not the "y" part.}
+	two mapping relations $r_{left} = \mappingRelSpec{left}$ and
 	$r_{right} = \mappingRelSpec{right}$, and a set of pairs of attributes
+\todo{Shouldn't $\symJoinAttrPairs$ be a subset of $\symAttrSubSet_{left} \times \symAttrSubSet_{right}$?}
+\todo{Also, can the fragment attribute part of any such pair?}
 	$\symJoinAttrPairs: \symAttrSubSet_{left} \times \symAttrSubSet_{right}$.
-	We assume that $\symAttrSubSet_{left} \cap \symAttrSubSet_{right} = \{\fragAttr\}$.
+	We assume
+\todo{You cannot state this as an assumption (we are not making assumptions as part of formal definitions). Instead, you must state this as a condition for the pair $r_{left}$ and $r_{right}$.}
+	that $\symAttrSubSet_{left} \cap \symAttrSubSet_{right} = \{\fragAttr\}$.
 	The \emph{$\symJoinAttrPairs$-specific join of mapping relations $r_{left}$ and
 		$r_{right}$} is the mapping relation $(\symAttrSubSet', \symMappingInst')$
 	such that $\symAttrSubSet' = \symAttrSubSet_{left} \cup \symAttrSubSet_{right}$
@@ -313,6 +326,7 @@ relation to a subset of the attributes of that relation.
 	\end{equation*}
 \end{definition}
 
+\todo[inline]{What if $t'$ and $t''$ have a different value for the fragment attribute?}
 
 
 

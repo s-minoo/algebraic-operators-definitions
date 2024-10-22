@@ -256,44 +256,6 @@ relation to a subset of the attributes of that relation.
 
 
 
-\subsection{Fragmenter Operator}%
-\label{sub:fragmenter_operator}
-
-\todo[inline]{For simplicity, I would replace the function $\symFragmentPFunc$ by just a single such pair. This doesn't loose expressiveness because multiple fragmenter operators with different pairs may be stacked on top of one another.}
-\todo[inline]{In any case, I wonder whether this definition is really capturing what you have in mind. The problem that I see is that, with this definition (and the other operators that we have so far), you cannot actually partition a mapping relation and say that some tuples go to some target and other go to a different target.}
-\todo[inline]{And then I still find the name very confusing/misleading. For instance, without knowing anything, if I see $\mathrm{fragment}^{\symFragmentPFunc}(\mappingTuple)$, I would assume that this function somehow returns a fragment of the given tuple $\mappingTuple$, not that it changes a value in that tuple.}
-
-\begin{definition}
-	\label{def:fragmenter_operator}
-	Let $r=\mappingRel$ be a mapping relation, and a set of pairs
-\todo{Instead of "set of pairs", shouldn't that be "partial function"?}
-	$\symFragmentPFunc:  \symFragmentSet \rightarrow \symFragmentSet$
-	where $\fctDom{\symFragmentPFunc} \cap \mathrm{img}(\symFragmentPFunc) = \emptyset$.
-	The \emph{$\symFragmentPFunc$-specific fragmentation of $r$} is
-	a mapping relation $(\symAttrSubSet', \symMappingInst')$ such that
-	$\symAttrSubSet' =  \symAttrSubSet$ and
-	\begin{equation*}
-		\symMappingInst'=
-		\{ \mathrm{fragment}^{\symFragmentPFunc}(\mappingTuple) \ | \
-		\mappingTuple \in \symMappingInst
-		\}
-	\end{equation*}
-	where, for every mapping tuple $\mappingTuple \in \symMappingInst$,
-	we write $\mathrm{fragment}^{\symFragmentPFunc}(\mappingTuple)$
-	to denote the mapping tuple $\mappingTuple'$ for which it holds
-	that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and,
-	for every attribute $a \in \fctDom{\mappingTuple'}$,
-	\begin{equation*}
-		\mappingTuple'(a) =
-		\begin{cases}
-			\symFragmentPFunc(\mappingTuple(a)) & \text{ if } a = \fragAttr,
-			\mappingTuple(a) \in \fctDom{\symFragmentPFunc}                  \\
-			\mappingTuple(a)
-		\end{cases}
-	\end{equation*}
-\end{definition}
-
-
 \subsection{$\theta$-join Operator}%
 \label{sub:theta_join_operator}
 

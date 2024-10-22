@@ -73,3 +73,20 @@
         \EndProcedure
 	\end{algorithmic}
 \end{algorithm}
+
+
+\begin{algorithm}
+    \caption{Projection operator translation}
+    \label{alg:projection_op}
+    \begin{algorithmic}[1]
+        \Require $\symRMLGraph$ an RDF graph of RML document, 
+        $tm_{iri}$ subject IRI of the triples map to translate the projection operator for
+        \Ensure $\symProjSet$ a set of projection attributes
+        \Procedure{TranslateProjectionOperator}{$tm_{iri},\symRMLGraph$}
+            \State $\symAttrQueryMap \gets$ \Call{QueryInTriplesMap}{$tm_{iri}, \symRMLGraph$}
+            \State $\symProjSet \gets \fctDom{\symAttrQueryMap}$
+            \State \Return  $\symProjSet$
+        \EndProcedure
+
+    \end{algorithmic}
+\end{algorithm}

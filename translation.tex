@@ -8,35 +8,49 @@
     \begin{algorithmic}[1]
         \Require  $\symRMLGraph$ an RDF graph of RML document, 
         $tm_{iri}$ the subject IRI of a triples map
-        \Ensure  $Q_{pairs}$ a map of attributes to query expressions
+        \Ensure  $\symAttrQueryMap$ a map of attributes to query expressions
         \Procedure{QueryInTriplesMap}{$tm_{iri}, \symRMLGraph$}
-            \State $Q_{pairs} \gets$ hash map with type: $\symAttrUniverse \setminus \{\fragAttr\} \rightarrow \symDataAcc$ 
-            \State $Q_{pairs} \gets$ \Call{QueryInTemplate}{$tm_{iri}, \symRMLGraph, Q_{pairs}$}
-            \State $Q_{pairs} \gets$ \Call{QueryInReferences}{$tm_{iri}, \symRMLGraph, Q_{pairs}$}
-            \State \Return $Q_{pairs}$
+            \State $\symAttrQueryMap \gets$ hash map with type: $\symAttrUniverse \setminus \{\fragAttr\} \rightarrow \symDataAcc$ 
+            \State $\symAttrQueryMap \gets$ \Call{QueryInReferences}{$tm_{iri}, \symRMLGraph, Q_{pairs}$}
+            \State $\symAttrQueryMap \gets$ \Call{QueryInJoinConditions}{$tm_{iri}, \symRMLGraph, Q_{pairs}$}
+            \State $\symAttrQueryMap \gets$ \Call{QueryInTemplate}{$tm_{iri}, \symRMLGraph, Q_{pairs}$}
+            \State \Return $\symAttrQueryMap$
         \EndProcedure
         \Statex
-        \Function{QueryInReferences}{$tm_{iri}, \symRMLGraph, Q_{pairs}$}
+        \Function{QueryInReferences}{$tm_{iri}, \symRMLGraph, \symAttrQueryMap$}
             \State $p_{ref} \gets$ rml:reference
             \For{$trip \in$ triples with predicate $p_{temp}$, associated with $tm_{iri}$ in $\symRMLGraph$}
-                \State $\queryExpr \gets trip.o$\Comment{object literals of rml:reference are query expressions}
+                \State $\queryExpr \gets trip.o$\Comment{object literal is a query expression}
                 \State $\attr \gets$ unique attribute derived based on $\queryExpr$
-                \State $Q_{pairs}[\attr] \gets \queryExpr$
+                \State $\symAttrQueryMap[\attr] \gets \queryExpr$
             \EndFor
-            \State \Return $Q_{pairs}$
+            \State \Return $\symAttrQueryMap$
         \EndFunction
-
         \Statex
-        \Function{QueryInTemplate}{$tm_{iri}, \symRMLGraph, Q_{pairs}$}
+        \Function{QueryInJoinConditions}{$tm_{iri}, \symRMLGraph, \symAttrQueryMap$}
+            \State $p_{child} \gets$ rr:child
+            \State $p_{parent} \gets$ rr:parent
+            \State $T_{child} \gets$  triples with predicate $p_{child}$, where $tm_{iri}$ is the child triples map in $\symRMLGraph$
+            \State $T_{parent} \gets$  triples with predicate $p_{parent}$, where $tm_{iri}$ is the parent triples map in $\symRMLGraph$
+
+            \For{$trip \in T_{child} \cup T_{parent}$ }
+                \State $\queryExpr \gets trip.o$\Comment{object literal is a query expression}
+                \State $\attr \gets$ unique attribute derived based on $\queryExpr$
+                \State $\symAttrQueryMap[\attr] \gets \queryExpr$
+            \EndFor
+            \State \Return $\symAttrQueryMap$
+        \EndFunction
+        \Statex
+        \Function{QueryInTemplate}{$tm_{iri}, \symRMLGraph, \symAttrQueryMap$}
         \State $p_{temp} \gets$ rr:template
             \For{$trip \in$ triples with predicate $p_{temp}$, associated with $tm_{iri}$ in $\symRMLGraph$}
             \State $lit_{temp} \gets trip.o$\Comment{object literal with template string}
                 \For{$\queryExpr \in$ query expressions surrounded by ``\{ \}" in $lit_{temp}$}
                     \State $\attr \gets$ unique attribute derived based on $\queryExpr$
-                    \State $Q_{pairs}[\attr] \gets \queryExpr$
+                    \State $\symAttrQueryMap[\attr] \gets \queryExpr$
                 \EndFor
             \EndFor
-        \State \Return $Q_{pairs}$
+        \State \Return $\symAttrQueryMap$
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
@@ -49,10 +63,8 @@
 		\Require $\symRMLGraph$ an RDF graph of RML document
 		\State $p \gets $ rml:logicalSource
 		\State $tm_{iris}, ls_{iris} \gets $ subjects and objects in $\symRMLGraph$ with predicate $p$
-        \\
 		\For{$tm_{current} \gets tm_{iris} $}
-        \State \Call{QueryInTemplate}{$tm_{iri}$,$\symRMLGraph$}
-        \State  $p_{ref} \gets $  rml:reference
+        \State $\symAttrQueryMap \gets $ \Call{QueryInTriplesMap}{$tm_{current}$,$\symRMLGraph$}
         \State  $tm_{current}$
 		\EndFor
 	\end{algorithmic}

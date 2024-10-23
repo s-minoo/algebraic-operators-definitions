@@ -68,6 +68,8 @@
 \newcommand{\extFuncType}{(\symTermUniverse \cup \{\error\})}
 \newcommand{\extFuncTuple}{(\extFunc,\extExpr_1,\dots,\extExpr_n)}
 \newcommand{\extOp}{\text{Extend}_{\varphi}^{\attr}}
+\newcommand{\renameOp}{\text{Rename}^{\symRenamePFunc}}
+\newcommand{\equiJoinOp}{\Join^{\symJoinAttrPairs}_{=}}
 
 
 % Functions % 
@@ -88,6 +90,8 @@
 \newcommand{\fctSubst}[2]{subst^{#1}(#2)}
 \newcommand{\fctExtFuncEvalN}[2]{\extFunc(\fctEval{#1_1}{#2},\dots,\fctEval{#1_n}{#2})}
 \newcommand{\fctExtOp}[1]{\extOp(#1)}
+\newcommand{\fctRenameOp}[1]{\renameOp(#1)}
+\newcommand{\fctEquiJoinOp}[2]{\equiJoinOp(#1, #2)}
 
 
 

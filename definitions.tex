@@ -81,7 +81,7 @@ data access language.
 	$\symAttrQueryMap$ is a partial function
 	$\symAttrQueryMap \!: \symAttrUniverse \setminus \{\fragAttr\} \rightarrow \symDataAcc$,
 	the \textbf{$\iterConfig$-specific mapping relation obtained from
-		$\dataSource$} is the mapping relation $\mappingRel$ such that
+        $\dataSource$}, denoted by $\fctSourceOp{s}{\iterConfig}$,  is the mapping relation $\mappingRel$ such that
 	\begin{align*}
 		\symAttrSubSet  & = \fctDom{\symAttrQueryMap} \cup \{\fragAttr\},
 		\; \text{ and}
@@ -165,7 +165,7 @@ relation to a subset of the attributes of that relation.
 	Given a partial function
 	$\symRenamePFunc: (\symAttrSubSet \setminus \{\fragAttr\}) \rightarrow (\symAttrUniverse \setminus \{\fragAttr\})$
 	that is injective,
-	the \textbf{$\symRenamePFunc$-specific renaming of $r$}
+    the \textbf{$\symRenamePFunc$-specific renaming of $r$}, denoted by $\fctRenameOp{r}$, 
 	is the mapping relation $(\symAttrSubSet'\!, \symMappingInst')$ such that
 	\begin{align*}
 		\symAttrSubSet'  & =  (\symAttrSubSet \setminus dom(\symRenamePFunc)) \; \cup \;
@@ -279,7 +279,7 @@ relation to a subset of the attributes of that relation.
 	such that $(\fragAttr, \fragAttr) \in \symJoinAttrPairs$.
 }
 	The \textbf{$\symJoinAttrPairs$-specific equijoin of mapping relations $r_{left}$ and
-		$r_{right}$} is the mapping relation $(\symAttrSubSet', \symMappingInst')$
+        $r_{right}$}, denoted by $\fctEquiJoinOp{r_{left}}{r_{right}}$,is the mapping relation $(\symAttrSubSet', \symMappingInst')$
 	such that $\symAttrSubSet' = \symAttrSubSet_{left} \cup \symAttrSubSet_{right}$
 	and
 	\begin{align*}

@@ -6,39 +6,46 @@ the algebraic mapping operators.
 
 We assume the following pairwise disjoint countably infinite sets:
 $\symAttrUniverse$ (attribute names), $\symAllIRIs$ (IRIs), $\symAllBNodes$
-(blank nodes), $\symAllLiterals$ (literals), and $\symFragmentUniverse$ (\fragment{}
-names).
+(blank nodes), and $\symAllLiterals$ (literals).
 We define a set of terms $\symTermUniverse$ as $\symTermUniverse = \symAllIRIs
 	\cup \symAllBNodes \cup \symAllLiterals$, and we denote a set of all possible
 sequences of terms as $\symTermSeqUniverse$.
 Furthermore, we also define a special value $\error$ with
-$\error \notin (\symTermUniverse \cup \symAttrUniverse \cup \symFragmentUniverse)$,
-we let $\fragAttr \in \symAttrUniverse$ be a designated attribute called the \emph{fragment attribute},
-and $\fragDefault \in \symFragmentUniverse$ be a designated \emph{default} fragment value.
+$\error \notin (\symTermUniverse \cup \symAttrUniverse)$.
 
 Using the aforementioned sets, we define the data model on which our algebraic
-mapping operators work: \emph{a mapping relation}.
+mapping operators work: \textbf{a mapping relation}.
 We build up the definition of a mapping relation in two steps as follows:
 
 
 \begin{definition}
-	A \emph{mapping tuple} is a partial function $\mappingTuple:
-		\symAttrUniverse \rightarrow \symFragmentUniverse \cup \symTermUniverse \cup \{\error\}
-	$.
+	A \textbf{mapping tuple} is a partial function $\mappingTuple:
+		\symAttrUniverse \rightarrow \symTermUniverse \cup \{\error\}$.
+    We also denote the \textbf{merging of two mapping tuples}  $\mappingTuple_1$
+    and $\mappingTuple_2$ as, $\mappingTuple_1 \cup \mappingTuple_2$.
+    $\mappingTuple_{merged} = \mappingTuple_1 \cup \mappingTuple_2$ is also a mapping tuple such that
+    for all $\attr \in \fctDom{\mappingTuple_1} \cap \fctDom{\mappingTuple_2}$, 
+    $\mappingTuple_1(\attr) = \mappingTuple_2(\attr)$, 
+    i.e. $\mappingTuple_1$ and $\mappingTuple_2$ are \textbf{compatible}.
+    Two mapping tuples with disjoint domains are always compatible and 
+    the empty mapping tuple, $\mappingTuple_{\emptyset}$, such that 
+    $\fctDom{\mappingTuple_{\emptyset}} = \emptyset$, is compatible with 
+    all the mapping tuples.
 \end{definition}
 
 \begin{definition}
-	A \emph{mapping relation} is a tuple $\mappingRel$, where
+	A \textbf{mapping relation} is a tuple $\mappingRel$, where
 	$\symAttrSubSet \subset \symAttrUniverse$ is a finite, non-empty set of attributes
-	such that $\fragAttr \in \symAttrSubSet$ and
+    and 	
 	$\symMappingInst$ is a set of mapping tuples such that
 	$\mathrm{dom}(\mappingTuple) = \symAttrSubSet$ for every $\mappingTuple$ in $\symMappingInst$, % i.e., each mapping tuple in $\mappingInst$ is defined for $\symAttrSubSet$
-	$\fctMappingTuple{\fragAttr} \in \symFragmentUniverse$, and
-	$\fctMappingTuple{a} \in \symTermUniverse \cup \{\error\}$ for all $a \in \symAttrSubSet \setminus \{\fragAttr\}$.
-	We call $\symAttrSubSet$ the \emph{schema} of the mapping relation
-	and $\symMappingInst$ is the \emph{instance} of the mapping relation.
+	and
+	$\fctMappingTuple{a} \in \symTermUniverse \cup \{\error\}$ for all $a \in \symAttrSubSet$.
+	We call $\symAttrSubSet$ the \textbf{schema} of the mapping relation
+	and $\symMappingInst$ is the \textbf{instance} of the mapping relation.
 	\label{def:mapping_relation}
 \end{definition}
+
 
 
 

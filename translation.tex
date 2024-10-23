@@ -1,45 +1,63 @@
 \section{RML translation}%
 \label{sec:rml_translation}
 
+\begin{definition}
+	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
+	$\triplesMapIRI$ an IRI of a RML triples map.
+	A \textbf{$\triplesMapIRI$-specific triples map graph
+		$\triplesMapGraph{TM}{\triplesMapIRI} \in \symRMLGraph$} is an RDF graph
+	recursively defined as follows:
+	\begin{enumerate}
+		\item  $\triplesMapGraph{TM}{\triplesMapIRI}$ contains every triple
+		      $(s,p,o) \in \symRMLGraph$ for which $s = \triplesMapIRI$
+		\item if $(s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$, then
+		      $\triplesMapGraph{TM}{\triplesMapIRI}$ also contains every triple
+		      $(s',p',o') \in \symRMLGraph$ where $s' = o$.
+	\end{enumerate}
+\end{definition}
 
+\begin{definition}
+	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
+	$\triplesMapIRI$ an IRI of a RML triples map.
+	A \textbf{$\triplesMapIRI$-specific parent triples map graph
+		$\triplesMapGraph{PTM}{\triplesMapIRI} \in \symRMLGraph$} is an RDF graph
+	defined as follows:
+	\begin{enumerate}
+		\item  $\triplesMapGraph{PTM}{\triplesMapIRI}$  contains triples $(s,p,o) \in \symRMLGraph$
+		      where $p = \texttt{rr:parentTriplesMap}$ and $o = \triplesMapIRI$.
+		\item If $(s,\texttt{rr:parentTriplesMap},o) \in \triplesMapGraph{PTM}{\triplesMapIRI}$, then
+		      $\triplesMapGraph{PTM}{\triplesMapIRI}$ also contains triples $(s',p',o') \in \symRMLGraph$
+		      where $s'=s$ and  $p' = \texttt{rr:joinCondition}$.
+		\item If $(s,\texttt{rr:joinCondition},o) \in \triplesMapGraph{PTM}{\triplesMapIRI}$, then
+		      $\triplesMapGraph{PTM}{\triplesMapIRI}$ also contains triples $(s',p',o') \in \symRMLGraph$
+		      where $s' = o$ and  $p' = \texttt{rr:parent}$.
+	\end{enumerate}
+\end{definition}
 \begin{algorithm}[thbp]
-	\caption{Extract query expressions from RML triples maps}
+	\caption{QueryInTriplesMap: Extract query expressions from RML triples maps}
 	\label{alg:query_extraction}
-    \begin{algorithmic}[1]
-        \Require  $\symRMLGraph$ an RDF graph of RML document, 
-        $tm_{iri}$ the subject IRI of a triples map
-        \Ensure  $\symAttrQueryMap$ a map of attributes to query expressions
-        \Procedure{QueryInTriplesMap}{$tm_{iri}, \symRMLGraph$}
-            \State $\symAttrQueryMap \gets$ hash map with type: $\symAttrUniverse \setminus \{\fragAttr\} \rightarrow \symDataAcc$ 
-            \Statex
-            \State $p_{ref} \gets$ rml:reference \Comment{Query expression extraction from references}
-            \For{$trip \in$ triples with predicate $p_{ref}$, associated with $tm_{iri}$ in $\symRMLGraph$}
-                \State $\queryExpr \gets trip.o$
-                \State $\attr \gets$ unique attribute derived based on $\queryExpr$
-                \State $\symAttrQueryMap[\attr] \gets \queryExpr$
-            \EndFor
-            \Statex
-            \State $p_{child} \gets$ rr:child \Comment{Query expression extraction from join conditions }
-            \State $p_{parent} \gets$ rr:parent
-            \State $T_{child} \gets$  triples with predicate $p_{child}$, where $tm_{iri}$ is the child triples map in $\symRMLGraph$
-            \State $T_{parent} \gets$  triples with predicate $p_{parent}$, where $tm_{iri}$ is the parent triples map in $\symRMLGraph$
-            \For{$trip \in T_{child} \cup T_{parent}$ }
-                \State $\queryExpr \gets trip.o$
-                \State $\attr \gets$ unique attribute derived based on $\queryExpr$
-                \State $\symAttrQueryMap[\attr] \gets \queryExpr$
-            \EndFor
-            \Statex
-            \State $p_{temp} \gets$ rr:template \Comment{Query expression extraction from templates}
-            \For{$trip \in$ triples with predicate $p_{temp}$, associated with $tm_{iri}$ in $\symRMLGraph$}
-            \State $lit_{temp} \gets trip.o$
-                \For{$\queryExpr \in$ query expressions surrounded by ``\{ \}" in $lit_{temp}$}
-                    \State $\attr \gets$ unique attribute derived based on $\queryExpr$
-                    \State $\symAttrQueryMap[\attr] \gets \queryExpr$
-                \EndFor
-            \EndFor
-            \State \Return $\symAttrQueryMap$
-        \EndProcedure
-    \end{algorithmic}
+	\begin{algorithmic}[1]
+		\Require  $\symRMLGraph$ an RDF graph of RML document,
+		$\triplesMapIRI$ the subject IRI of a triples map
+		\Ensure  $\symDataAcc$ a map of attributes to query expressions
+		\State $\symDataAcc \gets \emptyset$ \Comment Initial empty set of query expressions
+		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $p =\texttt{rml:reference}$ and  $o\in \symAllLiterals$}
+		    \State $\queryExpr \gets $ lexical form of $o$
+		    \State $\symDataAcc \gets \symDataAcc \cup \{ \queryExpr \}$
+		\EndFor
+		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $p =\texttt{rr:template}$ and  $o\in \symAllLiterals$}
+		    \For{$\queryExpr \in$ substrings in $o$ that are enclosed by \{ and \} }
+		    \State $\symDataAcc \gets \symDataAcc \cup \{ \queryExpr \}$
+		    \EndFor
+		\EndFor
+        \State $T_{child} \gets \{ (s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI} \} $ where $p = \texttt{rr:child}$
+        \State $T_{parent} \gets \{(s,p,o) \in \triplesMapGraph{PTM}{\triplesMapIRI}\}$ where $p = \texttt{rr:parent}$
+        \For{$(s,p,o) \in T_{child} \cup T_{parent}$ such that $o \in \symAllLiterals$ }
+		    \State $\queryExpr \gets $ lexical form of $o$
+		    \State $\symDataAcc \gets \symDataAcc \cup \{ \queryExpr \}$
+		\EndFor
+		\State \Return $\symDataAcc$
+	\end{algorithmic}
 \end{algorithm}
 
 
@@ -47,43 +65,43 @@
 	\caption{Source operator translation}
 	\label{alg:rml_source_op}
 	\begin{algorithmic}[1]
-        \Require $\symRMLGraph$ an RDF graph of RML document, 
-        $tm_{iri}$ subject IRI of the triples map to translate the source operator for
-        \Ensure $(\queryExpr_{root}, \symAttrQueryMap)$
-        \Procedure{TranslateSourceOperator}{$tm_{iri},\symRMLGraph$}
-            \State $p_{ls} \gets $ rml:logicalSource
-            \State $p_{iter} \gets $ rml:iterator
-            \State $ls_{iri} \gets $ object IRI of the triple with the subject~$tm_{iri}$ and the predicate~$p_{ls}$ 
-            \State $\queryExpr_{root} \gets $ object literal of the triple with subject $ls_{iri}$ and predicate~$p_{iter}$
-            \State $\symAttrQueryMap \gets$ \Call{QueryInTriplesMap}{$tm_{iri}, \symRMLGraph$}
-            \State \Return  $(\queryExpr_{root}, \symAttrQueryMap)$
-        \EndProcedure
+		\Require $\symRMLGraph$ an RDF graph of RML document,
+		$\triplesMapIRI$ subject IRI of the triples map to translate the source operator for
+		\Ensure $(\queryExpr_{root}, \symAttrQueryMap)$
+		\Procedure{TranslateSourceOperator}{$\triplesMapIRI,\symRMLGraph$}
+		\State $p_{ls} \gets $ rml:logicalSource
+		\State $p_{iter} \gets $ rml:iterator
+		\State $ls_{iri} \gets $ object IRI of the triple with the subject~$\triplesMapIRI$ and the predicate~$p_{ls}$
+		\State $\queryExpr_{root} \gets $ object literal of the triple with subject $ls_{iri}$ and predicate~$p_{iter}$
+		\State $\symAttrQueryMap \gets$ \Call{QueryInTriplesMap}{$\triplesMapIRI, \symRMLGraph$}
+		\State \Return  $(\queryExpr_{root}, \symAttrQueryMap)$
+		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
 
 
 \begin{algorithm}
-    \caption{Projection operator translation}
-    \label{alg:projection_op}
-    \begin{algorithmic}[1]
-        \Require $\symRMLGraph$ an RDF graph of RML document, 
-        $tm_{iri}$ subject IRI of the triples map to translate the projection operator for
-        \Ensure $\symProjSet$ a set of projection attributes
-        \Procedure{TranslateProjectionOperator}{$tm_{iri},\symRMLGraph$}
-            \State $\symAttrQueryMap \gets$ \Call{QueryInTriplesMap}{$tm_{iri}, \symRMLGraph$}
-            \State $\symProjSet \gets \fctDom{\symAttrQueryMap}$
-            \State \Return  $\symProjSet$
-        \EndProcedure
-    \end{algorithmic}
+	\caption{Projection operator translation}
+	\label{alg:projection_op}
+	\begin{algorithmic}[1]
+		\Require $\symRMLGraph$ an RDF graph of RML document,
+		$\triplesMapIRI$ subject IRI of the triples map to translate the projection operator for
+		\Ensure $\symProjSet$ a set of projection attributes
+		\Procedure{TranslateProjectionOperator}{$\triplesMapIRI,\symRMLGraph$}
+		\State $\symAttrQueryMap \gets$ \Call{QueryInTriplesMap}{$\triplesMapIRI, \symRMLGraph$}
+		\State $\symProjSet \gets \fctDom{\symAttrQueryMap}$
+		\State \Return  $\symProjSet$
+		\EndProcedure
+	\end{algorithmic}
 \end{algorithm}
 
 
 \begin{algorithm}
-    \caption{Extend operator translation}
-    \label{alg:rml_extend_op}
-    \begin{algorithmic}[1]
-        \Require $\symRMLGraph$ an RDF graph of RML document, 
-        $tm_{iri}$ subject IRI of the triples map to translate the extend operator for
-        \Ensure $\symProjSet$ a set of projection attributes
-    \end{algorithmic}
+	\caption{Extend operator translation}
+	\label{alg:rml_extend_op}
+	\begin{algorithmic}[1]
+		\Require $\symRMLGraph$ an RDF graph of RML document,
+		$\triplesMapIRI$ subject IRI of the triples map to translate the extend operator for
+		\Ensure $\symProjSet$ a set of projection attributes
+	\end{algorithmic}
 \end{algorithm}

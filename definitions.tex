@@ -193,13 +193,11 @@ relation to a subset of the attributes of that relation.
 \begin{definition}
 	An \textbf{extend expression}~$\extExpr$ is an expression that is defined recursively as
 	follows:
-\todo[inline]{Is there a specific reason why you chose $\extExpr$ as the symbol to denote such expressions? I find that symbol a bit difficult to write and to distinguish from "r" and "v" when formulas are written by hand. In contrast, $\varphi$ is much easier to write and distinguish, and it is more commonly used in the literature as the symbol for expressions.}
 	\begin{enumerate}
 		\item
-		      Every RDF term in $\symTermUniverse$ is an \textbf{extend expression}.
+		    Every RDF term in $\symTermUniverse$ is an \textbf{extend expression}.
 		\item
-		      Every attribute in $\symAttrUniverse$ is an \textbf{extend expression}.
-\todo[inline]{What about $\fragAttr$? We should rule it out here. The mapping tuples don't map it to RDF terms, which would be a problem for the evaluation function for extend expressions.}
+            Every attribute in $\symAttrUniverse \setminus \{\fragAttr\}$ is an \textbf{extend expression}.
 		\item
 		      If $\extExpr_1,\dots,\extExpr_n$ are extend expressions and
 		      $\extFunc \in \symExtFuncUni$, then the tuple $\extFuncTuple$ is an
@@ -218,8 +216,8 @@ relation to a subset of the attributes of that relation.
 	Let $r = \mappingRel$ be a mapping relation, $\attr \in \symAttrUniverse$ be
 	an attribute that is not in $\symAttrSubSet$ (i.e., $\attr \notin \symAttrSubSet$),
 	and $\extExpr$ be an extend expression.
-	The \textbf{$\extExpr$-specific extension of $r$ for $\attr$}
-\todo{"denoted by ..." ?}
+	The \textbf{$\extExpr$-specific extension of $r$ for $\attr$}, 
+    denoted by $\fctExtOp{r}$,
 	is the mapping tuple
 	$(\symAttrSubSet'\!,\symMappingInst')$ such that
 	\begin{align*}

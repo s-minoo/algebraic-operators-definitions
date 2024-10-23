@@ -59,7 +59,7 @@
 \newcommand{\length}{len}
 \newcommand{\var}{v}
 \newcommand{\indexSeq}{M}
-\newcommand{\extExpr}{\gamma}
+\newcommand{\extExpr}{\varphi}
 \newcommand{\extEval}{eval}
 \newcommand{\extPairsType}{(\symAttrUniverse \setminus \symAttrSubSet) \times \symExtExprSeqUni}
 \newcommand{\serdeAttr}{a_{serialized}}
@@ -67,6 +67,7 @@
 \newcommand{\extFunc}{f}
 \newcommand{\extFuncType}{(\symTermUniverse \cup \{\error\})}
 \newcommand{\extFuncTuple}{(\extFunc,\extExpr_1,\dots,\extExpr_n)}
+\newcommand{\extOp}{\text{Extend}_{\varphi}^{\attr}}
 
 
 % Functions % 
@@ -86,6 +87,7 @@
 \newcommand{\fctRenameTuple}[2]{rename^{#1}(#2)}
 \newcommand{\fctSubst}[2]{subst^{#1}(#2)}
 \newcommand{\fctExtFuncEvalN}[2]{\extFunc(\fctEval{#1_1}{#2},\dots,\fctEval{#1_n}{#2})}
+\newcommand{\fctExtOp}[1]{\extOp(#1)}
 
 
 

@@ -195,20 +195,20 @@ relation to a subset of the attributes of that relation.
 	follows:
 	\begin{enumerate}
 		\item
-		Every RDF term in $\symTermUniverse$ is an \textbf{extend expression}.
+		      Every RDF term in $\symTermUniverse$ is an \textbf{extend expression}.
 		\item
-		Every attribute in $\symAttrUniverse$ is an \textbf{extend expression}.
+		      Every attribute in $\symAttrUniverse$ is an \textbf{extend expression}.
 		\item
-		If $\extExpr_1,\dots,\extExpr_n$ are extend expressions and
-		$\extFunc \in \symExtFuncUni$, then the tuple $\extFuncTuple$ is an
-		extend expression.
+		      If $\extExpr_1,\dots,\extExpr_n$ are extend expressions and
+		      $\extFunc \in \symExtFuncUni$, then the tuple $\extFuncTuple$ is an
+		      extend expression.
 	\end{enumerate}
-% 	Thus, a grammar that accepts such extend expression $\extExpr$ is defined as
-% 	follows where $x \in \symTermUniverse$, $a \in \symAttrUniverse$, and
-% 	$\extFunc \in \symExtFuncUni$:
-% 	\begin{equation*}
-% 		\extExpr ::= x \ |\ a \ |\  (\extFunc, \extExpr, \dots, \extExpr)
-% 	\end{equation*}
+	% 	Thus, a grammar that accepts such extend expression $\extExpr$ is defined as
+	% 	follows where $x \in \symTermUniverse$, $a \in \symAttrUniverse$, and
+	% 	$\extFunc \in \symExtFuncUni$:
+	% 	\begin{equation*}
+	% 		\extExpr ::= x \ |\ a \ |\  (\extFunc, \extExpr, \dots, \extExpr)
+	% 	\end{equation*}
 \end{definition}
 
 
@@ -219,71 +219,70 @@ relation to a subset of the attributes of that relation.
 	The \textbf{$\extExpr$-specific extension of $r$ for $\attr$} is the mapping tuple
 	$(\symAttrSubSet'\!,\symMappingInst')$ where
 	\begin{align*}
-		\symAttrSubSet'  & = \symAttrSubSet \cup \{ \attr \} \text{ and }                                       \\
+		\symAttrSubSet'  & = \symAttrSubSet \cup \{ \attr \} \text{ and }                                            \\
 		\symMappingInst' & = \bigl\{\mappingTuple \cup \{\attr \rightarrow \fctEval{\extExpr}{\mappingTuple}\} \ | \
 		\mappingTuple \in \symMappingInst \bigr\}
 	\end{align*}
 	where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, $\fctEval{\extExpr}{\mappingTuple}$ is either an RDF term or the
 	error value ($\error$), which is determined recursively as follows:
 
-    \begin{enumerate}
-        \item If $\extExpr$ is an RDF term $x$, then $\fctEval{\extExpr}{\mappingTuple} = x$.
-        \item If $\extExpr$ is an attribute $\attr$ and $\attr \in \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \mappingTuple(\attr)$.
-        \item If $\extExpr$ is an attribute $\attr$ and $\attr \notin \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \error$.
-        \item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is an $n$-ary function, then
-            $\fctEval{\extExpr}{\mappingTuple} =  \fctExtFuncEvalN{\extExpr}{\mappingTuple}$.
-        \item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is not an $n$-ary function, then
-            $\fctEval{\extExpr}{\mappingTuple} =  \error$.
-    \end{enumerate}
+	\begin{enumerate}
+		\item If $\extExpr$ is an RDF term $x$, then $\fctEval{\extExpr}{\mappingTuple} = x$.
+		\item If $\extExpr$ is an attribute $\attr$ and $\attr \in \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \mappingTuple(\attr)$.
+		\item If $\extExpr$ is an attribute $\attr$ and $\attr \notin \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \error$.
+		\item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is an $n$-ary function, then
+		      $\fctEval{\extExpr}{\mappingTuple} =  \fctExtFuncEvalN{\extExpr}{\mappingTuple}$.
+		\item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is not an $n$-ary function, then
+		      $\fctEval{\extExpr}{\mappingTuple} =  \error$.
+	\end{enumerate}
 
-        \begin{equation*}
-            \fctEval{\extExpr}{\mappingTuple} = 
-            \begin{cases}
-                \extExpr & \text{if $\extExpr$ is an RDF term;} \\
-                \mappingTuple(\extExpr) & \text{if $\extExpr \in \symAttrUniverse$ and $\extExpr \in \fctDom{\mappingTuple}$;} \\
-                \fctExtFuncEvalN{\extExpr}{\mappingTuple}  &\ \parbox{15em}{if $\extExpr = \extFuncTuple$ such that $\extFunc$ is an $n$-ary function;} \\ 
-                \error & \text{else.}
-            \end{cases}
-        \end{equation*}
+	\begin{equation*}
+		\fctEval{\extExpr}{\mappingTuple} =
+		\begin{cases}
+			\extExpr                                  & \text{if $\extExpr$ is an RDF term;}                                                        \\
+			\mappingTuple(\extExpr)                   & \text{if $\extExpr \in \symAttrUniverse$ and $\extExpr \in \fctDom{\mappingTuple}$;}        \\
+			\fctExtFuncEvalN{\extExpr}{\mappingTuple} & \ \parbox{15em}{if $\extExpr = \extFuncTuple$ such that $\extFunc$ is an $n$-ary function;} \\
+			\error                                    & \text{else.}
+		\end{cases}
+	\end{equation*}
 
 
 \end{definition}
 
 
 
-\subsection{$\theta$-join Operator}%
-\label{sub:theta_join_operator}
-
-\todo[inline]{It is not actually a $\theta$-join if the only comparison operator between the join variables is equivalence. Then, it is just an equijoin (which is a special case of $\theta$-joins). See the Wikipedia link in the LaTeX comment here:} % https://en.wikipedia.org/wiki/Relational_algebra#%CE%B8-join_and_equijoin
-
+\subsection{Equijoin Operator}%
+\label{sub:equi_join_operator}
 
 \begin{definition}
-	\label{def:theta_join_operator}
-	Given
-\todo{This is not a complete English sentence. Sentences that start with "Given" are always of the form: "Given x, y." You have the "x" part here, but not the "y" part.}
-	two mapping relations $r_{left} = \mappingRelSpec{left}$ and
-	$r_{right} = \mappingRelSpec{right}$, and a set of pairs of attributes
-\todo{Shouldn't $\symJoinAttrPairs$ be a subset of $\symAttrSubSet_{left} \times \symAttrSubSet_{right}$?}
-\todo{Also, can the fragment attribute part of any such pair?}
-	$\symJoinAttrPairs: \symAttrSubSet_{left} \times \symAttrSubSet_{right}$.
-	We assume
-\todo{You cannot state this as an assumption (we are not making assumptions as part of formal definitions). Instead, you must state this as a condition for the pair $r_{left}$ and $r_{right}$.}
-	that $\symAttrSubSet_{left} \cap \symAttrSubSet_{right} = \{\fragAttr\}$.
-	The \textbf{$\symJoinAttrPairs$-specific join of mapping relations $r_{left}$ and
+	\label{def:equijoin_operator}
+	Let $r_{left} = \mappingRelSpec{left}$ and
+	$r_{right} = \mappingRelSpec{right}$ both be a mapping relation, and a set of pairs of attributes
+	$\symJoinAttrPairs \subset \symAttrSubSet_{left} \times \symAttrSubSet_{right}$ with
+	the condition for both $r_{left}$ and $r_{right}$ that
+	$\{\fragAttr\} = \symAttrSubSet_{left} \cap \symAttrSubSet_{right}$,
+	and the condition for $\symJoinAttrPairs$ that
+	$(\fragAttr, \fragAttr) \in \symJoinAttrPairs$.
+	The \textbf{$\symJoinAttrPairs$-specific equijoin of mapping relations $r_{left}$ and
 		$r_{right}$} is the mapping relation $(\symAttrSubSet', \symMappingInst')$
 	such that $\symAttrSubSet' = \symAttrSubSet_{left} \cup \symAttrSubSet_{right}$
 	and
-	\begin{equation*}
-		\symMappingInst' =  \{ \mappingTuple' \cup \mappingTuple'' \ | \
+	\begin{align*}
+		\symMappingInst' & =  \{ \mappingTuple' \cup \mappingTuple'' \ | \
 		\mappingTuple' \in \symMappingInst_{left} \text { and }
 		\mappingTuple'' \in \symMappingInst_{right} \text{ such that }
 		\mappingTuple'(\attr') = \mappingTuple''(\attr'') \text{ for all }
 		(\attr',\attr'') \in \symJoinAttrPairs
 		\}
-	\end{equation*}
+	\end{align*}
+	where
+	\begin{align*}
+        \mappingTuple' \cup \mappingTuple'' & = \{ (a \rightarrow v) \in \mappingTuple' \} \cup
+        \{(b \rightarrow c)\in \mappingTuple''\}
+	\end{align*}
+    such that for all $\attr \in \fctDom{\mappingTuple'} \cap \fctDom{\mappingTuple''}$, 
+    $\mappingTuple'(\attr) = \mappingTuple''(\attr)$.
 \end{definition}
-
-\todo[inline]{What if $t'$ and $t''$ have a different value for the fragment attribute?}
 
 
 

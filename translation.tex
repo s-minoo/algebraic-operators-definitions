@@ -11,47 +11,34 @@
         \Ensure  $\symAttrQueryMap$ a map of attributes to query expressions
         \Procedure{QueryInTriplesMap}{$tm_{iri}, \symRMLGraph$}
             \State $\symAttrQueryMap \gets$ hash map with type: $\symAttrUniverse \setminus \{\fragAttr\} \rightarrow \symDataAcc$ 
-            \State $\symAttrQueryMap \gets$ \Call{QueryInReferences}{$tm_{iri}, \symRMLGraph, Q_{pairs}$}
-            \State $\symAttrQueryMap \gets$ \Call{QueryInJoinConditions}{$tm_{iri}, \symRMLGraph, Q_{pairs}$}
-            \State $\symAttrQueryMap \gets$ \Call{QueryInTemplate}{$tm_{iri}, \symRMLGraph, Q_{pairs}$}
-            \State \Return $\symAttrQueryMap$
-        \EndProcedure
-        \Statex
-        \Function{QueryInReferences}{$tm_{iri}, \symRMLGraph, \symAttrQueryMap$}
-            \State $p_{ref} \gets$ rml:reference
-            \For{$trip \in$ triples with predicate $p_{temp}$, associated with $tm_{iri}$ in $\symRMLGraph$}
-                \State $\queryExpr \gets trip.o$\Comment{object literal is a query expression}
+            \Statex
+            \State $p_{ref} \gets$ rml:reference \Comment{Query expression extraction from references}
+            \For{$trip \in$ triples with predicate $p_{ref}$, associated with $tm_{iri}$ in $\symRMLGraph$}
+                \State $\queryExpr \gets trip.o$
                 \State $\attr \gets$ unique attribute derived based on $\queryExpr$
                 \State $\symAttrQueryMap[\attr] \gets \queryExpr$
             \EndFor
-            \State \Return $\symAttrQueryMap$
-        \EndFunction
-        \Statex
-        \Function{QueryInJoinConditions}{$tm_{iri}, \symRMLGraph, \symAttrQueryMap$}
-            \State $p_{child} \gets$ rr:child
+            \Statex
+            \State $p_{child} \gets$ rr:child \Comment{Query expression extraction from join conditions }
             \State $p_{parent} \gets$ rr:parent
             \State $T_{child} \gets$  triples with predicate $p_{child}$, where $tm_{iri}$ is the child triples map in $\symRMLGraph$
             \State $T_{parent} \gets$  triples with predicate $p_{parent}$, where $tm_{iri}$ is the parent triples map in $\symRMLGraph$
-
             \For{$trip \in T_{child} \cup T_{parent}$ }
-                \State $\queryExpr \gets trip.o$\Comment{object literal is a query expression}
+                \State $\queryExpr \gets trip.o$
                 \State $\attr \gets$ unique attribute derived based on $\queryExpr$
                 \State $\symAttrQueryMap[\attr] \gets \queryExpr$
             \EndFor
-            \State \Return $\symAttrQueryMap$
-        \EndFunction
-        \Statex
-        \Function{QueryInTemplate}{$tm_{iri}, \symRMLGraph, \symAttrQueryMap$}
-        \State $p_{temp} \gets$ rr:template
+            \Statex
+            \State $p_{temp} \gets$ rr:template \Comment{Query expression extraction from templates}
             \For{$trip \in$ triples with predicate $p_{temp}$, associated with $tm_{iri}$ in $\symRMLGraph$}
-            \State $lit_{temp} \gets trip.o$\Comment{object literal with template string}
+            \State $lit_{temp} \gets trip.o$
                 \For{$\queryExpr \in$ query expressions surrounded by ``\{ \}" in $lit_{temp}$}
                     \State $\attr \gets$ unique attribute derived based on $\queryExpr$
                     \State $\symAttrQueryMap[\attr] \gets \queryExpr$
                 \EndFor
             \EndFor
-        \State \Return $\symAttrQueryMap$
-        \EndFunction
+            \State \Return $\symAttrQueryMap$
+        \EndProcedure
     \end{algorithmic}
 \end{algorithm}
 
@@ -87,6 +74,16 @@
             \State $\symProjSet \gets \fctDom{\symAttrQueryMap}$
             \State \Return  $\symProjSet$
         \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
 
+
+\begin{algorithm}
+    \caption{Extend operator translation}
+    \label{alg:rml_extend_op}
+    \begin{algorithmic}[1]
+        \Require $\symRMLGraph$ an RDF graph of RML document, 
+        $tm_{iri}$ subject IRI of the triples map to translate the extend operator for
+        \Ensure $\symProjSet$ a set of projection attributes
     \end{algorithmic}
 \end{algorithm}

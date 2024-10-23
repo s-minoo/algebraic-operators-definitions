@@ -83,7 +83,7 @@ data access language.
 	the \textbf{$\iterConfig$-specific mapping relation obtained from
 		$\dataSource$} is the mapping relation $\mappingRel$ such that
 	\begin{align*}
-		\symAttrSubSet  & = \fctDom{\symAttrQueryMap} \cup \{\fragAttr\}
+		\symAttrSubSet  & = \fctDom{\symAttrQueryMap} \cup \{\fragAttr\},
 		\; \text{ and}
 		\\
 		\symMappingInst & = \left\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n}, \fragAttr \rightarrow \fragDefault \} \ | \
@@ -169,7 +169,7 @@ relation to a subset of the attributes of that relation.
 	is the mapping relation $(\symAttrSubSet'\!, \symMappingInst')$ such that
 	\begin{align*}
 		\symAttrSubSet'  & =  (\symAttrSubSet \setminus dom(\symRenamePFunc)) \; \cup \;
-		\{ \symRenamePFunc(a) \ |  \ a \in dom(\symRenamePFunc) \} \; \text{ and }                                       \\
+		\{ \symRenamePFunc(a) \ |  \ a \in dom(\symRenamePFunc) \}, \; \text{ and }                                       \\
 		\symMappingInst' & = \{ \fctRenameTuple{\symRenamePFunc}{\mappingTuple}\ | \ \mappingTuple \in \symMappingInst\}
 	\end{align*}
 	where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, we write $\fctRenameTuple{\symRenamePFunc}{\mappingTuple}$ to denote the mapping tuple~$\mappingTuple'$ for which it holds that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and, for every attribute~$\attr \in \fctDom{\mappingTuple'}$,
@@ -193,11 +193,13 @@ relation to a subset of the attributes of that relation.
 \begin{definition}
 	An \textbf{extend expression}~$\extExpr$ is an expression that is defined recursively as
 	follows:
+\todo[inline]{Is there a specific reason why you chose $\extExpr$ as the symbol to denote such expressions? I find that symbol a bit difficult to write and to distinguish from "r" and "v" when formulas are written by hand. In contrast, $\varphi$ is much easier to write and distinguish, and it is more commonly used in the literature as the symbol for expressions.}
 	\begin{enumerate}
 		\item
 		      Every RDF term in $\symTermUniverse$ is an \textbf{extend expression}.
 		\item
 		      Every attribute in $\symAttrUniverse$ is an \textbf{extend expression}.
+\todo[inline]{What about $\fragAttr$? We should rule it out here. The mapping tuples don't map it to RDF terms, which would be a problem for the evaluation function for extend expressions.}
 		\item
 		      If $\extExpr_1,\dots,\extExpr_n$ are extend expressions and
 		      $\extFunc \in \symExtFuncUni$, then the tuple $\extFuncTuple$ is an
@@ -214,12 +216,14 @@ relation to a subset of the attributes of that relation.
 
 \begin{definition}
 	Let $r = \mappingRel$ be a mapping relation, $\attr \in \symAttrUniverse$ be
-	an attribute such that $\attr \notin \symAttrSubSet$, and
-	$\extExpr$ be an extend expression.
-	The \textbf{$\extExpr$-specific extension of $r$ for $\attr$} is the mapping tuple
-	$(\symAttrSubSet'\!,\symMappingInst')$ where
+	an attribute that is not in $\symAttrSubSet$ (i.e., $\attr \notin \symAttrSubSet$),
+	and $\extExpr$ be an extend expression.
+	The \textbf{$\extExpr$-specific extension of $r$ for $\attr$}
+\todo{"denoted by ..." ?}
+	is the mapping tuple
+	$(\symAttrSubSet'\!,\symMappingInst')$ such that
 	\begin{align*}
-		\symAttrSubSet'  & = \symAttrSubSet \cup \{ \attr \} \text{ and }                                            \\
+		\symAttrSubSet'  & = \symAttrSubSet \cup \{ \attr \}, \; \text{ and }                                            \\
 		\symMappingInst' & = \bigl\{\mappingTuple \cup \{\attr \rightarrow \fctEval{\extExpr}{\mappingTuple}\} \ | \
 		\mappingTuple \in \symMappingInst \bigr\}
 	\end{align*}
@@ -254,8 +258,8 @@ relation to a subset of the attributes of that relation.
 \subsection{Equijoin Operator}%
 \label{sub:equi_join_operator}
 
+{\color{red}
 \begin{definition}
-	\label{def:equijoin_operator}
 	Let $r_{left} = \mappingRelSpec{left}$ and
 	$r_{right} = \mappingRelSpec{right}$ both be a mapping relation, and a set of pairs of attributes
 	$\symJoinAttrPairs \subset \symAttrSubSet_{left} \times \symAttrSubSet_{right}$ with
@@ -263,6 +267,19 @@ relation to a subset of the attributes of that relation.
 	$\{\fragAttr\} = \symAttrSubSet_{left} \cap \symAttrSubSet_{right}$,
 	and the condition for $\symJoinAttrPairs$ that
 	$(\fragAttr, \fragAttr) \in \symJoinAttrPairs$.
+	...
+\end{definition}
+}
+
+\begin{definition}
+	\label{def:equijoin_operator}
+{\color{blue}
+	Let $r_{left} = \mappingRelSpec{left}$ and
+	$r_{right} = \mappingRelSpec{right}$ be mapping relations
+	such that $\symAttrSubSet_{left} \cap \symAttrSubSet_{right} = \{\fragAttr\}$,
+	and let $\symJoinAttrPairs \subset \symAttrSubSet_{left} \times \symAttrSubSet_{right}$
+	such that $(\fragAttr, \fragAttr) \in \symJoinAttrPairs$.
+}
 	The \textbf{$\symJoinAttrPairs$-specific equijoin of mapping relations $r_{left}$ and
 		$r_{right}$} is the mapping relation $(\symAttrSubSet', \symMappingInst')$
 	such that $\symAttrSubSet' = \symAttrSubSet_{left} \cup \symAttrSubSet_{right}$
@@ -284,7 +301,14 @@ relation to a subset of the attributes of that relation.
     $\mappingTuple'(\attr) = \mappingTuple''(\attr)$.
 \end{definition}
 
-
+\todo[inline]{Further comments about the definition above: \\
+- Regarding $(\fragAttr, \fragAttr) \in \symJoinAttrPairs$, didn't we say we don't have $\fragAttr$ any longer? \\
+- Didn't we say that another condition for $\symJoinAttrPairs$ is that each LHS attribute should be in at most one such pair, and the same for every RHS attribute? \\
+- All these \textit{left} and \textit{right} superscripts blow up the formulas unnecessarily. Use 1 and 2 as subscripts instead. \\
+- Then, instead of $t'$ and $t''$, you should write $t_1$ and $t_2$ to make the connection to where each of these tuples comes from more visible. Same with $a'$ and $a''$. \\
+- Move the part about $\mappingTuple' \cup \mappingTuple''$ to the preliminaries section, as this is something more general that we are also using else where (see the Extend operator). Moreover the actual definition that you have for $\mappingTuple' \cup \mappingTuple''$ is formally not so nice. Better define it based on the function perspective of mapping tuples. You can do this in the same way as is done for solution mappings in many of the SPARQL papers. \\
+- By the way, given this definition of equijoin for mapping relations, any mapping tuple in one of the two relations that has a fragment value that doesn't exist in the other relation is dropped completed by this join. Not sure whether this was really your intention. Yet, as we won't have the fragment attributes and values any longer, this issue is irrelevant.
+}
 
 
 

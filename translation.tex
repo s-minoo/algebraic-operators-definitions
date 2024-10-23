@@ -62,20 +62,16 @@
 
 
 \begin{algorithm}
-	\caption{Source operator translation}
+	\caption{TranslateSourceOperator: Source operator translation for a given triples map IRI $\triplesMapIRI$}
 	\label{alg:rml_source_op}
 	\begin{algorithmic}[1]
 		\Require $\symRMLGraph$ an RDF graph of RML document,
 		$\triplesMapIRI$ subject IRI of the triples map to translate the source operator for
 		\Ensure $(\queryExpr_{root}, \symAttrQueryMap)$
-		\Procedure{TranslateSourceOperator}{$\triplesMapIRI,\symRMLGraph$}
-		\State $p_{ls} \gets $ rml:logicalSource
-		\State $p_{iter} \gets $ rml:iterator
-		\State $ls_{iri} \gets $ object IRI of the triple with the subject~$\triplesMapIRI$ and the predicate~$p_{ls}$
-		\State $\queryExpr_{root} \gets $ object literal of the triple with subject $ls_{iri}$ and predicate~$p_{iter}$
-		\State $\symAttrQueryMap \gets$ \Call{QueryInTriplesMap}{$\triplesMapIRI, \symRMLGraph$}
-		\State \Return  $(\queryExpr_{root}, \symAttrQueryMap)$
-		\EndProcedure
+        \State $ls_{iri} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = \triplesMapIRI$  and $p= \texttt{rml:logicalSource}$
+        \State $\queryExpr_{root} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = ls_{iri}$  and $p=  \texttt{rml:iterator }$
+        \State $\symAttrQueryMap \gets$ \Call{QueryInTriplesMap}{$\triplesMapIRI, \symRMLGraph$} \Comment{Algorithm~\ref{alg:query_extraction}}
+		\State \Return  $(\queryExpr_{root}, \symAttrQueryMap)$ 
 	\end{algorithmic}
 \end{algorithm}
 

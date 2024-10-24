@@ -39,7 +39,7 @@
 	\begin{algorithmic}[1]
 		\Require  $\symRMLGraph$ an RDF graph of RML document,
 		$\triplesMapIRI$ the subject IRI of a triples map
-		\Ensure  $\symDataAcc$ a map of attributes to query expressions
+		\Ensure  $\symDataAcc$ a set of query expressions
 		\State $\symDataAcc \gets \emptyset$ \Comment Initial empty set of query expressions
 		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $p =\texttt{rml:reference}$ and  $o\in \symAllLiterals$}
 		    \State $\queryExpr \gets $ lexical form of $o$
@@ -70,9 +70,65 @@
 		\Ensure $(\queryExpr_{root}, \symAttrQueryMap)$
         \State $ls_{iri} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = \triplesMapIRI$  and $p= \texttt{rml:logicalSource}$
         \State $\queryExpr_{root} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = ls_{iri}$  and $p=  \texttt{rml:iterator }$
-        \State $\symAttrQueryMap \gets$ \Call{QueryInTriplesMap}{$\triplesMapIRI, \symRMLGraph$} \Comment{Algorithm~\ref{alg:query_extraction}}
+        \State $\symDataAcc \gets$ \Call{QueryInTriplesMap}{$\triplesMapIRI, \symRMLGraph$} \Comment{Algorithm~\ref{alg:query_extraction}}
+        \State $\symAttrQueryMap \gets \{ (a, \queryExpr) \ | \ \queryExpr \in \symDataAcc \text{ and } 
+                                     a \in \symAttrUniverse  \text{ such that $a$ is unique in $\symAttrQueryMap$ }\}$  
 		\State \Return  $(\queryExpr_{root}, \symAttrQueryMap)$ 
 	\end{algorithmic}
+\end{algorithm}
+
+\todoi{Mariano's paper (Section 5) introduces steps to \textbf{normalize} RML document. We can reference it.}
+%https://www.sciencedirect.com/science/article/pii/S1570826815000153?via=ihub 
+\begin{definition}
+    A \textbf{normalized} RML document is defined by undertaking the following steps as described 
+    in~\citeneeded
+    \begin{enumerate}
+        \item All shortcuts for constant-term maps have been expanded,
+        \item All \texttt{rr:class} definitions are replaced by predicate object maps,
+        \item All predicate-object maps with multiple predicate or object
+            definitions are expanded into predicate-object maps with a single
+            predicate and a single object definition,
+        \item All triple maps with multiple predicate-object maps have been
+            replaced by a set of equivalent triple maps.
+    \end{enumerate}
+    
+\end{definition}
+
+
+\begin{algorithm}
+    \caption{RML translation to algebraic mapping expressions}
+    \label{alg:rml2algebra}
+    \begin{algorithmic}[1]
+		\Require $\symRMLGraph$ a \textbf{normalized} RDF graph of RML document
+        \State $\omega \gets$  initialization value for the current algebraic mapping expressions
+        \For{$(\triplesMapIRI,p,o) \in \symRMLGraph$ where  $p = \texttt{rdf:type}$ and $o= \texttt{rr:TriplesMap}$ }
+        \State  $\iterConfig \gets \iterConfigTuple = $ \Call{TranslateSourceOperator}{$\symRMLGraph, \triplesMapIRI$} \Comment{Algorithm~\ref{alg:rml_source_op}}
+        \State   $s \gets $ dataset represented by $o$ in $(\triplesMapIRI,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ where $p = \texttt{rr:logicalSource}$
+        \State   $\omega \gets \fctSourceOp{\iterConfig}{s}$
+        \State  $(v_{subj}, v_{pred},v_{obj}) \gets $ initial placeholder value for the (s,p,o) attributes for RDF serialization
+            \For{$(s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ where $p= \texttt{rr:subjectMap}$}
+                \State $(a, \extExpr) \gets $ extend operator from triple $(o,\texttt{rr:template},o') \lor (o,\texttt{rr:reference},o')$ 
+                \State $\extExpr \gets $\Call{TypeCast}{$\extExpr$} according to \texttt{rr:termType}
+                \State  $v_{subj} \gets a$ 
+                \State $\omega \gets \extOp(\omega)$
+            \EndFor
+            \For{$(s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ where $p= \texttt{rr:predicateMap}$}
+                \State $(a, \extExpr) \gets $ extend operator from triple $(o,\texttt{rr:template},o') \lor (o,\texttt{rr:reference},o')$ 
+                \State $\extExpr \gets $\Call{TypeCast}{$\extExpr$} according to \texttt{rr:termType}
+                \State  $v_{pred} \gets a$ 
+                \State $\omega \gets \extOp(\omega)$
+            \EndFor
+            \For{$(s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ where $p= \texttt{rr:objectMap}$}
+                \State $(a, \extExpr) \gets $ extend operator from triple $(o,\texttt{rr:template},o') \lor (o,\texttt{rr:reference},o')$ 
+                \State $\extExpr \gets $\Call{TypeCast}{$\extExpr$} according to \texttt{rr:termType}
+                \State  $v_{obj} \gets a$ 
+                \State $\omega \gets \extOp(\omega)$
+            \EndFor
+        \State $\omega \gets $ \Call{SerializeOp}{$(v_{subj}, v_{pred},v_{obj}, \omega)$}
+        \State $Execute(\omega)$ 
+        \State $\omega \gets$  initialization value for the current algebraic mapping expressions
+        \EndFor
+    \end{algorithmic}
 \end{algorithm}
 
 

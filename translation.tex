@@ -99,7 +99,7 @@
     \caption{RML translation to algebraic mapping expressions}
     \label{alg:rml2algebra}
     \begin{algorithmic}[1]
-		\Require $\symRMLGraph$ a \textbf{normalized} RDF graph of RML document
+		\Require $\symRMLGraph$ an RDF graph of a \textbf{normalized} RML document
         \State $\omega \gets$  initialization value for the current algebraic mapping expressions
         \For{$(\triplesMapIRI,p,o) \in \symRMLGraph$ where  $p = \texttt{rdf:type}$ and $o= \texttt{rr:TriplesMap}$ }
         \State  $\iterConfig \gets \iterConfigTuple = $ \Call{TranslateSourceOperator}{$\symRMLGraph, \triplesMapIRI$} \Comment{Algorithm~\ref{alg:rml_source_op}}

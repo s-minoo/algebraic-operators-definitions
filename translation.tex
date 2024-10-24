@@ -117,8 +117,32 @@
                 \State $\extExpr \gets $\Call{TypeCast}{$\extExpr$} according to \texttt{rr:termType}
                 \State  $v_{pred} \gets a$ 
                 \State $\omega \gets \extOp(\omega)$
-            \EndFor
+            \EndFor \Comment Continued in Algorithm~\ref{alg:rml2algebra_part2}
+            \State\dots
+            \algstore{state:full_translation}
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{RML translation to algebraic mapping expressions}
+    \label{alg:rml2algebra_part2}
+    \begin{algorithmic}[1]
+        \algrestore{state:full_translation} 
+        \State \dots
             \For{$(s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ where $p= \texttt{rr:objectMap}$}
+                \If{$p = \texttt{rr:parentTriplesMap}$ in the triple $(o,p,o') \in \triplesMapGraph{TM}{\triplesMapIRI}$} 
+                    \State $s_{ptm} \gets o'$ 
+                    \State  $\iterConfig \gets $ \Call{TranslateSourceOperator}{$\symRMLGraph, s_{ptm}$} \Comment{Algorithm~\ref{alg:rml_source_op}}
+                    \State   $source_{ptm} \gets o''$ with $(s'',p'',o'') \in \triplesMapGraph{TM}{s_{ptm}}$ where $p = \texttt{rr:logicalSource}$
+                    \State  $\omega_{ptm} \gets \fctSourceOp{\iterConfig}{source_{ptm}}$
+                    \State  $a_{left} \gets $ attribute of query expression $o$ in triple $(s,p,o) \in \triplesMapGraph{TM}{s_{ptm}}$ where $p = \texttt{rr:child}$ 
+                    \State  $a_{right} \gets $ attribute of query expression $o$ in triple $(s,p,o) \in \triplesMapGraph{TM}{s_{ptm}}$ where $p = \texttt{rr:parent}$ 
+                    \State  $\symJoinAttrPairs \gets (a_{left}, a_{right})$
+                    \State  $\omega \gets \fctEquiJoinOp{\omega}{\omega_{ptm}}$ 
+                    \State $\extOp \gets$ extend operator for the subject map of triples map with IRI $s_{ptm}$
+                    \State  $\omega \gets \fctExtOp{\omega}$ 
+                    \State  \texttt{break}
+                \EndIf
                 \State $(a, \extExpr) \gets $ extend operator from triple $(o,\texttt{rr:template},o') \lor (o,\texttt{rr:reference},o')$ 
                 \State $\extExpr \gets $\Call{TypeCast}{$\extExpr$} according to \texttt{rr:termType}
                 \State  $v_{obj} \gets a$ 

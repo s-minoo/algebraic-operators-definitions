@@ -11,7 +11,8 @@ We define a set of terms $\symTermUniverse$ as $\symTermUniverse = \symAllIRIs
 	\cup \symAllBNodes \cup \symAllLiterals$, and we denote a set of all possible
 sequences of terms as $\symTermSeqUniverse$.
 Furthermore, we also define a special value $\error$ with
-$\error \notin (\symTermUniverse \cup \symAttrUniverse)$.
+$\error \notin (\symTermUniverse \cup \symAttrUniverse)$,
+and we assume four designated attributes $\attr_\textrm{s} \in \symAttrUniverse$, $\attr_\textrm{p} \in \symAttrUniverse$, $\attr_\textrm{o} \in \symAttrUniverse$, and $\attr_\textrm{g} \in \symAttrUniverse$.
 
 Using the aforementioned sets, we define the data model on which our algebraic
 mapping operators work: \textbf{a mapping relation}.
@@ -21,17 +22,18 @@ We build up the definition of a mapping relation in two steps as follows:
 \begin{definition}
 	A \textbf{mapping tuple} is a partial function $\mappingTuple:
 		\symAttrUniverse \rightarrow \symTermUniverse \cup \{\error\}$.
-    We also denote the \textbf{merging of two mapping tuples}  $\mappingTuple_1$
-    and $\mappingTuple_2$ as, $\mappingTuple_1 \cup \mappingTuple_2$.
-    $\mappingTuple_{merged} = \mappingTuple_1 \cup \mappingTuple_2$ is also a mapping tuple such that
-    for all $\attr \in \fctDom{\mappingTuple_1} \cap \fctDom{\mappingTuple_2}$, 
-    $\mappingTuple_1(\attr) = \mappingTuple_2(\attr)$, 
-    i.e. $\mappingTuple_1$ and $\mappingTuple_2$ are \textbf{compatible}.
-    Two mapping tuples with disjoint domains are always compatible and 
-    the empty mapping tuple, $\mappingTuple_{\emptyset}$, such that 
-    $\fctDom{\mappingTuple_{\emptyset}} = \emptyset$, is compatible with 
-    all the mapping tuples.
 \end{definition}
+
+Two mapping tuples $\mappingTuple$ and $\mappingTuple'$ are \emph{compatible} if, for every attribute~$\attr \in \fctDom{\mappingTuple} \cap \fctDom{\mappingTuple'}$, it holds that $\mappingTuple(\attr) = \mappingTuple'(\attr)$.
+Given two mapping tuples $\mappingTuple$ and $\mappingTuple'$ that are compatible, we write $\mappingTuple \cup \mappingTuple'$ to denote the mapping tuple $\mappingTuple_\text{merged}$ that is the merge of $\mappingTuple$ and $\mappingTuple'$; that is, $\fctDom{\mappingTuple_\text{merged}} = \fctDom{\mappingTuple} \cup \fctDom{\mappingTuple'}$ and, for every attribute~$\attr \in \fctDom{\mappingTuple_\text{merged}}$,
+\begin{equation*}
+	\mappingTuple_\text{merged}(\attr) =
+	\begin{cases}
+		\mappingTuple(\attr) & \text{if $\attr \in \fctDom{\mappingTuple}$,} \\
+		\mappingTuple'(\attr) & \text{else.}
+	\end{cases}
+\end{equation*}
+
 
 \begin{definition}
 	A \textbf{mapping relation} is a tuple $\mappingRel$, where

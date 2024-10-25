@@ -69,12 +69,12 @@ data access language.
 	\label{def:source_operator}
 	Let $\dataSource = \dataSourceTuple$ be a data source with
 	$\sourceType=\sourceTypeTuple$.
-	Given a tuple~$\iterConfig = \iterConfigTuple$, where
+	Given a tuple~$\iterConfigTuple$, where
 	$\queryExpr_{root} \in \symDataAcc$ and
 	$\symAttrQueryMap$ is a partial function
 	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$,
-	the \textbf{$\iterConfig$-specific mapping relation obtained from
-        $\dataSource$}, denoted by $\fctSourceOp{\iterConfig}{s}$,  is the mapping relation $\mappingRel$ such that
+	the \textbf{$\iterConfigTuple$-specific mapping relation obtained from
+        $\dataSource$}, denoted by $\fctSourceOp{\iterConfigTuple}{s}$,  is the mapping relation $\mappingRel$ such that
 	\begin{align*}
 		\symAttrSubSet  & = \fctDom{\symAttrQueryMap},
 		\; \text{ and}
@@ -249,26 +249,12 @@ relation to a subset of the attributes of that relation.
 \subsection{Equijoin Operator}%
 \label{sub:equi_join_operator}
 
-{\color{red}
-\begin{definition}
-	Let $r_{left} = \mappingRelSpec{left}$ and
-	$r_{right} = \mappingRelSpec{right}$ both be a mapping relation, and a set of pairs of attributes
-	$\symJoinAttrPairs \subset \symAttrSubSet_{left} \times \symAttrSubSet_{right}$ with
-	the condition for both $r_{left}$ and $r_{right}$ that
-	$\{\fragAttr\} = \symAttrSubSet_{left} \cap \symAttrSubSet_{right}$,
-	and the condition for $\symJoinAttrPairs$ that
-	$(\fragAttr, \fragAttr) \in \symJoinAttrPairs$.
-	...
-\end{definition}
-}
-
 \begin{definition}
 	\label{def:equijoin_operator}
 	Let $r_{1} = \mappingRelSpec{1}$ and
 	$r_{2} = \mappingRelSpec{2}$ be mapping relations
 	such that $\symAttrSubSet_{1} \cap \symAttrSubSet_{2} = \emptyset$,
-	and let $\symJoinAttrPairs \subset \symAttrSubSet_{1} \times \symAttrSubSet_{2}$
-	such that $(\fragAttr, \fragAttr) \in \symJoinAttrPairs$.
+	and let $\symJoinAttrPairs \subseteq \symAttrSubSet_{1} \times \symAttrSubSet_{2}$.
 	The \textbf{$\symJoinAttrPairs$-specific equijoin of mapping relations $r_{1}$ and
         $r_{2}$}, denoted by $\fctEquiJoinOp{r_{1}}{r_{2}}$,is the mapping relation $(\symAttrSubSet', \symMappingInst')$
 	such that $\symAttrSubSet' = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
@@ -280,12 +266,10 @@ relation to a subset of the attributes of that relation.
 		\mappingTuple_1(\attr_1) = \mappingTuple_2(\attr_2) \text{ for all }
 		(\attr_1,\attr_2) \in \symJoinAttrPairs
 		\}
+		.
 	\end{align*}
 \end{definition}
 
-\todo[inline]{Further comments about the definition above: \\
-- Didn't we say that another condition for $\symJoinAttrPairs$ is that each LHS attribute should be in at most one such pair, and the same for every RHS attribute? \\
-}
 
 
 

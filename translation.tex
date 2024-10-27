@@ -294,7 +294,7 @@ Section~\ref{sub:translation_algorithms}.
             \EndIf
             \State $\extExpr \gets $\Call{toLiteral}{$\extExpr, dt, lt$}
 		\EndIf
-		\Return $\extExpr$
+		\State \Return $\extExpr$
 	\end{algorithmic}
 \end{algorithm}
 
@@ -318,6 +318,10 @@ Section~\ref{sub:translation_algorithms}.
 	\end{algorithmic}
 \end{algorithm}
 
+\begin{definition}
+    A \textbf{mapping definition}  is an expression that can be built by 
+    combining various operators of our algebra.
+\end{definition}
 
 \begin{algorithm}
 	\caption{RML translation to algebraic mapping expressions}
@@ -328,21 +332,16 @@ Section~\ref{sub:translation_algorithms}.
 		%% TODO Define earlier: a mapping definition is an expression that can be built by combining the various operators of our algebra
 		\For{$(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
 		\State  $\iterConfigTuple \gets$ \Call{TranslateSourceOperator}{$\symRMLGraph, \triplesMapIRI$} \Comment{Algorithm~\ref{alg:rml_source_op}}
-		\State   $src \gets \textrm{initSrc}(o)$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$
+		\State   $src \gets \textrm{initSrc}(o')$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$
 		\State   $\omega \gets \fctSourceOp{\iterConfigTuple}{src}$
 		\State  $(v_{subj}, v_{pred},v_{obj}) \gets $ initial placeholder value for the (s,p,o) attributes for RDF serialization
 
 		\For{$(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$}
-		\State $\extExpr \gets $ extend operator from triple $(o,\texttt{rr:template},o') \lor (o,\texttt{rr:reference},o')$
-		\State $\extExpr \gets $\Call{TypeCast$^{L2B}$}{$\extExpr$} according to \texttt{rr:termType}
-		\State $\attr \gets \attr_\textrm{s}$ TODO: move this directly into the Extend operator
-		\State  $v_{subj} \gets \attr$ !! not needed any more
+        \State $\extExpr \gets $\Call{ExtractExtendOp}{$\symRMLGraph, L2B, \symAttrQueryMap, o$} \Comment Algorithm~\ref{alg:rml_termmap_extend_op}
 		\State $\omega \gets \extOp(\omega)$
 		\EndFor
-		\For{$(s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ where $p= \texttt{rr:predicateMap}$}
-		\State $(a, \extExpr) \gets $ extend operator from triple $(o,\texttt{rr:template},o') \lor (o,\texttt{rr:reference},o')$
-		\State $\extExpr \gets $\Call{TypeCast}{$\extExpr$} according to \texttt{rr:termType}
-		\State  $v_{pred} \gets a$
+		\For{$(s,\texttt{rr:predicateMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ }
+        \State $\extExpr \gets $\Call{ExtractExtendOp}{$\symRMLGraph, L2B, \symAttrQueryMap, o$} \Comment Algorithm~\ref{alg:rml_termmap_extend_op}
 		\State $\omega \gets \extOp(\omega)$
 		\EndFor \Comment Continued in Algorithm~\ref{alg:rml2algebra_part2}
 		\State\dots
@@ -384,27 +383,3 @@ Section~\ref{sub:translation_algorithms}.
 \end{algorithm}
 
 
-\begin{algorithm}
-	\caption{Projection operator translation}
-	\label{alg:projection_op}
-	\begin{algorithmic}[1]
-		\Require $\symRMLGraph$ an RDF graph of RML document,
-		$\triplesMapIRI$ subject IRI of the triples map to translate the projection operator for
-		\Ensure $\symProjSet$ a set of projection attributes
-		\Procedure{TranslateProjectionOperator}{$\triplesMapIRI,\symRMLGraph$}
-		\State $\symAttrQueryMap \gets$ \Call{QueryInTriplesMap}{$\triplesMapIRI, \symRMLGraph$}
-		\State $\symProjSet \gets \fctDom{\symAttrQueryMap}$
-		\State \Return  $\symProjSet$
-		\EndProcedure
-	\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}
-	\caption{Extend operator translation}
-	\label{alg:rml_extend_op}
-	\begin{algorithmic}[1]
-		\Require $\symRMLGraph$ an RDF graph of RML document,
-		$\triplesMapIRI$ subject IRI of the triples map to translate the extend operator for
-		\Ensure $\symProjSet$ a set of projection attributes
-	\end{algorithmic}
-\end{algorithm}

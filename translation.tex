@@ -85,7 +85,7 @@ Section~\ref{sub:translation_algorithms}.
     \label{alg:toiri_function}
     \begin{algorithmic}[1]
        \Require $v$ an input term value 
-       \Ensure $v'$ an RDF term with type IRI or an error
+       \Ensure $v'$ an RDF IRI node or an error
        \If{lexical form of $v$ is valid IRI}
             \State $v' \gets $ an IRI term node with $v$ as value
        \Else 
@@ -150,6 +150,31 @@ Section~\ref{sub:translation_algorithms}.
     if the $\queryExpr \in \fctImg{\symAttrQueryMap}$.
 \end{definition}
 
+\begin{algorithm}
+    \caption{Template: An extend function which resolves the template string of
+    the input literal node and returns the template resolved string as a
+    literal}
+    \label{alg:template_function}
+    \begin{algorithmic}[1]
+       \Require $v$ an input literal value, $\symAttrQueryMap : \symAttrUniverse \rightarrow \symDataAcc$ 
+        a mapping of attribute to query expression
+       \Ensure $v'$ an RDF literal node or an error
+       \State $S \gets $ a sequence of substrings, $s$, of $v$ where substring $s$ 
+        appears in the order that it appears in $v$ and $s$ is either enclosed by 
+        unescaped pairs of ``\{" and ``\}" or not
+        \State $v' \gets $ empty string literal
+        \For {$s \in S$}
+            \State $s' \gets s$
+            \If{$s$ is enclosed by paris of ``\{" and ``\}" and $s \in \fctImg{\symAttrQueryMap}$} 
+                 \State $s' \gets \symAttrQueryMap^{-1}(s) $
+            \Else
+                \State \Return $\error$
+            \EndIf
+            \State $v' \gets v' \ || \  s'$
+        \EndFor
+        \State \Return $v'$
+    \end{algorithmic}
+\end{algorithm}
 
 \subsection{Translation algorithms}%
 \label{sub:translation_algorithms}
@@ -342,7 +367,6 @@ ELSE
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
-
 
 \begin{algorithm}
 	\caption{Extend operator translation}

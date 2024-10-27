@@ -258,59 +258,41 @@ Section~\ref{sub:translation_algorithms}.
 \end{algorithm}
 
 
-
-$sm \gets$ object of the triple $(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ for which $s = \triplesMapIRI$ // the is exactly one such triple in the normalized RML document
-
-
-Line 8 should expand as follows.
-IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:termType},o')$ such that $s'=o$ THEN
-$tt \gets o'$
-ENDIF
-
-IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:reference},o')$ such that $s'=o$ THEN
-$\extExpr \gets \attr'$, where $\attr'$ is the attribute in $\fctDom{\symAttrQueryMap}$ for which $\symAttrQueryMap(\attr')$ is the lexical form of $o'$
-IF ( $tt$ is the IRI \texttt{rr:IRI} )
-$\extExpr \gets toIRI(\extExpr)$
-ELSE IF ( $tt$ is the IRI \texttt{rr:BlankNode} )
-$\extExpr \gets toBNode^{L2B}(\extExpr)$
-ELSE
-error
-ENDIF
-ELSE IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:constant},o')$ such that $s'=o$ THEN
-$\extExpr \gets o'$
-ELSE IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:template},o')$ such that $s'=o$ THEN
-$\symDataAcc' \gets$ sequence of all substrings in $o'$ that are enclosed by \{ and \}, in the order in which they appear in $o'$
-????
-IF ( $tt$ is the IRI \texttt{rr:IRI} )
-$\extExpr \gets toIRI(\extExpr)$
-ELSE IF ( $tt$ is the IRI \texttt{rr:BlankNode} )
-$\extExpr \gets toBNode^{L2B}(\extExpr)$
-ELSE
-error
-ENDIF
-ELSE
-error
 \begin{algorithm}
 	\caption{ExtractExtendOp: Extend operator translation from an RML term map}
 	\label{alg:rml_termmap_extend_op}
 	\begin{algorithmic}[1]
 		\Require $\symRMLGraph$ an RDF graph of RML document,
+        $L2B$ a global state mapping literals to blank nodes, 
 		$\symAttrQueryMap$ a partial function mapping attributes to query expression,
 		$tm$ subject IRI of the RML term map to translate the extend operator for
 		\Ensure $\extExpr$ an extend expression
-		\State $\extExpr \gets $ initially empty extend expression
-		\State $tt \gets o_{tt} $ in triple $(tm,\texttt{rr:termType},o_{tt}) \in \triplesMapGraph{TM}{tm}$ \Comment extract term type
+        \State $\extExpr \gets $ initially empty extend expression
+        \State $tt \gets o_{tt} $ in triple $(tm,\texttt{rr:termType},o_{tt}) \in \triplesMapGraph{TM}{tm}$ \Comment extract term type
+
 		\If{$(tm, \texttt{rr:refernece}, o) \in \triplesMapGraph{TM}{tm}$}
-		\State $\extExpr \gets a$ where $a \in \fctDom{\symAttrQueryMap}$ and $\symAttrQueryMap(a)$ is the lexical form of $o$
+    		\State $\extExpr \gets a$ where $a \in \fctDom{\symAttrQueryMap}$ and $\symAttrQueryMap(a)$ is the lexical form of $o$
 		\ElsIf{$(tm, \texttt{rr:constant}, o) \in \triplesMapGraph{TM}{tm}$}
-		\State $\extExpr \gets o$
+    		\State $\extExpr \gets o$
 		\ElsIf{$(tm, \texttt{rr:template}, o) \in \triplesMapGraph{TM}{tm}$}
-		\State todo!
+            \State  $\extExpr \gets $ \Call{Template}{$o, \symAttrQueryMap$}  \Comment Algorithm~\ref{alg:template_function}
 		\EndIf
 
-		\If{$(tm, \texttt{rr:languageMap}, o) \in \triplesMapGraph{TM}{tm}$}
-		\ElsIf{$(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$}
-		\State $\extExpr \gets o $
+        \If{$tt = \texttt{rr:BlankNode}$}
+            \State $\extExpr \gets $\Call{toBNode}{$\extExpr, L2B$}
+        \ElsIf{$tt = \texttt{rr:BlankNode}$}
+            \State $\extExpr \gets $\Call{toIRI}{$\extExpr$}
+        \Else
+            \State $dt \gets \texttt{xsd:string}$ 
+            \State $lt \gets $ undefined
+		    \If{$(tm, \texttt{rr:languageMap}, o) \in \triplesMapGraph{TM}{tm}$}
+                \State $lt \gets$ \Call{ExtractExtendOp}{$\symRMLGraph, L2B, \symAttrQueryMap, o$} \Comment RML language map is a term map 
+		    \ElsIf{$(tm, \texttt{rr:language}, o) \in \triplesMapGraph{TM}{tm}$}
+                \State $lt \gets o$ with $o$ a literal node that specifies the language tag
+		    \ElsIf{$(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$}
+    		    \State $dt \gets o $ with $o$ an IRI describing the literal datatype
+            \EndIf
+            \State $\extExpr \gets $\Call{toLiteral}{$\extExpr, dt, lt$}
 		\EndIf
 		\Return $\extExpr$
 	\end{algorithmic}

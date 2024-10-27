@@ -23,6 +23,41 @@
 \newcommand{\rightouterjoin}{\mathrel{\Join\mkern-6.5mu\ojoin}}
 \newcommand{\fullouterjoin}{\mathrel{\ojoin\mkern-6.5mu\Join\mkern-6.5mu\ojoin}}
 
+
+\definecolor{eclipseStrings}{RGB}{42,0.0,255}
+\definecolor{eclipseKeywords}{RGB}{127,0,85}
+\definecolor{darkgreen}{RGB}{0,128,21}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{rdf}{
+    basicstyle=\small,
+    keywordstyle=\color{eclipseKeywords},
+    commentstyle=\color{gray}, % style of comment
+    stringstyle=\color{darkgreen},
+    keywords={rml, ql, rr, rdfs},
+    morecomment=[n]{?}{\ },
+    morecomment=[l]\#,
+    morestring=[b]",
+    morestring=[s]{<}{>},
+    stepnumber=1,
+    numbers=left,
+    numberstyle=\scriptsize,
+    frame=lines,
+}
+
+
+\lstdefinelanguage{triples}{
+    basicstyle=\small,
+    keywordstyle=\color{eclipseKeywords},
+    commentstyle=\color{darkgreen}, % style of comment
+    keywords={a, rml, ql, rr, rdfs},
+    morecomment=[s]{?}{\ },
+    stepnumber=1,
+    numbers=left,
+    numberstyle=\scriptsize,
+    frame=lines,
+}
+
   
 \input{_reviewing.tex}
 \input{macro.tex}

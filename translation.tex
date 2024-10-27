@@ -80,7 +80,7 @@ Section~\ref{sub:translation_algorithms}.
 \end{definition}
 
 
-\begin{algorithm}
+\begin{algorithm}[htbp]
 	\caption{ToIRI: A function to type cast the input value to an IRI term node}
 	\label{alg:toiri_function}
 	\begin{algorithmic}[1]
@@ -115,7 +115,7 @@ Section~\ref{sub:translation_algorithms}.
 	\end{equation*}
 \end{definition}
 
-\begin{algorithm}
+\begin{algorithm}[htbp]
 	\caption{ToBNode: A function to type cast the input value to an RDF blank node}
 	\label{alg:tobnode_function}
 	\begin{algorithmic}[1]
@@ -160,7 +160,7 @@ Section~\ref{sub:translation_algorithms}.
 \end{definition}
 
 
-\begin{algorithm}
+\begin{algorithm}[htbp]
     \caption{ToLiteral: A function to type cast the input value to an RDF literal node with 
     the given datatype or language tag}
     \label{alg:toliteral_function}
@@ -199,7 +199,7 @@ Section~\ref{sub:translation_algorithms}.
 	if the $\queryExpr \in \fctImg{\symAttrQueryMap}$.
 \end{definition}
 
-\begin{algorithm}
+\begin{algorithm}[htbp]
 	\caption{Template: An extend function which resolves the template string of
 		the input literal node and returns the template resolved string as a
 		literal}
@@ -258,7 +258,7 @@ Section~\ref{sub:translation_algorithms}.
 \end{algorithm}
 
 
-\begin{algorithm}
+\begin{algorithm}[thbp]
 	\caption{ExtractExtendOp: Extend operator translation from an RML term map}
 	\label{alg:rml_termmap_extend_op}
 	\begin{algorithmic}[1]
@@ -299,7 +299,7 @@ Section~\ref{sub:translation_algorithms}.
 \end{algorithm}
 
 
-\begin{algorithm}
+\begin{algorithm}[thbp]
 	\caption{TranslateSourceOperator: Source operator translation for a given triples map IRI $\triplesMapIRI$}
 	\label{alg:rml_source_op}
 	\begin{algorithmic}[1]
@@ -319,37 +319,81 @@ Section~\ref{sub:translation_algorithms}.
 \end{algorithm}
 
 \begin{definition}
+    \label{def:mapping_definition}
     A \textbf{mapping definition}  is an expression that can be built by 
-    combining various operators of our algebra.
+    combining various operators of the mapping algebra. 
 \end{definition}
 
-\begin{algorithm}
+
+\begin{lstlisting}[language=rdf, caption={Example RML document, with 1 subject
+and 1 predicate-object map, processing data from a CSV file.},
+label={lst:rml_document}, float=ht]
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://example.com/base/> .
+
+<TriplesMap1>
+    a rr:TriplesMap; 
+    rml:logicalSource [ 
+      rml:source "sport.csv";
+      rml:referenceFormulation ql:CSV
+  ];
+
+  rr:subjectMap [ 
+    rr:template "http://example.com/resource/sport_{ID}";
+    rr:class <http://example.com/ontology/Sport>;
+  ]; 
+
+  rr:predicateObjectMap [ 
+    rr:predicate rdfs:label ; 
+    rr:objectMap [ rml:reference "Name" ];
+  ]. 
+\end{lstlisting}
+
+\begin{definition}
+    \label{def:init_data_source}
+    Let $ls_{iri}$ be an IRI of an RML logical source. 
+    We denote $\fctInitSrc{ls_{iri}}$ as a \textbf{data source}, $\dataSourceTuple$, derived 
+    from the configurations of the given logical source~$ls_{iri}$.
+\end{definition}
+For example, given an RDF graph~$\symRMLGraph$ of an RML document in Listing~\ref{lst:rml_document}, 
+and a triple $(s, \texttt{rml:logicalSource}, ls_{iri}) \in \symRMLGraph$, 
+$\fctInitSrc{ls_{iri}}$ returns a data source tuple, $\dataSourceTuple$, such 
+that $\symDataset$ is a CSV dataset from the file ``sport.csv" and 
+$\sourceType =  \sourceTypeTuple$ such that  $\symSetDataset$ is a set of  
+CSV datasets, $\symDataAcc$ a set of query expressions, such as column names 
+of the given CSV dataset.
+
+
+\begin{algorithm}[htbp]
 	\caption{RML translation to algebraic mapping expressions}
 	\label{alg:rml2algebra}
 	\begin{algorithmic}[1]
 		\Require $\symRMLGraph$ an RDF graph of a \textbf{normalized} RML document
-		\State $\omega \gets$ initially empty mapping definition
+        \State $\omega \gets$ initially empty mapping definition \Comment Definition~\ref{def:mapping_definition}
 		%% TODO Define earlier: a mapping definition is an expression that can be built by combining the various operators of our algebra
 		\For{$(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
-		\State  $\iterConfigTuple \gets$ \Call{TranslateSourceOperator}{$\symRMLGraph, \triplesMapIRI$} \Comment{Algorithm~\ref{alg:rml_source_op}}
-		\State   $src \gets \textrm{initSrc}(o')$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$
-		\State   $\omega \gets \fctSourceOp{\iterConfigTuple}{src}$
-		\State  $(v_{subj}, v_{pred},v_{obj}) \gets $ initial placeholder value for the (s,p,o) attributes for RDF serialization
+	    	\State  $\iterConfigTuple \gets$ \Call{TranslateSourceOperator}{$\symRMLGraph, \triplesMapIRI$} \Comment{Algorithm~\ref{alg:rml_source_op}}
+            \State   $src \gets \textrm{initSrc}(o')$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$ \Comment Definition~\ref{def:init_data_source}
+	    	\State   $\omega \gets \fctSourceOp{\iterConfigTuple}{src}$
+	    	\State  $(v_{subj}, v_{pred},v_{obj}) \gets $ initial placeholder value for the (s,p,o) attributes for RDF serialization
 
 		\For{$(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$}
-        \State $\extExpr \gets $\Call{ExtractExtendOp}{$\symRMLGraph, L2B, \symAttrQueryMap, o$} \Comment Algorithm~\ref{alg:rml_termmap_extend_op}
-		\State $\omega \gets \extOp(\omega)$
+            \State $\extExpr \gets $\Call{ExtractExtendOp}{$\symRMLGraph, L2B, \symAttrQueryMap, o$} \Comment Algorithm~\ref{alg:rml_termmap_extend_op}
+    		\State $\omega \gets \extOp(\omega)$
 		\EndFor
 		\For{$(s,\texttt{rr:predicateMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ }
-        \State $\extExpr \gets $\Call{ExtractExtendOp}{$\symRMLGraph, L2B, \symAttrQueryMap, o$} \Comment Algorithm~\ref{alg:rml_termmap_extend_op}
-		\State $\omega \gets \extOp(\omega)$
+            \State $\extExpr \gets $\Call{ExtractExtendOp}{$\symRMLGraph, L2B, \symAttrQueryMap, o$}
+    		\State $\omega \gets \extOp(\omega)$
 		\EndFor \Comment Continued in Algorithm~\ref{alg:rml2algebra_part2}
 		\State\dots
 		\algstore{state:full_translation}
 	\end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
+\begin{algorithm}[htbp]
 	\caption{RML translation to algebraic mapping expressions}
 	\label{alg:rml2algebra_part2}
 	\begin{algorithmic}[1]

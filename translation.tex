@@ -1,6 +1,10 @@
 \section{RML translation}%
 \label{sec:rml_translation}
 
+\subsection{Translattion preliminaries}%
+\label{sub:translattion_preliminaries}
+
+
 \todoi{Mariano's paper (Section 5) introduces steps to \textbf{normalize} RML document. We can reference it.}
 %https://www.sciencedirect.com/science/article/pii/S1570826815000153?via=ihub 
 \begin{definition}
@@ -50,6 +54,109 @@
 		      such that $s' = o$ and  $p'$ is the IRI \texttt{rr:parent}.
 	\end{enumerate}
 \end{definition}
+
+
+\subsection{Built-in extend functions}%
+\label{sub:built_in_extend_functions}
+
+The following definitions describe the provided built-in extend functions used
+when translating RML documents to algebraic mapping expressions as described in
+Section~\ref{sub:translation_algorithms}. 
+
+\subsubsection{ToIRI function}%
+\label{ssub:toiri_function}
+\begin{definition}
+    Let $v \in \symTermUniverse \cup \error$, be the input value. 
+    An extend function $\toIRI: (\symTermUniverse \cup \error) \rightarrow (\symAllIRIs \cup \error)$ 
+    is a unary function, and we denote $\fctToIRI{v}$ as a type casting of the input 
+    value $v$ to an IRI as follows: 
+    \begin{equation*}
+        \fctToIRI{v} =
+        \begin{cases}
+            v', &\text{ if lexical form of $v$ is a valid IRI and $v'$ is an IRI using the lexical form of $v$} \\ 
+            \error, & \text{else}
+        \end{cases}
+    \end{equation*}
+\end{definition}
+
+
+\begin{algorithm}
+    \caption{ToIRI: A function to type cast the input value to an IRI term node}
+    \label{alg:toiri_function}
+    \begin{algorithmic}[1]
+       \Require $v$ an input term value 
+       \Ensure $v'$ an RDF term with type IRI or an error
+       \If{lexical form of $v$ is valid IRI}
+            \State $v' \gets $ an IRI term node with $v$ as value
+       \Else 
+            \State $v' \gets  \error$
+       \EndIf 
+       \State \Return $v'$
+    \end{algorithmic}
+\end{algorithm}
+
+
+\subsubsection{ToBNode function}%
+\label{ssub:tobnode_function}
+\begin{definition}
+    Let $L2B: \symAllLiterals \rightarrow \symAllBNodes$ a global state on the
+    mapping of literals to blank nodes, and $v\in \symTermUniverse \cup \error$
+    an input literal value. 
+    An extend function $\toBNode: (\symTermUniverse \cup \error) \rightarrow (\symAllBNodes \cup \error)$
+    is a unary function, and we denote $\fctToBNode{v}$ as type casting of the input literal value 
+    $v$ to a blank node as follows: 
+    \begin{equation*}
+        \fctToBNode{v} =  
+        \begin{cases}
+            L2B(v), & \text{if $v \in \fctDom{L2B}$ } \\   
+            v', &\text{ if $v'$ is a blank node with label $v$ and $L2B(v) = v'$ } \\ 
+            \error, & \text{else}
+        \end{cases}
+    \end{equation*}
+\end{definition}
+
+\begin{algorithm}
+    \caption{ToBNode: A function to type cast the input value to an RDF blank node}
+    \label{alg:tobnode_function}
+    \begin{algorithmic}[1]
+       \Require $v$ an input literal value, $L2B : \symAllLiterals \rightarrow \symAllBNodes$ 
+        a mapping of literal values to blank nodes
+       \Ensure $v'$ an RDF blank node or an error
+        \If{$v \neq \error$}
+            \If{$v \in \fctDom{L2B}$}
+                \State $v' \gets  L2B(v)$ 
+            \Else
+                \State $v' \gets $ a new blank node
+                \State $L2B \gets L2B \cup (v \rightarrow v')$
+            \EndIf
+        \Else
+            \State $v' \gets \error$
+        \EndIf
+        \State \Return $v'$
+    \end{algorithmic}
+\end{algorithm}
+
+
+\subsubsection{Template function}%
+\label{ssub:template_function}
+\begin{definition}
+    Let $v\in \symTermUniverse \cup \error$ an input value, and
+    $\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$ a partial 
+    function. 
+    An extend function $\template: (\symAllLiterals \cup \error) \rightarrow (\symAllLiterals \cup \error)$
+    is a unary function, and we denote  $\fctTemplate{v}$ 
+    as a literal where all the query expressions, $\queryExpr \in \symDataAcc$, in the
+    substrings of $v$, are replaced with the attribute $ \attr = \symAttrQueryMap^{-1}(\queryExpr)$ 
+    if the $\queryExpr \in \fctImg{\symAttrQueryMap}$.
+\end{definition}
+
+
+\subsection{Translation algorithms}%
+\label{sub:translation_algorithms}
+
+
+
+
 \begin{algorithm}[thbp]
 	\caption{QueryInTriplesMap: Extract query expressions from RML triples maps}
 	\label{alg:query_extraction}
@@ -74,6 +181,65 @@
 		\EndFor
 		\State \Return $\symDataAcc$
 	\end{algorithmic}
+\end{algorithm}
+
+
+
+$sm \gets$ object of the triple $(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ for which $s = \triplesMapIRI$ // the is exactly one such triple in the normalized RML document
+
+
+Line 8 should expand as follows.
+IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:termType},o')$ such that $s'=o$ THEN
+	$tt \gets o'$
+ENDIF
+
+IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:reference},o')$ such that $s'=o$ THEN
+	$\extExpr \gets \attr'$, where $\attr'$ is the attribute in $\fctDom{\symAttrQueryMap}$ for which $\symAttrQueryMap(\attr')$ is the lexical form of $o'$
+	IF ( $tt$ is the IRI \texttt{rr:IRI} )
+		$\extExpr \gets toIRI(\extExpr)$
+	ELSE IF ( $tt$ is the IRI \texttt{rr:BlankNode} )
+		$\extExpr \gets toBNode^{L2B}(\extExpr)$
+	ELSE
+		error
+	ENDIF
+ELSE IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:constant},o')$ such that $s'=o$ THEN
+	$\extExpr \gets o'$
+ELSE IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:template},o')$ such that $s'=o$ THEN
+	$\symDataAcc' \gets$ sequence of all substrings in $o'$ that are enclosed by \{ and \}, in the order in which they appear in $o'$
+	????
+	IF ( $tt$ is the IRI \texttt{rr:IRI} )
+		$\extExpr \gets toIRI(\extExpr)$
+	ELSE IF ( $tt$ is the IRI \texttt{rr:BlankNode} )
+		$\extExpr \gets toBNode^{L2B}(\extExpr)$
+	ELSE
+		error
+	ENDIF
+ELSE
+	error
+\begin{algorithm}
+    \caption{ExtractExtendOp: Extend operator translation from an RML term map}
+    \label{alg:rml_termmap_extend_op}
+    \begin{algorithmic}[1]
+		\Require $\symRMLGraph$ an RDF graph of RML document,
+        $\symAttrQueryMap$ a partial function mapping attributes to query expression, 
+        $tm$ subject IRI of the RML term map to translate the extend operator for
+		\Ensure $\extExpr$ an extend expression 
+        \State $\extExpr \gets $ initially empty extend expression
+        \State $tt \gets o_{tt} $ in triple $(tm,\texttt{rr:termType},o_{tt}) \in \triplesMapGraph{TM}{tm}$ \Comment extract term type
+        \If{$(tm, \texttt{rr:refernece}, o) \in \triplesMapGraph{TM}{tm}$} 
+            \State $\extExpr \gets a$ where $a \in \fctDom{\symAttrQueryMap}$ and $\symAttrQueryMap(a)$ is the lexical form of $o$
+        \ElsIf{$(tm, \texttt{rr:constant}, o) \in \triplesMapGraph{TM}{tm}$}
+            \State $\extExpr \gets o$
+        \ElsIf{$(tm, \texttt{rr:template}, o) \in \triplesMapGraph{TM}{tm}$} 
+            \State todo!
+        \EndIf
+
+        \If{$(tm, \texttt{rr:languageMap}, o) \in \triplesMapGraph{TM}{tm}$}
+        \ElsIf{$(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$}
+            \State $\extExpr \gets o $
+        \EndIf
+        \Return $\extExpr$
+    \end{algorithmic}
 \end{algorithm}
 
 
@@ -128,38 +294,6 @@
     \end{algorithmic}
 \end{algorithm}
 
-
-$sm \gets$ object of the triple $(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ for which $s = \triplesMapIRI$ // the is exactly one such triple in the normalized RML document
-
-
-Line 8 should expand as follows.
-IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:termType},o')$ such that $s'=o$ THEN
-	$tt \gets o'$
-ENDIF
-
-IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:reference},o')$ such that $s'=o$ THEN
-	$\extExpr \gets \attr'$, where $\attr'$ is the attribute in $\fctDom{\symAttrQueryMap}$ for which $\symAttrQueryMap(\attr')$ is the lexical form of $o'$
-	IF ( $tt$ is the IRI \texttt{rr:IRI} )
-		$\extExpr \gets toIRI(\extExpr)$
-	ELSE IF ( $tt$ is the IRI \texttt{rr:BlankNode} )
-		$\extExpr \gets toBNode^{L2B}(\extExpr)$
-	ELSE
-		error
-	ENDIF
-ELSE IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:constant},o')$ such that $s'=o$ THEN
-	$\extExpr \gets o'$
-ELSE IF $\triplesMapGraph{TM}{\triplesMapIRI}$ contains a triple $(s',\texttt{rr:template},o')$ such that $s'=o$ THEN
-	$\symDataAcc' \gets$ sequence of all substrings in $o'$ that are enclosed by \{ and \}, in the order in which they appear in $o'$
-	????
-	IF ( $tt$ is the IRI \texttt{rr:IRI} )
-		$\extExpr \gets toIRI(\extExpr)$
-	ELSE IF ( $tt$ is the IRI \texttt{rr:BlankNode} )
-		$\extExpr \gets toBNode^{L2B}(\extExpr)$
-	ELSE
-		error
-	ENDIF
-ELSE
-	error
 \begin{algorithm}
     \caption{RML translation to algebraic mapping expressions}
     \label{alg:rml2algebra_part2}

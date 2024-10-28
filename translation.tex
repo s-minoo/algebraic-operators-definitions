@@ -130,15 +130,12 @@ Formally, for every $v\in \symTermUniverse \cup \error$ and a given $\dt \in \sy
 \label{ssub:concatenate_function}
 
 \begin{definition}
-Let $v,w \in \symTermUniverse \cup \error$ two input values. 
-The extend function $\concat: (\symAllLiterals \cup \error) \times  (\symAllLiterals \cup \error) \rightarrow  (\symAllLiterals \cup \error) $
+Let $v,w \in \symAllLiterals \cup \error$ two input values such 
+    that $v$ is $(\lex_v, \dt_v)$ and $w$ is $(\lex_w, \dt_w)$. 
+The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUniverse \cup \error) \rightarrow  (\symTermUniverse \cup \error) $
     is a binary function, and we denote $\fctConcat{v}{w}$ as a literal 
-$v'$ with its value as the concatenation, $v \ || \ w$,  
-of the lexical forms of the two input values $v$ and $w$. 
-For a sequence of input values $\bar{V} = (v_1,\dots,v_n)$ with $n \ge 2$, we 
-denote $\fctConcatSeq{V}$  as the application of 
-$\concat$ functions on the sequence as such 
-$\fctConcat{v_1}{\dots, \fctConcat{v_{n-1}}{v_n}}$
+    $v'$ with $(\lex', \dt')$ such that $\lex'$ the concatenation, $\lex_v \ || \ \lex_w$, and 
+    $\dt'$ is an IRI \texttt{xsd:string}. 
 \end{definition}
 
 

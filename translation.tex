@@ -67,33 +67,24 @@ Section~\ref{sub:translation_algorithms}.
 \label{ssub:toiri_function}
 \begin{definition}
 	Let $v \in \symTermUniverse \cup \error$, be the input value.
-	The extend function $\toIRI: (\symTermUniverse \cup \error) \rightarrow (\symAllIRIs \cup \error)$
-	is a unary function, and we denote $\fctToIRI{v}$ as a type casting of the input
-	value $v$ to an IRI as follows:
-	\begin{equation*}
-		\fctToIRI{v} =
-		\begin{cases}
-			v',     & \text{ if lexical form of $v$ is a valid IRI and $v'$ is an IRI using the lexical form of $v$} \\
-			\error, & \text{else}
-		\end{cases}
-	\end{equation*}
+	The extend function $\toIRI: (\symTermUniverse \cup \error) \rightarrow (\symTermUniverse \cup \error)$
+	is a unary function, and we denote $\fctToIRI{v}$ as a function 
+    that converts string literals representing IRIs into these IRIs. 
+    Formally,  for every $v \in (\symTermUniverse \cup \error)$: 
+    \begin{equation*}
+    	\fctToIRI{v} =
+    	\begin{cases}
+    		\mathit{lex}
+    		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is a valid IRI}
+    		\\[-2mm]
+    		& \text{and $\dt$ is the IRI \texttt{xsd:string},}
+    		\\
+    		\error
+    		& \text{else.}
+    	\end{cases}
+    \end{equation*}
 \end{definition}
 
-{\color{blue}
-$\toIRI$ is a unary extend function that converts string literals representing IRIs into these IRIs. Formally, for every $v \in (\symTermUniverse \cup \error)$,
-\begin{equation*}
-	\fctToIRI{v} =
-	\begin{cases}
-		\mathit{lex}
-		& \text{if $v$ is a literal $(\mathit{lex}, \mathit{dt})$ such that $\mathit{lex}$ is a valid IRI}
-		\\[-2mm]
-		& \text{and $\mathit{dt}$ is the IRI \texttt{xsd:string},}
-		\\
-		\error
-		& \text{else.}
-	\end{cases}
-\end{equation*}
-}
 
 
 \subsubsection{ToBNode function}%

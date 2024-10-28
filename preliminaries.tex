@@ -4,26 +4,32 @@ In this section, we provide a preliminary definition of terms which will be
 used throughout the rest of this paper in the definitions of
 the algebraic mapping operators.
 
-{\color{blue}
-We let $\symAllStrings$ be the countably infinite set of strings (sequences of Unicode code points) and $\symAllIRIs$ be the subset of $\symAllStrings$ that consists of all strings that are valid IRIs. Moreover, $\symAllLiterals$ is a countably infinite set of pairs $(\mathit{lex}, \mathit{dt}) \in \symAllStrings \times \symAllIRIs$, which we call \emph{literals}. For each such literal~$\ell = (\mathit{lex}, \mathit{dt})$, $\mathit{lex}$ is its \emph{lexical form} and $\mathit{dt}$ is its \emph{datatype IRI}.\footnote{To avoid overly complex formulas in this paper, we ignore the option of literals that have a language tag. Yet, the formalism can easily be extended to cover language-tagged literals as well.}
-Furthermore, we assume a countably infinite set~$\symAllBNodes$ of \emph{blank nodes}, which is disjoint from both $\symAllStrings$ and $\symAllLiterals$.
-The set~$\symTermUniverse$ of all \emph{RDF terms} is defined as $\symTermUniverse = \symAllIRIs \cup \symAllBNodes \cup \symAllLiterals$, and we write $\symTermSeqUniverse$ to denote the set of all possible sequences of terms (i.e., each element of $\symTermSeqUniverse$ is a sequence of elements of $\symTermUniverse$).
-In addition to RDF terms, we also assume a special value $\error$ such that $\error \notin \symTermUniverse$, which shall be used to denote errors.
+We let $\symAllStrings$ be the countably infinite set of strings (sequences of
+Unicode code points) and $\symAllIRIs$ be the subset of $\symAllStrings$ that
+consists of all strings that are valid IRIs. 
+Moreover, $\symAllLiterals$ is a countably infinite set of pairs
+$ \literalTuple \in \symAllStrings \times \symAllIRIs$, which we
+call \emph{literals}. 
+For each such literal~$\literal = \literalTuple$, $\lex$ is
+its \emph{lexical form} and $\dt$ is its \emph{datatype
+IRI}~\footnote{To avoid overly complex formulas in this paper, we ignore the
+option of literals that have a language tag. Yet, the formalism can easily be
+extended to cover language-tagged literals as well.}. 
+Furthermore, we assume a countably infinite set~$\symAllBNodes$ of \emph{blank
+nodes}, which is disjoint from both $\symAllStrings$ and $\symAllLiterals$. 
+The set~$\symTermUniverse$ of all \emph{RDF terms} is defined as
+$\symTermUniverse = \symAllIRIs \cup \symAllBNodes \cup \symAllLiterals$, and
+we write $\symTermSeqUniverse$ to denote the set of all possible sequences of
+terms (i.e., each element of $\symTermSeqUniverse$ is a sequence of elements of
+$\symTermUniverse$). 
+In addition to RDF terms, we also assume a special value $\error$ such that
+$\error \notin \symTermUniverse$, which shall be used to denote errors.
 
-Furthermore, we assume a countably infinite set~$\symAttrUniverse$ of \emph{attributes}, where $\attr_\textrm{s} \in \symAttrUniverse$, $\attr_\textrm{p} \in \symAttrUniverse$, $\attr_\textrm{o} \in \symAttrUniverse$, and $\attr_\textrm{g} \in \symAttrUniverse$ are four designated attributes.
-}
-
-{\color{red}
-We assume the following pairwise disjoint countably infinite sets:
-$\symAttrUniverse$ (attribute names), $\symAllIRIs$ (IRIs), $\symAllBNodes$
-(blank nodes), and $\symAllLiterals$ (literals).
-We define a set of terms $\symTermUniverse$ as $\symTermUniverse = \symAllIRIs
-	\cup \symAllBNodes \cup \symAllLiterals$, and we denote a set of all possible
-sequences of terms as $\symTermSeqUniverse$.
-Furthermore, we also define a special value $\error$ with
-$\error \notin (\symTermUniverse \cup \symAttrUniverse)$,
-and we assume four designated attributes $\attr_\textrm{s} \in \symAttrUniverse$, $\attr_\textrm{p} \in \symAttrUniverse$, $\attr_\textrm{o} \in \symAttrUniverse$, and $\attr_\textrm{g} \in \symAttrUniverse$.
-}
+Furthermore, we assume a countably infinite set~$\symAttrUniverse$ of
+\emph{attributes}, where $\attr_\textrm{s} \in \symAttrUniverse$,
+$\attr_\textrm{p} \in \symAttrUniverse$, $\attr_\textrm{o} \in
+\symAttrUniverse$, and $\attr_\textrm{g} \in \symAttrUniverse$ are four
+designated attributes.
 
 Using the aforementioned sets, we define the data model on which our algebraic
 mapping operators work: \textbf{a mapping relation}.

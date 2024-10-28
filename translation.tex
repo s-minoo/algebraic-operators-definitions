@@ -1,8 +1,8 @@
 \section{RML translation}%
 \label{sec:rml_translation}
 
-\subsection{Translattion preliminaries}%
-\label{sub:translattion_preliminaries}
+\subsection{Translation preliminaries}%
+\label{sub:translation_preliminaries}
 
 
 \todoi{Mariano's paper (Section 5) introduces steps to \textbf{normalize} RML document. We can reference it.}
@@ -67,9 +67,7 @@ Section~\ref{sub:translation_algorithms}.
 \label{ssub:toiri_function}
 \begin{definition}
 	Let $v \in \symTermUniverse \cup \error$, be the input value.
-	An
-\todo{It is not "an" but "the".}
-	extend function $\toIRI: (\symTermUniverse \cup \error) \rightarrow (\symAllIRIs \cup \error)$
+	The extend function $\toIRI: (\symTermUniverse \cup \error) \rightarrow (\symAllIRIs \cup \error)$
 	is a unary function, and we denote $\fctToIRI{v}$ as a type casting of the input
 	value $v$ to an IRI as follows:
 	\begin{equation*}
@@ -119,7 +117,7 @@ literals representing IRIs into these IRIs. Formally, for every $v \in (\symTerm
 	Let $L2B: \symAllLiterals \rightarrow \symAllBNodes$ a global state on the
 	mapping of literals to blank nodes, and $v\in \symTermUniverse \cup \error$
 	an input literal value.
-	An extend function $\toBNode: (\symTermUniverse \cup \error) \rightarrow (\symAllBNodes \cup \error)$
+	The extend function $\toBNode: (\symTermUniverse \cup \error) \rightarrow (\symAllBNodes \cup \error)$
 	is a unary function, and we denote $\fctToBNode{v}$ as type casting of the input literal value
 	$v$ to a blank node as follows:
 	\begin{equation*}
@@ -130,6 +128,8 @@ literals representing IRIs into these IRIs. Formally, for every $v \in (\symTerm
 			\error, & \text{else}
 		\end{cases}
 	\end{equation*}
+    $\fctToBNode{v}$ also updates the global state $L2B$ with 
+    $L2B \cup \{(v \rightarrow v')\}$  if the generated blank node $v' \notin \fctImg{L2B}$. 
 \end{definition}
 
 \begin{algorithm}[htbp]
@@ -159,11 +159,10 @@ literals representing IRIs into these IRIs. Formally, for every $v \in (\symTerm
 
 \begin{definition}
     Let $dt$ be an optional RDF literal data type, $lt$ be an optional RDF
-    literal language tag, and $v\in \symTermUniverse \cup \error$ an input
-    literal value.
-	An extend function $\toLiteral: (\symTermUniverse \cup \error) \rightarrow (\symAllLiterals  \cup \error)$
+    literal language tag, and $v\in \symTermUniverse \cup \error$ an input value.
+	The extend function $\toLiteral: (\symTermUniverse \cup \error) \rightarrow (\symAllLiterals  \cup \error)$
     is a unary function, and we denote $\fctToLiteral{v}$ as type casting of
-    the input literal value $v$ to an RDF literal node as follows:
+    the input value $v$ to an RDF literal node as follows:
 
     \begin{equation*}
         \fctToLiteral{v} = 
@@ -209,7 +208,7 @@ literals representing IRIs into these IRIs. Formally, for every $v \in (\symTerm
 	Let $v\in \symTermUniverse \cup \error$ an input value, and
 	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$ a partial
 	function.
-	An extend function $\template: (\symAllLiterals \cup \error) \rightarrow (\symAllLiterals \cup \error)$
+	The extend function $\template: (\symAllLiterals \cup \error) \rightarrow (\symAllLiterals \cup \error)$
 	is a unary function, and we denote  $\fctTemplate{v}$
 	as a literal where all the query expressions, $\queryExpr \in \symDataAcc$, in the
 	substrings of $v$, are replaced with the attribute $ \attr = \symAttrQueryMap^{-1}(\queryExpr)$

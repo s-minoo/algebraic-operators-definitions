@@ -379,8 +379,8 @@ and a triple $(s, \texttt{rml:logicalSource}, ls_{iri}) \in \symRMLGraph$,
 $\fctInitSrc{ls_{iri}}$ returns a data source tuple, $\dataSourceTuple$, such 
 that $\symDataset$ is a CSV dataset from the file ``sport.csv" and 
 $\sourceType =  \sourceTypeTuple$ such that  $\symSetDataset$ is a set of  
-CSV datasets, $\symDataAcc$ a set of query expressions, such as column names 
-of the given CSV dataset.
+CSV datasets, $\symDataAcc$ a set of all possible query expressions applicable to the 
+given CSV dataset, such as column names.
 
 
 \begin{algorithm}[htbp]
@@ -415,29 +415,33 @@ of the given CSV dataset.
 	\begin{algorithmic}[1]
 		\algrestore{state:full_translation}
 		\State \dots
-		\For{$(s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ where $p= \texttt{rr:objectMap}$}
-		\If{$p = \texttt{rr:parentTriplesMap}$ in the triple $(o,p,o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
-		\State $s_{ptm} \gets o'$
-		\State  $\iterConfig \gets $ \Call{TranslateSourceOperator}{$\symRMLGraph, s_{ptm}$} \Comment{Algorithm~\ref{alg:rml_source_op}}
-		\State   $source_{ptm} \gets o''$ with $(s'',p'',o'') \in \triplesMapGraph{TM}{s_{ptm}}$ where $p = \texttt{rr:logicalSource}$
-		\State  $\omega_{ptm} \gets \fctSourceOp{\iterConfig}{source_{ptm}}$
-		\State  $a_{left} \gets $ attribute of query expression $o$ in triple $(s,p,o) \in \triplesMapGraph{TM}{s_{ptm}}$ where $p = \texttt{rr:child}$
-		\State  $a_{right} \gets $ attribute of query expression $o$ in triple $(s,p,o) \in \triplesMapGraph{TM}{s_{ptm}}$ where $p = \texttt{rr:parent}$
-		\State  $\symJoinAttrPairs \gets \{ (a_{left}, a_{right}) \}$
-		\State  $\omega \gets \fctEquiJoinOp{\omega}{\omega_{ptm}}$
-		\State $\extOp \gets$ extend operator for the subject map of triples map with IRI $s_{ptm}$
-		\State  $v_{obj} \gets a$  with $a$ the attribute used by $\extOp$
-		\State  $\omega \gets \fctExtOp{\omega}$
-		\State  \texttt{break}
-		\EndIf
-		\State $(a, \extExpr) \gets $ extend operator from triple $(o,\texttt{rr:template},o') \lor (o,\texttt{rr:reference},o')$
-		\State $\extExpr \gets $\Call{TypeCast}{$\extExpr$} according to \texttt{rr:termType}
-		\State  $v_{obj} \gets a$
-		\State $\omega \gets \extOp(\omega)$
-		\EndFor
-		\State $\omega \gets $ \Call{SerializeOp}{$(v_{subj}, v_{pred},v_{obj}, \omega)$}
-		\State $Execute(\omega)$
-		\State $\omega \gets$  initialization value for the current algebraic mapping expressions
+            \For{$(s,\texttt{rr:objectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$}
+                \If{$(o,\texttt{rr:parentTriplesMap},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
+		            \State $s_{ptm} \gets o'$
+		            \State  $\iterConfig \gets $ \Call{TranslateSourceOperator}{$\symRMLGraph, s_{ptm}$} \Comment{Algorithm~\ref{alg:rml_source_op}}
+                    \State   $source_{ptm} \gets \fctInitSrc{o''}$ with $(s'',\texttt{rr:logicalSource},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
+		            \State  $\omega_{ptm} \gets \fctSourceOp{\iterConfig}{source_{ptm}}$
+                    \If{$(o,\texttt{rr:joinCondition},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
+                        \State  $a \gets \symAttrQueryMap^{-1}(o'') $ for $o''$ in triple $(o',\texttt{rr:child},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
+                        \State  $a_{ptm} \gets \symAttrQueryMap^{-1}(o'')$ for $o''$ in triple $(o',\texttt{rr:parent},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
+		                \State  $\symJoinAttrPairs \gets \{ (a, a_{ptm}) \}$
+		                \State  $\omega \gets \fctEquiJoinOp{\omega}{\omega_{ptm}}$
+                    \Else
+		                \State  $\omega \gets $ TODO: union join
+                    \EndIf
+		            \State $\extOp \gets$ extend operator for the subject map of triples map with IRI $s_{ptm}$
+		            \State  $v_{obj} \gets a$  with $a$ the attribute used by $\extOp$
+		            \State  $\omega \gets \fctExtOp{\omega}$
+		            \State  \texttt{break}
+		        \EndIf
+		        \State $(a, \extExpr) \gets $ extend operator from triple $(o,\texttt{rr:template},o') \lor (o,\texttt{rr:reference},o')$
+		        \State $\extExpr \gets $\Call{TypeCast}{$\extExpr$} according to \texttt{rr:termType}
+		        \State  $v_{obj} \gets a$
+		        \State $\omega \gets \extOp(\omega)$
+		    \EndFor
+		    \State $\omega \gets $ \Call{SerializeOp}{$(v_{subj}, v_{pred},v_{obj}, \omega)$}
+		    \State $Execute(\omega)$
+		    \State $\omega \gets$  initialization value for the current algebraic mapping expressions
 		\EndFor
 	\end{algorithmic}
 \end{algorithm}

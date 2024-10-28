@@ -95,21 +95,6 @@ $\toIRI$ is a unary extend function that converts string literals representing I
 \end{equation*}
 }
 
-\begin{algorithm}[htbp]
-	\caption{ToIRI: A function to type cast the input value to an IRI term node}
-	\label{alg:toiri_function}
-	\begin{algorithmic}[1]
-		\Require $v$ an input term value
-		\Ensure $v'$ an RDF IRI node or an error
-		\If{lexical form of $v$ is valid IRI}
-		\State $v' \gets $ an IRI term node with $v$ as value
-		\Else
-		\State $v' \gets  \error$
-		\EndIf
-		\State \Return $v'$
-	\end{algorithmic}
-\end{algorithm}
-
 
 \subsubsection{ToBNode function}%
 \label{ssub:tobnode_function}
@@ -148,26 +133,6 @@ $\toBNode$ is a unary extend function that uses $\mathit{L2B}$ to convert string
 }
 
 
-\begin{algorithm}[htbp]
-	\caption{ToBNode: A function to type cast the input value to an RDF blank node}
-	\label{alg:tobnode_function}
-	\begin{algorithmic}[1]
-		\Require $v$ an input literal value, $L2B : \symAllLiterals \rightarrow \symAllBNodes$
-		a mapping of literal values to blank nodes
-		\Ensure $v'$ an RDF blank node or an error
-		\If{$v \neq \error$}
-		\If{$v \in \fctDom{L2B}$}
-		\State $v' \gets  L2B(v)$
-		\Else
-		\State $v' \gets $ a new blank node
-		\State $L2B \gets L2B \cup (v \rightarrow v')$
-		\EndIf
-		\Else
-		\State $v' \gets \error$
-		\EndIf
-		\State \Return $v'$
-	\end{algorithmic}
-\end{algorithm}
 
 \subsubsection{ToLiteral function}%
 \label{ssub:toliteral_function}
@@ -192,29 +157,6 @@ $\toBNode$ is a unary extend function that uses $\mathit{L2B}$ to convert string
 \end{definition}
 
 
-\begin{algorithm}[htbp]
-    \caption{ToLiteral: A function to type cast the input value to an RDF literal node with 
-    the given datatype or language tag}
-    \label{alg:toliteral_function}
-    \begin{algorithmic}[1]
-		\Require $v$ an input term node value, 
-        $dt$ an optional datatype IRI, $lt$ an optional language tag
-		\Ensure $v'$ an RDF literal node or an error
-        \State $v' \gets $ literal node with the lexical form of $v$ as its value
-        \If{$dt$ and $lt$ are defined}
-            \State \Return $\error$
-        \ElsIf{$dt$ is defined}
-            \State $v' \gets v'$ with $dt$ as the datatype
-        \ElsIf{$lt$ is defined}
-            \State $v' \gets v'$ with $lt$ as the language tag
-        \ElsIf{$dt$ is undefined}
-            \State $v' \gets v'$ with \texttt{xsd:string} as the datatype
-        \Else 
-            \State \Return $\error$
-        \EndIf
-        \State \Return $v'$
-    \end{algorithmic}
-\end{algorithm}
 
 
 \subsubsection{Concatenate function}%

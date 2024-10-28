@@ -80,14 +80,14 @@ Section~\ref{sub:translation_algorithms}.
 \end{definition}
 
 {\color{blue}
-$\toIRI$ is a unary extend function that converts
-	\todo{Do we want to restrict this to string literals?}
-literals representing IRIs into these IRIs. Formally, for every $v \in (\symTermUniverse \cup \error)$,
+$\toIRI$ is a unary extend function that converts string literals representing IRIs into these IRIs. Formally, for every $v \in (\symTermUniverse \cup \error)$,
 \begin{equation*}
 	\fctToIRI{v} =
 	\begin{cases}
 		\mathit{lex}
-		& \text{if $v$ is a literal $(\mathit{lex}, \mathit{dt})$ such that $\mathit{lex}$ is a valid IRI,}
+		& \text{if $v$ is a literal $(\mathit{lex}, \mathit{dt})$ such that $\mathit{lex}$ is a valid IRI}
+		\\[-2mm]
+		& \text{and $\mathit{dt}$ is the IRI \texttt{xsd:string},}
 		\\
 		\error
 		& \text{else.}
@@ -131,6 +131,22 @@ literals representing IRIs into these IRIs. Formally, for every $v \in (\symTerm
     $\fctToBNode{v}$ also updates the global state $L2B$ with 
     $L2B \cup \{(v \rightarrow v')\}$  if the generated blank node $v' \notin \fctImg{L2B}$. 
 \end{definition}
+
+{\color{blue}
+We assume a function $\mathit{L2B}: \symAllLiterals \rightarrow \symAllBNodes$ that is injective.
+$\toBNode$ is a unary extend function that uses $\mathit{L2B}$ to convert string literals into blank nodes. Formally, for every $v \in (\symTermUniverse \cup \error)$,
+\begin{equation*}
+	\toBNode{v} =
+	\begin{cases}
+		\mathit{L2B}(\mathit{lex})
+		& \text{if $v$ is a literal $(\mathit{lex}, \mathit{dt})$ such that $\mathit{dt}$ is the IRI \texttt{xsd:string},}
+		\\
+		\error
+		& \text{else.}
+	\end{cases}
+\end{equation*}
+}
+
 
 \begin{algorithm}[htbp]
 	\caption{ToBNode: A function to type cast the input value to an RDF blank node}
@@ -303,17 +319,17 @@ $\fctConcat{v_1}{\dots, \fctConcat{v_{n-1}}{v_n}}$
 		$tm$ subject IRI of the RML term map to translate the extend operator for
 		\Ensure $\extExpr$ an extend expression
         \State $\extExpr \gets $ initially empty extend expression
-        \State $tt \gets o_{tt} $ in triple $(tm,\texttt{rr:termType},o_{tt}) \in \triplesMapGraph{TM}{tm}$ \Comment extract term type
 
-		\If{$(tm, \texttt{rr:refernece}, o) \in \triplesMapGraph{TM}{tm}$}
-    		\State $\extExpr \gets a$ where $a \in \fctDom{\symAttrQueryMap}$ and $\symAttrQueryMap(a)$ is the lexical form of $o$
+		\If{$(tm, \texttt{rr:reference}, o) \in \triplesMapGraph{TM}{tm}$}
+    		\State $\extExpr \gets a$, where $a \in \fctDom{\symAttrQueryMap}$ and $\symAttrQueryMap(a)$ is the lexical form of $o$
 		\ElsIf{$(tm, \texttt{rr:constant}, o) \in \triplesMapGraph{TM}{tm}$}
     		\State $\extExpr \gets o$
 		\ElsIf{$(tm, \texttt{rr:template}, o) \in \triplesMapGraph{TM}{tm}$}
             \State  $\extExpr \gets $ \Call{Template}{$o, \symAttrQueryMap$}  \Comment Algorithm~\ref{alg:template_function}
 		\EndIf
 
-        \If{$tt = \texttt{rr:BlankNode}$}
+        \State TODO remove:  $tt \gets o_{tt} $ in triple $(tm,\texttt{rr:termType},o_{tt}) \in \triplesMapGraph{TM}{tm}$ \Comment extract term type
+        \If{there exists a triple $(tm,\texttt{rr:termType}, \texttt{rr:BlankNode}) \in \triplesMapGraph{TM}{tm}$}
             \State $\extExpr \gets $\Call{toBNode}{$\extExpr, L2B$}
         \ElsIf{$tt = \texttt{rr:BlankNode}$}
             \State $\extExpr \gets $\Call{toIRI}{$\extExpr$}
@@ -324,8 +340,8 @@ $\fctConcat{v_1}{\dots, \fctConcat{v_{n-1}}{v_n}}$
                 \State $lt \gets$ \Call{ExtractExtendOp}{$\symRMLGraph, L2B, \symAttrQueryMap, o$} \Comment RML language map is a term map 
 		    \ElsIf{$(tm, \texttt{rr:language}, o) \in \triplesMapGraph{TM}{tm}$}
                 \State $lt \gets o$ with $o$ a literal node that specifies the language tag
-		    \ElsIf{$(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$}
-    		    \State $dt \gets o $ with $o$ an IRI describing the literal datatype
+		    \ElsIf{there exists a triple $(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$ such that $o \in \symAllIRIs$}
+    		    \State $dt \gets o$
             \EndIf
             \State $\extExpr \gets $\Call{toLiteral}{$\extExpr, dt, lt$}
 		\EndIf

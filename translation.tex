@@ -65,87 +65,63 @@ Section~\ref{sub:translation_algorithms}.
 
 \subsubsection{ToIRI function}%
 \label{ssub:toiri_function}
-\begin{definition}
-	Let $v \in \symTermUniverse \cup \error$, be the input value.
-	The extend function $\toIRI: (\symTermUniverse \cup \error) \rightarrow (\symTermUniverse \cup \error)$
-	is a unary function, and we denote $\fctToIRI{v}$ as a function 
-    that converts string literals representing IRIs into these IRIs. 
-    Formally,  for every $v \in (\symTermUniverse \cup \error)$: 
-    \begin{equation*}
-    	\fctToIRI{v} =
-    	\begin{cases}
-    		\mathit{lex}
-    		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is a valid IRI}
-    		\\[-2mm]
-    		& \text{and $\dt$ is the IRI \texttt{xsd:string},}
-    		\\
-    		\error
-    		& \text{else.}
-    	\end{cases}
-    \end{equation*}
-\end{definition}
-
-
-
-\subsubsection{ToBNode function}%
-\label{ssub:tobnode_function}
-\begin{definition}
-	Let $L2B: \symAllLiterals \rightarrow \symAllBNodes$ a global state on the
-	mapping of literals to blank nodes, and $v\in \symTermUniverse \cup \error$
-	an input literal value.
-	The extend function $\toBNode: (\symTermUniverse \cup \error) \rightarrow (\symAllBNodes \cup \error)$
-	is a unary function, and we denote $\fctToBNode{v}$ as type casting of the input literal value
-	$v$ to a blank node as follows:
-	\begin{equation*}
-		\fctToBNode{v} =
-		\begin{cases}
-			L2B(v), & \text{if $v \in \fctDom{L2B}$ }                                   \\
-			v',     & \text{ if $v'$ is a blank node with label $v$ and $L2B(v) = v'$ } \\
-			\error, & \text{else}
-		\end{cases}
-	\end{equation*}
-    $\fctToBNode{v}$ also updates the global state $L2B$ with 
-    $L2B \cup \{(v \rightarrow v')\}$  if the generated blank node $v' \notin \fctImg{L2B}$. 
-\end{definition}
-
-{\color{blue}
-We assume a function $\mathit{L2B}: \symAllLiterals \rightarrow \symAllBNodes$ that is injective.
-$\toBNode$ is a unary extend function that uses $\mathit{L2B}$ to convert string literals into blank nodes. Formally, for every $v \in (\symTermUniverse \cup \error)$,
+Let $v \in \symTermUniverse \cup \error$, be the input value.
+The extend function $\toIRI: (\symTermUniverse \cup \error) \rightarrow (\symTermUniverse \cup \error)$
+is a unary function, and we denote $\fctToIRI{v}$ as a function 
+that converts string literals representing IRIs into these IRIs. 
+Formally,  for every $v \in (\symTermUniverse \cup \error)$: 
 \begin{equation*}
-	\toBNode{v} =
+	\fctToIRI{v} =
 	\begin{cases}
-		\mathit{L2B}(\mathit{lex})
-		& \text{if $v$ is a literal $(\mathit{lex}, \mathit{dt})$ such that $\mathit{dt}$ is the IRI \texttt{xsd:string},}
+		\mathit{lex}
+		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is a valid IRI}
+		\\[-2mm]
+		& \text{and $\dt$ is the IRI \texttt{xsd:string},}
 		\\
 		\error
 		& \text{else.}
 	\end{cases}
 \end{equation*}
-}
 
 
+
+\subsubsection{ToBNode function}%
+\label{ssub:tobnode_function}
+We assume a function $\LTB: \symAllLiterals \rightarrow \symAllBNodes$ that is injective.
+$\toBNode$ is a unary extend function that uses $\LTB$ to convert string literals into blank nodes. Formally, for every $v \in (\symTermUniverse \cup \error)$:
+\begin{equation*}
+	\fctToBNode{v} =
+	\begin{cases}
+		\LTB(\lex)
+		& \text{if $v$ is a literal $\literalTuple$}
+        \\[-1mm]
+        & \text{such that $\dt$ is the IRI \texttt{xsd:string},}
+        \\ 
+		\error
+		& \text{else.}
+	\end{cases}
+\end{equation*}
 
 \subsubsection{ToLiteral function}%
 \label{ssub:toliteral_function}
-
-
-\begin{definition}
-    Let $dt$ be an optional RDF literal data type, $lt$ be an optional RDF
-    literal language tag, and $v\in \symTermUniverse \cup \error$ an input value.
-	The extend function $\toLiteral: (\symTermUniverse \cup \error) \rightarrow (\symAllLiterals  \cup \error)$
-    is a unary function, and we denote $\fctToLiteral{v}$ as type casting of
-    the input value $v$ to an RDF literal node as follows:
-
-    \begin{equation*}
-        \fctToLiteral{v} = 
-        \begin{cases}
-            v', &\parbox{15em}{ if $dt$ and $lt$ are not provided, $v'$ is literal with value as lexical form of $v$ and datatype \texttt{xsd:string}   } \\  \\ 
-            v', &\parbox{15em}{ if $dt$ is provided, $v'$ is literal with value as lexical form of $v$ and datatype $dt$   } \\  \\ 
-            v', &\parbox{15em}{ if $lt$ is provided, $v'$ is literal with value as lexical form of $v$ and language tag $lt$   } \\ \\ 
-            \error, & \text{ else }
-        \end{cases}
-    \end{equation*}
-\end{definition}
+Let $\dt \in \symAllIRIs$ be an IRI defining the literal data type,
+and $v\in \symTermUniverse \cup \error$ an input value.
+The extend function $\toLiteral: (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error) \rightarrow (\symTermUniverse  \cup \error)$
+is a binary function that converts string literals or IRIs, into literals with the given 
+datatype $\dt$.
+Formally, for every $v\in \symTermUniverse \cup \error$ and a given $\dt \in \symAllIRIs$ : 
+\begin{equation*}
+    \fctToLiteral{v, \dt'} = 
+    \begin{cases}
+        v', &\text{if $v$ is a literal, $\literalTuple$, such that $\dt$ is \texttt{xsd:string},}
+        \\[-1mm]
+         & \text{and  $v' = (\lex, \dt')$  }\\ 
+        v', &\text{if $v$ is an IRI such that $\lex$ is the lexical form of $v$}
+        \\[-1mm]
+         & \text{and  $v' = (\lex, \dt')$  }\\ 
+        \error, & \text{ else }
+    \end{cases}
+\end{equation*}
 
 
 

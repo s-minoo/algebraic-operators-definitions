@@ -201,18 +201,37 @@ literals representing IRIs into these IRIs. Formally, for every $v \in (\symTerm
 \end{algorithm}
 
 
+\subsubsection{Concatenate function}%
+\label{ssub:concatenate_function}
+
+\begin{definition}
+Let $v,w \in \symTermUniverse \cup \error$ two input values. 
+The extend function $\concat: (\symAllLiterals \cup \error) \times  (\symAllLiterals \cup \error) \rightarrow  (\symAllLiterals \cup \error) $
+    is a binary function, and we denote $\fctConcat{v}{w}$ as a literal 
+$v'$ with its value as the concatenation, $v \ || \ w$,  
+of the lexical forms of the two input values $v$ and $w$. 
+For a sequence of input values $\bar{V} = (v_1,\dots,v_n)$ with $n \ge 2$, we 
+denote $\fctConcatSeq{V}$  as the application of 
+$\concat$ functions on the sequence as such 
+$\fctConcat{v_1}{\dots, \fctConcat{v_{n-1}}{v_n}}$
+\end{definition}
+
 
 \subsubsection{Template function}%
 \label{ssub:template_function}
 \begin{definition}
-	Let $v\in \symTermUniverse \cup \error$ an input value, and
+	Let $v\in \symTermUniverse \cup \error$ an input value,
 	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$ a partial
 	function.
-	The extend function $\template: (\symAllLiterals \cup \error) \rightarrow (\symAllLiterals \cup \error)$
+	The extend function $\template: (\symAllLiterals \cup \error) \rightarrow  \extExpr$
 	is a unary function, and we denote  $\fctTemplate{v}$
-	as a literal where all the query expressions, $\queryExpr \in \symDataAcc$, in the
-	substrings of $v$, are replaced with the attribute $ \attr = \symAttrQueryMap^{-1}(\queryExpr)$
-	if the $\queryExpr \in \fctImg{\symAttrQueryMap}$.
+    as the extend expression~$\extExpr$ tuple $(concatSeq, \extExpr_1, \dots, \extExpr_n)$ 
+    such that for each $s_n \in \symAllStrings$, where $s_n$ is the $n$-th substring in $v$,
+    the value for $\extExpr_n$ is determined as follows: 
+    if $s_n$ is enclosed by ``\{" and ``\}", it is a string representation of 
+    the query expression~$\queryExpr \in \symDataAcc$,
+    and the corresponding $\extExpr_n = \symAttrQueryMap^{-1}(q)$, 
+    otherwise $\extExpr_n$ is an RDF literal with the value of $s_n$.
 \end{definition}
 
 \begin{algorithm}[htbp]

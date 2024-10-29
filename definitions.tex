@@ -272,6 +272,55 @@ relation to a subset of the attributes of that relation.
 
 
 
+\subsection{Natural join Operator}%
+\label{sub:natural_join_operator}
+\begin{definition}
+	\label{def:natural_join_operator}
+	Let $r_{1} = \mappingRelSpec{1}$ and
+	$r_{2} = \mappingRelSpec{2}$ be mapping relations
+	such that $\symAttrSubSet_{1} \cap \symAttrSubSet_{2} \neq \emptyset$.
+	The \textbf{natural join of mapping relations $r_{1}$ and
+        $r_{2}$}, denoted by $\fctNatJoin{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet', \symMappingInst')$
+	such that $\symAttrSubSet' = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
+	and
+	\begin{align*}
+		\symMappingInst' & =  \{ \mappingTuple_1 \cup \mappingTuple_2 \ | \
+		\mappingTuple_1 \in \symMappingInst_{1} \text { and }
+		\mappingTuple_2 \in \symMappingInst_{2} \text{ such that }
+		\mappingTuple_1(\attr) = \mappingTuple_2(\attr) \text{ for all }
+		\attr \in \symAttrSubSet_1 \cap \symAttrSubSet_2
+		\}.
+	\end{align*}
+\end{definition}
+
+
+
+\subsection{Union operator}%
+\label{sub:union_operator}
+\begin{definition}
+	\label{def:union_operator}
+	Let $r_{1} = \mappingRelSpec{1}$ and
+	$r_{2} = \mappingRelSpec{2}$ be mapping relations.
+	The \textbf{union of mapping relations $r_{1}$ and
+        $r_{2}$}, denoted by $\fctUnion{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet', \symMappingInst')$
+	such that $\symAttrSubSet' = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
+	and
+	\begin{align*}
+        \symMappingInst' & =  \{ \mappingTuple \ | \ \mappingTuple \in \symMappingInst_1 \text{ and for all } 
+        \attr \in \symAttrSubSet_2 \setminus \symAttrSubSet_1 \text{ such that } 
+        \mappingTuple(a) = \error\}\\
+        & \qquad \cup 
+        \{ \mappingTuple \ | \ \mappingTuple \in \symMappingInst_2 \text{ and for all } 
+        \attr \in \symAttrSubSet_1 \setminus \symAttrSubSet_2 \text{ such that } 
+        \mappingTuple(a) = \error\}
+	\end{align*}
+\end{definition}
+
+
+
+
+
+
 
 
 

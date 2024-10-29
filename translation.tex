@@ -65,6 +65,10 @@ Section~\ref{sub:translation_algorithms}.
 
 \subsubsection{ToIRI function}%
 \label{ssub:toiri_function}
+\todo[inline]{The first two sentences here do not make so much sense. \\
+Why is there a comma in the middle of the first sentence? \\
+Why is the first sentence necessary at all? \\
+"denote $\fctToIRI{v}$ as a function" sounds weird. Why didn't you want to keep exactly the sentence that I had written?}
 Let $v \in \symTermUniverse \cup \error$, be the input value.
 The extend function $\toIRI: (\symTermUniverse \cup \error) \rightarrow (\symTermUniverse \cup \error)$
 is a unary function, and we denote $\fctToIRI{v}$ as a function 
@@ -93,24 +97,31 @@ $\toBNode$ is a unary extend function that uses $\LTB$ to convert string literal
 	\fctToBNode{v} =
 	\begin{cases}
 		\LTB(\lex)
-		& \text{if $v$ is a literal $\literalTuple$}
-        \\[-1mm]
-        & \text{such that $\dt$ is the IRI \texttt{xsd:string},}
+		& \text{if $v$ is a literal $\literalTuple$ such that $\dt$ is the IRI \texttt{xsd:string},}
         \\ 
 		\error
 		& \text{else.}
 	\end{cases}
 \end{equation*}
 
-%CHECKME
+
 \subsubsection{ToLiteral function}%
 \label{ssub:toliteral_function}
+\todo[inline]{The first two sentences here have similar issues as the ones that you have above for the toIRI function. \\
+What is a "literal data type"? And what is "the" literal data type? \\
+What is a "input value"? \\
+Why is the first sentence needed at all? \\
+I don't think you need to both say that it is binary function and write it signature ($\toLiteral: (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error) \rightarrow (\symTermUniverse  \cup \error)$). \\
+Why don't you simply have a sentence such as the second one for toBNode? As part of that sentence you can simply say: "... into literals with a datatype IRI that is given as the second argument."
+}
 Let $\dt \in \symAllIRIs$ be an IRI defining the literal data type,
 and $v\in \symTermUniverse \cup \error$ an input value.
 The extend function $\toLiteral: (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error) \rightarrow (\symTermUniverse  \cup \error)$
 is a binary function that converts string literals or IRIs, into literals with the given 
 datatype $\dt$.
-Formally, for every $v\in \symTermUniverse \cup \error$ and a given $\dt \in \symAllIRIs$ : 
+Formally, for every $v\in \symTermUniverse \cup \error$ and a given $\dt \in \symAllIRIs$ :
+	 \todo{This sentence should be: ".. for every pair~$(v,\dt) \in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$}
+	 \todo{Also, why do you have the space before the colon?}
 \begin{equation*}
     \fctToLiteral{v, \dt'} = 
     \begin{cases}
@@ -120,23 +131,31 @@ Formally, for every $v\in \symTermUniverse \cup \error$ and a given $\dt \in \sy
         v', &\text{if $v$ is an IRI such that $\lex$ is the lexical form of $v$}
         \\[-1mm]
          & \text{and  $v' = (\lex, \dt')$  }\\ 
-        \error, & \text{ else }
+        \error, & \text{else }
     \end{cases}
 \end{equation*}
+\todo[inline]{Something is not right with the $\dt'$ and the $\dt$ in the formula. They should be swapped!}
+\todo[inline]{As a general comment, the if-parts of such formulas cannot be used to construct new elements (such as $v'$). As a more specific comment, constructing $v'$ is not even necessary here; instead you can simply write $(\lex, \dt)$ in the places where you current use $v'$.}
+\todo[inline]{Is the case of IRIs to literals really useful / really needed here? If you want to keep it, what is "the lexical form of" an IRI?}
+\todo[inline]{It is not correct English to put the commas in the places where you currently have them in the formula; instead, the commas must be at the end of each if-part, and the else-part should be ended by a period (.). See how I did it for toIRI and toBNode.}
+\todo[inline]{Speaking of commas, the commas around $\literalTuple$ in the first if-part are also incorrect.}
 
 
 
 
-%CHECKME
 \subsubsection{Concatenate function}%
 \label{ssub:concatenate_function}
+\todo[inline]{Similar issues in the first two sentences.}
 Let $v,w \in \symAllLiterals \cup \error$ two input values such 
     that $v$ is $(\lex_v, \dt_v)$ and $w$ is $(\lex_w, \dt_w)$. 
 The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUniverse \cup \error) \rightarrow  (\symTermUniverse \cup \error) $
     is a binary function, and we denote $\fctConcat{v}{w}$ as a literal 
     $v'$ with $(\lex', \dt')$ such that $\lex'$ the concatenation, $\lex_v \ || \ \lex_w$, and 
     $\dt'$ is an IRI \texttt{xsd:string}. 
-
+\todo[inline]{Instead of $v$ and $w$, and then things such as $\lex_v$, I would use $v_1$ and $v_2$ and then $\lex_1$ etc.}
+\todo[inline]{The $||$ operator is not defined, and I don't think it is necessary to define it. Instead, write that $\lex'$ is the string obtained by concatenating $\lex_1$ and $\lex_2$. That's sufficient in this case.}
+\todo[inline]{I don't think it is such a good idea to define this for arbitrary literals, independent of their datatypes. Instead, I would define this only for pairs of string literals.}
+\todo[inline]{You definition also needs to cover all the cases in which the two arguments are not literals.}
 
 
 \subsection{Translation algorithms}%

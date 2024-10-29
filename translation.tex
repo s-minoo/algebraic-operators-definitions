@@ -139,48 +139,6 @@ The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUn
 \end{definition}
 
 
-\subsubsection{Template function}%
-\label{ssub:template_function}
-\begin{definition}
-	Let $v\in \symTermUniverse \cup \error$ an input value,
-	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$ a partial
-	function.
-	The extend function $\template: (\symAllLiterals \cup \error) \rightarrow  \extExpr$
-	is a unary function, and we denote  $\fctTemplate{v}$
-    as the extend expression~$\extExpr$ tuple $(concatSeq, \extExpr_1, \dots, \extExpr_n)$ 
-    such that for each $s_n \in \symAllStrings$, where $s_n$ is the $n$-th substring in $v$,
-    the value for $\extExpr_n$ is determined as follows: 
-    if $s_n$ is enclosed by ``\{" and ``\}", it is a string representation of 
-    the query expression~$\queryExpr \in \symDataAcc$,
-    and the corresponding $\extExpr_n = \symAttrQueryMap^{-1}(q)$, 
-    otherwise $\extExpr_n$ is an RDF literal with the value of $s_n$.
-\end{definition}
-
-\begin{algorithm}[htbp]
-	\caption{Template: An extend function which resolves the template string of
-		the input literal node and returns the template resolved string as a
-		literal}
-	\label{alg:template_function}
-	\begin{algorithmic}[1]
-		\Require $v$ an input literal value, $\symAttrQueryMap : \symAttrUniverse \rightarrow \symDataAcc$
-		a mapping of attribute to query expression
-		\Ensure $v'$ an RDF literal node or an error
-		\State $S \gets $ a sequence of substrings, $s$, of $v$ where substring $s$
-		appears in the order that it appears in $v$ and $s$ is either enclosed by
-		unescaped pairs of ``\{" and ``\}" or not
-		\State $v' \gets $ empty string literal
-		\For {$s \in S$}
-		\State $s' \gets s$
-		\If{$s$ is enclosed by paris of ``\{" and ``\}" and $s \in \fctImg{\symAttrQueryMap}$}
-		\State $s' \gets \symAttrQueryMap^{-1}(s) $
-		\Else
-		\State \Return $\error$
-		\EndIf
-		\State $v' \gets v' \ || \  s'$
-		\EndFor
-		\State \Return $v'$
-	\end{algorithmic}
-\end{algorithm}
 
 \subsection{Translation algorithms}%
 \label{sub:translation_algorithms}
@@ -220,7 +178,7 @@ The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUn
 	\label{alg:rml_termmap_extend_op}
 	\begin{algorithmic}[1]
 		\Require $\symRMLGraph$ an RDF graph of RML document,
-        $L2B$ a global state mapping literals to blank nodes, 
+        $\LTB$ an injective function mapping literals to blank nodes, 
 		$\symAttrQueryMap$ a partial function mapping attributes to query expression,
 		$tm$ subject IRI of the RML term map to translate the extend operator for
 		\Ensure $\extExpr$ an extend expression
@@ -234,24 +192,43 @@ The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUn
             \State  $\extExpr \gets $ \Call{Template}{$o, \symAttrQueryMap$}  \Comment Algorithm~\ref{alg:template_function}
 		\EndIf
 
-        \State TODO remove:  $tt \gets o_{tt} $ in triple $(tm,\texttt{rr:termType},o_{tt}) \in \triplesMapGraph{TM}{tm}$ \Comment extract term type
-        \If{there exists a triple $(tm,\texttt{rr:termType}, \texttt{rr:BlankNode}) \in \triplesMapGraph{TM}{tm}$}
-            \State $\extExpr \gets $\Call{toBNode}{$\extExpr, L2B$}
-        \ElsIf{$tt = \texttt{rr:BlankNode}$}
-            \State $\extExpr \gets $\Call{toIRI}{$\extExpr$}
+        \If{$(tm,\texttt{rr:termType}, \texttt{rr:BlankNode}) \in \triplesMapGraph{TM}{tm}$}
+            \State $\extExpr \gets \fctToBNode{\extExpr}$
+        \ElsIf{$(tm,\texttt{rr:termType}, \texttt{rr:IRI}) \in \triplesMapGraph{TM}{tm}$}
+            \State $\extExpr \gets \fctToIRI{\extExpr}$
         \Else
             \State $dt \gets \texttt{xsd:string}$ 
-            \State $lt \gets $ undefined
-		    \If{$(tm, \texttt{rr:languageMap}, o) \in \triplesMapGraph{TM}{tm}$}
-                \State $lt \gets$ \Call{ExtractExtendOp}{$\symRMLGraph, L2B, \symAttrQueryMap, o$} \Comment RML language map is a term map 
-		    \ElsIf{$(tm, \texttt{rr:language}, o) \in \triplesMapGraph{TM}{tm}$}
-                \State $lt \gets o$ with $o$ a literal node that specifies the language tag
-		    \ElsIf{there exists a triple $(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$ such that $o \in \symAllIRIs$}
+		    \If{there exists a triple $(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$ such that $o \in \symAllIRIs$}
     		    \State $dt \gets o$
             \EndIf
-            \State $\extExpr \gets $\Call{toLiteral}{$\extExpr, dt, lt$}
+            \State $\extExpr \gets \fctToLiteral{\extExpr, \dt}$
 		\EndIf
 		\State \Return $\extExpr$
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[htbp]
+	\caption{Template: An algorithm which extracts an extend expression for 
+        resolving the template string of the input literal node.}
+	\label{alg:template_function}
+	\begin{algorithmic}[1]
+		\Require $v$ an input literal value, $\symAttrQueryMap : \symAttrUniverse \rightarrow \symDataAcc$
+		a mapping of attribute to query expression
+		\Ensure $v'$ an RDF literal node or an error
+		\State $S \gets $ a sequence of substrings, $s$, of $v$ where substring $s$
+		appears in the order that it appears in $v$ and $s$ is either enclosed by
+		unescaped pairs of ``\{" and ``\}" or not
+		\State $v' \gets $ empty string literal
+		\For {$s \in S$}
+		\State $s' \gets s$
+		\If{$s$ is enclosed by paris of ``\{" and ``\}" and $s \in \fctImg{\symAttrQueryMap}$}
+		\State $s' \gets \symAttrQueryMap^{-1}(s) $
+		\Else
+		\State \Return $\error$
+		\EndIf
+		\State $v' \gets v' \ || \  s'$
+		\EndFor
+		\State \Return $v'$
 	\end{algorithmic}
 \end{algorithm}
 

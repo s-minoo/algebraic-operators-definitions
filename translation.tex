@@ -102,6 +102,7 @@ $\toBNode$ is a unary extend function that uses $\LTB$ to convert string literal
 	\end{cases}
 \end{equation*}
 
+%CHECKME
 \subsubsection{ToLiteral function}%
 \label{ssub:toliteral_function}
 Let $\dt \in \symAllIRIs$ be an IRI defining the literal data type,
@@ -126,17 +127,15 @@ Formally, for every $v\in \symTermUniverse \cup \error$ and a given $\dt \in \sy
 
 
 
+%CHECKME
 \subsubsection{Concatenate function}%
 \label{ssub:concatenate_function}
-
-\begin{definition}
 Let $v,w \in \symAllLiterals \cup \error$ two input values such 
     that $v$ is $(\lex_v, \dt_v)$ and $w$ is $(\lex_w, \dt_w)$. 
 The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUniverse \cup \error) \rightarrow  (\symTermUniverse \cup \error) $
     is a binary function, and we denote $\fctConcat{v}{w}$ as a literal 
     $v'$ with $(\lex', \dt')$ such that $\lex'$ the concatenation, $\lex_v \ || \ \lex_w$, and 
     $\dt'$ is an IRI \texttt{xsd:string}. 
-\end{definition}
 
 
 
@@ -155,27 +154,28 @@ The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUn
 		\Ensure  $\symDataAcc$ a set of query expressions
 		\State $\symDataAcc \gets \emptyset$ \Comment Initial empty set of query expressions
 		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $p =\texttt{rml:reference}$ and  $o\in \symAllLiterals$}
-		\State $\queryExpr \gets $ lexical form of $o$
-		\State $\symDataAcc \gets \symDataAcc \cup \{ \queryExpr \}$
+            \State $\queryExpr \gets \lex$ where $o = (\lex,\dt)$
+		    \State $\symDataAcc \gets \symDataAcc \cup \{ \queryExpr \}$
 		\EndFor
 		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $p =\texttt{rr:template}$ and  $o\in \symAllLiterals$}
-		\State $\symDataAcc' \gets$ set of all substrings in $o$ that are enclosed by \{ and \}
-		\State $\symDataAcc \gets \symDataAcc \cup \symDataAcc'$
+		    \State $\symDataAcc' \gets$ set of all substrings in $o$ that are enclosed by \{ and \}
+		    \State $\symDataAcc \gets \symDataAcc \cup \symDataAcc'$
 		\EndFor
 		\State $T_{child} \gets \{ (s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI} \, | \, p = \texttt{rr:child} \}$
 		\State $T_{parent} \gets \{(s,p,o) \in \triplesMapGraph{PTM}{\triplesMapIRI} \, | \, p = \texttt{rr:parent} \}$
 		\For{$(s,p,o) \in T_{child} \cup T_{parent}$ such that $o \in \symAllLiterals$ }
-		\State $\queryExpr \gets $ lexical form of $o$
-		\State $\symDataAcc \gets \symDataAcc \cup \{ \queryExpr \}$
+            \State $\queryExpr \gets \lex$ where $o = (\lex,\dt)$
+		    \State $\symDataAcc \gets \symDataAcc \cup \{ \queryExpr \}$
 		\EndFor
 		\State \Return $\symDataAcc$
 	\end{algorithmic}
 \end{algorithm}
 
 
+%CHECKME
 \begin{algorithm}[thbp]
-	\caption{ExtractExtendOp: Extend operator translation from an RML term map}
-	\label{alg:rml_termmap_extend_op}
+	\caption{ExtractExtendExpr: Extend expression translation from an RML term map}
+	\label{alg:rml_termmap_extend_expr}
 	\begin{algorithmic}[1]
 		\Require $\symRMLGraph$ an RDF graph of RML document,
         $\LTB$ an injective function mapping literals to blank nodes, 
@@ -198,7 +198,7 @@ The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUn
             \State $\extExpr \gets \fctToIRI{\extExpr}$
         \Else
             \State $dt \gets \texttt{xsd:string}$ 
-		    \If{there exists a triple $(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$ such that $o \in \symAllIRIs$}
+		    \If{$(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$ such that $o \in \symAllIRIs$}
     		    \State $dt \gets o$
             \EndIf
             \State $\extExpr \gets \fctToLiteral{\extExpr, \dt}$
@@ -207,28 +207,55 @@ The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUn
 	\end{algorithmic}
 \end{algorithm}
 
+
+%CHECKME
+\begin{definition}
+    \label{def:tempSubStrs}
+    Let $v = (\lex, \dt)$ an input literal string such that $\dt$ is \texttt{xsd:string}.  
+    For ease of reading, we denote a substring as \textbf{enclosed query substring} 
+    if it is enclosed by a pair of curly braces \{ and \} as defined in R2RML~\citeneeded, 
+    otherwise it is denoted as \textbf{normal substring}.
+    $\tempSubStrs$ is a unary function which splits the lexical form of the 
+    input literal string into a sequence of substrings~$\substrSeq$ which contains 
+    alternating normal substrings and enclosed query substrings in two pass as follows: 
+
+    \begin{enumerate}
+        \item  An intermediate sequence of substrings~$\substrSeq'$ is generated which 
+            contains substrings that are \textbf{normal} or \textbf{enclosed query}  
+            substrings in the order that these substrings appear in $\lex$ from 
+            left to right. 
+        \item $\substrSeq'$ is further processed as follows to produce $\substrSeq$: 
+            \begin{enumerate}
+                \item if $\substrSeq'$ is empty, an \textbf{empty substring} is inserted
+                \item if there are two enclosed query substring \textbf{next to each other} in $\substrSeq'$, 
+                    insert an empty substring between them
+                \item if the first element in $\substrSeq'$ is an enclosed query substring, 
+                    add an empty substring at the head of $\substrSeq'$
+                \item if the last element in $\substrSeq'$ is an enclosed query substring, 
+                    add an empty substring at the tail of $\substrSeq'$
+            \end{enumerate}
+    \end{enumerate}
+    After the aforementioned processing, the sequence $\substrSeq$ has an 
+    \textbf{enclosed query substring} at every odd index, and it is non-empty.
+\end{definition}
+
+
+
+%CHECKME
 \begin{algorithm}[htbp]
 	\caption{Template: An algorithm which extracts an extend expression for 
         resolving the template string of the input literal node.}
 	\label{alg:template_function}
 	\begin{algorithmic}[1]
-		\Require $v$ an input literal value, $\symAttrQueryMap : \symAttrUniverse \rightarrow \symDataAcc$
+        \Require $(\lex, \dt)$ an input literal value, $\symAttrQueryMap : \symAttrUniverse \rightarrow \symDataAcc$
 		a mapping of attribute to query expression
-		\Ensure $v'$ an RDF literal node or an error
-		\State $S \gets $ a sequence of substrings, $s$, of $v$ where substring $s$
-		appears in the order that it appears in $v$ and $s$ is either enclosed by
-		unescaped pairs of ``\{" and ``\}" or not
-		\State $v' \gets $ empty string literal
-		\For {$s \in S$}
-		\State $s' \gets s$
-		\If{$s$ is enclosed by paris of ``\{" and ``\}" and $s \in \fctImg{\symAttrQueryMap}$}
-		\State $s' \gets \symAttrQueryMap^{-1}(s) $
-		\Else
-		\State \Return $\error$
-		\EndIf
-		\State $v' \gets v' \ || \  s'$
+		\Ensure $\extExpr$ an extend expression
+        \State $\substrSeq \gets \fctTempSubStrs{\lex}$ \Comment Definition~\ref{def:tempSubStrs}
+        \State $\extExpr \gets \fctConcat{``"}{``"}$ \Comment Section~\ref{ssub:concatenate_function}
+		\For {$s \in \substrSeq$}
+           \State $\extExpr \gets \fctConcat{\extExpr}{s}$ 
 		\EndFor
-		\State \Return $v'$
+		\State \Return $\extExpr$
 	\end{algorithmic}
 \end{algorithm}
 
@@ -315,7 +342,7 @@ given CSV dataset, such as column names.
 	    	\State  $(v_{subj}, v_{pred},v_{obj}) \gets $ initial placeholder value for the (s,p,o) attributes for RDF serialization
 
 		\For{$(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$}
-            \State $\extExpr \gets $\Call{ExtractExtendOp}{$\symRMLGraph, L2B, \symAttrQueryMap, o$} \Comment Algorithm~\ref{alg:rml_termmap_extend_op}
+            \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, L2B, \symAttrQueryMap, o$} \Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
     		\State $\omega \gets \extOp(\omega)$
 		\EndFor
 		\For{$(s,\texttt{rr:predicateMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ }

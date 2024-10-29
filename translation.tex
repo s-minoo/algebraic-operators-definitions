@@ -331,7 +331,9 @@ that $\symDataset$ is a CSV dataset from the file ``sport.csv" and
 $\sourceType =  \sourceTypeTuple$ such that  $\symSetDataset$ is a set of  
 CSV datasets, $\symDataAcc$ a set of all possible query expressions applicable to the 
 given CSV dataset, such as column names.
-
+$\eval$ is a function that returns a row of CSV data object per
+iteration, and $\cbeval$ is a function that returns the data object for the
+given CSV column name. 
 
 \begin{algorithm}[htbp]
 	\caption{RML translation to algebraic mapping expressions}

@@ -387,6 +387,16 @@ given CSV column name.
                 \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{obj}$}
                 \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
 		    \EndIf
+            \Statex
+            \If{$(s,\texttt{rr:graphMap},tm_{graph}) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$} 
+                \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{graph}$} 
+                \State $\omega' \gets \extOpAttr{\attr_{g}}(\omega')$
+            \Else
+                \State $\extExpr \gets o$ where $o$ is the default graph IRI
+                \State $\omega' \gets \extOpAttr{\attr_{g}}(\omega')$
+            \EndIf
+
+            \Statex
             \State $\symProjSet \gets \{\attr_{s},\attr_{p},\attr_{o},\attr_{g},\}$
             \State $\omega' \gets \fctProjectOp{\omega'}$
             \State $\omega \gets  \fctUnion{\omega'}{\omega}$

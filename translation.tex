@@ -236,7 +236,8 @@ The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUn
             \end{enumerate}
     \end{enumerate}
     After the aforementioned processing, the sequence $\substrSeq$ has an 
-    \textbf{enclosed query substring} at every odd index, and it is non-empty.
+    \textbf{enclosed query substring} at every odd index and \textbf{normal substring} 
+    at every even index, and it is non-empty.
 \end{definition}
 
 
@@ -252,8 +253,12 @@ The extend function $\concat: (\symTermUniverse \cup \error) \times  (\symTermUn
 		\Ensure $\extExpr$ an extend expression
         \State $\substrSeq \gets \fctTempSubStrs{\lex}$ \Comment Definition~\ref{def:tempSubStrs}
         \State $\extExpr \gets \fctConcat{``"}{``"}$ \Comment Section~\ref{ssub:concatenate_function}
-		\For {$s \in \substrSeq$}
-           \State $\extExpr \gets \fctConcat{\extExpr}{s}$ 
+        \For {$s_i \in  (s_0,\dots,s_n)$ where $ \substrSeq = (s_0,\dots,s_n)$ and $n = |\substrSeq|- 1$ }
+            \If{$i$ is even}
+                \State $\extExpr \gets \fctConcat{\extExpr}{s_i}$ 
+            \Else
+                \State $\extExpr \gets \fctConcat{\extExpr}{\symAttrQueryMap^{-1}(s_i)}$
+            \EndIf
 		\EndFor
 		\State \Return $\extExpr$
 	\end{algorithmic}

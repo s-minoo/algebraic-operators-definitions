@@ -342,20 +342,19 @@ given CSV column name.
 		\Require $\symRMLGraph$ an RDF graph of a \textbf{normalized} RML document, 
         $\LTB$ an injective function mapping literals to blank nodes, 
         \State $\omega \gets$ initially empty mapping definition \Comment Definition~\ref{def:mapping_definition}
-		%% TODO Define earlier: a mapping definition is an expression that can be built by combining the various operators of our algebra
 		\For{$(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
 	    	\State  $\iterConfigTuple \gets$ \Call{TranslateSourceOperator}{$\symRMLGraph, \triplesMapIRI$} \Comment{Algorithm~\ref{alg:rml_source_op}}
             \State   $src \gets \textrm{initSrc}(o')$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$ \Comment Definition~\ref{def:init_data_source}
-	    	\State   $\omega \gets \fctSourceOp{\iterConfigTuple}{src}$
+	    	\State   $\omega' \gets \fctSourceOp{\iterConfigTuple}{src}$
 
             \Statex
             \State $tm_{sub} \gets o$, where triple $(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
             \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sub}$} \Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
-            \State $\omega \gets \extOpAttr{\attr_{s}}(\omega)$
+            \State $\omega' \gets \extOpAttr{\attr_{s}}(\omega')$
             \Statex
             \State $tm_{pred} \gets o$, where triple $(s,\texttt{rr:predicateMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
             \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{pred}$}
-            \State $\omega \gets \extOpAttr{\attr_{p}}(\omega)$
+            \State $\omega' \gets \extOpAttr{\attr_{p}}(\omega')$
 		    \State\dots  \Comment Continued in Algorithm~\ref{alg:rml2algebra_part2}
 		    \algstore{state:full_translation}
 	\end{algorithmic}
@@ -377,21 +376,20 @@ given CSV column name.
                     \State  $a \gets \symAttrQueryMap^{-1}(o'') $ for $o''$ in triple $(o',\texttt{rr:child},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
                     \State  $a_{ptm} \gets \symAttrQueryMap^{-1}(o'')$ for $o''$ in triple $(o',\texttt{rr:parent},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
 		            \State  $\symJoinAttrPairs \gets \{ (a, a_{ptm}) \}$
-		            \State  $\omega \gets \fctEquiJoinOp{\omega}{\omega_{ptm}}$
+		            \State  $\omega' \gets \fctEquiJoinOp{\omega'}{\omega_{ptm}}$
                 \Else
-		            \State  $\omega \gets $ TODO: union join
+                    \State  $\omega' \gets \fctNatJoin{\omega'}{\omega_{ptm}}$ 
                 \EndIf
                 \State $tm_{sptm} \gets  o''$ with $(s'',\texttt{rr:subjectMap},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
                 \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sptm}$}
-                \State  $\omega \gets \extOpAttr{a_{o}}$
+                \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
             \Else
                 \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{obj}$}
-                \State  $\omega \gets \extOpAttr{a_{o}}$
+                \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
 		    \EndIf
             \State $\symProjSet \gets \{\attr_{s},\attr_{p},\attr_{o},\attr_{g},\}$
-            \State $\omega \gets \fctProjectOp{\omega}$
-		    \State $Execute(\omega)$
-		    \State $\omega \gets$  initialization value for the current algebraic mapping expressions
+            \State $\omega' \gets \fctProjectOp{\omega'}$
+            \State $\omega \gets  \fctUnion{\omega'}{\omega}$
 		\EndFor
 	\end{algorithmic}
 \end{algorithm}

@@ -57,7 +57,6 @@
 
 \subsection{Built-in Extend Functions}%
 \label{sub:built_in_extend_functions}
-\todo{I see that you fixed the inconsistencies in the capitalization of the subsection titles above, this one here is still inconsistent with the other ones.}
 
 The following definitions describe the provided built-in extend functions used
 when translating RML documents to algebraic mapping expressions as described in
@@ -102,11 +101,9 @@ $\toBNode$ is a unary extension function that uses $\LTB$ to convert string lite
 \subsubsection{toLiteral function}%
 \label{ssub:toliteral_function}
 $\toLiteral$
-is a binary extension function that converts string literals,
-	\todo{Having a comma here is wrong.}
+is a binary extension function that converts string literals
 into literals with the 
-datatype $\dt$
-	\todo{"with the datatype $\dt$ that is" $\rightarrow$ "with a datatype IRI that is"}
+datatype IRI
 that is given as the second argument.
 Formally, for every pair $(v, \dt)\in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$:
 

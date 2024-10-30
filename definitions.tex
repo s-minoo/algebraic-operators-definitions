@@ -305,6 +305,8 @@ relation to a subset of the attributes of that relation.
 	The \textbf{union of $r_{1}$ and $r_{2}$}, denoted by
 	$\fctUnion{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet', \symMappingInst')$
 	such that $\symAttrSubSet'\! = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
+\todo{While $\symAttrSubSet'\! = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$ is not wrong, you can simplify this to: $\symAttrSubSet'\! = \symAttrSubSet_{1}$. In fact, you can simplify even further by not introducing the new $\symAttrSubSet'$ at all; instead, the resulting mapping relation is $(\symAttrSubSet_1, \symMappingInst')$.}
+\todo{And another simplification: the resulting mapping relation is $(\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.}
 	and
 	\begin{align*}
         \symMappingInst' & =  \{\mappingTuple \ | \ \mappingTuple \in \symMappingInst_1 \text{ or } 

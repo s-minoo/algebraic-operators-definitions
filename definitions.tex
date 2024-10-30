@@ -273,15 +273,13 @@ relation to a subset of the attributes of that relation.
 
 
 
-\subsection{Natural join Operator}%
+\subsection{Natural Join Operator}%
 \label{sub:natural_join_operator}
-\todo[inline]{The capitalization of the section titles is inconsistent. Just compare this one to the previous one and to the next one.}
 
 \begin{definition}
 	\label{def:natural_join_operator}
 	Let $r_{1} = \mappingRelSpec{1}$ and
-	$r_{2} = \mappingRelSpec{2}$ be mapping relations
-	such that $\symAttrSubSet_{1} \cap \symAttrSubSet_{2} \neq \emptyset$.
+	$r_{2} = \mappingRelSpec{2}$ be mapping relations.
 	The \textbf{natural join of $r_{1}$ and $r_{2}$}, denoted by
 	$\fctNatJoin{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet', \symMappingInst')$
 	such that $\symAttrSubSet'\! = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
@@ -295,31 +293,24 @@ relation to a subset of the attributes of that relation.
 		\}.
 	\end{equation*}
 \end{definition}
-\todo[inline]{I don't think it is necessary to have the condition that $\symAttrSubSet_{1}$ and $\symAttrSubSet_{2}$ must overlap. In contrast, if they don't overlap, then the natural join simply becomes the Cartesian product, which I don't see as a problem. So, I suggest to simply remove this condition from the definition.}
 
 
-
-\subsection{Union operator}%
+\subsection{Union Operator}%
 \label{sub:union_operator}
 \begin{definition}
 	\label{def:union_operator}
 	Let $r_{1} = \mappingRelSpec{1}$ and
-	$r_{2} = \mappingRelSpec{2}$ be mapping relations.
+	$r_{2} = \mappingRelSpec{2}$ be mapping relations
+    such that $\symAttrSubSet_1 = \symAttrSubSet_2$.
 	The \textbf{union of $r_{1}$ and $r_{2}$}, denoted by
 	$\fctUnion{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet', \symMappingInst')$
 	such that $\symAttrSubSet'\! = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
 	and
 	\begin{align*}
-        \symMappingInst' & =  \{ \mappingTuple \ | \ \mappingTuple \in \symMappingInst_1 \text{ and for all } 
-        \attr \in \symAttrSubSet_2 \setminus \symAttrSubSet_1 \text{ such that } 
-        \mappingTuple(a) = \error\}\\
-        & \qquad \cup 
-        \{ \mappingTuple \ | \ \mappingTuple \in \symMappingInst_2 \text{ and for all } 
-        \attr \in \symAttrSubSet_1 \setminus \symAttrSubSet_2 \text{ such that } 
-        \mappingTuple(a) = \error\}
+        \symMappingInst' & =  \{\mappingTuple \ | \ \mappingTuple \in \symMappingInst_1 \text{ or } 
+        \mappingTuple \in \symMappingInst_2\}\\
 	\end{align*}
 \end{definition}
-\todo[inline]{What you define here is not a union but something like a full outer join. For a union, the two input relations must have the same set of attributes.}
 
 
 

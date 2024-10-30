@@ -57,15 +57,16 @@
 
 \subsection{Built-in extend functions}%
 \label{sub:built_in_extend_functions}
+\todo{I see that you fixed the inconsistencies in the capitalization of the subsection titles above, this one here is still inconsistent with the other ones.}
 
 The following definitions describe the provided built-in extend functions used
 when translating RML documents to algebraic mapping expressions as described in
 Section~\ref{sub:translation_algorithms}.
 
-\subsubsection{ToIRI function}%
+\subsubsection{toIRI function}%
 \label{ssub:toiri_function}
 $\toIRI$
-is a unary function that converts string literals representing IRIs into these IRIs. 
+is a unary extension function that converts string literals representing IRIs into these IRIs. 
 Formally,  for every $v \in (\symTermUniverse \cup \error)$: 
 \begin{equation*}
 	\fctToIRI{v} =
@@ -82,10 +83,10 @@ Formally,  for every $v \in (\symTermUniverse \cup \error)$:
 
 
 
-\subsubsection{ToBNode function}%
+\subsubsection{toBNode function}%
 \label{ssub:tobnode_function}
 We assume a function $\LTB: \symAllLiterals \rightarrow \symAllBNodes$ that is injective.
-$\toBNode$ is a unary extend function that uses $\LTB$ to convert string literals into blank nodes. Formally, for every $v \in (\symTermUniverse \cup \error)$:
+$\toBNode$ is a unary extension function that uses $\LTB$ to convert string literals into blank nodes. Formally, for every $v \in (\symTermUniverse \cup \error)$:
 \begin{equation*}
 	\fctToBNode{v} =
 	\begin{cases}
@@ -98,17 +99,21 @@ $\toBNode$ is a unary extend function that uses $\LTB$ to convert string literal
 \end{equation*}
 
 
-\subsubsection{ToLiteral function}%
+\subsubsection{toLiteral function}%
 \label{ssub:toliteral_function}
 $\toLiteral$
-is a binary function that converts string literals, into literals with the 
-datatype $\dt$ that is given as the second argument.
+is a binary extension function that converts string literals,
+	\todo{Having a comma here is wrong.}
+into literals with the 
+datatype $\dt$
+	\todo{"with the datatype $\dt$ that is" $\rightarrow$ "with a datatype IRI that is"}
+that is given as the second argument.
 Formally, for every pair $(v, \dt)\in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$:
 
 \begin{equation*}
     \fctToLiteral{v, \dt} = 
     \begin{cases}
-        (\lex, \dt) &\text{if $v$ is a literal~$(\lex, \dt')$ such that $\dt'$ is \texttt{xsd:string}}, \\ 
+        (\lex, \dt) &\text{if $v$ is a literal~$(\lex, \dt')$ such that $\dt'$ is the IRI \texttt{xsd:string}}, \\
         \error & \text{else.}
     \end{cases}
 \end{equation*}
@@ -118,25 +123,23 @@ Formally, for every pair $(v, \dt)\in (\symTermUniverse \cup \error) \times (\sy
 
 \subsubsection{Concatenate function}%
 \label{ssub:concatenate_function}
-$\concat$ is a binary function, and we denote $\fctConcat{v_1}{v_2}$ as a literal 
-    $v'$ with $(\lex', \dt')$ such that $v_1$ and $v_2$ are a pair of string literals 
-    $(\lex_1, \texttt{xsd:string})$ and $(\lex_2, \texttt{xsd:string})$ respectively,
-    $\lex'$ is the string obtained by concatenating $\lex_1$ and $\lex_2$, and 
-    $\dt'$ is an IRI \texttt{xsd:string}. 
-    Formally, for every pair $(v_1, v_2) \in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$
+$\concat$ is a binary extension function that concatenates two string literals.
+Formally, for every pair $(v_1, v_2) \in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$
 
 \begin{equation*}
     \fctConcat{v_1}{v_2} = 
     \begin{cases}
-        (\lex', \texttt{xsd:string})  &\text{if $v_1$ and $v_2$ are string literals }
+        (\lex_1 \circ \lex_2, \texttt{xsd:string})  &\text{if $v_1$ and $v_2$ are literals $(\lex_1,\dt_1)$ and}
 		\\[-1mm]
-        & \text{$(\lex_1, \texttt{xsd:string})$ and $(\lex_2, \texttt{xsd:string})$ respectively,} 
+        & \text{$(\lex_2,\dt_2)$, respectively, such that both}
+		\\[-1mm]
+        & \text{$\dt_1$ and $\dt_2$ are the IRI \texttt{xsd:string},}
         \\ 
-        \error &\text{else.}
+        \error &\text{else,}
 		\\
     \end{cases}
 \end{equation*}
-where  $\lex'$ is a string obtained from the concatenation of $\lex_1$ and $\lex_2$.
+where $\lex_1 \circ \lex_2$ is the string obtained from the concatenating the strings $\lex_1$ and $\lex_2$.
 
 \subsection{Translation algorithms}%
 \label{sub:translation_algorithms}

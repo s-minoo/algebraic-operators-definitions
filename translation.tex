@@ -341,6 +341,7 @@ given CSV column name.
 	\begin{algorithmic}[1]
 		\Require $\symRMLGraph$ an RDF graph of a \textbf{normalized} RML document, 
         $\LTB$ an injective function mapping literals to blank nodes, 
+        \Ensure $\omega$ a mapping definition
         \State $\omega \gets$ initially empty mapping definition \Comment Definition~\ref{def:mapping_definition}
 		\For{$(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
 	    	\State  $\iterConfigTuple \gets$ \Call{TranslateSourceOperator}{$\symRMLGraph, \triplesMapIRI$} \Comment{Algorithm~\ref{alg:rml_source_op}}

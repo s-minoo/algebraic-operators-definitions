@@ -168,23 +168,23 @@ where $\lex_1 \circ \lex_2$ is the string obtained from the concatenating the st
 \end{algorithm}
 
 
-%CHECKME
 \begin{algorithm}[htbp]
 	\caption{ExtractExtendExpr: Extend expression translation from an RML term map}
 	\label{alg:rml_termmap_extend_expr}
 	\begin{algorithmic}[1]
-		\Require $\symRMLGraph$ an RDF graph of RML document,
-        $\LTB$ an injective function mapping literals to blank nodes, 
-		$\symAttrQueryMap$ a partial function mapping attributes to query expression,
-		$tm$ subject IRI of the RML term map to translate the extend operator for
+		\Require 
+             $\symRMLGraph$ an RDF graph of RML document,
+            \Statex \qquad \quad $\LTB$ an injective function mapping literals to blank nodes, 
+            \Statex \qquad \quad $\symAttrQueryMap$ a partial function mapping attributes to query expression,
+            \Statex \qquad \quad $tm$ subject IRI of the RML term map to translate the extend operator for
 		\Ensure $\extExpr$ an extend expression
         \State $\extExpr \gets $ initially empty extend expression
 
-		\If{$(tm, \texttt{rr:reference}, o) \in \triplesMapGraph{TM}{tm}$}
-    		\State $\extExpr \gets a$, where $a \in \fctDom{\symAttrQueryMap}$ and $\symAttrQueryMap(a)$ is the lexical form of $o$
+        \If{$(tm, \texttt{rr:reference}, o) \in \triplesMapGraph{TM}{tm}$ such that $o$ is a literal $\literalTuple$ }
+    		\State $\extExpr \gets a$, where $a$ is the attribute in $\fctDom{\symAttrQueryMap}$ such that $\symAttrQueryMap(a) = \lex$
 		\ElsIf{$(tm, \texttt{rr:constant}, o) \in \triplesMapGraph{TM}{tm}$}
     		\State $\extExpr \gets o$
-		\ElsIf{$(tm, \texttt{rr:template}, o) \in \triplesMapGraph{TM}{tm}$}
+		\ElsIf{$(tm, \texttt{rr:template}, o) \in \triplesMapGraph{TM}{tm}$ such that $o$ is a literal}
             \State  $\extExpr \gets $ \Call{Template}{$o, \symAttrQueryMap$}  \Comment Algorithm~\ref{alg:template_function}
 		\EndIf
 
@@ -192,12 +192,11 @@ where $\lex_1 \circ \lex_2$ is the string obtained from the concatenating the st
             \State $\extExpr \gets \fctToBNode{\extExpr}$
         \ElsIf{$(tm,\texttt{rr:termType}, \texttt{rr:IRI}) \in \triplesMapGraph{TM}{tm}$}
             \State $\extExpr \gets \fctToIRI{\extExpr}$
-        \Else
-            \State $dt \gets \texttt{xsd:string}$ 
-		    \If{$(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$ such that $o \in \symAllIRIs$}
-    		    \State $dt \gets o$
-            \EndIf
-            \State $\extExpr \gets \fctToLiteral{\extExpr, \dt}$
+
+        \ElsIf{$(tm, \texttt{rr:datatype}, o) \in \triplesMapGraph{TM}{tm}$ such that $o \in \symAllIRIs$}
+            \State $\extExpr \gets \fctToLiteral{\extExpr, o}$
+        \Else 
+            \State $\extExpr \gets \fctToLiteral{\extExpr, \texttt{xsd:string}}$
 		\EndIf
 		\State \Return $\extExpr$
 	\end{algorithmic}

@@ -207,27 +207,27 @@ where $\lex_1 \circ \lex_2$ is the string obtained from the concatenating the st
 \begin{definition}
     \label{def:tempSubStrs}
     Let $v = (\lex, \dt)$ an input literal string such that $\dt$ is \texttt{xsd:string}.  
-    For ease of reading, we denote a substring as \textbf{enclosed query substring} 
+    For ease of reading, we call a substring of $\lex$ an \textbf{enclosed query substring} 
     if it is enclosed by a pair of curly braces \{ and \} as defined in R2RML~\citeneeded, 
-    otherwise it is denoted as \textbf{normal substring}.
-    $\tempSubStrs$ is a unary function which splits the lexical form of the 
-    input literal string into a sequence of substrings~$\substrSeq$ which contains 
-    alternating normal substrings and enclosed query substrings in two pass as follows: 
+    otherwise it is called as \textbf{normal substring}.
+    $\tempSubStrs$ is a unary function which splits $\lex$ into a sequence~$\substrSeq$
+    of substrings of $\lex$ which contains alternating normal substrings and
+    enclosed query substrings in two pass as follows: 
 
     \begin{enumerate}
-        \item  An intermediate sequence of substrings~$\substrSeq'$ is generated which 
+        \item  An intermediate sequence~$\substrSeq'$ of substrings is generated that 
             contains substrings that are \textbf{normal} or \textbf{enclosed query}  
             substrings in the order that these substrings appear in $\lex$ from 
             left to right. 
         \item $\substrSeq'$ is further processed as follows to produce $\substrSeq$: 
             \begin{enumerate}
-                \item if $\substrSeq'$ is empty, an \textbf{empty substring} is inserted
+                \item if $\substrSeq'$ is empty, an \textbf{empty substring} is inserted at the beginning of $\substrSeq'$
                 \item if there are two enclosed query substring \textbf{next to each other} in $\substrSeq'$, 
                     insert an empty substring between them
                 \item if the first element in $\substrSeq'$ is an enclosed query substring, 
-                    add an empty substring at the head of $\substrSeq'$
+                    add an empty substring at the beginning of $\substrSeq'$
                 \item if the last element in $\substrSeq'$ is an enclosed query substring, 
-                    add an empty substring at the tail of $\substrSeq'$
+                    add an empty substring at the end of $\substrSeq'$
             \end{enumerate}
     \end{enumerate}
     After the aforementioned processing, the sequence $\substrSeq$ has an 
@@ -237,24 +237,28 @@ where $\lex_1 \circ \lex_2$ is the string obtained from the concatenating the st
 
 
 
-%CHECKME
 \begin{algorithm}[htbp]
 	\caption{Template: An algorithm which extracts an extend expression for 
         resolving the template string of the input literal node.}
 	\label{alg:template_function}
 	\begin{algorithmic}[1]
-        \Require $(\lex, \dt)$ an input literal value, $\symAttrQueryMap : \symAttrUniverse \rightarrow \symDataAcc$
-		a mapping of attribute to query expression
+        \Require $(\lex, \dt)$ a literal, 
+        \Statex \qquad \quad $\symAttrQueryMap$ a mapping of attributes in $\symAttrUniverse$ to query expressions in $\symDataAcc$
 		\Ensure $\extExpr$ an extend expression
         \State $\substrSeq \gets \fctTempSubStrs{\lex}$ \Comment Definition~\ref{def:tempSubStrs}
-        \State $\extExpr \gets \fctConcat{``"}{``"}$ \Comment Section~\ref{ssub:concatenate_function}
-        \For {$s_i \in  (s_0,\dots,s_n)$ where $ \substrSeq = (s_0,\dots,s_n)$ and $n = |\substrSeq|- 1$ }
-            \If{$i$ is even}
-                \State $\extExpr \gets \fctConcat{\extExpr}{s_i}$ 
-            \Else
-                \State $\extExpr \gets \fctConcat{\extExpr}{\symAttrQueryMap^{-1}(s_i)}$
-            \EndIf
-		\EndFor
+        \State $\extExpr \gets (s_1, \texttt{xsd:string})$, where $s_1$ is the first element in $\substrSeq$
+        \If{$|\substrSeq| > 1$}
+            \For {$i \in \{2,\dots,|\substrSeq|\}$}
+                \State $s \gets s_i$ 
+                    where $s_i$ is the $i$-th element in $\substrSeq$
+                \If{$i$ is even}
+                    \State $\extExpr \gets \fctConcat{\extExpr}{\symAttrQueryMap^{-1}(s)}$ 
+                    \Comment Section~\ref{ssub:concatenate_function}
+                \Else
+                    \State $\extExpr \gets \fctConcat{\extExpr}{(s, \texttt{xsd:string})}$   
+                \EndIf
+		    \EndFor
+        \EndIf
 		\State \Return $\extExpr$
 	\end{algorithmic}
 \end{algorithm}

@@ -25,41 +25,35 @@
 for constant-term maps},
 label={lst:rml_document}, float=ht]
 
+\end{lstlisting}
+
+\begin{lstlisting}[language=sparql, caption={SPARQL update query to expand shortcuts
+for constant-term maps},
+label={lst:rml_document}, float=ht]
+
 DELETE {
     ?tm rr:subject ?sm_constant .
+    ?tm rr:predicate ?pm_constant .
+    ?tm rr:object ?om_constant .
 }
 INSERT {
     ?tm rr:subjectMap [
         rr:constant ?sm_constant; 
         rr:termType rr:IRI; 
     ].
-}
-WHERE {
-  ?tm rr:subject ?sm_constant .
-}
-...
-DELETE {
-    ?tm rr:predicate ?pm_constant .
-}
-INSERT {
+
     ?tm rr:predicateMap [
         rr:constant ?pm_constant; 
         rr:termType rr:IRI; 
     ].
-}
-WHERE {
-  ?tm rr:predicate ?pm_constant .
-}
-...
-DELETE {
-    ?tm rr:object ?om_constant .
-}
-INSERT {
+
     ?tm rr:objectMap [
         rr:constant ?om_constant; 
     ].
 }
 WHERE {
+  ?tm rr:subject ?sm_constant .
+  ?tm rr:predicate ?pm_constant .
   ?tm rr:object ?om_constant .
 }
 \end{lstlisting}

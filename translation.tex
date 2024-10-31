@@ -203,15 +203,16 @@ where $\lex_1 \circ \lex_2$ is the string obtained from the concatenating the st
 \end{algorithm}
 
 
+\break
 %CHECKME
 \begin{definition}
     \label{def:tempSubStrs}
     Let $v = (\lex, \dt)$ an input literal string such that $\dt$ is \texttt{xsd:string}.  
     For ease of reading, we call a substring of $\lex$ an \textbf{enclosed query substring} 
-    if it is enclosed by a pair of curly braces \{ and \} as defined in R2RML~\citeneeded, 
+    if it is the substring starting and ending with the curly braces \{ and \} respectively, as defined in R2RML~\citeneeded, 
     otherwise it is called as \textbf{normal substring}.
     $\tempSubStrs$ is a unary function which splits $\lex$ into a sequence~$\substrSeq$
-    of substrings of $\lex$ which contains alternating normal substrings and
+    of substrings of $\lex$ that contains alternating normal substrings and
     enclosed query substrings in two pass as follows: 
 
     \begin{enumerate}
@@ -222,8 +223,10 @@ where $\lex_1 \circ \lex_2$ is the string obtained from the concatenating the st
         \item $\substrSeq'$ is further processed as follows to produce $\substrSeq$: 
             \begin{enumerate}
                 \item if $\substrSeq'$ is empty, an \textbf{empty substring} is inserted at the beginning of $\substrSeq'$
-                \item if there are two enclosed query substring \textbf{next to each other} in $\substrSeq'$, 
-                    insert an empty substring between them
+                \item if there are two enclosed query substring, $s_i $ and $s_{i+1}$ 
+                    with $i$ the $i$-th position of substring in $\substrSeq'$, 
+                    insert an empty substring, $s^0$ between $s_i$ and $s_{i+1}$  such that 
+                    the sequence $\substrSeq'$ contains $(\dots,s_i,s^0,s_{i+1},\dots)$.
                 \item if the first element in $\substrSeq'$ is an enclosed query substring, 
                     add an empty substring at the beginning of $\substrSeq'$
                 \item if the last element in $\substrSeq'$ is an enclosed query substring, 
@@ -231,8 +234,9 @@ where $\lex_1 \circ \lex_2$ is the string obtained from the concatenating the st
             \end{enumerate}
     \end{enumerate}
     After the aforementioned processing, the sequence $\substrSeq$ has an 
-    \textbf{enclosed query substring} at every odd index and \textbf{normal substring} 
-    at every even index, and it is non-empty.
+    alternating sequence of \textbf{enclosed query substring} and \textbf{normal substring}
+    with enclosed query substrings at every second position, and $\substrSeq$ 
+    is non-empty.
 \end{definition}
 
 
@@ -264,7 +268,7 @@ where $\lex_1 \circ \lex_2$ is the string obtained from the concatenating the st
 \end{algorithm}
 
 
-\begin{algorithm}[thbp]
+\begin{algorithm}[htbp]
 	\caption{TranslateSourceOperator: Source operator translation for a given triples map IRI $\triplesMapIRI$}
 	\label{alg:rml_source_op}
 	\begin{algorithmic}[1]

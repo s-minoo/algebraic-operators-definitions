@@ -17,14 +17,43 @@
 		      definitions are expanded into predicate-object maps with a single
 		      predicate and a single object definition,
 		\item All triple maps with multiple predicate-object maps have been
-		      replaced by a set of equivalent triple maps.
+		      replaced by a set of equivalent triple maps with single 
+              predicate-object map.
 	\end{enumerate}
 \end{definition}
+
+
+\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace
+triples maps with multiple predicate-object maps to equivalent triples maps
+with single predicate-object map},
+label={lst:sparql_tm_singlepom}, float=ht]
+
+DELETE{
+    ?tm a rr:TriplesMap.
+    ?tm rml:logcialSource ?ls. 
+    ?tm rr:subjectMap ?sm.
+    ?tm rr:predicateObjectMap ?pom.
+}
+INSERT{
+    [] a rr:TriplesMap.
+    [] rml:logicalSource ?ls.
+    [] rr:subjectMap ?sm. 
+    [] rr:predicateObjectMap ?pom.
+}
+WHERE{
+    ?tm rml:logcialSource ?ls. 
+    ?tm rr:subjectMap ?sm.
+    ?tm rr:predicateObjectMap ?pom.
+}
+
+\end{lstlisting}
+
+
 
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to replace 
 predicate-object maps with multiple predicate or object definitions to 
 predicate-object maps with a single predicate and a single object definition},
-label={lst:rml_document}, float=ht]
+label={lst:sparql_simple_pom}, float=ht]
 
 DELETE{
     ?tm rr:predicateObjectMap  ?pom. 
@@ -46,7 +75,7 @@ WHERE{
 
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to expand shortcuts
 for constant-term maps},
-label={lst:rml_document}, float=ht]
+label={lst:sparql_shortcut}, float=ht]
 
 DELETE {
     ?tm rr:subject ?sm_constant .
@@ -78,7 +107,7 @@ WHERE {
 
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to replace \texttt{rr:class} 
 definitions with predicate object maps},
-label={lst:rml_document}, float=ht]
+label={lst:sparql_class_expand}, float=ht]
 
 DELETE {
     ?sm rr:class ?sm_class .

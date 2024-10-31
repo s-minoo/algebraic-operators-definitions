@@ -21,10 +21,27 @@
 	\end{enumerate}
 \end{definition}
 
-\begin{lstlisting}[language=sparql, caption={SPARQL update query to expand shortcuts
-for constant-term maps},
+\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace 
+predicate-object maps with multiple predicate or object definitions to 
+predicate-object maps with a single predicate and a single object definition},
 label={lst:rml_document}, float=ht]
 
+DELETE{
+    ?tm rr:predicateObjectMap  ?pom. 
+    ?pom rr:predicateMap ?pm. 
+    ?pom rr:objectMap ?om. 
+}
+INSERT{
+    ?tm rr:predicateObjectMap [
+        rr:predicateMap ?pm;
+        rr:objectMap ?om; 
+    ].
+}
+WHERE{
+    ?tm rr:predicateObjectMap  ?pom. 
+    ?pom rr:predicateMap ?pm. 
+    ?pom rr:objectMap ?om. 
+}
 \end{lstlisting}
 
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to expand shortcuts

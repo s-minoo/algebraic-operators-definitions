@@ -33,8 +33,8 @@ label={lst:rml_document}, float=ht]
 
 DELETE {
     ?tm rr:subject ?sm_constant .
-    ?tm rr:predicate ?pm_constant .
-    ?tm rr:object ?om_constant .
+    ?pom rr:predicate ?pm_constant .
+    ?pom rr:object ?om_constant .
 }
 INSERT {
     ?tm rr:subjectMap [
@@ -42,19 +42,19 @@ INSERT {
         rr:termType rr:IRI; 
     ].
 
-    ?tm rr:predicateMap [
+    ?pom rr:predicateMap [
         rr:constant ?pm_constant; 
         rr:termType rr:IRI; 
     ].
 
-    ?tm rr:objectMap [
+    ?pom rr:objectMap [
         rr:constant ?om_constant; 
     ].
 }
 WHERE {
   ?tm rr:subject ?sm_constant .
-  ?tm rr:predicate ?pm_constant .
-  ?tm rr:object ?om_constant .
+  ?pom rr:predicate ?pm_constant .
+  ?pom rr:object ?om_constant .
 }
 \end{lstlisting}
 

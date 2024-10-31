@@ -29,6 +29,22 @@
 \definecolor{darkgreen}{RGB}{0,128,21}
 \colorlet{numb}{magenta!60!black}
 
+
+\lstdefinelanguage{sparql}{
+    basicstyle=\small,
+    keywordstyle=\color{eclipseKeywords},
+    commentstyle=\color{blue}, % style of comment
+    stringstyle=\color{darkgreen},
+    keywords={INSERT, UPDATE, DELETE, WHERE, SELECT, rr,rml,ql,rdfs},
+    morecomment=[n]{?}{\ },
+    morecomment=[l]\#,
+    morestring=[b]",
+    morestring=[s]{<}{>},
+    stepnumber=1,
+    numbers=left,
+    numberstyle=\scriptsize,
+    frame=lines,
+}
 \lstdefinelanguage{rdf}{
     basicstyle=\small,
     keywordstyle=\color{eclipseKeywords},

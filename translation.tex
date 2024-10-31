@@ -12,7 +12,7 @@
 	in~\citeneeded
 	\begin{enumerate}
 		\item All shortcuts for constant-term maps have been expanded,
-		\item All \texttt{rr:class} definitions are replaced by predicate object maps,
+        \item All \texttt{rr:class} definitions are replaced by predicate object maps
 		\item All predicate-object maps with multiple predicate or object
 		      definitions are expanded into predicate-object maps with a single
 		      predicate and a single object definition,
@@ -20,6 +20,31 @@
 		      replaced by a set of equivalent triple maps.
 	\end{enumerate}
 \end{definition}
+
+
+\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace \texttt{rr:class} 
+definitions with predicate object maps},
+label={lst:rml_document}, float=ht]
+
+DELETE {
+    ?sm rr:class ?sm_class .
+}
+INSERT {
+    ?tm rr:predicateObjectMap [
+        rr:predicate rdfs:type; 
+        rr:objectMap [
+           rr:termType rr:IRI;
+           rr:constant ?sm_class;
+        ];
+    ].
+}
+WHERE {
+  ?tm rr:subjectMap ?sm . 
+  ?sm rr:class ?sm_class .
+}
+\end{lstlisting}
+
+
 
 \begin{definition}
 	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and

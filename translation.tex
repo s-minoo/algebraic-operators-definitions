@@ -22,54 +22,25 @@
 	\end{enumerate}
 \end{definition}
 
+\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace \texttt{rr:class} 
+definitions with predicate object maps},
+label={lst:sparql_class_expand}, float=ht]
 
-\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace
-triples maps with multiple predicate-object maps to equivalent triples maps
-with single predicate-object map},
-label={lst:sparql_tm_singlepom}, float=ht]
-
-DELETE{
-    ?tm a rr:TriplesMap.
-    ?tm rml:logcialSource ?ls. 
-    ?tm rr:subjectMap ?sm.
-    ?tm rr:predicateObjectMap ?pom.
+DELETE {
+    ?sm rr:class ?sm_class .
 }
-INSERT{
-    [] a rr:TriplesMap.
-    [] rml:logicalSource ?ls.
-    [] rr:subjectMap ?sm. 
-    [] rr:predicateObjectMap ?pom.
-}
-WHERE{
-    ?tm rml:logcialSource ?ls. 
-    ?tm rr:subjectMap ?sm.
-    ?tm rr:predicateObjectMap ?pom.
-}
-
-\end{lstlisting}
-
-
-
-\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace 
-predicate-object maps with multiple predicate or object definitions to 
-predicate-object maps with a single predicate and a single object definition},
-label={lst:sparql_simple_pom}, float=ht]
-
-DELETE{
-    ?tm rr:predicateObjectMap  ?pom. 
-    ?pom rr:predicateMap ?pm. 
-    ?pom rr:objectMap ?om. 
-}
-INSERT{
+INSERT {
     ?tm rr:predicateObjectMap [
-        rr:predicateMap ?pm;
-        rr:objectMap ?om; 
+        rr:predicate rdfs:type; 
+        rr:objectMap [
+           rr:termType rr:IRI;
+           rr:constant ?sm_class;
+        ];
     ].
 }
-WHERE{
-    ?tm rr:predicateObjectMap  ?pom. 
-    ?pom rr:predicateMap ?pm. 
-    ?pom rr:objectMap ?om. 
+WHERE {
+  ?tm rr:subjectMap ?sm . 
+  ?sm rr:class ?sm_class .
 }
 \end{lstlisting}
 
@@ -105,26 +76,55 @@ WHERE {
 \end{lstlisting}
 
 
-\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace \texttt{rr:class} 
-definitions with predicate object maps},
-label={lst:sparql_class_expand}, float=ht]
 
-DELETE {
-    ?sm rr:class ?sm_class .
+\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace 
+predicate-object maps with multiple predicate or object definitions to 
+predicate-object maps with a single predicate and a single object definition},
+label={lst:sparql_simple_pom}, float=ht]
+
+DELETE{
+    ?tm rr:predicateObjectMap  ?pom. 
+    ?pom rr:predicateMap ?pm. 
+    ?pom rr:objectMap ?om. 
 }
-INSERT {
+INSERT{
     ?tm rr:predicateObjectMap [
-        rr:predicate rdfs:type; 
-        rr:objectMap [
-           rr:termType rr:IRI;
-           rr:constant ?sm_class;
-        ];
+        rr:predicateMap ?pm;
+        rr:objectMap ?om; 
     ].
 }
-WHERE {
-  ?tm rr:subjectMap ?sm . 
-  ?sm rr:class ?sm_class .
+WHERE{
+    ?tm rr:predicateObjectMap  ?pom. 
+    ?pom rr:predicateMap ?pm. 
+    ?pom rr:objectMap ?om. 
 }
+\end{lstlisting}
+
+
+
+\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace
+triples maps with multiple predicate-object maps to equivalent triples maps
+with single predicate-object map},
+label={lst:sparql_tm_singlepom}, float=ht]
+
+DELETE{
+    ?tm a rr:TriplesMap.
+    ?tm rml:logcialSource ?ls. 
+    ?tm rr:subjectMap ?sm.
+    ?tm rr:predicateObjectMap ?pom.
+}
+INSERT{
+    [] a rr:TriplesMap.
+    [] rml:logicalSource ?ls.
+    [] rr:subjectMap ?sm. 
+    [] rr:predicateObjectMap ?pom.
+}
+WHERE{
+    ?tm rml:logcialSource ?ls. 
+    ?tm rr:subjectMap ?sm.
+    ?tm rr:predicateObjectMap ?pom.
+}
+
 \end{lstlisting}
 
 

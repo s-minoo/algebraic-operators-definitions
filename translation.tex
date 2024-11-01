@@ -230,6 +230,10 @@ where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the string
 \subsection{Translation Algorithms}%
 \label{sub:translation_algorithms}
 
+\todo[inline]{I propose to change the header parts of the algorithms. "Require" and "Ensure" doesn't sound right. Better "Input" and "Returns". Moreover, for the "Returns" part it doesn't make so much sense to include the symbol of the returned thing. Drop that. For instance, the "Returns" part of the first algorithm can simply be: "a set of query expressions"}
+
+\todo[inline]{There is an inconsistency in terms of the font that you use for function names in the caption of the algorithms (e.g., "QueryInTriplesMap") and the font that you use at the place where you call these functions within some other algorithm (e.g., "\textsc{QueryInTriplesMap}").}
+
 \begin{algorithm}[htbp]
 	\caption{QueryInTriplesMap: Extract query expressions from RML triples maps}
 	\label{alg:query_extraction}
@@ -237,20 +241,18 @@ where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the string
 		\Require  $\symRMLGraph$ an RDF graph of RML document,
 		$\triplesMapIRI$ the subject IRI of a triples map
 		\Ensure  $\symDataAcc$ a set of query expressions
-		\State $\symDataAcc \gets \emptyset$ \Comment Initial empty set of query expressions
-		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $p =\texttt{rml:reference}$ and  $o\in \symAllLiterals$}
-            \State $\queryExpr \gets \lex$ where $o = (\lex,\dt)$
-		    \State $\symDataAcc \gets \symDataAcc \cup \{ \queryExpr \}$
+		\State $\symDataAcc \gets \emptyset$ \Comment Initially empty set of query expressions
+		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ s.t.\ $p$ is the IRI \texttt{rml:reference} and $o$ is a literal $(\lex,\dt) \in \symAllLiterals$}
+		    \State $\symDataAcc \gets \symDataAcc \cup \{ \lex \}$
 		\EndFor
-		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $p =\texttt{rr:template}$ and  $o\in \symAllLiterals$}
-		    \State $\symDataAcc' \gets$ set of all substrings in $o$ that are enclosed by \{ and \}
+		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $p$ is the IRI \texttt{rr:template} and  $o$ is a literal $(\lex,\dt) \in \symAllLiterals$}
+		    \State $\symDataAcc' \gets$ set of all substrings in $\lex$ that are enclosed by \{ and \}
 		    \State $\symDataAcc \gets \symDataAcc \cup \symDataAcc'$
 		\EndFor
-		\State $T_{child} \gets \{ (s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI} \, | \, p = \texttt{rr:child} \}$
-		\State $T_{parent} \gets \{(s,p,o) \in \triplesMapGraph{PTM}{\triplesMapIRI} \, | \, p = \texttt{rr:parent} \}$
-		\For{$(s,p,o) \in T_{child} \cup T_{parent}$ such that $o \in \symAllLiterals$ }
-            \State $\queryExpr \gets \lex$ where $o = (\lex,\dt)$
-		    \State $\symDataAcc \gets \symDataAcc \cup \{ \queryExpr \}$
+		\State $T_\textrm{child} \gets \{ (s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI} \, | \, p \text{ is the IRI } \texttt{rr:child} \}$
+		\State $T_\textrm{parent} \gets \{(s,p,o) \in \triplesMapGraph{PTM}{\triplesMapIRI} \, | \, p \text{ is the IRI } \texttt{rr:parent} \}$
+		\For{$(s,p,o) \in (T_\textrm{child} \cup T_\textrm{parent})$ such that $o$ is a literal $(\lex,\dt) \in \symAllLiterals$ }
+		    \State $\symDataAcc \gets \symDataAcc \cup \{ \lex \}$
 		\EndFor
 		\State \Return $\symDataAcc$
 	\end{algorithmic}
@@ -371,12 +373,6 @@ is not empty and has an odd number of elements.
 		\State \Return  $(\queryExpr_{root}, \symAttrQueryMap)$
 	\end{algorithmic}
 \end{algorithm}
-
-\begin{definition}
-    \label{def:mapping_definition}
-    A \textbf{mapping definition}  is an expression that can be built by 
-    combining various operators of the mapping algebra. 
-\end{definition}
 
 
 \begin{lstlisting}[language=rdf, caption={Example RML document, with 1 subject

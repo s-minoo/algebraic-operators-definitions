@@ -2,6 +2,7 @@
 \usepackage{amssymb, amsthm, amsmath, algpseudocode, algorithm}					% packages to get the fonts, symbols used in most math
 %\usepackage{dcolumn}
 \usepackage[english]{babel}
+\usepackage{hyperref}
 \usepackage{multirow}
 \usepackage{latexsym}
 \usepackage{listings}
@@ -107,6 +108,16 @@
 \newtheorem{example}[exmp]{Example}
 
 %%%%%%%%%%% End of definitions
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The following ensures that we have a (non-visible) table of contents embedded
+% in the PDF, which PDF readers can show and, thus, allows me to navigate the
+% document more easily.
+%                                    Olaf
+\setcounter{tocdepth}{2}
+\hypersetup{bookmarksopen=true, citecolor=blue}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\doublespacing                         	% Together with the package setspace above allows for doublespacing of the document
 

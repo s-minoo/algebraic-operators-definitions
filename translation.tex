@@ -11,8 +11,8 @@
 	A \textbf{normalized} RML document is defined by undertaking the following steps as described
 	in~\citeneeded
 	\begin{enumerate}
-		\item All shortcuts for constant-term maps have been expanded,
         \item All \texttt{rr:class} definitions are replaced by predicate object maps
+		\item All shortcuts for constant-term maps have been expanded,
 		\item Every predicate-object map with multiple predicate or object
 		      maps is replaced by a corresponding set of predicate-object maps that each have a single
 		      predicate map and a single object map,
@@ -31,12 +31,15 @@ DELETE {
 }
 INSERT {
     ?tm rr:predicateObjectMap [
-        rr:predicate rdfs:type; 
+        rr:predicateMap [
+            rr:constant rdf:type ;
+            rr:termType rr:IRI ;
+        ] ;
         rr:objectMap [
-           rr:termType rr:IRI;
-           rr:constant ?sm_class;
-        ];
-    ].
+           rr:termType rr:IRI ;
+           rr:constant ?sm_class ;
+        ] ;
+    ] .
 }
 WHERE {
   ?tm rr:subjectMap ?sm . 
@@ -110,18 +113,18 @@ label={lst:sparql_tm_singlepom}, float=ht]
 
 DELETE{
     ?tm a rr:TriplesMap.
-    ?tm rml:logcialSource ?ls. 
+    ?tm rml:logicalSource ?ls. 
     ?tm rr:subjectMap ?sm.
     ?tm rr:predicateObjectMap ?pom.
 }
 INSERT{
-    [] a rr:TriplesMap.
-    [] rml:logicalSource ?ls.
-    [] rr:subjectMap ?sm. 
-    [] rr:predicateObjectMap ?pom.
+    [] a rr:TriplesMap;
+       rml:logicalSource ?ls;
+       rr:subjectMap ?sm; 
+       rr:predicateObjectMap ?pom.
 }
 WHERE{
-    ?tm rml:logcialSource ?ls. 
+    ?tm rml:logicalSource ?ls. 
     ?tm rr:subjectMap ?sm.
     ?tm rr:predicateObjectMap ?pom.
 }

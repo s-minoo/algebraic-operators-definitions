@@ -347,7 +347,6 @@ is not empty and has an odd number of elements.
                 \If{$s_i$ is a string that starts with ``\{" and ends with ``\}"}
                     \State $\queryExpr \gets $ substring of $s_i$ without the enclosing ``\{" and ``\}"
                     \State $\extExpr \gets \fctConcat{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$ 
-                    \Comment Section~\ref{ssub:concatenate_function}
                 \Else
                     \State $\extExpr \gets \fctConcat{\extExpr}{(s_i, \texttt{xsd:string})}$   
                 \EndIf
@@ -462,16 +461,17 @@ given CSV column name.
             \State $tm_{obj} \gets o$ where triple $(s,\texttt{rr:objectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$ 
             \If{$(tm_{obj},\texttt{rr:parentTriplesMap},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
 		        \State $s_{ptm} \gets o'$
-		        \State  $\iterConfig \gets $ \Call{TranslateSourceOperator}{$\symRMLGraph, s_{ptm}$} \Comment{Algorithm~\ref{alg:rml_source_op}}
+		        \State  $\iterConfigTuple \gets $ \Call{TranslateSourceOperator}{$\symRMLGraph, s_{ptm}$} \Comment{Algorithm~\ref{alg:rml_source_op}}
                 \State   $source_{ptm} \gets \fctInitSrc{o''}$ with $(s'',\texttt{rr:logicalSource},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
-		        \State  $\omega_{ptm} \gets \fctSourceOp{\iterConfig}{source_{ptm}}$
-                \If{$(tm_{obj},\texttt{rr:joinCondition},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
+		        \State  $\omega_{ptm} \gets \fctSourceOp{\iterConfigTuple}{source_{ptm}}$
+                \State $\symJoinAttrPairs \gets \emptyset$
+                \For{$(tm_{obj},\texttt{rr:joinCondition},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
                     \State  $a \gets \symAttrQueryMap^{-1}(o'') $ for $o''$ in triple $(o',\texttt{rr:child},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
                     \State  $a_{ptm} \gets \symAttrQueryMap^{-1}(o'')$ for $o''$ in triple $(o',\texttt{rr:parent},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
-		            \State  $\symJoinAttrPairs \gets \{ (a, a_{ptm}) \}$
+		            \State  $\symJoinAttrPairs \gets \symJoinAttrPairs \cup \{ (a, a_{ptm}) \}$
+                \EndFor
+                \If {$\symJoinAttrPairs  \neq \emptyset$ }
 		            \State  $\omega' \gets \fctEquiJoinOp{\omega'}{\omega_{ptm}}$
-                \Else
-                    \State  $\omega' \gets \fctNatJoin{\omega'}{\omega_{ptm}}$ 
                 \EndIf
                 \State $tm_{sptm} \gets  o''$ with $(s'',\texttt{rr:subjectMap},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
                 \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sptm}$}

@@ -355,11 +355,12 @@ is not empty and has an odd number of elements.
         \State $\substrSeq \gets \fctTempSubStrs{\lex}$ \Comment Definition~\ref{def:tempSubStrs}
         \State $\extExpr \gets (s_1, \texttt{xsd:string})$, where $s_1$ is the first element in $\substrSeq$
         \If{$|\substrSeq| > 1$}
-            \For {$i \in \{2,\dots,|\substrSeq|\}$}
+            \For {$i \in 2,\dots,|\substrSeq|$}
                 \State $s_i \gets $
                     the $i$-th element in $\substrSeq$
-                \If{$i$ is even}
-                    \State $\extExpr \gets \fctConcat{\extExpr}{\symAttrQueryMap^{-1}(s_i)}$ 
+                \If{$s_i$ is a string that starts with ``\{" and ends with ``\}"}
+                    \State $\queryExpr \gets $ substring of $s_i$ without the enclosing ``\{" and ``\}"
+                    \State $\extExpr \gets \fctConcat{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$ 
                     \Comment Section~\ref{ssub:concatenate_function}
                 \Else
                     \State $\extExpr \gets \fctConcat{\extExpr}{(s_i, \texttt{xsd:string})}$   

@@ -13,12 +13,12 @@
 	\begin{enumerate}
 		\item All shortcuts for constant-term maps have been expanded,
         \item All \texttt{rr:class} definitions are replaced by predicate object maps
-		\item All predicate-object maps with multiple predicate or object
-		      definitions are expanded into predicate-object maps with a single
-		      predicate and a single object definition,
-		\item All triple maps with multiple predicate-object maps have been
-		      replaced by a set of equivalent triple maps with single 
-              predicate-object map.
+		\item Every predicate-object map with multiple predicate or object
+		      maps is replaced by a corresponding set of predicate-object maps that each have a single
+		      predicate map and a single object map,
+		\item Every triple map with multiple predicate-object maps is
+		      replaced by a corresponding set of triple maps that each have one of
+		      the predicate-object maps.
 	\end{enumerate}
 \end{definition}
 
@@ -77,9 +77,10 @@ WHERE {
 
 
 
-\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace 
-predicate-object maps with multiple predicate or object definitions to 
-predicate-object maps with a single predicate and a single object definition},
+\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace
+every predicate-object map that has multiple predicate or object maps by a
+corresponding set of predicate-object maps that each have a single predicate
+map and a single object map},
 label={lst:sparql_simple_pom}, float=ht]
 
 DELETE{
@@ -103,8 +104,8 @@ WHERE{
 
 
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to replace
-triples maps with multiple predicate-object maps to equivalent triples maps
-with single predicate-object map},
+every triple map that has multiple predicate-object maps by a corresponding
+set of triple maps that each have one of the predicate-object maps},
 label={lst:sparql_tm_singlepom}, float=ht]
 
 DELETE{

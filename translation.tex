@@ -164,18 +164,13 @@ WHERE{
 \end{definition}
 
 
-\subsection{Built-in Extend Functions}%
+\subsection{Relevant Extension Functions}%
 \label{sub:built_in_extend_functions}
 
-The following definitions describe the provided built-in extend functions used
-when translating RML documents to algebraic mapping expressions as described in
-Section~\ref{sub:translation_algorithms}.
-
-\subsubsection{toIRI function}%
-\label{ssub:toiri_function}
-$\toIRI$
-is a unary extension function that converts string literals representing IRIs into these IRIs. 
-Formally,  for every $v \in (\symTermUniverse \cup \error)$: 
+The translation of RML descriptions into our formalism shall create Extend operators with extend expressions that use the following extension functions~(as per Definition~\ref{def:ExtensionFunction}).
+\begin{itemize}
+	\item
+	$\toIRI$ is a unary extension function that converts string literals representing IRIs into these IRIs. Formally,  for every $v \in (\symTermUniverse \cup \error)$, we define:
 \begin{equation*}
 	\fctToIRI{v} =
 	\begin{cases}
@@ -189,12 +184,8 @@ Formally,  for every $v \in (\symTermUniverse \cup \error)$:
 	\end{cases}
 \end{equation*}
 
-
-
-\subsubsection{toBNode function}%
-\label{ssub:tobnode_function}
-We assume a function $\LTB: \symAllLiterals \rightarrow \symAllBNodes$ that is injective.
-$\toBNode$ is a unary extension function that uses $\LTB$ to convert string literals into blank nodes. Formally, for every $v \in (\symTermUniverse \cup \error)$:
+	\item
+	$\toBNode$ is a unary extension function for which we assume a function $\LTB: \symAllLiterals \rightarrow \symAllBNodes$ that is injective. Then, $\toBNode$ uses $\LTB$ to convert string literals into blank nodes. Formally, for every $v \in (\symTermUniverse \cup \error)$, we define:
 \begin{equation*}
 	\fctToBNode{v} =
 	\begin{cases}
@@ -206,16 +197,8 @@ $\toBNode$ is a unary extension function that uses $\LTB$ to convert string lite
 	\end{cases}
 \end{equation*}
 
-
-\subsubsection{toLiteral function}%
-\label{ssub:toliteral_function}
-$\toLiteral$
-is a binary extension function that converts string literals
-into literals with the 
-datatype IRI
-that is given as the second argument.
-Formally, for every pair $(v, \dt)\in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$:
-
+	\item
+	$\toLiteral$ is a binary extension function that converts string literals into literals with a datatype IRI that is given as the second argument. Formally, for every pair $(v, \dt)\in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$, we define:
 \begin{equation*}
     \fctToLiteral{v, \dt} = 
     \begin{cases}
@@ -224,14 +207,8 @@ Formally, for every pair $(v, \dt)\in (\symTermUniverse \cup \error) \times (\sy
     \end{cases}
 \end{equation*}
 
-
-
-
-\subsubsection{Concatenate function}%
-\label{ssub:concatenate_function}
-$\concat$ is a binary extension function that concatenates two string literals.
-Formally, for every pair $(v_1, v_2) \in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$
-
+	\item
+	$\concat$ is a binary extension function that concatenates two string literals. Formally, for every pair $(v_1, v_2) \in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$, we define,
 \begin{equation*}
     \fctConcat{v_1}{v_2} = 
     \begin{cases}
@@ -245,7 +222,10 @@ Formally, for every pair $(v_1, v_2) \in (\symTermUniverse \cup \error) \times (
 		\\
     \end{cases}
 \end{equation*}
-where $\lex_1 \circ \lex_2$ is the string obtained from the concatenating the strings $\lex_1$ and $\lex_2$.
+where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the strings $\lex_1$ and $\lex_2$.
+
+\end{itemize}
+
 
 \subsection{Translation Algorithms}%
 \label{sub:translation_algorithms}

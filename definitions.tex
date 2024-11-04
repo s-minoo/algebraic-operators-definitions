@@ -307,7 +307,7 @@ Given a mapping relation~$r = \mappingRel$ with $\subjAttr, \predAttr, \objAttr,
 an \textbf{RDF dataset} is generated as from $r$ as follows: 
 For each mapping tuple~$\mappingTuple$ in $\symMappingInst$, an RDF triple is
 generated using the term values returned by
-$\mappingTuple(\subjAttr),\mappingTuple(\predAttr),\mappingTuple(\objAttr)$
+$\mappingTuple(\subjAttr),\mappingTuple(\predAttr),$ and $\mappingTuple(\objAttr)$
 as \textbf{subject, predicate, and object} respectively. 
 The generated RDF triple belongs to the RDF graph returned 
 by $\mappingTuple(\graphAttr)$. 

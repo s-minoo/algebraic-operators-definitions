@@ -55,6 +55,7 @@ DELETE {
     ?tm rr:subject ?sm_constant .
     ?pom rr:predicate ?pm_constant .
     ?pom rr:object ?om_constant .
+    ?termMap rr:graph ?gm_constant . 
 }
 INSERT {
     ?tm rr:subjectMap [
@@ -70,11 +71,17 @@ INSERT {
     ?pom rr:objectMap [
         rr:constant ?om_constant; 
     ].
+
+    ?termMap rr:graphMap [
+        rr:constant ?gm_constant; 
+        rr:termType rr:IRI; 
+    ].
 }
 WHERE {
   ?tm rr:subject ?sm_constant .
   ?pom rr:predicate ?pm_constant .
   ?pom rr:object ?om_constant .
+  ?termMap rr:graph ?gm_constant . 
 }
 \end{lstlisting}
 

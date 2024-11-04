@@ -132,25 +132,6 @@ relation to a subset of the attributes of that relation.
 \subsection{Rename Operator}%
 \label{sub:rename_operator}
 
-{\color{red}
-	\todoi{Change the following paragraph according to the definition - SMO}
-	Given a mapping relation $\mappingRel$, and set of pairs of attributes
-	$\symRenamePFunc$ with $\{(a_{1}, b_{1}),..(a_{n}, b_{n})\}$ where all $a$'s and
-	$b$'s are unique.
-	A \textbf{rename operator} renames the attributes in the mapping relations,
-	$\mappingRel$,  according to set of the pairs of attributes~$\symRenamePFunc$.
-	It creates a new mapping relation $(\symAttrSubSet', \symMappingInst')$
-	such that $\symAttrSubSet'$ is a set of attributes where,
-	given a pair of attributes $(a_{old},b) \in \symRenamePFunc$, for all
-	attributes $a \in \symAttrSubSet$ is replaced with $b$ if $a = a_{old}$ otherwise
-	$a$ from is kept in $\symAttrSubSet'$.
-	For the \textbf{renamed mapping tuples}~$\mappingTuple'$, it is the result of
-	restricting the mapping tuple~$\mappingTuple$ to $\symAttrSubSet'$ as
-	$\mappingTuple[\symAttrSubSet']$ with the condition such that for each
-	pair $(a_{old},b) \in \symRenamePFunc$, we have $\mappingTuple'(b) = \mappingTuple(a_{old})$,
-	and for every $a$ in $A$ that did not get renamed, we have $\mappingTuple'(a) =
-		\mappingTuple(a)$, thus, $dom(\mappingTuple') = \symAttrSubSet'$.
-}
 
 \begin{definition}
 	\label{def:rename_operator}

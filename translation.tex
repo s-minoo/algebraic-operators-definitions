@@ -16,9 +16,17 @@
 		\item Every predicate-object map with multiple predicate or object
 		      maps is replaced by a corresponding set of predicate-object maps that each have a single
 		      predicate map and a single object map,
+        %CHECKME
+		\item Every referencing-object map with a parent triples map without join
+              conditions is replaced by a corresponding object map with the 
+              subject IRI of the parent triples map as the reference value.
 		\item Every triple map with multiple predicate-object maps is
 		      replaced by a corresponding set of triple maps that each have one of
 		      the predicate-object maps.
+        %CHECKME
+		\item Every triple map with multiple graph maps is
+		      replaced by a corresponding set of triple maps that each have one of
+		      the graph maps.
 	\end{enumerate}
 \end{definition}
 
@@ -47,6 +55,8 @@ WHERE {
 }
 \end{lstlisting}
 
+
+%CHECKME
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to expand shortcuts
 for constant-term maps},
 label={lst:sparql_shortcut}, float=ht]
@@ -100,20 +110,50 @@ DELETE{
     ?tm rr:predicateObjectMap  ?pom. 
     ?pom rr:predicateMap ?pm. 
     ?pom rr:objectMap ?om. 
+    ?pom rr:graphMap ?gm.
 }
 INSERT{
     ?tm rr:predicateObjectMap [
         rr:predicateMap ?pm;
         rr:objectMap ?om; 
+        rr:graphMap ?gm;
     ].
 }
 WHERE{
     ?tm rr:predicateObjectMap  ?pom. 
     ?pom rr:predicateMap ?pm. 
     ?pom rr:objectMap ?om. 
-}
+    OPTIONAL {?pom rr:graphMap ?gm.}
+} 
+ 
 \end{lstlisting}
 
+
+%CHECKME
+\begin{lstlisting}[language=sparql, caption={SPARQL update query to replace 
+referencing object map without join conditions with an object map containing 
+the contents of the parent triples map's subject map},
+label={lst:sparql_selfjoin}, float=ht]
+
+DELETE{
+    ?om rr:parentTriplesMap ?ptm .
+}
+INSERT{
+    ?om rr:reference  ?ref .
+    ?om rr:template ?template . 
+    ?om rr:constant ?const .
+    ?om rr:termType rr:IRI .
+}
+WHERE{
+    ?om rr:parentTriplesMap ?ptm .
+    ?ptm rr:subjectMap ?sm . 
+    OPTIONAL{?sm rr:reference ?ref .}
+    OPTIONAL{?sm rr:template ?template .}
+    OPTIONAL{?sm rr:constant ?const .}
+    FILTER NOT EXISTS {?om rr:joinCondition ?jc .}
+} 
+ 
+\end{lstlisting}
 
 
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to replace
@@ -138,10 +178,43 @@ WHERE{
     ?tm rr:subjectMap ?sm.
     ?tm rr:predicateObjectMap ?pom.
 }
-
 \end{lstlisting}
 
 
+%CHECKME
+\begin{lstlisting}[language=sparql, caption={SPARQL update query to ensure 
+that each triples map contain only one graph map if it exists},
+label={lst:sparql_graphmap_norm}, float=ht]
+
+DELETE{
+    ?tm a rr:TriplesMap.
+    ?tm rml:logicalSource ?ls. 
+    ?tm rr:subjectMap ?sm.
+    ?sm rr:graphMap ?gm. 
+    ?tm rr:predicateObjectMap ?pom.
+    ?pom rr:graphMap ?gm2.
+}
+INSERT{
+    [] a rr:TriplesMap;
+       rml:logicalSource ?ls;
+       rr:subjectMap ?sm; 
+       rr:predicateObjectMap ?pom.
+    ?sm rr:graphMap ?gm. 
+
+    [] a rr:TriplesMap;
+       rml:logicalSource ?ls;
+       rr:subjectMap ?sm; 
+       rr:predicateObjectMap ?pom.
+    ?sm rr:graphMap ?gm2. 
+}
+WHERE{
+    ?tm rml:logicalSource ?ls. 
+    ?tm rr:subjectMap ?sm.
+    ?sm rr:graphMap ?gm. 
+    ?tm rr:predicateObjectMap ?pom.
+    ?pom rr:graphMap ?gm2.
+}
+\end{lstlisting}
 
 \begin{definition}
 	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
@@ -305,7 +378,6 @@ where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the string
 
 
 \break
-%CHECKME
 \begin{definition}
     \label{def:tempSubStrs}
     Let $v = (\lex, \dt)$ an input literal string such that $\dt$ is \texttt{xsd:string}.  
@@ -414,7 +486,6 @@ label={lst:rml_document}, float=ht]
 \end{lstlisting}
 
 
-%CHECKME
 \begin{definition}
     \label{def:init_data_source}
     Let $ls_{iri}$ be an IRI of an RML logical source. 
@@ -433,7 +504,6 @@ iteration, and $\cbeval$ is a function that returns the data object for the
 given CSV column name. 
 
 
-%CHECKME
 \begin{algorithm}[htbp]
 	\caption{RML translation to algebraic mapping expressions}
 	\label{alg:rml2algebra}

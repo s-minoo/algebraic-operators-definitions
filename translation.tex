@@ -53,8 +53,8 @@ label={lst:sparql_shortcut}, float=ht]
 
 DELETE {
     ?tm rr:subject ?sm_constant .
-    ?pom rr:predicate ?pm_constant .
-    ?pom rr:object ?om_constant .
+    ?pompm rr:predicate ?pm_constant .
+    ?pomom rr:object ?om_constant .
     ?termMap rr:graph ?gm_constant . 
 }
 INSERT {
@@ -63,13 +63,14 @@ INSERT {
         rr:termType rr:IRI; 
     ].
 
-    ?pom rr:predicateMap [
+    ?pompm rr:predicateMap [
         rr:constant ?pm_constant; 
         rr:termType rr:IRI; 
     ].
 
-    ?pom rr:objectMap [
+    ?pomom rr:objectMap [
         rr:constant ?om_constant; 
+        rr:termType ?om_termtype;
     ].
 
     ?termMap rr:graphMap [
@@ -78,10 +79,12 @@ INSERT {
     ].
 }
 WHERE {
-  ?tm rr:subject ?sm_constant .
-  ?pom rr:predicate ?pm_constant .
-  ?pom rr:object ?om_constant .
-  ?termMap rr:graph ?gm_constant . 
+    {?tm rr:subject ?sm_constant .} UNION
+    {?pomom rr:object ?om_constant .
+    BIND( IF(isIRI(?om_constant), rr:IRI, rr:Literal) AS ?om_termtype )
+    } UNION
+    {?pomom rr:object ?om_constant .} UNION
+    {?termMap rr:graph ?gm_constant .}
 }
 \end{lstlisting}
 

@@ -29,53 +29,7 @@
 \definecolor{eclipseKeywords}{RGB}{127,0,85}
 \definecolor{darkgreen}{RGB}{0,128,21}
 \colorlet{numb}{magenta!60!black}
-
-
-\lstdefinelanguage{sparql}{
-    basicstyle=\small,
-    keywordstyle=\color{eclipseKeywords},
-    commentstyle=\color{blue}, % style of comment
-    stringstyle=\color{darkgreen},
-    keywords={INSERT, UPDATE, DELETE, WHERE, SELECT, rr,rml,ql,rdfs},
-    morecomment=[n]{?}{\ },
-    morecomment=[l]\#,
-    morestring=[b]",
-    morestring=[s]{<}{>},
-    stepnumber=1,
-    numbers=left,
-    numberstyle=\scriptsize,
-    frame=lines,
-}
-\lstdefinelanguage{rdf}{
-    basicstyle=\small,
-    keywordstyle=\color{eclipseKeywords},
-    commentstyle=\color{gray}, % style of comment
-    stringstyle=\color{darkgreen},
-    keywords={rml, ql, rr, rdfs},
-    morecomment=[n]{?}{\ },
-    morecomment=[l]\#,
-    morestring=[b]",
-    morestring=[s]{<}{>},
-    stepnumber=1,
-    numbers=left,
-    numberstyle=\scriptsize,
-    frame=lines,
-}
-
-
-\lstdefinelanguage{triples}{
-    basicstyle=\small,
-    keywordstyle=\color{eclipseKeywords},
-    commentstyle=\color{darkgreen}, % style of comment
-    keywords={a, rml, ql, rr, rdfs},
-    morecomment=[s]{?}{\ },
-    stepnumber=1,
-    numbers=left,
-    numberstyle=\scriptsize,
-    frame=lines,
-}
-
-  
+\input{listingslang.tex}
 \input{_reviewing.tex}
 \input{macro.tex}
 %\usepackage{setspace}               		% Together with \doublespacing below allows for doublespacing of the document
@@ -123,6 +77,7 @@
 
 \begin{document}												% end of preamble and beginning of text that will be printed
 
+\input{algccommands.tex}
 \input{preliminaries.tex}
 \input{definitions.tex}
 \input{translation.tex}

@@ -233,7 +233,6 @@ where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the string
 \subsection{Translation Algorithms}%
 \label{sub:translation_algorithms}
 
-\todo[inline]{I propose to change the header parts of the algorithms. "Require" and "Ensure" doesn't sound right. Better "Input" and "Returns". Moreover, for the "Returns" part it doesn't make so much sense to include the symbol of the returned thing. Drop that. For instance, the "Returns" part of the first algorithm can simply be: "a set of query expressions"}
 
 \todo[inline]{There is an inconsistency in terms of the font that you use for function names in the caption of the algorithms (e.g., "QueryInTriplesMap") and the font that you use at the place where you call these functions within some other algorithm (e.g., "\textsc{QueryInTriplesMap}").}
 
@@ -242,8 +241,9 @@ where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the string
 	\label{alg:query_extraction}
 	\begin{algorithmic}[1]
 		\Require  $\symRMLGraph$ an RDF graph of RML document,
-		$\triplesMapIRI$ the subject IRI of a triples map
-		\Ensure  $\symDataAcc$ a set of query expressions
+		\Statex  \qquad $\triplesMapIRI$ the subject IRI of a triples map
+		\Ensure  A set of query expressions
+
 		\State $\symDataAcc \gets \emptyset$ \Comment Initially empty set of query expressions
 		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ s.t.\ $p$ is the IRI \texttt{rml:reference} and $o$ is a literal $(\lex,\dt) \in \symAllLiterals$}
 		    \State $\symDataAcc \gets \symDataAcc \cup \{ \lex \}$
@@ -267,11 +267,11 @@ where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the string
 	\label{alg:rml_termmap_extend_expr}
 	\begin{algorithmic}[1]
 		\Require 
-             $\symRMLGraph$ an RDF graph of RML document,
-            \Statex \qquad \quad $\LTB$ an injective function mapping literals to blank nodes, 
-            \Statex \qquad \quad $\symAttrQueryMap$ a partial function mapping attributes to query expression,
-            \Statex \qquad \quad $tm$ subject IRI of the RML term map to translate the extend operator for
-		\Ensure $\extExpr$ an extend expression
+            $\symRMLGraph$ an RDF graph of RML document,
+            \Statex \qquad $\LTB$ an injective function mapping literals to blank nodes, 
+            \Statex \qquad $\symAttrQueryMap$ a partial function mapping attributes to query expression,
+            \Statex \qquad $tm$ subject IRI of the RML term map to translate the extend operator for
+		\Ensure An extend expression
         \State $\extExpr \gets $ initially empty extend expression
 
         \If{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$ }
@@ -336,8 +336,8 @@ is not empty and has an odd number of elements.
 	\label{alg:template_function}
 	\begin{algorithmic}[1]
         \Require $(\lex, \dt)$ a literal, 
-        \Statex \qquad \quad $\symAttrQueryMap$ a mapping of attributes in $\symAttrUniverse$ to query expressions in $\symDataAcc$
-		\Ensure $\extExpr$ an extend expression
+        \Statex \qquad $\symAttrQueryMap$ a mapping of attributes in $\symAttrUniverse$ to query expressions in $\symDataAcc$
+		\Ensure An extend expression
         \State $\substrSeq \gets \fctTempSubStrs{\lex}$ \Comment Definition~\ref{def:tempSubStrs}
         \State $\extExpr \gets (s_1, \texttt{xsd:string})$, where $s_1$ is the first element in $\substrSeq$
         \If{$|\substrSeq| > 1$}
@@ -362,8 +362,8 @@ is not empty and has an odd number of elements.
 	\label{alg:rml_source_op}
 	\begin{algorithmic}[1]
 		\Require $\symRMLGraph$ an RDF graph of RML document,
-		$\triplesMapIRI$ subject IRI of the triples map to translate the source operator for
-		\Ensure $(\queryExpr_{root}, \symAttrQueryMap)$
+		\Statex \qquad $\triplesMapIRI$ subject IRI of a triples map 
+		\Ensure A tuple containing a root query expression and a partial function $\symAttrUniverse  \rightarrow  \symDataAcc$
 		\State $ls_{iri} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = \triplesMapIRI$  and $p= \texttt{rml:logicalSource}$
 		\State $\queryExpr_{root} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = ls_{iri}$  and $p=  \texttt{rml:iterator }$
 		\State $\symDataAcc \gets$ \Call{QueryInTriplesMap}{$\triplesMapIRI, \symRMLGraph$} \Comment{Algorithm~\ref{alg:query_extraction}}
@@ -430,8 +430,8 @@ given CSV column name.
 	\label{alg:rml2algebra}
 	\begin{algorithmic}[1]
 		\Require $\symRMLGraph$ an RDF graph of a \textbf{normalized} RML document, 
-        $\LTB$ an injective function mapping literals to blank nodes, 
-        \Ensure $\omega$ a mapping definition
+        \Statex \qquad $\LTB$ an injective function mapping literals to blank nodes, 
+        \Ensure A mapping definition
         \State $\omega \gets$ initially empty mapping definition \Comment Definition~\ref{def:mapping_definition}
 		\For{$(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
 	    	\State  $\iterConfigTuple \gets$ \Call{TranslateSourceOperator}{$\symRMLGraph, \triplesMapIRI$} \Comment{Algorithm~\ref{alg:rml_source_op}}

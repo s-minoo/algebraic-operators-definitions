@@ -234,7 +234,6 @@ where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the string
 \label{sub:translation_algorithms}
 
 
-\todo[inline]{There is an inconsistency in terms of the font that you use for function names in the caption of the algorithms (e.g., "QueryInTriplesMap") and the font that you use at the place where you call these functions within some other algorithm (e.g., "\textsc{QueryInTriplesMap}").}
 
 \begin{algorithm}[htbp]
 	\caption{QueryInTriplesMap: Extract query expressions from RML triples maps}
@@ -279,7 +278,7 @@ where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the string
 		\ElsIf{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:constant}, o)$}
     		\State $\extExpr \gets o$
 		\ElsIf{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:template}, o)$ such that $o$ is a literal}
-            \State  $\extExpr \gets $ \Call{Template}{$o, \symAttrQueryMap$}  \Comment Algorithm~\ref{alg:template_function}
+            \State  $\extExpr \gets $ \textbf{Template}($o, \symAttrQueryMap$)  \Comment Algorithm~\ref{alg:template_function}
 		\EndIf
 \medskip
         \If{$\triplesMapGraph{TM}{tm}$ contains the triple $(tm,\texttt{rr:termType}, \texttt{rr:BlankNode})$}
@@ -366,7 +365,7 @@ is not empty and has an odd number of elements.
 		\Ensure A tuple containing a root query expression and a partial function $\symAttrUniverse  \rightarrow  \symDataAcc$
 		\State $ls_{iri} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = \triplesMapIRI$  and $p= \texttt{rml:logicalSource}$
 		\State $\queryExpr_{root} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = ls_{iri}$  and $p=  \texttt{rml:iterator }$
-		\State $\symDataAcc \gets$ \Call{QueryInTriplesMap}{$\triplesMapIRI, \symRMLGraph$} \Comment{Algorithm~\ref{alg:query_extraction}}
+		\State $\symDataAcc \gets$ \textbf{QueryInTriplesMap}($\triplesMapIRI, \symRMLGraph$) \Comment{Algorithm~\ref{alg:query_extraction}}
 		\State $\symAttrQueryMap \gets$ initially empty function from attributes to query expressions in $\symDataAcc$
 		\For{$\queryExpr \in \symDataAcc$}
 		\State $\attr \gets$ a fresh attribute from $\symAttrUniverse \setminus \{ \attr_\textrm{s}, \attr_\textrm{p}, \attr_\textrm{o}, \attr_\textrm{g} \}$ that has not been used before in this translation process
@@ -434,17 +433,17 @@ given CSV column name.
         \Ensure A mapping definition
         \State $\omega \gets$ initially empty mapping definition \Comment Definition~\ref{def:mapping_definition}
 		\For{$(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
-	    	\State  $\iterConfigTuple \gets$ \Call{TranslateSourceOperator}{$\symRMLGraph, \triplesMapIRI$} \Comment{Algorithm~\ref{alg:rml_source_op}}
+	    	\State  $\iterConfigTuple \gets$ \textbf{TranslateSourceOperator}($\symRMLGraph, \triplesMapIRI$) \Comment{Algorithm~\ref{alg:rml_source_op}}
             \State   $src \gets \textrm{initSrc}(o')$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$ \Comment Definition~\ref{def:init_data_source}
 	    	\State   $\omega' \gets \fctSourceOp{\iterConfigTuple}{src}$
 
             \Statex
             \State $tm_{sub} \gets o$, where triple $(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
-            \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sub}$} \Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
+            \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sub}$) \Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
             \State $\omega' \gets \extOpAttr{\attr_{s}}(\omega')$
             \Statex
             \State $tm_{pred} \gets o$, where triple $(s,\texttt{rr:predicateMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
-            \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{pred}$}
+            \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{pred}$)
             \State $\omega' \gets \extOpAttr{\attr_{p}}(\omega')$
 		    \State\dots  \Comment Continued in Algorithm~\ref{alg:rml2algebra_part2}
 		    \algstore{state:full_translation}
@@ -461,7 +460,7 @@ given CSV column name.
             \State $tm_{obj} \gets o$ where triple $(s,\texttt{rr:objectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$ 
             \If{$(tm_{obj},\texttt{rr:parentTriplesMap},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
 		        \State $s_{ptm} \gets o'$
-		        \State  $\iterConfigTuple \gets $ \Call{TranslateSourceOperator}{$\symRMLGraph, s_{ptm}$} \Comment{Algorithm~\ref{alg:rml_source_op}}
+		        \State  $\iterConfigTuple \gets $ \textbf{TranslateSourceOperator}($\symRMLGraph, s_{ptm}$) \Comment{Algorithm~\ref{alg:rml_source_op}}
                 \State   $source_{ptm} \gets \fctInitSrc{o''}$ with $(s'',\texttt{rr:logicalSource},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
 		        \State  $\omega_{ptm} \gets \fctSourceOp{\iterConfigTuple}{source_{ptm}}$
                 \State $\symJoinAttrPairs \gets \emptyset$
@@ -474,15 +473,15 @@ given CSV column name.
 		            \State  $\omega' \gets \fctEquiJoinOp{\omega'}{\omega_{ptm}}$
                 \EndIf
                 \State $tm_{sptm} \gets  o''$ with $(s'',\texttt{rr:subjectMap},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
-                \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sptm}$}
+                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sptm}$)
                 \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
             \Else
-                \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{obj}$}
+                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{obj}$)
                 \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
 		    \EndIf
             \Statex
             \If{$(s,\texttt{rr:graphMap},tm_{graph}) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$} 
-                \State $\extExpr \gets $\Call{ExtractExtendExpr}{$\symRMLGraph, \LTB, \symAttrQueryMap, tm_{graph}$} 
+                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{graph}$) 
                 \State $\omega' \gets \extOpAttr{\attr_{g}}(\omega')$
             \Else
                 \State $\extExpr \gets o$ where $o$ is the default graph IRI

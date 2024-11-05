@@ -1,5 +1,6 @@
-\documentclass[12 pt, dvipsnames]{article}        	%sets the font to 12 pt and says this is an article (as opposed to book or other documents)
-\usepackage{amssymb, amsthm, amsmath, algpseudocode, algorithm}					% packages to get the fonts, symbols used in most math
+\documentclass[runningheads]{llncs}
+\usepackage[T1]{fontenc}
+\usepackage{algpseudocode, algorithm, amsmath, amssymb}					% packages to get the fonts, symbols used in most math
 %\usepackage{dcolumn}
 \usepackage[english]{babel}
 \usepackage{hyperref}
@@ -7,6 +8,14 @@
 \usepackage{latexsym}
 \usepackage{listings}
 \usepackage{booktabs}
+% T1 fonts will be used to generate the final print and online PDFs,
+% so please use T1 fonts in your manuscript whenever possible.
+% Other font encondings may result in incorrect characters.
+%
+\usepackage{graphicx}
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
 \usepackage[dvipsnames,svgnames, table]{xcolor} % text color
 \DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
 \DeclareFontShape{U}{mathx}{m}{n}{
@@ -29,63 +38,73 @@
 \definecolor{eclipseKeywords}{RGB}{127,0,85}
 \definecolor{darkgreen}{RGB}{0,128,21}
 \colorlet{numb}{magenta!60!black}
-\input{listingslang.tex}
+
 \input{_reviewing.tex}
+\input{algccommands.tex}
+\input{listingslang.tex}
 \input{macro.tex}
-%\usepackage{setspace}               		% Together with \doublespacing below allows for doublespacing of the document
-
-\oddsidemargin=-0.5cm                 	% These three commands create the margins required for class
-\setlength{\textwidth}{6.5in}         	%
-\addtolength{\voffset}{-20pt}        		%
-\addtolength{\headsep}{25pt}           	%
 
 
 
-\pagestyle{myheadings}                           	% tells LaTeX to allow you to enter information in the heading
-\markright{Sitt Min Oo\hfill October 7, 2024 \hfill} 	% put your name instead of Murphy Waggoner 
-																									% and put the proposition number from the book
-                                                	% LaTeX will put your name on the left, the date the paper 
-                                                	% is generated in the middle 
-                                                 	% and a page number on the right
 
-%%%%%%%%%%% Put your definitions here
-\newcounter{defn}
-\newcounter{exmp}
-\newcounter{thm}
-\newcounter{propn}
-
-\theoremstyle{definition}
-\newtheorem{definition}[defn]{Definition}
-
-\newtheorem{property}[propn]{Property}
-\newtheorem{theorem}[thm]{Theorem}
-\newtheorem{example}[exmp]{Example}
-
-%%%%%%%%%%% End of definitions
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% The following ensures that we have a (non-visible) table of contents embedded
-% in the PDF, which PDF readers can show and, thus, allows me to navigate the
-% document more easily.
-%                                    Olaf
-\setcounter{tocdepth}{2}
-\hypersetup{bookmarksopen=true, citecolor=blue}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\doublespacing                         	% Together with the package setspace above allows for doublespacing of the document
 
 \begin{document}												% end of preamble and beginning of text that will be printed
 
-\input{algccommands.tex}
+\title{Contribution Title}
+%
+%\titlerunning{Abbreviated paper title}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+\author{First Author\inst{1}\orcidID{0000-1111-2222-3333} \and
+Second Author\inst{2,3}\orcidID{1111-2222-3333-4444} \and
+Third Author\inst{3}\orcidID{2222--3333-4444-5555}}
+%
+\authorrunning{F. Author et al.}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+\institute{Princeton University, Princeton NJ 08544, USA \and
+Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany
+\email{lncs@springer.com}\\
+\url{http://www.springer.com/gp/computer-science/lncs} \and
+ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
+\email{\{abc,lncs\}@uni-heidelberg.de}}
+%
+\maketitle              % typeset the header of the contribution
+%
+\begin{abstract}
+The abstract should briefly summarize the contents of the paper in
+150--250 words.
+
+\keywords{First keyword  \and Second keyword \and Another keyword.}
+\end{abstract}
+%
+%
 \input{preliminaries.tex}
 \input{definitions.tex}
 \input{translation.tex}
 
 
+\begin{credits}
+\subsubsection{\ackname} A bold run-in heading in small font size at the end of the paper is
+used for general acknowledgments, for example: This study was funded
+by X (grant number Y).
 
-%\bibliographystyle{ios1}           % Style BST file.
-%\bibliography{bibliography}        % Bibliography file (usually '*.bib')
+\subsubsection{\discintname}
+It is now necessary to declare any competing interests or to specifically
+state that the authors have no competing interests. Please place the
+statement with a bold run-in heading in small font size beneath the
+(optional) acknowledgments\footnote{If EquinOCS, our proceedings submission
+system, is used, then the disclaimer can be provided directly in the system.},
+for example: The authors have no competing interests to declare that are
+relevant to the content of this article. Or: Author A has received research
+grants from Company W. Author B has received a speaker honorarium from
+Company X and owns stock in Company Y. Author C is a member of committee Z.
+\end{credits}
+
+% \bibliographystyle{splncs04}
+% \bibliography{mybibliography}
 
 
 \end{document}

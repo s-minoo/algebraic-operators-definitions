@@ -83,12 +83,12 @@ data access language.
 		\dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
 	\end{align*}
 	where $\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$ and
-	\begin{equation*}
+	\begin{equation}
 		X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap}}
 		\{(\attr, \var) \ | \
 		\var \in \fctCbeval{\symDataset}{\dataObject}{\queryExpr} \text{ with }  q = \symAttrQueryMap(\attr)\}
 		.
-	\end{equation*}
+	\end{equation}
 \end{definition}
 
 

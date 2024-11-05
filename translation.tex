@@ -13,20 +13,23 @@
 	\begin{enumerate}
         \item All \texttt{rr:class} definitions are replaced by predicate object maps
 		\item All shortcuts for constant-term maps have been expanded,
+\todo[inline]{The query for this point contains the variable \texttt{?pompm} in both the DELETE and the INSERT clause, but not in the WHERE clause. I think there is a copy-and-paste error in the WHERE clause.}
 		\item Every predicate-object map with multiple predicate or object
 		      maps is replaced by a corresponding set of predicate-object maps that each have a single
 		      predicate map and a single object map,
-        %CHECKME
 		\item Every referencing-object map with a parent triples map without join
               conditions is replaced by a corresponding object map with the 
               subject IRI of the parent triples map as the reference value.
 		\item Every triple map with multiple predicate-object maps is
 		      replaced by a corresponding set of triple maps that each have one of
 		      the predicate-object maps.
-        %CHECKME
-		\item Every triple map with multiple graph maps is
+		\item Every triple map
+\todo{Is it called "triple map" or "triples map"? Be consistent throughout the paper!}
+		      with multiple graph maps is
 		      replaced by a corresponding set of triple maps that each have one of
 		      the graph maps.
+\todo[inline]{The WHERE clause of the query for point this matches only for triples maps that have both a subject map with a graph map and a predicate-object map with a graph map. Can there be cases that only the subject map has a graph map but not the predicate-object map, or vice versa?}
+\todo[inline]{Moreover, the second block in the INSERT clause associates ?gm2 with ?sm. Shouldn't it be associated with ?pom instead?}
 	\end{enumerate}
 \end{definition}
 
@@ -56,7 +59,6 @@ WHERE {
 \end{lstlisting}
 
 
-%CHECKME
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to expand shortcuts
 for constant-term maps},
 label={lst:sparql_shortcut}, float=ht]
@@ -129,7 +131,6 @@ WHERE{
 \end{lstlisting}
 
 
-%CHECKME
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to replace 
 referencing object map without join conditions with an object map containing 
 the contents of the parent triples map's subject map},
@@ -181,7 +182,6 @@ WHERE{
 \end{lstlisting}
 
 
-%CHECKME
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to ensure 
 that each triples map contain only one graph map if it exists},
 label={lst:sparql_graphmap_norm}, float=ht]

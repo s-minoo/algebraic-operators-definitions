@@ -25,8 +25,6 @@
         \item Every triples map with multiple graph maps is replaced by a
               corresponding set of triples maps that each have one of the graph
               maps.
-\todo[inline]{The WHERE clause of the query for point this matches only for triples maps that have both a subject map with a graph map and a predicate-object map with a graph map. Can there be cases that only the subject map has a graph map but not the predicate-object map, or vice versa?}
-\todo[inline]{Moreover, the second block in the INSERT clause associates ?gm2 with ?sm. Shouldn't it be associated with ?pom instead?}
 	\end{enumerate}
 \end{definition}
 
@@ -556,11 +554,11 @@ given CSV column name.
                 \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
 		    \EndIf
             \Statex
-            \If{$(s,\texttt{rr:graphMap},tm_{graph}) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$} 
+            \If{$(s,\texttt{rr:graphMap},tm_{graph}) \in \triplesMapGraph{TM}{\triplesMapIRI}$} 
                 \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{graph}$) 
                 \State $\omega' \gets \extOpAttr{\attr_{g}}(\omega')$
             \Else
-                \State $\extExpr \gets o$ where $o$ is the default graph IRI
+                \State $\extExpr \gets \texttt{rr:defaultGraph}$
                 \State $\omega' \gets \extOpAttr{\attr_{g}}(\omega')$
             \EndIf
 

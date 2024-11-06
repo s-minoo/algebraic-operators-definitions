@@ -303,21 +303,14 @@ relation to a subset of the attributes of that relation.
 
 \subsection{Generating RDF Dataset}%
 \label{sub:gen_rdf_dataset}
-Given a mapping relation~$r = \mappingRel$ with $\subjAttr, \predAttr, \objAttr, \graphAttr \in \symAttrSubSet$, 
-an \textbf{RDF dataset} is generated as from $r$ as follows: 
-For each mapping tuple~$\mappingTuple$ in $\symMappingInst$, an RDF triple is
-generated using the term values returned by
-$\mappingTuple(\subjAttr),\mappingTuple(\predAttr),$ and $\mappingTuple(\objAttr)$
-as \textbf{subject, predicate, and object} respectively. 
-The generated RDF triple belongs to the RDF graph returned 
-by $\mappingTuple(\graphAttr)$. 
-
-
-\todo[inline]{What happens if the triple $\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr)$ is not a valid RDF triple? \\ (e.g., $\mappingTuple(\subjAttr)$ may be a literal or any of the three values may be $\error$)}
-\todo[inline]{What happens if $\mappingTuple(\graphAttr)$ is $\error$ or is a literal?}
-\todo[inline]{How is the default graph handled? I see that in line~40 of Algorithm~\ref{alg:rml2algebra_part2} you say "where $o$ is the default graph IRI". Is this $o$ introduced anywhere? Notice that, in RDF, the default graph does not have an IRI, and the notion of "the default graph IRI" is not a concept in RDF. Also, I don't like picking some IRI and then saying that every mapping tuple with this IRI in the $\graphAttr$ column is meant to produce a triple for the default graph, because an RML description may accidentally produce this very IRI in a graph map. --- Oh, wait. I see that RML/R2RML even introduces an IRI for this very purpose: rr:defaultGraph. In this case, I am fine with using that. But still, you need to be accurate about the default graph in the generated RDF dataset, as that one does not have an IRI.}
-\todo[inline]{So, here is a definition that addresses all of these issues (but you still need to change line~40 of Algorithm~\ref{alg:rml2algebra_part2}):}
-
+%Given a mapping relation~$r = \mappingRel$ with $\subjAttr, \predAttr, \objAttr, \graphAttr \in \symAttrSubSet$, 
+%an \textbf{RDF dataset} is generated as from $r$ as follows: 
+%For each mapping tuple~$\mappingTuple$ in $\symMappingInst$, an RDF triple is
+%generated using the term values returned by
+%$\mappingTuple(\subjAttr),\mappingTuple(\predAttr),$ and $\mappingTuple(\objAttr)$
+%as \textbf{subject, predicate, and object} respectively. 
+%The generated RDF triple belongs to the RDF graph returned 
+%by $\mappingTuple(\graphAttr)$. 
 Let $r = \mappingRel$ be a mapping relation with $\subjAttr, \predAttr, \objAttr, \graphAttr \in \symAttrSubSet$. The \textbf{RDF dataset generated from $r$} is the RDF dataset
 \begin{equation*}
 	D =

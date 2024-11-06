@@ -311,7 +311,23 @@ relation to a subset of the attributes of that relation.
 %as \textbf{subject, predicate, and object} respectively. 
 %The generated RDF triple belongs to the RDF graph returned 
 %by $\mappingTuple(\graphAttr)$. 
-Let $r = \mappingRel$ be a mapping relation with $\subjAttr, \predAttr, \objAttr, \graphAttr \in \symAttrSubSet$. The \textbf{RDF dataset generated from $r$} is the RDF dataset
+Let $r = \mappingRel$ be a mapping relation with $\subjAttr, \predAttr, \objAttr, \graphAttr \in \symAttrSubSet$, and let
+\begin{align*}
+	\symMappingInst_\mathrm{valid}
+	& =
+	\bigl\{
+		\mappingTuple \in \symMappingInst
+		\,\big|\,
+		\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr) \text{ is an RDF triple}
+	\bigr\}
+	\; \text{ and}
+	\\
+	N
+	& =
+	\bigl\{ \mappingTuple(\graphAttr) \in \symAllIRIs\cup\symAllBNodes \,\big|\, \mappingTuple \in \symMappingInst_\mathrm{valid} \text{ and $\mappingTuple(\graphAttr)$ is not the IRI } \texttt{rr:defaultGraph} \bigr\}
+	.
+\end{align*}
+The \textbf{RDF dataset generated from $r$} is the RDF dataset
 \begin{equation*}
 	D =
 	\{ G_\mathrm{dflt} \}
@@ -323,31 +339,21 @@ Let $r = \mappingRel$ be a mapping relation with $\subjAttr, \predAttr, \objAttr
 	\bigr\}
 	,
 \end{equation*}
-where
-\begin{equation*}
-	N = \bigl\{ \mappingTuple(\graphAttr) \in \symAllIRIs\cup\symAllBNodes \,\big|\, \mappingTuple \in \symMappingInst \text{ and $\mappingTuple(\graphAttr)$ is not the IRI } \texttt{rr:defaultGraph} \bigr\}
-	,
-\end{equation*}
+where, for every $n \in N$,
 \begin{align*}
-	G_\mathrm{dflt} =
-	\Bigl\{
+	G_n & =
+	\bigl\{
 		\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr)
-		\in (\symAllIRIs\cup\symAllBNodes) \times \symAllIRIs \times (\symAllIRIs\cup\symAllBNodes\cup\symAllLiterals)
-		\,\Big|\,
-		& \mappingTuple \in \symMappingInst \text{ such that } \mappingTuple(\graphAttr) \text{ is}
-		\\[-2mm]
-		& \text{the IRI } \texttt{rr:defaultGraph}
-	\Bigr\}
-	,
-\end{align*}
-and, for every $n \in N$,
-\begin{equation*}
-	G_n =
-	\Bigl\{
+		\,\big|\,
+		\mappingTuple \in \symMappingInst_\mathrm{valid} \text{ such that } \mappingTuple(\graphAttr)=n
+	\bigr\}
+	\; \text{ and}
+	\\
+	G_\mathrm{dflt} & =
+	\bigl\{
 		\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr)
-		\in (\symAllIRIs\cup\symAllBNodes) \times \symAllIRIs \times (\symAllIRIs\cup\symAllBNodes\cup\symAllLiterals)
-		\,\Big|\,
-		\mappingTuple \in \symMappingInst \text{ such that } \mappingTuple(\graphAttr)=n
-	\Bigr\}
+		\,\big|\,
+		\mappingTuple \in \symMappingInst_\mathrm{valid} \text{ such that } \mappingTuple(\graphAttr) \text{ is } \texttt{rr:defaultGraph}
+	\bigr\}
 	.
-\end{equation*}
+\end{align*}

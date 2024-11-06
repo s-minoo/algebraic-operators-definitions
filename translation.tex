@@ -13,7 +13,6 @@
 	\begin{enumerate}
         \item All \texttt{rr:class} definitions are replaced by predicate object maps
 		\item All shortcuts for constant-term maps have been expanded,
-\todo[inline]{The query for this point contains the variable \texttt{?pompm} in both the DELETE and the INSERT clause, but not in the WHERE clause. I think there is a copy-and-paste error in the WHERE clause.}
 		\item Every predicate-object map with multiple predicate or object
 		      maps is replaced by a corresponding set of predicate-object maps that each have a single
 		      predicate map and a single object map,
@@ -82,7 +81,7 @@ INSERT {
 
     ?pomom rr:objectMap [
         rr:constant ?om_constant; 
-        rr:termType ?om_termtype;
+        rr:termType ?otermtype;
     ].
 
     ?termMap rr:graphMap [
@@ -92,10 +91,10 @@ INSERT {
 }
 WHERE {
     {?tm rr:subject ?sm_constant .} UNION
+    {?pompm rr:predicate ?om_constant .} UNION
     {?pomom rr:object ?om_constant .
-    BIND( IF(isIRI(?om_constant), rr:IRI, rr:Literal) AS ?om_termtype )
+    BIND( IF(isIRI( ?om_constant ), rr:IRI, rr:Literal) AS ?otermtype)
     } UNION
-    {?pomom rr:object ?om_constant .} UNION
     {?termMap rr:graph ?gm_constant .}
 }
 \end{lstlisting}

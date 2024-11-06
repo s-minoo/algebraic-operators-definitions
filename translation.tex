@@ -19,14 +19,12 @@
 		\item Every referencing-object map with a parent triples map without join
               conditions is replaced by a corresponding object map with the 
               subject IRI of the parent triples map as the reference value.
-		\item Every triple map with multiple predicate-object maps is
-		      replaced by a corresponding set of triple maps that each have one of
+		\item Every triples map with multiple predicate-object maps is
+		      replaced by a corresponding set of triples maps that each have one of
 		      the predicate-object maps.
-		\item Every triple map
-\todo{Is it called "triple map" or "triples map"? Be consistent throughout the paper!}
-		      with multiple graph maps is
-		      replaced by a corresponding set of triple maps that each have one of
-		      the graph maps.
+        \item Every triples map with multiple graph maps is replaced by a
+              corresponding set of triples maps that each have one of the graph
+              maps.
 \todo[inline]{The WHERE clause of the query for point this matches only for triples maps that have both a subject map with a graph map and a predicate-object map with a graph map. Can there be cases that only the subject map has a graph map but not the predicate-object map, or vice versa?}
 \todo[inline]{Moreover, the second block in the INSERT clause associates ?gm2 with ?sm. Shouldn't it be associated with ?pom instead?}
 	\end{enumerate}
@@ -157,8 +155,8 @@ WHERE{
 
 
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to replace
-every triple map that has multiple predicate-object maps by a corresponding
-set of triple maps that each have one of the predicate-object maps},
+every triples map that has multiple predicate-object maps by a corresponding
+set of triples maps that each have one of the predicate-object maps},
 label={lst:sparql_tm_singlepom}, float=ht]
 
 DELETE{

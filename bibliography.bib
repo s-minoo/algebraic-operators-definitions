@@ -1,3 +1,69 @@
+@inproceedings{Xu2024RAGKGLinkedin,
+author = {Xu, Zhentao and Cruz, Mark Jerome and Guevara, Matthew and Wang, Tie and Deshpande, Manasi and Wang, Xiaofeng and Li, Zheng},
+title = {Retrieval-Augmented Generation with Knowledge Graphs for Customer Service Question Answering},
+year = {2024},
+isbn = {9798400704314},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3626772.3661370},
+doi = {10.1145/3626772.3661370},
+abstract = {In customer service technical support, swiftly and accurately retrieving relevant past issues is critical for efficiently resolving customer inquiries. The conventional retrieval methods in retrieval-augmented generation (RAG) for large language models (LLMs) treat a large corpus of past issue tracking tickets as plain text, ignoring the crucial intra-issue structure and inter-issue relations, which limits performance. We introduce a novel customer service question-answering method that amalgamates RAG with a knowledge graph (KG). Our method constructs a KG from historical issues for use in retrieval, retaining the intra-issue structure and inter-issue relations. During the question-answering phase, our method parses consumer queries and retrieves related sub-graphs from the KG to generate answers. This integration of a KG not only improves retrieval accuracy by preserving customer service structure information but also enhances answering quality by mitigating the effects of text segmentation. Empirical assessments on our benchmark datasets, utilizing key retrieval (MRR, Recall@K, NDCG@K) and text generation (BLEU, ROUGE, METEOR) metrics, reveal that our method outperforms the baseline by 77.6\% in MRR and by 0.32 in BLEU. Our method has been deployed within LinkedIn's customer service team for approximately six months and has reduced the median per-issue resolution time by 28.6\%.},
+booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+pages = {2905–2909},
+numpages = {5},
+keywords = {knowledge graph, large language model, question answering, retrieval-augmented generation},
+location = {Washington DC, USA},
+series = {SIGIR '24}
+}
+@ARTICLE{Ji2022KGSurvey,
+  author={Ji, Shaoxiong and Pan, Shirui and Cambria, Erik and Marttinen, Pekka and Yu, Philip S.},
+  journal={IEEE Transactions on Neural Networks and Learning Systems}, 
+  title={A Survey on Knowledge Graphs: Representation, Acquisition, and Applications}, 
+  year={2022},
+  volume={33},
+  number={2},
+  pages={494-514},
+  keywords={Cognition;Knowledge based systems;Semantics;Knowledge acquisition;Task analysis;Taxonomy;Extraterrestrial measurements;Deep learning;knowledge graph completion (KGC);knowledge graph;reasoning;relation extraction;representation learning},
+  doi={10.1109/TNNLS.2021.3070843}
+}
+
+@InProceedings{Tailhardat2024NORIA,
+author="Tailhardat, Lionel
+and Chabot, Yoan
+and Troncy, Raphael",
+editor="Mero{\~{n}}o Pe{\~{n}}uela, Albert
+and Dimou, Anastasia
+and Troncy, Rapha{\"e}l
+and Hartig, Olaf
+and Acosta, Maribel
+and Alam, Mehwish
+and Paulheim, Heiko
+and Lisena, Pasquale",
+title="NORIA-O: An Ontology for Anomaly Detection and Incident Management in ICT Systems",
+booktitle="The Semantic Web",
+year="2024",
+publisher="Springer Nature Switzerland",
+address="Cham",
+pages="21--39",
+abstract="Large-scale Information and Communications Technology (ICT) systems give rise to difficult situations such as handling cascading failures and detecting complex malicious activities occurring on multiple services and network layers. For network supervision, managing these situations while ensuring the high-standard quality of service and security requires a comprehensive view on how communication devices are interconnected and are performing. However, the information is spread across heterogeneous data sources which triggers information integration challenges. Existing data models enable to represent computing resources and how they are allocated. However, to date, there is no model to describe the inter-dependencies between the structural, dynamic, and functional aspects of a network infrastructure. In this paper, we propose the NORIA ontology that has been developed together with network and cybersecurity experts in order to describe an infrastructure, its events, diagnosis and repair actions performed during incident management. A use case describing a fictitious failure shows how this ontology can model complex situations and serve as a basis for anomaly detection and root cause analysis. The ontology is available at https://w3id.org/noriaand empowers the largest telco operator in France.",
+isbn="978-3-031-60635-9"
+}
+
+
+@article{Sakor2023KG4Covid,
+title = {Knowledge4COVID-19: A semantic-based approach for constructing a COVID-19 related knowledge graph from various sources and analyzing treatments’ toxicities},
+journal = {Journal of Web Semantics},
+volume = {75},
+pages = {100760},
+year = {2023},
+issn = {1570-8268},
+doi = {https://doi.org/10.1016/j.websem.2022.100760},
+url = {https://www.sciencedirect.com/science/article/pii/S1570826822000440},
+author = {Ahmad Sakor and Samaneh Jozashoori and Emetis Niazmand and Ariam Rivas and Konstantinos Bougiatiotis and Fotis Aisopos and Enrique Iglesias and Philipp D. Rohde and Trupti Padiya and Anastasia Krithara and Georgios Paliouras and Maria-Esther Vidal},
+keywords = {Knowledge graphs, COVID-19, Drug–drug interactions},
+abstract = {In this paper, we present Knowledge4COVID-19, a framework that aims to showcase the power of integrating disparate sources of knowledge to discover adverse drug effects caused by drug–drug interactions among COVID-19 treatments and pre-existing condition drugs. Initially, we focus on constructing the Knowledge4COVID-19 knowledge graph (KG) from the declarative definition of mapping rules using the RDF Mapping Language. Since valuable information about drug treatments, drug–drug interactions, and side effects is present in textual descriptions in scientific databases (e.g., DrugBank) or in scientific literature (e.g., the CORD-19, the Covid-19 Open Research Dataset), the Knowledge4COVID-19 framework implements Natural Language Processing. The Knowledge4COVID-19 framework extracts relevant entities and predicates that enable the fine-grained description of COVID-19 treatments and the potential adverse events that may occur when these treatments are combined with treatments of common comorbidities, e.g., hypertension, diabetes, or asthma. Moreover, on top of the KG, several techniques for the discovery and prediction of interactions and potential adverse effects of drugs have been developed with the aim of suggesting more accurate treatments for treating the virus. We provide services to traverse the KG and visualize the effects that a group of drugs may have on a treatment outcome. Knowledge4COVID-19 was part of the Pan-European hackathon#EUvsVirus in April 2020 and is publicly available as a resource through a GitHub repository and a DOI.}
+}
+
 @inproceedings{Freund2024FlexRMLKGCW,
   author       = {Michael Freund and
                   Sebastian Schmid and

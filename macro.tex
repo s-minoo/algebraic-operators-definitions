@@ -56,8 +56,8 @@
 \newcommand{\dataSource}{s}
 \newcommand{\dataSourceTuple}{(\sourceType,\symDataset)}
 \newcommand{\iterConfig}{\bbbc}
-\newcommand{\iterConfigTuple}{(\queryExpr_{root}, \symAttrQueryMap)}
-\newcommand{\sourceOp}{Source}
+\newcommand{\sourceOp}[3]{\textrm{Source}^{(#1,#2,#3)}}
+\newcommand{\sourceOpDflt}{\sourceOp{\dataSource}{\queryExpr_{root}}{\symAttrQueryMap}}
 \newcommand{\sourceOpTuple}{(\dataSource, \iterConfig)}
 \newcommand{\attrQueryPair}{(\attr \rightarrow \queryExpr)}
 \newcommand{\typeCast}{cast}
@@ -92,14 +92,14 @@
 \newcommand{\LTB}{\mathit{L2B}}
 \newcommand{\tempSubStrs}{\texttt{tempSubStrs}}
 \newcommand{\substrSeq}{\bar{S}}
-\newcommand{\projectOp}{\text{Project}^{\symProjSet}}
+\newcommand{\projectOp}[1]{\text{Project}^{#1}}
 \newcommand{\natJoin}{\text{NatJoin}}
 \newcommand{\union}{\text{Union}}
 
 % Functions % 
 \newcommand{\fctDom}[1]{\mathrm{dom}(#1)}
 \newcommand{\fctMappingTuple}[1]{\mappingTuple(#1)}
-\newcommand{\fctVars}[1]{\fctsymVars(#1)}
+\newcommand{\fctAttrs}[1]{\mathrm{attrs}(#1)}
 \newcommand{\fctCard}[2]{\card[#1](#2)}
 \newcommand{\fctRootIt}[2]{\rootIt(#1, #2)}
 \newcommand{\fctCobit}[3]{\cobit(#1, #2, #3)}
@@ -107,15 +107,19 @@
 \newcommand{\fctEvalLang}[3]{\eval^{#3}(#1,#2)}
 \newcommand{\fctCbeval}[3]{\cbeval(#1,#2,#3)}
 \newcommand{\fctCbevalLang}[4]{\cbeval^{#4}(#1,#2,#3)}
-\newcommand{\fctSourceOp}[2]{\text{\sourceOp}^{#1}(#2)}
 \newcommand{\fctTypeCast}[1]{\typeCast(#1)}
 \newcommand{\fctLength}[1]{\length(#1)}
 \newcommand{\fctRenameTuple}[2]{rename^{#1}(#2)}
 \newcommand{\fctSubst}[2]{subst^{#1}(#2)}
 \newcommand{\fctExtFuncEvalN}[2]{\extFunc(\fctEval{#1_1}{#2},\dots,\fctEval{#1_n}{#2})}
 \newcommand{\fctExtOp}[1]{\extOp(#1)}
+\newcommand{\fctExtOpBig}[1]{\extOp\bigl(#1\bigr)}
+\newcommand{\fctExtOpX}[3]{\text{Extend}^{#1}_{#2}(#3)}
+\newcommand{\fctExtOpXBig}[3]{\text{Extend}^{#1}_{#2}\bigl(#3\bigr)}
 \newcommand{\fctRenameOp}[1]{\renameOp(#1)}
+\newcommand{\fctRenameOpBig}[1]{\renameOp\bigl(#1\bigr)}
 \newcommand{\fctEquiJoinOp}[2]{\equiJoinOp(#1, #2)}
+\newcommand{\fctEquiJoinOpBig}[2]{\equiJoinOp\bigl(#1, #2\bigr)}
 \newcommand{\fctToIRI}[1]{\toIRI(#1)}
 \newcommand{\fctToBNode}[1]{\toBNode(#1)}
 \newcommand{\fctToLiteral}[1]{\toLiteral(#1)}
@@ -125,7 +129,9 @@
 \newcommand{\fctConcat}[2]{\concat(#1, #2)}
 \newcommand{\fctConcatSeq}[1]{\concatSeq(#1)}
 \newcommand{\fctTempSubStrs}[1]{\tempSubStrs(#1)}
-\newcommand{\fctProjectOp}[1]{\projectOp(#1)}
+\newcommand{\fctProjectOpDflt}[1]{\fctProjectOp{\symProjSet}{#1}}
+\newcommand{\fctProjectOp}[2]{\projectOp{#1}(#2)}
+\newcommand{\fctProjectOpBig}[2]{\projectOp{#1}\bigl(#2\bigr)}
 \newcommand{\fctNatJoin}[2]{\natJoin(#1,#2)}
 \newcommand{\fctUnion}[2]{\union(#1,#2)}
 

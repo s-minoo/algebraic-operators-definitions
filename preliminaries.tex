@@ -37,6 +37,7 @@ We build up the definition of a mapping relation in two steps as follows:
 
 
 \begin{definition}
+	\normalfont
 	A \textbf{mapping tuple} is a partial function $\mappingTuple:
 		\symAttrUniverse \rightarrow \symTermUniverse \cup \{\error\}$.
 \end{definition}
@@ -53,18 +54,20 @@ Given two mapping tuples $\mappingTuple$ and $\mappingTuple'$ that are compatibl
 
 
 \begin{definition}
-	A \textbf{mapping relation} is a tuple $\mappingRel$, where
+	\normalfont
+	A \textbf{mapping relation}~$r$ is a tuple $\mappingRel$, where
 	$\symAttrSubSet \subset \symAttrUniverse$ is a finite, non-empty set of attributes
     and 	
-	$\symMappingInst$ is a set of mapping tuples such that
-	$\mathrm{dom}(\mappingTuple) = \symAttrSubSet$ for every $\mappingTuple$ in $\symMappingInst$, % i.e., each mapping tuple in $\mappingInst$ is defined for $\symAttrSubSet$
-	and
-	$\fctMappingTuple{a} \in \symTermUniverse \cup \{\error\}$ for all $a \in \symAttrSubSet$.
+	$\symMappingInst$ is a set of mapping tuples such
+		that, for every such tuple~$\mappingTuple \in \symMappingInst$, it holds that $\mathrm{dom}(\mappingTuple) = \symAttrSubSet$.
+		%that $\mathrm{dom}(\mappingTuple) = \symAttrSubSet$ for all $\mappingTuple$ in $\symMappingInst$.
 	We call $\symAttrSubSet$ the \textbf{schema} of the mapping relation
 	and $\symMappingInst$ is the \textbf{instance} of the mapping relation.
 	\label{def:mapping_relation}
 \end{definition}
 
-
+For the sake of conciseness, we sometimes write $\mappingTuple \in r$ to denote that $\mappingTuple$ is a mapping tuple in
+	the instance~%
+$\symMappingInst$ of a mapping relation $r=\mappingRel$.
 
 

@@ -508,9 +508,9 @@ given CSV column name.
         \Ensure A mapping definition
         \State $\omega \gets$ initially empty mapping definition \Comment Definition~\ref{def:mapping_definition}
 		\For{$(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
-	    	\State  $\iterConfigTuple \gets$ \textbf{TranslateSourceOperator}($\symRMLGraph, \triplesMapIRI$) \Comment{Algorithm~\ref{alg:rml_source_op}}
+	    	\State  $(\queryExpr_{root},\symAttrQueryMap) \gets$ \textbf{TranslateSourceOperator}($\symRMLGraph, \triplesMapIRI$) \Comment{Algorithm~\ref{alg:rml_source_op}}
             \State   $src \gets \textrm{initSrc}(o')$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$ \Comment Definition~\ref{def:init_data_source}
-	    	\State   $\omega' \gets \fctSourceOp{\iterConfigTuple}{src}$
+	    	\State   $\omega' \gets \sourceOp{src}{\queryExpr_{root}}{\symAttrQueryMap}$
 
             \Statex
             \State $tm_{sub} \gets o$, where triple $(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
@@ -534,9 +534,9 @@ given CSV column name.
             \State $tm_{obj} \gets o$ where triple $(s,\texttt{rr:objectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$ 
             \If{$(tm_{obj},\texttt{rr:parentTriplesMap},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
 		        \State $s_{ptm} \gets o'$
-		        \State  $\iterConfigTuple \gets $ \textbf{TranslateSourceOperator}($\symRMLGraph, s_{ptm}$) \Comment{Algorithm~\ref{alg:rml_source_op}}
+		        \State  $(\queryExpr_{root},\symAttrQueryMap) \gets $ \textbf{TranslateSourceOperator}($\symRMLGraph, s_{ptm}$) \Comment{Algorithm~\ref{alg:rml_source_op}}
                 \State   $source_{ptm} \gets \fctInitSrc{o''}$ with $(s'',\texttt{rr:logicalSource},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
-		        \State  $\omega_{ptm} \gets \fctSourceOp{\iterConfigTuple}{source_{ptm}}$
+		        \State  $\omega_{ptm} \gets \sourceOp{source_{ptm}}{\queryExpr_{root}}{\symAttrQueryMap}$
                 \State $\symJoinAttrPairs \gets \emptyset$
                 \For{$(tm_{obj},\texttt{rr:joinCondition},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
                     \State  $a \gets \symAttrQueryMap^{-1}(o'') $ for $o''$ in triple $(o',\texttt{rr:child},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
@@ -564,7 +564,7 @@ given CSV column name.
 
             \Statex
             \State $\symProjSet \gets \{\attr_{s},\attr_{p},\attr_{o},\attr_{g},\}$
-            \State $\omega' \gets \fctProjectOp{\omega'}$
+            \State $\omega' \gets \fctProjectOp{\symProjSet}{\omega'}$
             \State $\omega \gets  \fctUnion{\omega'}{\omega}$
 		\EndFor
 	\end{algorithmic}

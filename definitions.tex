@@ -67,14 +67,13 @@ data access language.
 
 \begin{definition}
 	\label{def:source_operator}
+	\normalfont
 	Let $\dataSource = \dataSourceTuple$ be a data source with
-	$\sourceType=\sourceTypeTuple$.
-	Given a tuple~$\iterConfigTuple$, where
-	$\queryExpr_{root} \in \symDataAcc$ and
-	$\symAttrQueryMap$ is a partial function
-	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$,
-	the \textbf{$\iterConfigTuple$-specific mapping relation obtained from
-        $\dataSource$}, denoted by $\fctSourceOp{\iterConfigTuple}{s}$,  is the mapping relation $\mappingRel$ such that
+	$\sourceType=\sourceTypeTuple$,
+	$\queryExpr_{root} \in \symDataAcc$, and
+	$\symAttrQueryMap$ be a partial function
+	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$.
+	The \textbf{$(\queryExpr_{root},\symAttrQueryMap)$-specific mapping relation obtained from $\dataSource$}, denoted by $\sourceOpDflt$, is the mapping relation $\mappingRel$ such that
 	\begin{align*}
 		\symAttrSubSet  & = \fctDom{\symAttrQueryMap},
 		\; \text{ and}
@@ -120,7 +119,7 @@ relation to a subset of the attributes of that relation.
 		\symAttrSubSet$ be a non-empty subset of the
 	attributes of $r$.
 	The \textbf{$\symProjSet$-specific projection of $r$}, denoted by
-    $\fctProjectOp{r}$, is the mapping relation $(\symAttrSubSet',
+    $\fctProjectOpDflt{r}$, is the mapping relation $(\symAttrSubSet',
 		\symMappingInst')$ such that $\symAttrSubSet' = \symProjSet$ 
         and $\symMappingInst' = \{ \mappingTuple[\symAttrSubSet'] \ | \
 		\mappingTuple \in \symMappingInst \}$.
@@ -186,11 +185,19 @@ relation to a subset of the attributes of that relation.
 	% 	\end{equation*}
 \end{definition}
 
+For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote the set of all attributes mentioned in $\extExpr$. Formally, this set is defined recursively as follows.
+\begin{enumerate}
+	\item If $\extExpr$ is an RDF term, then $\fctAttrs{\extExpr} = \emptyset$.
+	\item If $\extExpr$ is an attribute $\attr \in \symAttrUniverse$, then $\fctAttrs{\extExpr} = \{\attr\}$.
+	\item If $\extExpr$ is of the form $\extFuncTuple$, then $\fctAttrs{\extExpr} = \bigcup_{i \in \{1,\ldots,n\}} \fctAttrs{\extExpr_i}$.
+\end{enumerate}
+
 
 \begin{definition}
+	\label{def:extend_operator}
 	Let $r = \mappingRel$ be a mapping relation, $\attr \in \symAttrUniverse$ be
 	an attribute that is not in $\symAttrSubSet$ (i.e., $\attr \notin \symAttrSubSet$),
-	and $\extExpr$ be an extend expression.
+	and $\extExpr$ be an extend expression that is valid for $r$.
 	The \textbf{$\extExpr$-specific extension of $r$ for $\attr$}, 
     denoted by $\fctExtOp{r}$,
 	is the mapping tuple

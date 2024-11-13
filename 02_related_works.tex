@@ -1,21 +1,58 @@
 \section{Related Works}%
 \label{sec:related_works}
 
-To the best of our knowledge, little research has been conducted on the formalizations of 
-declarative mapping languages for knowledge graph construction.
 According to Van Assche et al.~\cite{VanAssche2022DeclarativeRDFgraph}, 
 declarative mapping languages can be further categorized into two categories: 
 i) \emph{dedicated languages} which extend specifications or use custom
 syntaxes, and ii) \emph{repurposed languages} which repurpose existing
 specifications or query languages to support knowledge graph construction.
 In this section, we briefly review existing works on formalizations of 
-dedicated mapping languages for knowledge graph constructions. 
+dedicated mapping languages for knowledge graph construction. 
 
 We do not consider repurposed mapping languages in this work since they 
 inherit the formalizations of the specifications or query languages on which
 they are based upon, limiting them to the syntax of the parent languages and not 
-applicable for mapping languages in general. 
+applicable for formalizing a language-agnostic mapping process. 
 
-
-\subsection{Dedicated mapping languages}
+\subsection{Formalizations in Dedicated Mapping Languages}
 \label{sub:dedicated_mapping_languages}
+R2RML~\cite{Seema2012R2RML} is a dedicated mapping language, using
+Turtle-syntax, for generating knowledge graphs from relational databases. 
+It has been used as the basis for a family of mapping languages which extends 
+its scope from relational database to (semi)-structured data~\cite{VanAssche2022DeclarativeRDFgraph}, 
+such as RML~\cite{dimou_ldow_2014}, D2RML~\cite{Chortaras2018D2RML}, and xR2RML~\cite{michel2015translation}. 
+Thus, it is important to consider the formalization studies conducted on 
+R2RML which can have impact on the languages in the R2RML family.  
+
+Sequeda et al.~\cite{Sequeda2013R2RML} provided formalizations of the 
+operational semantics of R2RML using Datalog.
+They proved that the semantics of R2RML can be captured using 57 distinct 
+Datalog rules to generate RDF from relational databases. 
+However, since R2RML's scope is limited to relational databases, the same 
+formalizations cannot be applied to other languages whose scope is much larger
+than just relational databases.  
+
+D2RML and xR2ML do not provide any formal operational semantics for executing
+the mapping process described in their respective languages nor were there any
+studies conducted for formalizing these languages.
+In contrast, a few studies on formalization of RML have been published in 
+recent years~\cite{MinOo2023TowardsAlgebra,Iglesias2022ScalingKnowledgeGraph}
+Iglesias et al.~\cite{Iglesias2022ScalingKnowledgeGraph} focused on formalizing 
+the optimization of executing the mapping process in a RML document.
+The formalization relied on the syntax of RML to provide 
+operational semantics such as using RML's concept of triples map to 
+describe mapping assertions. 
+Furthermore, the authors did not explore if it is possible to apply the same
+formalizations to provide semantics for other mapping languages where the 
+concept of triples maps do not exist. 
+
+An initial study explored the provision of formal semantics for the 
+mapping process in a language-agnostic manner through \emph{algebraic mapping
+operators}~\cite{MinOo2023TowardsAlgebra}. 
+However, this preliminary work does not provide a complete semantics for 
+mapping processes, since it does not provide a way to capture the semantics of
+joining multiple mapping processes which RML can describe. 
+Thus, there is still a lack of study in providing language-agnostic, complete,
+and well-defined semantics to the mapping process of generating knowledge
+graphs from (semi)-structured data.
+

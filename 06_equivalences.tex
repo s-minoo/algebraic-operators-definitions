@@ -6,15 +6,26 @@ In addition to providing a basis to formally define the semantics of a mapping l
 	%That is,
 such tools may use our algebra
 	as a form of language
-to internally represent the plans that they create for converting data according to a given mapping description, and then they may use algebraic equivalences to rewrite initial mapping plans into more efficient ones. While an extensive study of such optimization opportunities is beyond the scope of this paper, in this section we show a number of such equivalences and describe how they may be relevant for a plan optimizer.
+to internally represent the plans that they create for converting data according to a given mapping description, and then they may use algebraic equivalences to rewrite initial mapping plans into more efficient ones%
+	~(with the provable guarantee that the rewritten plans produce the same result!)%
+. While an extensive study of such optimization opportunities is beyond the scope of this paper, in this section we show a number of such equivalences and describe how they may be relevant for a plan optimizer.
 
 \subsection{Projection Pushing}
 
-TODO (Olaf) some text here
+The first group of equivalences focuses on pushing
+	project operators
+	%projections
+deeper into a given plan. This may be useful to reduce the size of intermediate mapping relations in terms of
+	values for attributes
+	%columns
+that are not used anymore later in the plan.
+	Dropping such attributes from intermediate mapping relations as early as possible reduces the memory space required for executing the mapping
+		%plan and, thus, may make the execution more efficient.
+		plan.
 
-
-The following result shows that there are cases in which a projection operator over an extend-based subexpression may be pushed completely into this subexpression. In particular, this is the case if the set of projection attributes coincides with the set of attributes mentioned by the corresponding extend expression, together with the extend attribute.
-\todo{adapt}
+As a typical example of an algebraic equivalence that an optimizer may use for this purpose, consider the following result, which shows that a project operator over an extend-based subexpression may be pushed
+	%completely
+into this subexpression if the set of projection attributes contains both the extend attribute and the attributes mentioned by the corresponding extend expression (if any).
 
 \begin{proposition}
 	\label{prop:FullProjectPushing}
@@ -57,7 +68,9 @@ The following result shows that there are cases in which a projection operator o
 	\qed
 \end{proof}
 
-\newpage
+
+To satisfy the condition for the equivalence in Proposition~\ref{prop:FullProjectPushing} and, thus, to facilitate projection pushing based on this equivalence, in some cases, it may be necessary to first add another projection with additional projection attributes. The following result shows an equivalence that can be used for this purpose.
+
 \begin{proposition}
 	\label{prop:ProjectSplitting}
 	\normalfont
@@ -73,11 +86,18 @@ The following result shows that there are cases in which a projection operator o
 \end{proposition}
 
 
+As a corollary of
+	the previous two results,
+	%Propositions~\ref{prop:FullProjectPushing} and~\ref{prop:ProjectSplitting},
+it is possible to push some projection attributes into an extend-based subexpression even in cases in which the condition for the equivalence in Proposition~\ref{prop:FullProjectPushing} is not directly satisfied.
+
 \begin{corollary}
-	\label{prop:PartialProjectPushing}
+	\label{corr:PartialProjectPushing}
 	\normalfont
 	Let $r = \mappingRel$ be a mapping relation,
-	$\attr \in \symAttrUniverse$ be an attribute that is not in $\symAttrSubSet$ (i.e., $\attr \notin \symAttrSubSet$),
+	$\attr \in \symAttrUniverse$ be an attribute
+		%that is not in $\symAttrSubSet$ (i.e., $\attr \notin \symAttrSubSet$),
+		such that $\attr \notin \symAttrSubSet$,
 	$\extExpr$ be an extend expression, and
 	$\symProjSet \subseteq \symAttrSubSet \cup \{\attr\}$.
 	It holds that
@@ -96,21 +116,17 @@ The following result shows that there are cases in which a projection operator o
 	%%% also not be pushed.
 \end{corollary}
 
+We emphasize that, while the equivalence in Corollary~\ref{corr:PartialProjectPushing} does not eliminate the initial project operator, applying another projection already before the extend operator may still lead to efficiency gains due to reduced memory requirements, in particular if the added projection can be pushed down further.
 
+While further equivalences for projection pushing can be shown (e.g., into a join),
+	%which we consider as future work,
+we also want to highlight the existence of cases in which a project operator can be removed completely. For instance, every project operator
+	with a source operator as input
+	%over a source operator
+may be removed%
+	, as shown by the following result%
+.
 
-\begin{proposition}
-	\label{prop:ProjectionRemoval}
-	\normalfont
-	For every mapping relation $r = \mappingRel$, it holds that
-	\begin{equation*}
-		\fctProjectOp{\symAttrSubSet}{r}
-		=
-		r
-		.
-	\end{equation*}
-\end{proposition}
-
-A projection operator over a source operator may also be removed, as shown by the following result.
 \begin{proposition}
 	\label{prop:ProjectionIntoSource}
 	\normalfont
@@ -128,6 +144,28 @@ A projection operator over a source operator may also be removed, as shown by th
 	\end{equation*}
 	where $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$; i.e., $\fctDom{\symAttrQueryMap'} = \symProjSet$ and $\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'}$.
 \end{proposition}
+
+	As a final (and not particularly surprising) example, a
+	%Not surprisingly, a
+	%A
+project operator may also be removed completely (anywhere in a
+	mapping
+plan) if its set of projection attributes coincides with the attributes of the input relation%
+	%, as shown by the following result%
+.
+
+\begin{proposition}
+	\label{prop:ProjectionRemoval}
+	\normalfont
+	For every mapping relation $r = \mappingRel$, it holds that
+	\begin{equation*}
+		\fctProjectOp{\symAttrSubSet}{r}
+		=
+		r
+		.
+	\end{equation*}
+\end{proposition}
+
 
 \subsection{Pushing or Pulling Extend Operators}
 While pushing projections would be always useful in terms of the size of the intermediate mapping relations to be processed, the decision to push an extend operator that is on top of a join-based subplan into these subplans or to pull an extend operator out of such a subplan depends on the selectivity of the join. The following result shows an equivalence

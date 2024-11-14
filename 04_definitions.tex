@@ -155,32 +155,32 @@ relation to a subset of the attributes of that relation.
 \end{example}
 
 
-\subsection{Rename Operator}%
-\label{sub:rename_operator}
-
-
-\begin{definition}
-	\label{def:rename_operator}
-	Let $r = \mappingRel$ be a mapping relation.
-	Given a partial function
-	$\symRenamePFunc: \symAttrSubSet \rightarrow \symAttrUniverse$
-	that is injective,
-    the \textbf{$\symRenamePFunc$-specific renaming of $r$}, denoted by $\fctRenameOp{r}$, 
-	is the mapping relation $(\symAttrSubSet'\!, \symMappingInst')$ such that
-	\begin{align*}
-		\symAttrSubSet'  & =  (\symAttrSubSet \setminus dom(\symRenamePFunc)) \; \cup \;
-		\{ \symRenamePFunc(a) \ |  \ a \in dom(\symRenamePFunc) \}, \; \text{ and }                                       \\
-		\symMappingInst' & = \{ \fctRenameTuple{\symRenamePFunc}{\mappingTuple}\ | \ \mappingTuple \in \symMappingInst\}
-	\end{align*}
-	where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, we write $\fctRenameTuple{\symRenamePFunc}{\mappingTuple}$ to denote the mapping tuple~$\mappingTuple'$ for which it holds that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and, for every attribute~$\attr \in \fctDom{\mappingTuple'}$,
-	\begin{equation*}
-		\mappingTuple'(\attr) =
-		\begin{cases}
-			\mappingTuple(\symRenamePFunc^{-1}(a)) & \text{if $\attr \in \mathrm{img}(\symRenamePFunc)$,} \\
-			\mappingTuple(a)                       & \text{else.}
-		\end{cases}
-	\end{equation*}
-\end{definition}
+%\subsection{Rename Operator}%
+%\label{sub:rename_operator}
+%
+%
+%\begin{definition}
+%	\label{def:rename_operator}
+%	Let $r = \mappingRel$ be a mapping relation.
+%	Given a partial function
+%	$\symRenamePFunc: \symAttrSubSet \rightarrow \symAttrUniverse$
+%	that is injective,
+%    the \textbf{$\symRenamePFunc$-specific renaming of $r$}, denoted by $\fctRenameOp{r}$, 
+%	is the mapping relation $(\symAttrSubSet'\!, \symMappingInst')$ such that
+%	\begin{align*}
+%		\symAttrSubSet'  & =  (\symAttrSubSet \setminus dom(\symRenamePFunc)) \; \cup \;
+%		\{ \symRenamePFunc(a) \ |  \ a \in dom(\symRenamePFunc) \}, \; \text{ and }                                       \\
+%		\symMappingInst' & = \{ \fctRenameTuple{\symRenamePFunc}{\mappingTuple}\ | \ \mappingTuple \in \symMappingInst\}
+%	\end{align*}
+%	where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, we write $\fctRenameTuple{\symRenamePFunc}{\mappingTuple}$ to denote the mapping tuple~$\mappingTuple'$ for which it holds that $\fctDom{\mappingTuple'} = \symAttrSubSet'$ and, for every attribute~$\attr \in \fctDom{\mappingTuple'}$,
+%	\begin{equation*}
+%		\mappingTuple'(\attr) =
+%		\begin{cases}
+%			\mappingTuple(\symRenamePFunc^{-1}(a)) & \text{if $\attr \in \mathrm{img}(\symRenamePFunc)$,} \\
+%			\mappingTuple(a)                       & \text{else.}
+%		\end{cases}
+%	\end{equation*}
+%\end{definition}
 
 \subsection{Extend Operator}%
 \label{sub:extend_operator}

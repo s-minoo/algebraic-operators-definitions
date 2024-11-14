@@ -112,10 +112,6 @@ containing the following 2 rows of CSV data records as:
 \end{example}
 
 
-
-
-
-
 \subsection{Projection Operator}%
 \label{sub:projection_operator}
 
@@ -145,7 +141,18 @@ relation to a subset of the attributes of that relation.
 		\mappingTuple \in \symMappingInst \}$.
 \end{definition}
 
-
+\begin{example}
+    \label{ex:projection_operator}
+    Let $r = \mappingRel$ be the mapping relation generated in Example~\ref{ex:source_operator},
+    and $\symProjSet = \{?id, ?name\}$. 
+    The mapping relation $r' = (\symAttrSubSet', \symMappingInst')$ generated after
+    applying $\fctProjectOpDflt{r}$ has $\symAttrSubSet' = \{ ?id, ?name \}$,
+    with 
+    \begin{align*}
+        \symMappingInst' &= \{ t'_1, t'_2\} \text{ such that } t'_1 = \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}\}, \text{ and } \\
+        t'_2 &= \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}\}
+    \end{align*}
+\end{example}
 
 
 \subsection{Rename Operator}%

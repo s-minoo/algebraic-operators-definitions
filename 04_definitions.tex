@@ -92,6 +92,26 @@ data access language.
 
 
 
+\begin{example}
+\label{ex:source_operator}
+We provide a running example used throughout the rest of the paper starting
+with a CSV file with the header, $H= [(id, firstname, lastname, age)]$, 
+containing the following 2 rows of CSV data records as: 
+\begin{equation*}
+    \symDataset &= [(1, \text{Alice}, \text{Lee}, 23), (2, \text{Bob}, \text{Malice}, 25)] 
+\end{equation*}
+    A source operator, $\sourceOpDflt$, with $\dataSource = \dataSourceTuple$,
+    $\sourceType = \sourceTypeTuple$, $\queryExpr_{root}$ a CSV root query 
+    which, when evaluated as $\eval(\queryExpr_{root})$, will return the 2 CSV records in $\symDataset$
+    as data objects, and $\symAttrQueryMap = \{?id \rightarrow id,  ?name \rightarrow firstname, ?age \rightarrow age\}$    
+    generates a mapping relation $r = \mappingRel$  with:
+    \begin{align*}
+        \symAttrSubSet &= \{?id, ?name, ?age\} \text{ and } \symMappingInst = \{ t_1, t_2\}  \text{ such that } \\
+        t_1 &= \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}, ?age \rightarrow 23 \}\quad t_2 = \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}, ?age \rightarrow 25 \} \\
+    \end{align*}
+\end{example}
+
+
 
 
 

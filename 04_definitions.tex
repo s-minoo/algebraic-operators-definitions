@@ -130,6 +130,7 @@ relation to a subset of the attributes of that relation.
 
 \begin{definition}
 	\label{def:projection_operator}
+    \normalfont
 	Let $r = \mappingRel$ be a mapping relation and $\symProjSet \subseteq
 		\symAttrSubSet$ be a non-empty subset of the
 	attributes of $r$.
@@ -142,15 +143,14 @@ relation to a subset of the attributes of that relation.
 
 \begin{example}
     \label{ex:projection_operator}
-    Let $r = \mappingRel$ be the mapping relation generated in Example~\ref{ex:source_operator},
+    Let $r$ be the mapping relation generated in Example~\ref{ex:source_operator},
     and $\symProjSet = \{?id, ?name\}$. 
-    The mapping relation $r' = (\symAttrSubSet', \symMappingInst')$ generated after
-    applying $\fctProjectOpDflt{r}$ has $\symAttrSubSet' = \{ ?id, ?name \}$,
-    with 
-    \begin{align*}
-        \symMappingInst' &= \{ t'_1, t'_2\} \text{ such that } t'_1 = \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}\}, \text{ and } \\
-        t'_2 &= \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}\}
-    \end{align*}
+    The mapping relation $r'$ generated after applying $\fctProjectOpDflt{r}$
+    has mapping tuples $t'_1, t'_2 \in r'$ as:
+    \begin{equation*}
+        t'_1 = \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}\},
+        t'_2 = \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}\}
+    \end{equation*}
 \end{example}
 
 

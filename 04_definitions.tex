@@ -104,9 +104,8 @@ containing the following 2 rows of CSV data records as:
     $\sourceType = \sourceTypeTuple$, $\queryExpr_{root}$ a CSV root query 
     which, when evaluated as $\eval(\queryExpr_{root})$, will return the 2 CSV records in $\symDataset$
     as data objects, and $\symAttrQueryMap = \{?id \rightarrow id,  ?name \rightarrow firstname, ?age \rightarrow age\}$    
-    generates a mapping relation $r = \mappingRel$  with:
+    generates a mapping relation $r$  with two mapping tuples $t_1, t_2 \in r$ as:
     \begin{align*}
-        \symAttrSubSet &= \{?id, ?name, ?age\} \text{ and } \symMappingInst = \{ t_1, t_2\}  \text{ such that } \\
         t_1 &= \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}, ?age \rightarrow 23 \}\quad t_2 = \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}, ?age \rightarrow 25 \} \\
     \end{align*}
 \end{example}
@@ -260,6 +259,12 @@ For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote
 
 \end{definition}
 
+\begin{example}
+    \label{ex:extend_operator}
+The mapping relation generated in Example~\ref{ex:projection_operator} still 
+lacks the attributes $\attr_s, \attr_p, \attr_o$, and  $\attr_g$ required 
+for the generation of RDF dataset.
+\end{example} 
 
 
 \subsection{Equijoin Operator}%

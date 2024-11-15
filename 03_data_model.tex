@@ -1,9 +1,11 @@
 \section{Data Model}
 \label{sec:data_model}
-In this section, we provide a preliminary definition of terms which will be
-used throughout the rest of this paper in the definitions of
-the algebraic mapping operators.
+This section defines the data model that we introduce as the basis of our mapping algebra. This data model is a version of the relational data model,
+	restricted to a special kind of relations, that we call \emph{mapping relations}, in which the only possible values
+	%restricted to values that
+are RDF terms (plus a special value to capture processing errors).
 
+As a preliminary step for defining the model formally, we introduce relevant concepts of RDF:
 We let $\symAllStrings$ be the countably infinite set of strings (sequences of
 Unicode code points) and $\symAllIRIs$ be the subset of $\symAllStrings$ that
 consists of all strings that are valid IRIs. 
@@ -20,27 +22,25 @@ nodes}, which is disjoint from both $\symAllStrings$ and $\symAllLiterals$.
 The set~$\symTermUniverse$ of all \emph{RDF terms} is defined as
 $\symTermUniverse = \symAllIRIs \cup \symAllBNodes \cup \symAllLiterals$, and
 we write $\symTermSeqUniverse$ to denote the set of all possible sequences of
-terms (i.e., each element of $\symTermSeqUniverse$ is a sequence of elements of
-$\symTermUniverse$). 
-In addition to RDF terms, we also assume a special value $\error$ such that
-$\error \notin \symTermUniverse$, which shall be used to denote errors.
+terms; i.e., each element of $\symTermSeqUniverse$ is a sequence of elements of
+$\symTermUniverse$.
+As usual, an \emph{RDF triple} is a tuple $(s,p,o) \in (\symAllIRIs \cup \symAllBNodes) \times \symAllIRIs \times \symTermUniverse$, an \emph{RDF graph} is a set of RDF triples, and an \emph{RDF dataset} is a set $\big\{ G_\mathrm{dflt}, (n_1,G_1), \ldots, (n_m,G_m) \big\}$ where $G_\mathrm{dflt}, G_1, \ldots, G_m$ are RDF graphs, $m \geq 0$, and $n_i \in \symAllIRIs \cup \symAllBNodes$ for all $i \in \{1,\ldots,m\}$.
 
-Furthermore, we assume a countably infinite set~$\symAttrUniverse$ of
-\emph{attributes}, where $\subjAttr \in \symAttrUniverse$,
-$\predAttr \in \symAttrUniverse$, $\objAttr \in
-\symAttrUniverse$, and $\graphAttr \in \symAttrUniverse$ are four
-designated attributes.
-
-Using the aforementioned sets, we define the data model on which our algebraic
-mapping operators work: \textbf{a mapping relation}.
-We build up the definition of a mapping relation in two steps as follows:
-
+As additional ingredients for defining mapping relations, we assume a countably infinite set~$\symAttrUniverse$ of
+\emph{attributes} and a special value $\error$ such that $\error \notin \symTermUniverse$%
+	%, which shall be used to denote errors%
+, and we define the notion of a \emph{mapping tuple}, as
+	%the types of tuples
+	shall be
+used in mapping relations.
 
 \begin{definition}
 	\normalfont
 	A \textbf{mapping tuple} is a partial function $\mappingTuple:
 		\symAttrUniverse \rightarrow \symTermUniverse \cup \{\error\}$.
 \end{definition}
+
+\todo[inline]{Olaf, continue here ...}
 
 Two mapping tuples $\mappingTuple$ and $\mappingTuple'$ are \emph{compatible} if, for every attribute~$\attr \in \fctDom{\mappingTuple} \cap \fctDom{\mappingTuple'}$, it holds that $\mappingTuple(\attr) = \mappingTuple'(\attr)$.
 Given two mapping tuples $\mappingTuple$ and $\mappingTuple'$ that are compatible, we write $\mappingTuple \cup \mappingTuple'$ to denote the mapping tuple $\mappingTuple_\text{merged}$ that is the merge of $\mappingTuple$ and $\mappingTuple'$; that is, $\fctDom{\mappingTuple_\text{merged}} = \fctDom{\mappingTuple} \cup \fctDom{\mappingTuple'}$ and, for every attribute~$\attr \in \fctDom{\mappingTuple_\text{merged}}$,
@@ -52,6 +52,7 @@ Given two mapping tuples $\mappingTuple$ and $\mappingTuple'$ that are compatibl
 	\end{cases}
 \end{equation*}
 
+Finally, our notion of a mapping relation is then defined as follows.
 
 \begin{definition}
 	\normalfont
@@ -70,4 +71,9 @@ For the sake of conciseness, we sometimes write $\mappingTuple \in r$ to denote 
 	the instance~%
 $\symMappingInst$ of a mapping relation $r=\mappingRel$.
 
+\todo[inline]{TODO (Olaf): here comes the part about the RDF datasets generated from mapping relations}
 
+
+we assume four designated attributes: $\subjAttr \in \symAttrUniverse$,
+$\predAttr \in \symAttrUniverse$, $\objAttr \in
+\symAttrUniverse$, and $\graphAttr \in \symAttrUniverse$

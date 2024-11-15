@@ -263,9 +263,45 @@ For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote
 
 \begin{example}
     \label{ex:extend_operator}
-The mapping relation generated in Example~\ref{ex:projection_operator} still 
-lacks the attributes $\attr_s, \attr_p, \attr_o$, and  $\attr_g$ required 
-for the generation of RDF dataset.
+    The mapping relation, $r$, generated in
+    Example~\ref{ex:projection_operator} only contains RDF literals, thus, an
+    RDF dataset containing RDF graphs with triples cannot be generated from
+    $r$. 
+    Extend operators, applied in succession, can generate the IRI terms
+    required for the triples in the resulting RDF dataset. 
+    Let $\extExpr_{iri}^{\attr}=(f, \attr)$ be an extend expression with a function~$f$
+    that generates an IRI, when evaluating $\eval(\extExpr_{iri}^{\attr},
+    \mappingTuple)$, by prepending the URL ``\texttt{example.com/}'' to
+    $\mappingTuple(\attr)$.
+    We apply 4 extend operators in succession on $r$ as follows:
+    \begin{equation*}
+        \fctExtOpXBig{\subjAttr}{\extExpr_{iri}^{?id}}{
+            \fctExtOpXBig{\predAttr}{\texttt{foaf:name}}{
+                \fctExtOpXBig{\objAttr}{?name}{
+                    \fctExtOpXBig{\graphAttr}{\texttt{rr:defaultGraph}}{
+                        r
+                    }
+                }
+            }
+        }
+    \end{equation*}
+    This results in a new mapping relation with $r'$ with the following 
+    mapping tuples $t_1$, and $t_2$ with both having a mapping
+    $\graphAttr \rightarrow \texttt{rr:defaultGraph}$:
+    \begin{align*}
+        t_1 &= \{\dots,
+        \subjAttr \rightarrow \text{<example.com/1>},
+        \predAttr \rightarrow \texttt{foaf:name}, 
+        \objAttr \rightarrow \text{``Alice''}, 
+        \dots
+        \}\\
+        t_2 &= \{\dots,
+        \subjAttr \rightarrow \text{<example.com/2>},
+        \predAttr \rightarrow \texttt{foaf:name}, 
+        \objAttr \rightarrow \text{``Bob''}, 
+        \dots
+        \}
+    \end{align*}
 \end{example} 
 
 

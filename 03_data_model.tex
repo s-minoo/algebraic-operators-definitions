@@ -1,9 +1,16 @@
 \section{Data Model}
 \label{sec:data_model}
-This section defines the data model that we introduce as the basis of our mapping algebra. This data model is a version of the relational data model,
-	restricted to a special kind of relations, that we call \emph{mapping relations}, in which the only possible values
-	%restricted to values that
-are RDF terms (plus a special value to capture processing errors).
+
+This section introduces the data model
+	based on which our mapping algebra is defined.
+	%of our mapping algebra.
+Hence, this model captures the types of intermediate results of any mapping process
+	%formalized based on our algebra.
+	described by our formalism.
+%
+Informally, the data model is a version of the relational data model, restricted to a special kind of relations, that we call \emph{mapping relations}%
+	%, in which the only possible values are RDF terms (plus a special value to capture processing errors).
+	\ and that contain RDF terms as possible values.
 
 As a preliminary step for defining the model formally, we introduce relevant concepts of RDF:
 We let $\symAllStrings$ be the countably infinite set of strings (sequences of
@@ -26,13 +33,12 @@ terms; i.e., each element of $\symTermSeqUniverse$ is a sequence of elements of
 $\symTermUniverse$.
 As usual, an \emph{RDF triple} is a tuple $(s,p,o) \in (\symAllIRIs \cup \symAllBNodes) \times \symAllIRIs \times \symTermUniverse$, an \emph{RDF graph} is a set of RDF triples, and an \emph{RDF dataset} is a set $\big\{ G_\mathrm{dflt}, (n_1,G_1), \ldots, (n_m,G_m) \big\}$ where $G_\mathrm{dflt}, G_1, \ldots, G_m$ are RDF graphs, $m \geq 0$, and $n_i \in \symAllIRIs \cup \symAllBNodes$ for all $i \in \{1,\ldots,m\}$.
 
-As additional ingredients for defining mapping relations, we assume a countably infinite set~$\symAttrUniverse$ of
-\emph{attributes} and a special value $\error$ such that $\error \notin \symTermUniverse$%
-	%, which shall be used to denote errors%
-, and we define the notion of a \emph{mapping tuple}, as
-	%the types of tuples
-	shall be
-used in mapping relations.
+As additional ingredients for defining mapping relations, we assume a countably infinite set~$\symAttrUniverse$ of \emph{attributes} and a special value $\error$
+	%such that $\error \notin \symTermUniverse$, and we define the notion of a \emph{mapping tuple}, as shall be used in mapping relations.
+	that is not an RDF term~(i.e., $\error \notin \symTermUniverse$) and that shall be used to capture processing errors. The last ingredient
+		are  \emph{mapping tuples}, which are the type of tuples used in mapping relations.
+		%is the notion of \emph{mapping tuples}, which are the type of tuples used in mapping relations.
+		%is the type of tuples used in mapping relations, called \emph{mapping tuples}.
 
 \begin{definition}
 	\normalfont
@@ -40,21 +46,24 @@ used in mapping relations.
 		\symAttrUniverse \rightarrow \symTermUniverse \cup \{\error\}$.
 \end{definition}
 
-\todo[inline]{Olaf, continue here ...}
+	We say that two
+	%Two
+mapping tuples $\mappingTuple$ and $\mappingTuple'$ are \emph{compatible} if, for every attribute $\attr \in \fctDom{\mappingTuple} \cap \fctDom{\mappingTuple'}$, it holds that $\mappingTuple(\attr) = \mappingTuple'(\attr)$.
+Given two mapping tuples $\mappingTuple$ and $\mappingTuple'$ that are compatible, we write $\mappingTuple \cup \mappingTuple'$ to denote the mapping tuple $\mappingTuple''$ that is the merge of $\mappingTuple$ and $\mappingTuple'$; that is, $\fctDom{\mappingTuple''} = \fctDom{\mappingTuple} \cup \fctDom{\mappingTuple'}$ and, for every attribute~$\attr \in \fctDom{\mappingTuple''}$,
+	%\begin{equation*}
+	%	\mappingTuple''(\attr) =
+	%	\begin{cases}
+	%		\mappingTuple(\attr) & \text{if $\attr \in \fctDom{\mappingTuple}$,} \\
+	%		\mappingTuple'(\attr) & \text{else.}
+	%	\end{cases}
+	%\end{equation*}
+	%
+	$\mappingTuple''(\attr) = \mappingTuple(\attr)$ if $\attr \in \fctDom{\mappingTuple}$, and $\mappingTuple''(\attr) = \mappingTuple'(\attr)$ otherwise.
 
-Two mapping tuples $\mappingTuple$ and $\mappingTuple'$ are \emph{compatible} if, for every attribute~$\attr \in \fctDom{\mappingTuple} \cap \fctDom{\mappingTuple'}$, it holds that $\mappingTuple(\attr) = \mappingTuple'(\attr)$.
-Given two mapping tuples $\mappingTuple$ and $\mappingTuple'$ that are compatible, we write $\mappingTuple \cup \mappingTuple'$ to denote the mapping tuple $\mappingTuple_\text{merged}$ that is the merge of $\mappingTuple$ and $\mappingTuple'$; that is, $\fctDom{\mappingTuple_\text{merged}} = \fctDom{\mappingTuple} \cup \fctDom{\mappingTuple'}$ and, for every attribute~$\attr \in \fctDom{\mappingTuple_\text{merged}}$,
-\begin{equation*}
-	\mappingTuple_\text{merged}(\attr) =
-	\begin{cases}
-		\mappingTuple(\attr) & \text{if $\attr \in \fctDom{\mappingTuple}$,} \\
-		\mappingTuple'(\attr) & \text{else.}
-	\end{cases}
-\end{equation*}
-
-Finally, our notion of a mapping relation is then defined as follows.
+Now we are ready to define our notion of a mapping relation.
 
 \begin{definition}
+	\label{def:mapping_relation}
 	\normalfont
 	A \textbf{mapping relation}~$r$ is a tuple $\mappingRel$, where
 	$\symAttrSubSet \subset \symAttrUniverse$ is a finite, non-empty set of attributes
@@ -64,16 +73,67 @@ Finally, our notion of a mapping relation is then defined as follows.
 		%that $\mathrm{dom}(\mappingTuple) = \symAttrSubSet$ for all $\mappingTuple$ in $\symMappingInst$.
 	We call $\symAttrSubSet$ the \textbf{schema} of the mapping relation
 	and $\symMappingInst$ is the \textbf{instance} of the mapping relation.
-	\label{def:mapping_relation}
 \end{definition}
 
 For the sake of conciseness, we sometimes write $\mappingTuple \in r$ to denote that $\mappingTuple$ is a mapping tuple in
 	the instance~%
 $\symMappingInst$ of a mapping relation $r=\mappingRel$.
 
+\todo[inline]{Olaf, continue here ...}
 \todo[inline]{TODO (Olaf): here comes the part about the RDF datasets generated from mapping relations}
 
 
 we assume four designated attributes: $\subjAttr \in \symAttrUniverse$,
 $\predAttr \in \symAttrUniverse$, $\objAttr \in
 \symAttrUniverse$, and $\graphAttr \in \symAttrUniverse$
+
+\begin{definition}
+	\normalfont
+	Let $r = \mappingRel$ be a mapping relation with $\subjAttr, \predAttr, \objAttr, \graphAttr \in \symAttrSubSet$, and
+		%let
+	\begin{align*}
+		\symMappingInst_\mathrm{valid}
+		& =
+		\bigl\{
+			\mappingTuple \in \symMappingInst
+			\,\big|\,
+			\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr) \text{ is an RDF triple}
+		\bigr\}
+		\; \text{ and}
+		\\
+		N
+		& =
+		\bigl\{ \mappingTuple(\graphAttr) \in \symAllIRIs\cup\symAllBNodes \,\big|\, \mappingTuple \in \symMappingInst_\mathrm{valid} \text{ and $\mappingTuple(\graphAttr)$ is not the IRI } \texttt{rr:defaultGraph} \bigr\}
+		.
+	\end{align*}
+	The \textbf{RDF dataset resulting from $r$} is the RDF dataset
+	\begin{equation*}
+		D =
+		\{ G_\mathrm{dflt} \}
+		\cup
+		\bigl\{
+			( n, G_n )
+			\,\big|\,
+			n \in N
+		\bigr\}
+		,
+	\end{equation*}
+	where, for every $n \in N$,
+	\begin{align*}
+		G_n & =
+		\bigl\{
+			\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr)
+			\,\big|\,
+			\mappingTuple \in \symMappingInst_\mathrm{valid} \text{ such that } \mappingTuple(\graphAttr)=n
+		\bigr\}
+		\; \text{ and}
+		\\
+		G_\mathrm{dflt} & =
+		\bigl\{
+			\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr)
+			\,\big|\,
+			\mappingTuple \in \symMappingInst_\mathrm{valid} \text{ such that } \mappingTuple(\graphAttr) \text{ is } \texttt{rr:defaultGraph}
+		\bigr\}
+		.
+	\end{align*}
+\end{definition}

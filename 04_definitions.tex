@@ -98,7 +98,7 @@ We provide a running example used throughout the rest of the paper starting
 with a CSV file with the header, $H= [(id, firstname, lastname, age)]$, 
 containing the following 2 rows of CSV data records as: 
 \begin{equation*}
-    \symDataset &= [(1, \text{Alice}, \text{Lee}, 23), (2, \text{Bob}, \text{Malice}, 25)] 
+    \symDataset = [(1, \text{Alice}, \text{Lee}, 23), (2, \text{Bob}, \text{Malice}, 25)] 
 \end{equation*}
     A source operator, $\sourceOpDflt$, with $\dataSource = \dataSourceTuple$,
     $\sourceType = \sourceTypeTuple$, $\queryExpr_{root}$ a CSV root query 
@@ -376,61 +376,3 @@ For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote
     combining various operators of the mapping algebra. 
 \end{definition}
 
-
-
-\subsection{Generating RDF Dataset}%
-\label{sub:gen_rdf_dataset}
-%Given a mapping relation~$r = \mappingRel$ with $\subjAttr, \predAttr, \objAttr, \graphAttr \in \symAttrSubSet$, 
-%an \textbf{RDF dataset} is generated as from $r$ as follows: 
-%For each mapping tuple~$\mappingTuple$ in $\symMappingInst$, an RDF triple is
-%generated using the term values returned by
-%$\mappingTuple(\subjAttr),\mappingTuple(\predAttr),$ and $\mappingTuple(\objAttr)$
-%as \textbf{subject, predicate, and object} respectively. 
-%The generated RDF triple belongs to the RDF graph returned 
-%by $\mappingTuple(\graphAttr)$. 
-Let $r = \mappingRel$ be a mapping relation with $\subjAttr, \predAttr, \objAttr, \graphAttr \in \symAttrSubSet$, and let
-\begin{align*}
-	\symMappingInst_\mathrm{valid}
-	& =
-	\bigl\{
-		\mappingTuple \in \symMappingInst
-		\,\big|\,
-		\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr) \text{ is an RDF triple}
-	\bigr\}
-	\; \text{ and}
-	\\
-	N
-	& =
-	\bigl\{ \mappingTuple(\graphAttr) \in \symAllIRIs\cup\symAllBNodes \,\big|\, \mappingTuple \in \symMappingInst_\mathrm{valid} \text{ and $\mappingTuple(\graphAttr)$ is not the IRI } \texttt{rr:defaultGraph} \bigr\}
-	.
-\end{align*}
-The \textbf{RDF dataset generated from $r$} is the RDF dataset
-\begin{equation*}
-	D =
-	\{ G_\mathrm{dflt} \}
-	\cup
-	\bigl\{
-		( n, G_n )
-		\,\big|\,
-		n \in N
-	\bigr\}
-	,
-\end{equation*}
-where, for every $n \in N$,
-\begin{align*}
-	G_n & =
-	\bigl\{
-		\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr)
-		\,\big|\,
-		\mappingTuple \in \symMappingInst_\mathrm{valid} \text{ such that } \mappingTuple(\graphAttr)=n
-	\bigr\}
-	\; \text{ and}
-	\\
-	G_\mathrm{dflt} & =
-	\bigl\{
-		\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr)
-		\,\big|\,
-		\mappingTuple \in \symMappingInst_\mathrm{valid} \text{ such that } \mappingTuple(\graphAttr) \text{ is } \texttt{rr:defaultGraph}
-	\bigr\}
-	.
-\end{align*}

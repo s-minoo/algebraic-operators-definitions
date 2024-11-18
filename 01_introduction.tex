@@ -47,22 +47,21 @@ However, their formalizations suffer from being dependent upon the syntaxes
 of RML and limited to the context of optimizing RML document.
 Other studies also provide formalizations of declarative mapping languages such
 as XSPARQL~\cite{Lopes2011XSPARQL}, and Façade-X~\cite{asprino2023knowledge}
-but limited to the language that they use. 
-There is currently no studies on language-agnostic formalizations of 
+but remain limited to the language that they use. 
+There are currently no studies on language-agnostic formalizations of 
 mapping processes. 
 % why it’s an interesting problem
 A language-agnostic formalization of the mapping process paves the way for a
 unified mapping engine capable of working with the user's choice of language,
-ensuring verified correctness and supporting optimization across different
+ensuring verified correctness and supporting optimizations across different
 mapping languages.
 
 % what’s my solution
 In this work, we tackled the challenge of providing mapping language-agnostic
 formalizations in two steps.
 First, we provide formal definitions and propose a set of algebraic mapping
-operators which can be composed together to formally describe the mapping
-processes. 
-Lastly, we provide an algorithm for translating RML document
+operators which can be composed to formally describe the mapping processes. 
+In the second and last step, we provide an algorithm for translating RML documents
 to an expression comprising these algebraic mapping operators,
 thereby formalizing RML's operational semantics and demonstrating that our 
 language-agnostic algebra can serve as the foundation for formalizing
@@ -78,7 +77,7 @@ implementation.
 
 % paper outline
 The paper is outlined as follows. 
-Section~\ref{sec:related_works} provides an overview of related works at 
+Section~\ref{sec:related_works} provides an overview of related work in the domain of  
 formalizing declarative mapping languages. 
 Section~\ref{sec:preliminaries} introduces the notations and symbols we 
 used to provide the formal definitions of algebraic mapping operators. 
@@ -89,8 +88,4 @@ for transforming RML document into an expression composed of our algebraic
 mapping operators, thereby formalizing RML. 
 Finally, Section~\ref{sec:conclusion} concludes this paper and provides 
 possible future works utilizing our algebraic mapping operators. 
-
-
-
-
 

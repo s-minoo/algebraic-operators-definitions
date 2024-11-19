@@ -97,7 +97,7 @@ To satisfy the condition for the equivalence in Proposition~\ref{prop:FullProjec
     Given $\mappingTuple \in \symMappingInst_1$ with
     Definition~\ref{def:projection_operator}, it holds that there exists
     mapping tuple $\mappingTuple' \in r$ such that $\mappingTuple$ is the 
-    restriction of $\mappingTuple'$  to $\symProjSet$; i.e, $\mappingTuple = \mappingTuple'[\symProjSet]$ and 
+    restriction of $\mappingTuple'$  to $\symProjSet$; i.e., $\mappingTuple = \mappingTuple'[\symProjSet]$ and 
     $\mappingTuple(a) = \mappingTuple'(a)$ for all $a \in \symProjSet$. 
     Considering $\symProjSet \cup \symProjSet' \subseteq A$, let $\mappingTuple'' =
     \mappingTuple'[\symProjSet \cup \symProjSet']$, which, by
@@ -111,8 +111,26 @@ To satisfy the condition for the equivalence in Proposition~\ref{prop:FullProjec
     Now that we have $\fctDom{\mappingTuple'''} = \symProjSet = \fctDom{\mappingTuple}$, and 
     $\mappingTuple'''(a) =  \mappingTuple''(a)= \mappingTuple'(a)= \mappingTuple(a)$ for all $a \in \symProjSet$, 
     we can conclude that $\mappingTuple''' =  \mappingTuple$; 
-    i.e, $\mappingTuple \in \fctProjectOpBig{\symProjSet}{\fctProjectOp{\symProjSet\cup\symProjSet'}{r}}$ and $\mappingTuple  \in \symMappingInst_2$.
- 
+    i.e., $\mappingTuple \in \fctProjectOpBig{\symProjSet}{\fctProjectOp{\symProjSet\cup\symProjSet'}{r}}$ and $\mappingTuple  \in \symMappingInst_2$.
+
+    Lastly, we show that $\symMappingInst_2 \subseteq \symMappingInst_1$ by 
+    considering an arbitrary mapping tuple $\mappingTuple \in \symMappingInst_2$ and prove that $\mappingTuple \in \symMappingInst_1$. 
+    Given $\mappingTuple \in \symMappingInst_2$ with Definition~\ref{def:projection_operator}, it holds 
+    that i)~$\fctDom{\mappingTuple} =  \symProjSet$, and ii)~there exists a mapping
+    tuple $\mappingTuple' \in \fctProjectOpBig{\symProjSet \cup \symProjSet'}{r}$ such 
+    that $\mappingTuple(a) = \mappingTuple'(a)$ for all $a \in \symProjSet$.
+    Since $\mappingTuple' \in \fctProjectOpBig{\symProjSet \cup \symProjSet'}{r}$, 
+    it holds that i)~$\fctDom{\mappingTuple'} = \symProjSet \cup \symProjSet'$, and 
+    ii)~there exists a mapping tuple $\mappingTuple'' \in r$ such that 
+    $\mappingTuple'(a) = \mappingTuple''(a)$ for all $a \in \symProjSet \cup \symProjSet'$. 
+    Considering $\symProjSet \subseteq \symAttrSubSet$, let 
+    $\mappingTuple''' = \mappingTuple''[\symProjSet]$, which, by Definition~\ref{def:projection_operator}, 
+    $\fctDom{\mappingTuple'''} = \symProjSet$ and $\mappingTuple''' \in \fctProjectOp{\symProjSet}{r}$. 
+    Combining everything, we have i)~$\fctDom{\mappingTuple'''} = \symProjSet = \fctDom{\mappingTuple}$, and 
+    ii)~$\mappingTuple'''(a) = \mappingTuple''(a) = \mappingTuple'(a) = \mappingTuple(a)$ for all $a \in \symProjSet$. 
+    Consequently, $\mappingTuple''' = \mappingTuple$ and $\mappingTuple \in \fctProjectOpDflt{r}$; 
+    i.e., $\mappingTuple \in \symMappingInst_1$.
+    \qed
 \end{proof}
 
 As a corollary of

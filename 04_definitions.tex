@@ -1,14 +1,40 @@
 \section{Mapping Algebra}%
 \label{sec:mapping_algebra}
 
+{
+\color{blue}
+    In this section, we define the algebraic mapping operators used
+    in our formalism of mapping processes to generate RDF datasets 
+    form (semi-)structured data. 
+    For each operator, we also introduce the rationale behind the 
+    choice of defining such operators for use in our formalism. 
+    Throughout this section, a running example is provided by 
+    applying the operators sequentially on a sample dataset. 
+    First, we define the \emph{mapping definition} as follows: 
+\begin{definition}
+    \label{def:mapping_definition}
+    A \textbf{mapping definition}  is an expression that can be built by 
+    combining various operators of the mapping algebra. 
+    It represents the logical plan of generating RDF datasets from  
+    (semi-)structured data.
+\end{definition}
+}
+
+
 \subsection{Source Operator}%
 \label{sub:source_operator}
+{ \color{blue}
+The mapping relations (Definition~\ref{def:mapping_relation}), which serve as
+the data model for the algebraic operators, must first be generated from
+(semi-)structured data. 
+To accomplish this, a dedicated operator, the Source
+operator, is introduced to produce mapping relations from (semi-)structured
+data. 
+Before defining the Source operator, we present essential notations and
+concepts involved in its definition.
+}
 
-\subsubsection{Notations}%
-\label{ssub:source_notations}
-
-
-We assume the following pairwise disjoint countably infinite sets:
+\noindent \textbf{Notations}  We assume the following pairwise disjoint countably infinite sets:
 $\symDatasetUni$ (datasets), and  $\symDataObjUni$ (data objects).
 Each dataset in $\symDatasetUni$ is a collection of data objects.
 To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in
@@ -22,7 +48,6 @@ Each data access language  $\symDataAcc \in \symDataAccUni$ is a set, where
 every element $\queryExpr \in \symDataAcc$ is a one of the expressions of the
 language.
 
-
 Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
 entity that could be queried using a query expression to extract
 one or more data objects \textbf{which can, in turn, be accessible by different data access languages}.
@@ -31,13 +56,6 @@ access language, and it can be further queried using JSONPath expressions to
 extract JSON arrays (data objects) or a JSON field containing a string
 representation of CSV rows (data objects), which can be further queried using a CSV specific
 data access language.
-
-
-
-
-
-\subsubsection{Source Type}%
-\label{ssub:source_type}
 
 \begin{definition}
 	\label{def:source_type}
@@ -382,11 +400,4 @@ For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote
 
 
 
-\subsection{Mapping Definitions}%
-\label{sub:mapping_definition}
-\begin{definition}
-    \label{def:mapping_definition}
-    A \textbf{mapping definition}  is an expression that can be built by 
-    combining various operators of the mapping algebra. 
-\end{definition}
 

@@ -79,15 +79,29 @@ For the sake of conciseness, we sometimes write $\mappingTuple \in r$ to denote 
 	the instance~%
 $\symMappingInst$ of a mapping relation $r=\mappingRel$.
 
-\todo[inline]{Olaf, continue here ...}
-\todo[inline]{TODO (Olaf): here comes the part about the RDF datasets generated from mapping relations}
+\begin{example}
+	\label{ex:mapping_relation}
+	Consider the mapping relation~$r = \mappingRel$ that is represented in a tabular form in Table~\ref{tab:mapping_relation}.
+\todo{TODO: Min Oo, can you please create such a table. For the content of this table, look at the values mentioned here in this example as well as at the RDF dataset produce from this relation in the next example. For the second tuple, make sure that its "SPO part" is not a valid triple (e.g., put a literal in the S position), and put IRI \ttl{ex:g1} in the G position.}
+	It holds that $\symAttrSubSet = \{ \attr_\mathrm{x}, \subjAttr, \predAttr, \objAttr, \graphAttr \}$ and
+	$\symMappingInst$ contains three mapping tuples, $\mappingTuple$, $\mappingTuple'\!$, and $\mappingTuple''\!$, such that
+	$\mappingTuple(\attr_\mathrm{x})$ is the literal $(\ttl{"12"},\ttl{xsd:integer})$,
+	both $\mappingTuple'(\attr_\mathrm{x})$ is the IRI \ttl{ex:alice},
+	$\mappingTuple''(\attr_\mathrm{x}) = \error$, etc.
+\end{example}
 
-
-we assume four designated attributes: $\subjAttr \in \symAttrUniverse$,
-$\predAttr \in \symAttrUniverse$, $\objAttr \in
-\symAttrUniverse$, and $\graphAttr \in \symAttrUniverse$
+While mapping relations are
+	%the
+intermediate results of mapping processes described by our algebra, the ultimate goal of
+	%any such process
+	such processes
+is to produce an RDF dataset. Therefore, we also need to define how mapping relations are mapped into RDF datasets. To this end, we assume four special attributes: $\subjAttr,\predAttr,\objAttr,\graphAttr \in \symAttrUniverse$. Every mapping relation whose schema contains these attributes is mapped to an RDF dataset
+	by using the values that the tuples in the relation have for these attributes. That is, if the values that a mapping tuple has for $\subjAttr$, $\predAttr$, and $\objAttr$ form a valid RDF triple, then the graph determined by the $\graphAttr$-value of the tuple contains this triple. Formally, we define this approach as follows.
+	%as specified by the following definition.
+	%as follows.
 
 \begin{definition}
+	\label{def:generated_dataset}
 	\normalfont
 	Let $r = \mappingRel$ be a mapping relation with $\subjAttr, \predAttr, \objAttr, \graphAttr \in \symAttrSubSet$, and
 		%let
@@ -97,13 +111,13 @@ $\predAttr \in \symAttrUniverse$, $\objAttr \in
 		\bigl\{
 			\mappingTuple \in \symMappingInst
 			\,\big|\,
-			\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr) \text{ is an RDF triple}
+			\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr) \text{ is an RDF triple and } \mappingTuple(\graphAttr) \in \symAllIRIs\cup\symAllBNodes
 		\bigr\}
 		\; \text{ and}
 		\\
 		N
 		& =
-		\bigl\{ \mappingTuple(\graphAttr) \in \symAllIRIs\cup\symAllBNodes \,\big|\, \mappingTuple \in \symMappingInst_\mathrm{valid} \text{ and $\mappingTuple(\graphAttr)$ is not the IRI } \texttt{rr:defaultGraph} \bigr\}
+		\bigl\{ \mappingTuple(\graphAttr) \in \symAllIRIs\cup\symAllBNodes \,\big|\, \mappingTuple \in \symMappingInst_\mathrm{valid} \text{ and $\mappingTuple(\graphAttr)$ is not the IRI } \ttl{rr:defaultGraph} \bigr\}
 		.
 	\end{align*}
 	The \textbf{RDF dataset resulting from $r$} is the RDF dataset
@@ -132,8 +146,17 @@ $\predAttr \in \symAttrUniverse$, $\objAttr \in
 		\bigl\{
 			\bigl( \mappingTuple(\subjAttr), \mappingTuple(\predAttr), \mappingTuple(\objAttr) \bigr)
 			\,\big|\,
-			\mappingTuple \in \symMappingInst_\mathrm{valid} \text{ such that } \mappingTuple(\graphAttr) \text{ is } \texttt{rr:defaultGraph}
+			\mappingTuple \in \symMappingInst_\mathrm{valid} \text{ such that } \mappingTuple(\graphAttr) \text{ is } \ttl{rr:defaultGraph}
 		\bigr\}
 		.
 	\end{align*}
 \end{definition}
+
+\begin{example}
+	\label{ex:generated_dataset}
+		For the mapping relation in Example~\ref{ex:mapping_relation} it holds that $\symMappingInst_\mathrm{valid} = \{ \mappingTuple, \mappingTuple'' \}$ and $N = \{ \ttl{ex:g2} \}$. Therefore, the RDF dataset resulting from this mapping relation
+		%The RDF dataset resulting from the mapping relation in Example~\ref{ex:mapping_relation}
+	is $D = \bigl\{ G, (\ttl{ex:g2}, G') \bigr\}$
+	with $G = \big\{ (\ttl{ex:alice}, \ttl{foaf:knows}, \ttl{ex:bob}) \big\}$
+	and $G'\! = \big\{ (\ttl{ex:bob}, \ttl{foaf:name}, (\ttl{"Bob"},\ttl{xsd:string})) \big\}$. Notice that $\mappingTuple'\! \notin \symMappingInst_\mathrm{valid}$ because $\big( \mappingTuple'(\subjAttr), \mappingTuple'(\predAttr), \mappingTuple'(\objAttr) \bigr)$ is not an RDF triple.
+\end{example}

@@ -5,21 +5,16 @@
 		\centering
         \begin{lstlisting}[language=sparql, caption={Replace \texttt{rr:class} definitions with predicate object maps},
         label={lst:sparql_class_expand}]
-DELETE {
-  ?sm rr:class ?sm_class . }
-INSERT {
-  ?tm rr:predicateObjectMap [
+DELETE { ?sm rr:class ?sm_class . }
+INSERT { ?tm rr:predicateObjectMap [
       rr:predicateMap [
           rr:constant rdf:type ;
-          rr:termType rr:IRI ;
-      ] ;
+          rr:termType rr:IRI ; ] ;
       rr:objectMap [
          rr:termType rr:IRI ;
-         rr:constant ?sm_class ;
-      ] ;
-  ] . }
-WHERE {
-  ?tm rr:subjectMap ?sm . 
+         rr:constant ?sm_class ; 
+    ] ; ] . }
+WHERE { ?tm rr:subjectMap ?sm . 
   ?sm rr:class ?sm_class . }
 \end{lstlisting}
 	\end{minipage}
@@ -29,19 +24,14 @@ WHERE {
 \begin{lstlisting}[language=sparql, caption={Replace complex predicate-object maps with
 simple predicate-object maps},
 label={lst:sparql_simple_pom}]
-DELETE{
-  ?tm rr:predicateObjectMap  ?pom. 
-  ?pom rr:predicateMap ?pm. 
-  ?pom rr:objectMap ?om. 
-  ?pom rr:graphMap ?gm. }
-INSERT{
-  ?tm rr:predicateObjectMap [
+DELETE{ ?tm rr:predicateObjectMap  ?pom. 
+  ?pom rr:predicateMap ?pm;
+  rr:objectMap ?om; rr:graphMap ?gm. }
+INSERT{ ?tm rr:predicateObjectMap [
       rr:predicateMap ?pm;
       rr:objectMap ?om; 
-      rr:graphMap ?gm;
-  ]. }
-WHERE{
-  ?tm rr:predicateObjectMap  ?pom. 
+      rr:graphMap ?gm; ]. }
+WHERE{ ?tm rr:predicateObjectMap  ?pom. 
   ?pom rr:predicateMap ?pm. 
   ?pom rr:objectMap ?om. 
   OPTIONAL {?pom rr:graphMap ?gm.} } 
@@ -52,22 +42,17 @@ WHERE{
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to expand shortcuts
 for constant-term maps},
 label={lst:sparql_shortcut}]
-DELETE {
-  ?tm rr:subject ?sm_constant .
-  ?pompm rr:predicate ?pm_constant .
-  ?pomom rr:object ?om_constant .
+DELETE { ?tm rr:subject ?sm_constant .
+  ?pompm rr:predicate ?pm_constant; rr:object ?om_constant .
   ?termMap rr:graph ?gm_constant . }
-INSERT {
-  ?tm rr:subjectMap [ rr:constant ?sm_constant; rr:termType rr:IRI; ].
+INSERT { ?tm rr:subjectMap [ rr:constant ?sm_constant; rr:termType rr:IRI; ].
   ?pompm rr:predicateMap [ rr:constant ?pm_constant; rr:termType rr:IRI; ].
   ?pomom rr:objectMap [ rr:constant ?om_constant; rr:termType ?otermtype; ].
   ?termMap rr:graphMap [ rr:constant ?gm_constant; rr:termType rr:IRI; ]. }
-WHERE {
-  {?tm rr:subject ?sm_constant .} UNION
+WHERE { {?tm rr:subject ?sm_constant .} UNION
   {?pompm rr:predicate ?om_constant .} UNION
   {?pomom rr:object ?om_constant .
-  BIND( IF(isIRI( ?om_constant ), rr:IRI, rr:Literal) AS ?otermtype)
-  } UNION
+  BIND( IF(isIRI( ?om_constant ), rr:IRI, rr:Literal) AS ?otermtype) } UNION
   {?termMap rr:graph ?gm_constant .} }
 \end{lstlisting}
     \end{minipage}
@@ -76,15 +61,12 @@ WHERE {
 \begin{lstlisting}[language=sparql, caption={Replace referencing object maps without 
 join conditions with simple object map},
 label={lst:sparql_selfjoin}]
-DELETE{
-?om rr:parentTriplesMap ?ptm . }
-INSERT{
-?om rr:reference  ?ref .
-?om rr:template ?template . 
-?om rr:constant ?const .
-?om rr:termType rr:IRI . }
-WHERE{
-?om rr:parentTriplesMap ?ptm .
+DELETE{ ?om rr:parentTriplesMap ?ptm .}
+INSERT{ ?om rr:reference  ?ref ;
+    rr:template ?template; 
+    rr:constant ?const ;
+    rr:termType rr:IRI . }
+WHERE{ ?om rr:parentTriplesMap ?ptm .
 ?ptm rr:subjectMap ?sm . 
 OPTIONAL{?sm rr:reference ?ref .}
 OPTIONAL{?sm rr:template ?template .}
@@ -98,57 +80,38 @@ FILTER NOT EXISTS
 \begin{lstlisting}[language=sparql, caption={Replace triples map with multiple 
 predicate-object map with single predicate-object map},
 label={lst:sparql_tm_singlepom}]
-DELETE{
-?tm a rr:TriplesMap.
-?tm rml:logicalSource ?ls. 
-?tm rr:subjectMap ?sm.
-?tm rr:predicateObjectMap ?pom. }
-INSERT{
-[] a rr:TriplesMap;
+DELETE{ ?tm a rr:TriplesMap;
+    rml:logicalSource ?ls; rr:subjectMap ?sm;
+    rr:predicateObjectMap ?pom . }
+INSERT{ [] a rr:TriplesMap;
    rml:logicalSource ?ls;
    rr:subjectMap ?sm; 
    rr:predicateObjectMap ?pom. }
-WHERE{
-?tm rml:logicalSource ?ls. 
-?tm rr:subjectMap ?sm.
-?tm rr:predicateObjectMap ?pom. }
+WHERE{ ?tm rml:logicalSource ?ls;
+    rr:subjectMap ?sm;
+    rr:predicateObjectMap ?pom . }
 \end{lstlisting}
     \end{minipage}
-\end{figure}
-\begin{figure}[htbp!]
+    \begin{minipage}[t]{\textwidth}
 \begin{lstlisting}[language=sparql, caption={SPARQL update query to ensure 
 that each triples map contain only one graph map if it exists},
 label={lst:sparql_graphmap_norm}]
-
-DELETE{
-    ?tm a rr:TriplesMap.
-    ?tm rml:logicalSource ?ls. 
-    ?tm rr:subjectMap ?sm.
+DELETE{ ?tm a rrTriplesMap; rml:logicalSource ?ls; rr:subjectMap ?sm;
+            rr:predicateObjectMap ?pom.
     ?sm rr:graphMap ?gm. 
-    ?tm rr:predicateObjectMap ?pom.
-    ?pom rr:graphMap ?gm2.
-}
-INSERT{
-    [] a rr:TriplesMap;
-       rml:logicalSource ?ls;
-       rr:subjectMap ?sm; 
+    ?pom rr:graphMap ?gm2 . }
+INSERT { [] a rr:TriplesMap; rml:logicalSource ?ls; rr:subjectMap ?sm; 
+            rr:predicateObjectMap ?pom.
+         ?sm rr:graphMap ?gm. 
+    [] a rr:TriplesMap; rml:logicalSource ?ls; rr:subjectMap ?sm; 
        rr:predicateObjectMap ?pom.
+    ?sm rr:graphMap ?gm2 . }
+WHERE { ?tm rml:logicalSource ?ls; rr:subjectMap ?sm;
+            rr:predicateObjectMap ?pom.
     ?sm rr:graphMap ?gm. 
-
-    [] a rr:TriplesMap;
-       rml:logicalSource ?ls;
-       rr:subjectMap ?sm; 
-       rr:predicateObjectMap ?pom.
-    ?sm rr:graphMap ?gm2. 
-}
-WHERE{
-    ?tm rml:logicalSource ?ls. 
-    ?tm rr:subjectMap ?sm.
-    ?sm rr:graphMap ?gm. 
-    ?tm rr:predicateObjectMap ?pom.
-    ?pom rr:graphMap ?gm2.
-}
+    ?pom rr:graphMap ?gm2 . }
 \end{lstlisting}
+    \end{minipage}
 \end{figure}
 
 

@@ -1,24 +1,38 @@
 \section{Mapping Algebra}%
 \label{sec:mapping_algebra}
 
-{
-\color{blue}
-    In this section, we define the algebraic mapping operators used
-    in our formalism of mapping processes to generate RDF datasets 
-    form (semi-)structured data. 
-    For each operator, we also introduce the rationale behind the 
-    choice of defining such operators for use in our formalism. 
-    Throughout this section, a running example is provided by 
-    applying the operators sequentially on a sample dataset. 
-    First, we define the \emph{mapping definition} as follows: 
-\begin{definition}
-    \label{def:mapping_definition}
-    A \textbf{mapping definition}  is an expression that can be built by 
-    combining various operators of the mapping algebra. 
-    It represents the logical plan of generating RDF datasets from  
-    (semi-)structured data.
-\end{definition}
-}
+This section introduces our mapping algebra which consists of six
+	\todo{Change this number if we decide to remove some of the operators due to space constraints.}
+types of operators.
+	The output of each such operator is
+	%The output of each operator is
+	%Each such operator outputs
+a mapping relation and the inputs (if any) are mapping relations as well. Hence, the operators can be combined
+	%to form
+	into
+arbitrarily complex algebra expressions, where each such expression defines a mapping from one or more sources of
+	%structured or semi-structured
+	(semi-)structured
+data into an~RDF~dataset.\footnote{We assume here that the mapping relation resulting from the root operator of the expression contains the aforementioned attributes $\subjAttr$, $\predAttr$, $\objAttr$, and $\graphAttr$ (see Definition~\ref{def:generated_dataset}).}
+
+% {
+% \color{blue}
+%     In this section, we define the algebraic mapping operators used
+%     in our formalism of mapping processes to generate RDF datasets 
+%     form (semi-)structured data. 
+%     For each operator, we also introduce the rationale behind the 
+%     choice of defining such operators for use in our formalism. 
+%     Throughout this section, a running example is provided by 
+%     applying the operators sequentially on a sample dataset. 
+%     First, we define the \emph{mapping definition} as follows: 
+% \begin{definition}
+%     \label{def:mapping_definition}
+%     A \textbf{mapping definition}  is an expression that can be built by 
+%     combining various operators of the mapping algebra. 
+%     It represents the logical plan of generating RDF datasets from  
+%     (semi-)structured data.
+% \end{definition}
+% }
 
 
 \subsection{Source Operator}%

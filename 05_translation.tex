@@ -1,9 +1,17 @@
 \section{RML Translation}%
 \label{sec:rml_translation}
+After establishing the formalism of our mapping algebra in
+Section~\ref{sec:mapping_algebra}, we demonstrate its expressiveness by using
+it to define the semantics of the RML mapping language, specifically version
+1.1.2~\footnote{\url{https://rml.io/specs/rml/v/1.1.2/}}.
+This section provides an algorithm that, given a valid arbitrary RML document,
+generates a \emph{mapping definition}~(Definition~\ref{def:mapping_definition})
+capturing the semantics of the mapping process described in the input RML
+document.
+We showed that our formalism is \textbf{at least as expressive as} RML. 
 
 \subsection{Translation Preliminaries}%
 \label{sub:translation_preliminaries}
-
 
 \todoi{Mariano's paper (Section 5) introduces steps to \textbf{normalize} RML document. We can reference it.}
 %https://www.sciencedirect.com/science/article/pii/S1570826815000153?via=ihub 

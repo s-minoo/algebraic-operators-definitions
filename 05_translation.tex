@@ -5,38 +5,36 @@ Section~\ref{sec:mapping_algebra}, we demonstrate its expressiveness by using
 it to define the semantics of the RML mapping language, specifically version
 1.1.2~\footnote{\url{https://rml.io/specs/rml/v/1.1.2/}}.
 This section provides an algorithm that, given a valid arbitrary RML document,
-generates a \emph{mapping definition}~(Definition~\ref{def:mapping_definition})
-capturing the semantics of the mapping process described in the input RML
-document.
-We showed that our formalism is \textbf{at least as expressive as} RML. 
+generates an algebraic expression that captures the semantics of the mapping
+process described in the input RML document.
+We show that our mapping algebra is \textbf{at least as expressive as} RML. 
 
 \subsection{Translation Preliminaries}%
 \label{sub:translation_preliminaries}
+Before translating an RML document into our algebraic expression, the document
+is first \emph{normalized} by following the steps outlined
+in~\cite{Mariano2015SPARQL2SQL}, with adaptations specific to RML, as detailed
+below:
+\begin{enumerate}
+    \item All \texttt{rr:class} definitions are replaced by predicate object maps,
+	\item All shortcuts for constant-term maps have been expanded,
+	\item All predicate-object maps with multiple predicate or object
+	      maps are expanded into predicate-object maps with a single 
+	      predicate map and a single object map,
+	\item All referencing-object maps with a parent triples map without join
+          conditions are replaced by an object map with the 
+          subject IRI of the parent triples map as the reference value,
+	\item All triples map with multiple predicate-object maps are
+	      replaced by equivalent triples maps that each have one of
+	      the predicate-object maps,
+    \item All triples maps with multiple graph maps are replaced by a
+          equivalent set of triples maps that each have one of the graph
+          maps.
+\end{enumerate}
 
-\todoi{Mariano's paper (Section 5) introduces steps to \textbf{normalize} RML document. We can reference it.}
-%https://www.sciencedirect.com/science/article/pii/S1570826815000153?via=ihub 
-\begin{definition}
-	A \textbf{normalized} RML document is defined by undertaking the following steps as described
-	in~\citeneeded
-	\begin{enumerate}
-        \item All \texttt{rr:class} definitions are replaced by predicate object maps
-		\item All shortcuts for constant-term maps have been expanded,
-		\item Every predicate-object map with multiple predicate or object
-		      maps is replaced by a corresponding set of predicate-object maps that each have a single
-		      predicate map and a single object map,
-		\item Every referencing-object map with a parent triples map without join
-              conditions is replaced by a corresponding object map with the 
-              subject IRI of the parent triples map as the reference value.
-		\item Every triples map with multiple predicate-object maps is
-		      replaced by a corresponding set of triples maps that each have one of
-		      the predicate-object maps.
-        \item Every triples map with multiple graph maps is replaced by a
-              corresponding set of triples maps that each have one of the graph
-              maps.
-	\end{enumerate}
-\end{definition}
-
-
+Furthermore, we define two types of RDF graphs within an RML document, which
+will be utilized throughout the translation algorithm to translate the relevant
+algebraic expressions associated with a chosen triples map.
 \begin{definition}
 	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
 	$\triplesMapIRI$ an IRI of a RML triples map.

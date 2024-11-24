@@ -16,10 +16,12 @@
 \newcommand{\symMappingTupleSet}{M}
 \newcommand{\symRenamePFunc}{R}
 \newcommand{\symDataset}{D}
-\newcommand{\symSetDataset}%
-	%{\symDatasetUni_\mathrm{ds}}
-	{\mathcal{D}^\texttt{\tiny ds}\!}
+\newcommand{\symSetDataset}{\mathcal{D}^\texttt{\tiny ds}\!}
 \newcommand{\symSetDatasetX}[1]{\mathcal{D}^\texttt{\tiny ds}_{#1}}
+\newcommand{\symSetContentA}{\mathcal{D}^\texttt{\tiny c1}}
+\newcommand{\symSetContentAX}[1]{\mathcal{D}^\texttt{\tiny c1}_{#1}}
+\newcommand{\symSetContentB}{\mathcal{D}^\texttt{\tiny c2}}
+\newcommand{\symSetContentBX}[1]{\mathcal{D}^\texttt{\tiny c2}_{#1}}
 \newcommand{\symDataAcc}{L}
 \newcommand{\symDataAccX}[1]{L_{#1}}
 \newcommand{\symDataSeqCard}[1]{D^{seq,#1}}
@@ -53,16 +55,15 @@
 \newcommand{\rootIt}{rit}
 \newcommand{\cobit}{cobit}
 \newcommand{\dataObject}{d}
-\newcommand{\eval}{eval}
-\newcommand{\evalX}[1]{eval_{#1}}
-\newcommand{\cbeval}{cbeval}
+\newcommand{\eval}{\mathit{eval}}
+\newcommand{\evalX}[1]{\eval_{#1}}
+\newcommand{\cbeval}{\mathit{eval}'\!}
+\newcommand{\cbevalX}[1]{\eval_{#1}'}
 \newcommand{\sourceType}{type}
 \newcommand{\sourceTypeX}[1]{type_{#1}}
-\newcommand{\sourceTypeTuple}
-	%{(\symSetDataset, \symDataAcc, \eval, \cbeval)}
-	{(\symSetDataset\!, \symDataAcc, \eval)}
-\newcommand{\sourceTypeTupleX}[1]{(\symSetDatasetX{#1}, \symDataAccX{#1}, \evalX{#1})}
-\newcommand{\sourceTypeTupleXXX}[3]{(\symSetDatasetX{#1}, \symDataAccX{#2}, \evalX{#3})}
+\newcommand{\sourceTypeTuple}{(\symSetDataset, \symSetContentA\!, \symSetContentB\!, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \typeCast)}
+\newcommand{\sourceTypeTupleX}[1]{\sourceTypeTupleXXX{#1}{#1}{#1}}
+\newcommand{\sourceTypeTupleXXX}[3]{(\symSetDatasetX{#1}, \symSetContentAX{#2}, \symSetContentBX{#3}, \symDataAccX{#2}, \symDataAccX{#3}', \evalX{#2}, \cbevalX{#3}, \typeCastX{#1})}
 \newcommand{\dataSource}{s}
 \newcommand{\dataSourceTuple}{(\sourceType,\symDataset)}
 \newcommand{\iterConfig}{\bbbc}
@@ -71,6 +72,7 @@
 \newcommand{\sourceOpTuple}{(\dataSource, \iterConfig)}
 \newcommand{\attrQueryPair}{(\attr \rightarrow \queryExpr)}
 \newcommand{\typeCast}{cast}
+\newcommand{\typeCastX}[1]{\typeCast_{#1}}
 \newcommand{\length}{len}
 \newcommand{\var}{v}
 \newcommand{\indexSeq}{M}

@@ -84,7 +84,7 @@ The set $\symDataAccUni$ captures possible \emph{query languages} to retrieve da
 	%of
 the language. In practice, each such language is designed to be used for a specific kind of data objects (i.e., a specific subset of $\symDataObjUni$).
 	%Some languages may also be repurposed to be used for different kinds of data objects.
-Therefore, we define the notion of the \emph{types of data sources} considered for the source operators of our algebra as a structure that specifies the relevant kind of data objects and the corresponding evaluation semantics of the language to be used for data sources of such a type.
+Therefore, we define the notion of the \emph{types of data sources} considered for the source operators of our algebra as a structure that specifies the relevant kinds of data objects and the corresponding evaluation semantics of the languages to be used for data sources of such a type.
 
 % Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
 % entity that could be queried using a query expression to extract
@@ -95,38 +95,62 @@ Therefore, we define the notion of the \emph{types of data sources} considered f
 % representation of CSV rows (data objects), which can be further queried using a CSV specific
 % data access language.
 
-\smallskip\noindent
-\textbf{\color{red} Everything below is still work in progress (I am still thinking about putting $\cbeval$ back)}
 
 \begin{definition}
 	\label{def:source_type}
 	\normalfont
-	A \textbf{source type} is a tuple $\sourceTypeTuple$ in which
-	$\symSetDataset \subseteq \symDataObjUni$,
-	$\symDataAcc$ is a query language in $\symDataAccUni$,
-	and $\eval$ is a partial function $\eval \!: \symSetDataset \times \symDataObjUni \times \symDataAcc \rightarrow \symDataSeqUni$,
-\todo{Min Oo, notice that I have decided to replace the two evaluation functions by a single one. When I tried to describe their purpose, I realized that there is not really a totally convincing argument for having two separate ones. \\ Attention: this change still needs to be reflected in the rest of the paper.}
-	where $\symDataSeqUni$ is the set of all possible sequences of data objects in $\symDataObjUni$.
-	%
-	A \textbf{data source}~$\dataSource$ is a tuple~$\dataSourceTuple$ in which
-	$\sourceType$ is a source type $\sourceTypeTuple$ and
-	$\symDataset \in \symSetDataset\!$.
+	A \textbf{source type} is a tuple $\sourceTypeTuple$
+\todo{Min Oo, notice that I have changed this one as well. There are two languages now, one for selecting the context objects and one for selecting the values from the context objects. Additionally, the type-cast function is now part of the source type and there are two more sets of data objects to capture explicitly the types of objects in the results of the first and the second language, respectively. This changes still need to be reflected in the rest of the paper.}
+	where
+	\begin{itemize}
+		\item
+		$\symSetDataset \subseteq \symDataObjUni$,
+		\, $\symSetContentA\! \subseteq \symDataObjUni$,
+		\, $\symSetContentB\! \subseteq \symDataObjUni$,
+
+		\item
+		$\symDataAcc$ and $\symDataAcc'$ are query languages in $\symDataAccUni$,
+
+		\item
+		$\eval$ is a function $\eval \!: \symSetDataset \times \symDataAcc \rightarrow \overline{\symSetContentA}$,
+
+		\item
+		$\cbeval$ is a function $\cbeval : \symSetDataset \times \symSetContentA\! \times \symDataAcc'\! \rightarrow \overline{\symSetContentB}$, and
+
+		\item
+		$\typeCast$ is a partial function $\typeCast \!: \symSetContentB\! \rightarrow \symAllLiterals$,
+	\end{itemize}
+	where $\overline{\symSetContentA}$, resp.\ $\overline{\symSetContentB}$, is the set of all
+		%possible
+	sequences of data objects in $\symSetContentA\!$, resp.\ $\symSetContentB\!$.
 \end{definition}
 
-As per Definition~\ref{def:source_type}, the set $\symSetDataset$ of a source type~$\sourceTypeTuple$ determines the kind of data objects that the data sources of this type may provide access to.
-	For instance, for CSV-based data sources this may be the (infinite) set of all possible CSV files. %, and for JSON-based data sources, it may be the (infinite) set of all JSON documents.
-	%For instance, for $\sourceTypeX{\mathsf{csv}} = \sourceTypeTupleX{\mathsf{csv}}$, which represents the type of all CSV-based data sources, $\symSetDatasetX{\mathsf{csv}}$ is the (infinite) set of all possible CSV files.
-The function~$\eval$
-	is meant to define
-	%captures
-the evaluation semantics of the language~$\symDataAcc$
-	when used
-for data sources of the given type%
-	%~(which opens the option to repurpose the same language for different types of data sources)%
-. The domain of this function consists of 3-tuples that contain an additional data object as their second element. This is to cover cases in which the evaluation of a query $\queryExpr \in \symDataAcc$ assumes a context object, in addition to the dataset $\symDataset \in \symSetDataset$ over which
-	%the query
-	$\queryExpr$
-is evaluated. JSONPath and XPath are typical examples of languages that assume a context object. For languages for which this is not the case, the second argument of the $\eval$ function may simply be fixed to be the same as the first~argument.
+\begin{definition}
+	\label{def:data_source}
+	\normalfont
+	A \textbf{data source}~$\dataSource$ is a tuple~$\dataSourceTuple$ in which
+	$\sourceType$ is a source type
+		%$\sourceTypeTuple$
+		$(\symSetDataset, \mathcal{D}^\texttt{\tiny o1}\!, \mathcal{D}^\texttt{\tiny o2}\!, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \mathit{cast})$
+	and
+	$\symDataset \in \symSetDataset$.
+\end{definition}
+
+
+As per Definitions~\ref{def:source_type}%
+	\ and~%
+	%--%
+\ref{def:data_source}, the set $\symSetDataset$ of a source type
+	%$\sourceTypeTuple$
+determines the kind of data objects that the data sources of this type may provide access to.
+	For instance, for CSV-based data sources this may be the (infinite) set of all possible CSV files.
+The
+	%function~$\eval$ is meant to define the evaluation semantics of the language~$\symDataAcc$ when used for data sources of the given type, and $\cbeval$ is meant to define the evaluation semantics of $\symDataAcc'\!$.
+	functions~$\eval$ and $\cbeval$ are meant to define the evaluation semantics of the languages~$\symDataAcc$ and~$\symDataAcc'\!$, respectively.
+Notice that the domain of $\cbeval$ consists of 3-tuples that contain an additional data object as their second element, which is meant as a context object for the evaluation. The idea of the source operators shall be to use $\symDataAcc$ to specify the relevant context objects and, then, to use $\symDataAcc'$ to retrieve values for mapping tuples
+	%based on each
+	per
+context~object.
 
 	While a formal definition of concrete source types is beyond the scope of this paper, the
 	%The
@@ -134,61 +158,65 @@ following two examples outline informally how JSON-based data sources and CSV-ba
 
 \begin{example}
 	\label{ex:source_type_json}
-	We may introduce $\sourceTypeX{\mathsf{json}} = \sourceTypeTupleXXX{\mathsf{json}}{\mathsf{jp}}{\mathsf{jp}}$ as a source type for JSON-based data sources. To this end, $\symSetDatasetX{\mathsf{json}}$ is the set of all possible JSON documents, $\symDataAccX{\mathsf{jp}}$ is the set of all
-		possible
-	JSONPath expressions, and $\evalX{\mathsf{jp}}$ captures the evaluation semantics of JSONPath
-		%expressions over JSON documents.
-		expressions.
-	For instance, for a JSON document $\symDataset \in \symSetDatasetX{\mathsf{json}}$ and a JSONPath expression $\queryExpr \in \symDataAccX{\mathsf{jp}}$ that begins with the selector for the root element (i.e., \texttt{\$}), $\evalX{\mathsf{jp}}(\symDataset,\symDataset,\queryExpr)$ returns the elements of $\symDataset$ selected by $\queryExpr$. If $\queryExpr'\! \in \symDataAccX{\mathsf{jp}}$ is a JSONPath expression that does not begin with~\texttt{\$}, and assume $\dataObject$ is a JSON object within $\symDataset$, then $\evalX{\mathsf{jp}}(\symDataset,\dataObject,\queryExpr')$ returns the elements of $\symDataset$ that can be reached from $\dataObject$ as per the traversal specified by $\queryExpr'\!$.
+	As a
+		%source
+	type for
+		JSON-based
+		%JSON
+	data sources, we may define $\sourceTypeX{\mathsf{json}} = \sourceTypeTupleXXX{\mathsf{json}}{\mathsf{jp}}{\mathsf{jp}}$ as follows.
+	$\symSetDatasetX{\mathsf{json}}$ is the infinite set of all possible JSON documents, both $\symSetContentAX{\mathsf{jp}}$ and $\symSetContentBX{\mathsf{jp}}$ are the infinite set of all possible elements that may occur within JSON documents (i.e., $\symSetContentAX{\mathsf{jp}} = \symSetContentBX{\mathsf{jp}}$),
+	$\symDataAccX{\mathsf{jp}}$ is the set of all JSONPath expressions that begin with the selector for the root element (i.e., \texttt{\$}), and
+	$\symDataAccX{\mathsf{jp}}'$ are all JSONPath expressions that do not begin with~\texttt{\$}.
+	Then, $\evalX{\mathsf{jp}}$ and $\cbevalX{\mathsf{jp}}$ capture the evaluation semantics of JSONPath.
+	That is, for a JSON document $\symDataset \in \symSetDatasetX{\mathsf{json}}$ and a query $\queryExpr \in \symDataAccX{\mathsf{jp}}$, $\evalX{\mathsf{jp}}(\symDataset,\queryExpr)$ returns the elements of $\symDataset$ selected by $\queryExpr$. If $\queryExpr'\! \in \symDataAccX{\mathsf{jp}}'$, and assume $\dataObject \in \symSetContentAX{\mathsf{jp}}$ is a JSON object within $\symDataset$, then $\cbevalX{\mathsf{jp}}(\symDataset,\dataObject,\queryExpr')$ returns the elements of $\symDataset$ that can be reached from $\dataObject$ as per the traversal specified by $\queryExpr'\!$.
+	Finally, $\typeCastX{\mathsf{json}}$ maps JSON values to RDF literals. For instance, string values may be mapped to \ttl{xsd:string} literals, numeric values that are integers may be mapped to \ttl{xsd:integer} literals, etc.
 \end{example}
 
 \begin{example}
 	\label{ex:source_type_csv}
-	To define $\sourceTypeX{\mathsf{csv}} = \sourceTypeTupleX{\mathsf{csv}}$ as a source type for CSV-based data sources, we let $\symSetDatasetX{\mathsf{csv}}$ be the infinite set of all possible CSV files. As the language $\symDataAccX{\mathsf{csv}}$, we may use the set of all strings (i.e., $\symDataAccX{\mathsf{csv}} = \symAllStrings$). Informally, $\evalX{\mathsf{csv}}$ may then be defined as follows. For the empty string~$\varepsilon$, and every CSV document~$\symDataset \in \symSetDatasetX{\mathsf{csv}}$, $\evalX{\mathsf{csv}}(\symDataset,\symDataset,\varepsilon)$ returns all rows of $\symDataset$%
+	To define $\sourceTypeX{\mathsf{csv}} = \sourceTypeTupleX{\mathsf{csv}}$ as a source type for CSV-based data sources, we let $\symSetDatasetX{\mathsf{csv}}$ be the infinite set of all possible CSV files,
+	$\symSetContentAX{\mathsf{jp}}$ is the infinite set of all possible rows of CSV files, and
+	$\symSetContentBX{\mathsf{jp}} \subset \symAllStrings$ is the infinite set of strings that may be values within CSV files.
+	As the language $\symDataAccX{\mathsf{csv}}$, we may use the singleton set that contains (only) the empty string~$\varepsilon$, and $\symDataAccX{\mathsf{csv}} \subset \symAllStrings$ is the set of all strings that may be used as column names in CSV files. Informally, $\evalX{\mathsf{csv}}$ and $\cbevalX{\mathsf{csv}}$ may then be defined as follows. For
+		%the empty string~$\varepsilon$ and
+	every CSV document~$\symDataset \in \symSetDatasetX{\mathsf{csv}}$, $\evalX{\mathsf{csv}}(\symDataset,\varepsilon)$ returns all rows of $\symDataset$%
 		%, in the order in which they appear within $\symDataset$%
-	. Moreover, for every CSV document~$\symDataset \in \symSetDatasetX{\mathsf{csv}}$, every string $c$ that is a column name in $\symDataset$, and every row $\dataObject \in \symDataset$, $\evalX{\mathsf{csv}}(\symDataset,\dataObject,c)$ is the value that
+	, and for every string $c$ that is a column name in $\symDataset$, and every row $\dataObject \in \symDataset$, $\cbevalX{\mathsf{csv}}(\symDataset,\dataObject,c)$ is the value that
 		the row~%
 	$\dataObject$ has in column~$c$.
+	$\typeCastX{\mathsf{csv}}$ maps all string in $\symSetContentBX{\mathsf{jp}}$ to \ttl{xsd:string} literals.
 \end{example}
 
 %The question of how data sources of any such type are actually accessed in practice is irrelevant for our formalization.
 
-As a last ingredient for
-	%the following definition of the
-	defining
-source operators, we assume a partial function $\typeCast \!: \symDataObjUni \rightarrow \symAllLiterals$ that maps (some) data objects to RDF literals. For instance, string values in CSV files and in JSON documents may be mapped to \ttl{xsd:string} literals, numeric JSON values that are integers may be mapped to \ttl{xsd:integer} literals, etc.
+Now we are ready to define the source operator. While they are nullary operators, they are specified using three parameters: the data source ...
 
 \todo[inline]{Olaf, continue here with a brief informal description of how the source operators work ... }
-
-% \begin{definition}
-% 	\label{def:cast_function}
-% 	A \textbf{type-cast} function is a partial function
-% 	$\typeCast: \symDataObjUni \rightarrow \symAllLiterals$.
-% \end{definition}
 
 \begin{definition}
 	\label{def:source_operator}
 	\normalfont
 	Let $\dataSource = \dataSourceTuple$ be a data source with
-	$\sourceType=\sourceTypeTuple$,
+		%$\sourceType = \sourceTypeTuple$,
+		$\sourceType = (\symSetDataset, \symSetContentA\!, \symSetContentB\!, \symDataAcc, \symDataAcc'\!,$ $\eval, \cbeval, \typeCast)$,
 	$\queryExpr \in \symDataAcc$, and
 	$\symAttrQueryMap$ be a partial function
-	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$.
-	The \textbf{$(\queryExpr,\symAttrQueryMap)$-specific mapping relation obtained from $\dataSource$}, denoted by $\sourceOpDflt$, is the mapping relation $\mappingRel$ such that
+	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'\!$.
+	The \textbf{$(\queryExpr,\symAttrQueryMap)$-specific mapping relation obtained from $\dataSource$}, denoted by $\sourceOpDflt$, is the mapping relation $\mappingRel$ such that $\symAttrSubSet = \fctDom{\symAttrQueryMap}$ and
 	\begin{align*}
-		\symAttrSubSet  & = \fctDom{\symAttrQueryMap},
-		\; \text{ and}
-		\\
-		\symMappingInst & = \left\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n} \} \ | \
-		\dataObject \in \symDataSeq_{root} \text{ and } ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d\right\}
+		\symMappingInst = \big\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n} \} \ \big| \
+		& \dataObject \in \symDataSeq \text{ and}
+		\\[-1mm]
+		& ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d \big\}
+		,
 	\end{align*}
-	where $\symDataSeq_{root} = \fctEval{\symDataset}{\queryExpr_{root}}$ and
-	\begin{equation}
+	where $\symDataSeq = \fctEval{\symDataset}{\queryExpr_{root}}$ and
+	\begin{equation*}
 		X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap}}
-		\{(\attr, \var) \ | \
-		\var \in \fctCbeval{\symDataset}{\dataObject}{\queryExpr} \text{ with }  q = \symAttrQueryMap(\attr)\}
+		\big\{ (\attr, \var) \ \big| \
+		\var \in \fctCbeval{\symDataset}{\dataObject}{\queryExpr'} \text{ with }  \queryExpr'\! = \symAttrQueryMap(\attr) \big\}
 		.
-	\end{equation}
+	\end{equation*}
 \end{definition}
 
 

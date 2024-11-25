@@ -7,12 +7,22 @@ it to define the semantics of the RML mapping language, specifically version
 This section provides an algorithm that, given a valid arbitrary RML document,
 generates an algebraic expression that captures the semantics of the mapping
 process described in the input RML document.
-We show that our mapping algebra is \textbf{at least as expressive as} RML. 
+We demonstrate that our mapping algebra is \textbf{at least as expressive as} RML, and 
+provide a \textbf{well-defined formal semantics} for RML v1.1.2. 
 
 \subsection{Translation Preliminaries}%
 \label{sub:translation_preliminaries}
-Before translating an RML document into our algebraic expression, the document
-is first \emph{normalized} by following the steps outlined
+Before translating an RML document into our algebraic expression, a few
+preparations are required: i)~normalization of the RML document,
+ii)~identification of RDF sub-graph to translate algebraic expressions relevant
+to a specific triples map, and iii)~definitions of extend functions for Extend
+operator creation.
+
+
+
+\subsubsection{RML normalization}%
+\label{ssub:rml_normalization}
+First, the input RML document is \emph{normalized} by following the steps outlined
 in~\cite{Mariano2015SPARQL2SQL}, with adaptations specific to RML, as detailed
 below:
 \begin{enumerate}
@@ -31,10 +41,19 @@ below:
           equivalent set of triples maps that each have one of the graph
           maps.
 \end{enumerate}
+After normalizations, all triples map in the normalized RML document have only
+a single predicate-object map and if present, a single graph map. Moreover, all
+term maps do not have shortcuts. 
 
-Furthermore, we define two types of RDF graphs within an RML document, which
-will be utilized throughout the translation algorithm to translate the relevant
-algebraic expressions associated with a chosen triples map.
+\subsubsection{Triples Map-Specific RDF Graph}%
+\label{ssub:tm_specific_rdf_graph}
+Secondly, to support the translation process, we define two types of RDF
+graphs within an RML document: i)~\textbf{$\triplesMapIRI$-specific triples map
+graph}, and ii)~\textbf{$\triplesMapIRI$-specific parent triples map graph}. 
+These graphs are used throughout the translation algorithm to translate the
+relevant algebraic expressions from the triples in the RDF graph associated with
+the chosen triples map~$\triplesMapIRI$.
+
 \begin{definition}
 	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
 	$\triplesMapIRI$ an IRI of a RML triples map.
@@ -69,10 +88,11 @@ algebraic expressions associated with a chosen triples map.
 \end{definition}
 
 
-\subsection{Relevant Extension Functions}%
-\label{sub:built_in_extend_functions}
-
-The translation of RML descriptions into our formalism shall create Extend operators with extend expressions that use the following extension functions~(as per Definition~\ref{def:ExtensionFunction}).
+\subsubsection{Relevant Extension Functions}%
+\label{ssub:built_in_extend_functions}
+Lastly, we define the following extension functions~(as per Definition~\ref{def:ExtensionFunction})
+to support the creation of Extend operators during the translation 
+of RML descriptions into our formalism. 
 \begin{itemize}
 	\item
 	$\toIRI$ is a unary extension function that converts string literals representing IRIs into these IRIs. Formally,  for every $v \in (\symTermUniverse \cup \error)$, we define:
@@ -128,13 +148,122 @@ The translation of RML descriptions into our formalism shall create Extend opera
     \end{cases}
 \end{equation*}
 where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the strings $\lex_1$ and $\lex_2$.
-
 \end{itemize}
 
 
 \subsection{Translation Algorithms}%
 \label{sub:translation_algorithms}
+We present the pseudocode of the algorithm to translate a normalized RML document 
+to algebraic expressions in Algorithm~\ref{alg:rml2algebra}. 
+Given an RDF graph of a \emph{normalized} RML document and for each triples map
+in the RDF graph, the algorithm first generates a Source operator 
+following Algorithm~\ref{alg:rml_source_op} where all the query expressions
+detected, in the current triples map-specific RDF
+graph~(Section~\ref{ssub:tm_specific_rdf_graph}), are extracted
+(Algorithm~\ref{alg:query_extraction}) and composed to form the current 
+algebraic expression being translated~$\omega'$. 
+Subsequently, the relevant Extend operators are extracted, according to 
+Algorithm~\ref{alg:rml_termmap_extend_expr}, for both the subject and the 
+predicate term maps (line 6-11) where the Extend operators generate the 
+subject and predicate terms while binding them to the attributes $\subjAttr$ and $\predAttr$ 
+respectively. 
 
+To extract the Extend operators from the object maps, we need to also
+determine if it is a referencing-object
+map~\footnote{\url{https://rml.io/specs/rml/\#logical-join}}. 
+If the object map is a referencing-object map (line 14-28), the algorithm first
+extracts the Source operator for the parent triples map (line 15-18) and stores
+it into a temporary algebraic expression~$\omega_{ptm}$, then retrieves the
+join attributes (line 20-24) for the Equi-join operator (line 25), and finally,
+the algebraic expression~$\omega'$ is updated with the Equi-join operator (line
+26-28).
+Otherwise, the object map is treated the same as the subject and the predicate map 
+where an Extend operator is extracted directly (line 30-31). 
+The Extend operator generated for the object map binds the value returned by 
+evaluating the extend expression to the attribute $\objAttr$. 
+
+To get determine the RDF graph of the triples to be generated, 
+an Extend operator, to generate the graph IRI, is generated from the graph map 
+that exists in the triples map (line 33-36). 
+If there is no graph map in the triples map, a default graph IRI is generated 
+with the value \texttt{rr:defaultGraph} (line 37-38). 
+The attribute $\graphAttr$ contains the graph IRI to be generated by the 
+Extend operator. 
+
+Finally, a Projection operator is applied to only have the attributes 
+$\subjAttr, \predAttr, \objAttr$, and $\graphAttr$, in the mapping 
+relations resulting from the root operator of 
+the algebraic expression (line 40-41). 
+To capture all the mappings described in the RML document, a Union operator 
+is applied between the accumulated expression~$\omega$ and the current 
+algebraic expression~$\omega'$ (line 42). 
+At the end of this algorithm, we have an algebraic expression $\omega$ that 
+captures the full semantics of the mapping process described in a given 
+normalized RML document. 
+
+
+\begin{algorithm}[h!tbp]
+	\caption{RML translation to algebraic mapping expressions Part 1}
+	\label{alg:rml2algebra}
+	\begin{algorithmic}[1]
+		\Require $\symRMLGraph$ an RDF graph of a \textbf{normalized} RML document, 
+        \Statex \qquad $\LTB$ an injective function mapping literals to blank nodes, 
+        \Ensure A mapping definition
+        \State $\omega \gets$ initially empty algebraic expression
+		\For{$(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
+	    	\State  $(\queryExpr_{root},\symAttrQueryMap) \gets$ \textbf{TranslateSourceOperator}($\symRMLGraph, \triplesMapIRI$) \Comment{Algorithm~\ref{alg:rml_source_op}}
+            \State   $src \gets \textrm{initSrc}(o')$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$ \Comment Definition~\ref{def:init_data_source}
+	    	\State   $\omega' \gets \sourceOp{src}{\queryExpr_{root}}{\symAttrQueryMap}$
+
+            \State $tm_{sub} \gets o$, where triple $(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
+            \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sub}$) \Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
+            \State $\omega' \gets \extOpAttr{\attr_{s}}(\omega')$
+            \State $tm_{pred} \gets o$, where triple $(s,\texttt{rr:predicateMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
+            \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{pred}$)
+            \State $\omega' \gets \extOpAttr{\attr_{p}}(\omega')$
+		    \State\dots  \Comment Continued in Algorithm~\ref{alg:rml2algebra_part2}
+		    \algstore{state:full_translation}
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[h!tbp]
+	\caption{RML translation to algebraic mapping expressions Part 2}
+	\label{alg:rml2algebra_part2}
+	\begin{algorithmic}[1]
+		\algrestore{state:full_translation}
+            \State $tm_{obj} \gets o$ where triple $(s,\texttt{rr:objectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$ 
+            \If{$(tm_{obj},\texttt{rr:parentTriplesMap},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
+		        \State $s_{ptm} \gets o'$
+		        \State  $(\queryExpr_{root},\symAttrQueryMap) \gets $ \textbf{TranslateSourceOperator}($\symRMLGraph, s_{ptm}$) \Comment{Algorithm~\ref{alg:rml_source_op}}
+                \State   $source_{ptm} \gets \fctInitSrc{o''}$ with $(s'',\texttt{rr:logicalSource},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
+		        \State  $\omega_{ptm} \gets \sourceOp{source_{ptm}}{\queryExpr_{root}}{\symAttrQueryMap}$
+                \State $\symJoinAttrPairs \gets \emptyset$
+                \For{$(tm_{obj},\texttt{rr:joinCondition},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
+                    \State  $a \gets \symAttrQueryMap^{-1}(o'') $ for $o''$ in triple $(o',\texttt{rr:child},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
+                    \State  $a_{ptm} \gets \symAttrQueryMap^{-1}(o'')$ for $o''$ in triple $(o',\texttt{rr:parent},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
+		            \State  $\symJoinAttrPairs \gets \symJoinAttrPairs \cup \{ (a, a_{ptm}) \}$
+                \EndFor
+		        \State  $\omega' \gets \fctEquiJoinOp{\omega'}{\omega_{ptm}}$
+                \State $tm_{sptm} \gets  o''$ with $(s'',\texttt{rr:subjectMap},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
+                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sptm}$)
+                \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
+            \Else
+                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{obj}$)
+                \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
+		    \EndIf
+            \If{$(s,\texttt{rr:graphMap},tm_{graph}) \in \triplesMapGraph{TM}{\triplesMapIRI}$} 
+                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{graph}$) 
+                \State $\omega' \gets \extOpAttr{\attr_{g}}(\omega')$
+            \Else
+                \State $\extExpr \gets \texttt{rr:defaultGraph}$
+                \State $\omega' \gets \extOpAttr{\attr_{g}}(\omega')$
+            \EndIf
+            \State $\symProjSet \gets \{\attr_{s},\attr_{p},\attr_{o},\attr_{g},\}$
+            \State $\omega' \gets \fctProjectOp{\symProjSet}{\omega'}$
+            \State $\omega \gets  \fctUnion{\omega'}{\omega}$
+		\EndFor
+	\end{algorithmic}
+\end{algorithm}
 
 
 \begin{algorithm}[htbp]
@@ -321,77 +450,4 @@ given CSV dataset, such as column names.
 $\eval$ is a function that returns a row of CSV data object per
 iteration, and $\cbeval$ is a function that returns the data object for the
 given CSV column name. 
-
-
-\begin{algorithm}[htbp]
-	\caption{RML translation to algebraic mapping expressions}
-	\label{alg:rml2algebra}
-	\begin{algorithmic}[1]
-		\Require $\symRMLGraph$ an RDF graph of a \textbf{normalized} RML document, 
-        \Statex \qquad $\LTB$ an injective function mapping literals to blank nodes, 
-        \Ensure A mapping definition
-        \State $\omega \gets$ initially empty mapping definition \Comment Definition~\ref{def:mapping_definition}
-		\For{$(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
-	    	\State  $(\queryExpr_{root},\symAttrQueryMap) \gets$ \textbf{TranslateSourceOperator}($\symRMLGraph, \triplesMapIRI$) \Comment{Algorithm~\ref{alg:rml_source_op}}
-            \State   $src \gets \textrm{initSrc}(o')$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$ \Comment Definition~\ref{def:init_data_source}
-	    	\State   $\omega' \gets \sourceOp{src}{\queryExpr_{root}}{\symAttrQueryMap}$
-
-            \Statex
-            \State $tm_{sub} \gets o$, where triple $(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
-            \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sub}$) \Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
-            \State $\omega' \gets \extOpAttr{\attr_{s}}(\omega')$
-            \Statex
-            \State $tm_{pred} \gets o$, where triple $(s,\texttt{rr:predicateMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
-            \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{pred}$)
-            \State $\omega' \gets \extOpAttr{\attr_{p}}(\omega')$
-		    \State\dots  \Comment Continued in Algorithm~\ref{alg:rml2algebra_part2}
-		    \algstore{state:full_translation}
-	\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}[htbp]
-	\caption{RML translation to algebraic mapping expressions Part 2}
-	\label{alg:rml2algebra_part2}
-	\begin{algorithmic}[1]
-		\algrestore{state:full_translation}
-		\State \dots
-            \State $tm_{obj} \gets o$ where triple $(s,\texttt{rr:objectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$ 
-            \If{$(tm_{obj},\texttt{rr:parentTriplesMap},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
-		        \State $s_{ptm} \gets o'$
-		        \State  $(\queryExpr_{root},\symAttrQueryMap) \gets $ \textbf{TranslateSourceOperator}($\symRMLGraph, s_{ptm}$) \Comment{Algorithm~\ref{alg:rml_source_op}}
-                \State   $source_{ptm} \gets \fctInitSrc{o''}$ with $(s'',\texttt{rr:logicalSource},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
-		        \State  $\omega_{ptm} \gets \sourceOp{source_{ptm}}{\queryExpr_{root}}{\symAttrQueryMap}$
-                \State $\symJoinAttrPairs \gets \emptyset$
-                \For{$(tm_{obj},\texttt{rr:joinCondition},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
-                    \State  $a \gets \symAttrQueryMap^{-1}(o'') $ for $o''$ in triple $(o',\texttt{rr:child},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
-                    \State  $a_{ptm} \gets \symAttrQueryMap^{-1}(o'')$ for $o''$ in triple $(o',\texttt{rr:parent},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
-		            \State  $\symJoinAttrPairs \gets \symJoinAttrPairs \cup \{ (a, a_{ptm}) \}$
-                \EndFor
-                \If {$\symJoinAttrPairs  \neq \emptyset$ }
-		            \State  $\omega' \gets \fctEquiJoinOp{\omega'}{\omega_{ptm}}$
-                \EndIf
-                \State $tm_{sptm} \gets  o''$ with $(s'',\texttt{rr:subjectMap},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
-                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sptm}$)
-                \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
-            \Else
-                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{obj}$)
-                \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
-		    \EndIf
-            \Statex
-            \If{$(s,\texttt{rr:graphMap},tm_{graph}) \in \triplesMapGraph{TM}{\triplesMapIRI}$} 
-                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{graph}$) 
-                \State $\omega' \gets \extOpAttr{\attr_{g}}(\omega')$
-            \Else
-                \State $\extExpr \gets \texttt{rr:defaultGraph}$
-                \State $\omega' \gets \extOpAttr{\attr_{g}}(\omega')$
-            \EndIf
-
-            \Statex
-            \State $\symProjSet \gets \{\attr_{s},\attr_{p},\attr_{o},\attr_{g},\}$
-            \State $\omega' \gets \fctProjectOp{\symProjSet}{\omega'}$
-            \State $\omega \gets  \fctUnion{\omega'}{\omega}$
-		\EndFor
-	\end{algorithmic}
-\end{algorithm}
-
 

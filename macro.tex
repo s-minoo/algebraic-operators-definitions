@@ -7,15 +7,14 @@
 \newcommand{\symAllLiterals}{\mathcal{L}} % the symbol for the set of all literals
 \newcommand{\symAllBNodes}{\mathcal{B}} % the symbol for the set of all blank nodes
 \newcommand{\symRMLGraph}{G}
-\newcommand{\symDatasetUni}{\mathcal{D}}
-\newcommand{\symDataObjUni}{\mathcal{O}}
+\newcommand{\symDataObjUni}{\mathcal{D}}
 \newcommand{\symDataAccUni}{\mathcal{Q}}
 \newcommand{\symDataSeqUni}{\bar{\mathcal{O}}}
 \newcommand{\symAttrSubSet}{A}
 \newcommand{\symProjSet}{P}
 \newcommand{\symMappingTupleSet}{M}
 \newcommand{\symRenamePFunc}{R}
-\newcommand{\symDataset}{D}
+\newcommand{\bigDataObject}{D}
 \newcommand{\symSetDataset}{\mathcal{D}^\texttt{\tiny ds}\!}
 \newcommand{\symSetDatasetX}[1]{\mathcal{D}^\texttt{\tiny ds}_{#1}}
 \newcommand{\symSetContentA}{\mathcal{D}^\texttt{\tiny c1}}
@@ -65,7 +64,7 @@
 \newcommand{\sourceTypeTupleX}[1]{\sourceTypeTupleXXX{#1}{#1}{#1}}
 \newcommand{\sourceTypeTupleXXX}[3]{(\symSetDatasetX{#1}, \symSetContentAX{#2}, \symSetContentBX{#3}, \symDataAccX{#2}, \symDataAccX{#3}', \evalX{#2}, \cbevalX{#3}, \typeCastX{#1})}
 \newcommand{\dataSource}{s}
-\newcommand{\dataSourceTuple}{(\sourceType,\symDataset)}
+\newcommand{\dataSourceTuple}{(\sourceType,\bigDataObject)}
 \newcommand{\iterConfig}{\bbbc}
 \newcommand{\sourceOp}[3]{\textrm{Source}^{(#1,#2,#3)}}
 \newcommand{\sourceOpDflt}{\sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap}}
@@ -149,3 +148,4 @@
 
 % Layout %
 \newcommand{\ttl}[1]{\texttt{\small #1}}  % for conrete IRIs, etc. used in examples and in formulas
+\newcommand{\ttsf}[1]{\textsf{\small #1}}

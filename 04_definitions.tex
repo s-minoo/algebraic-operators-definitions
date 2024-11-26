@@ -21,17 +21,17 @@
 % }
 
 This section introduces our mapping algebra which consists of six
-	\todo{Change this number if we decide to remove some of the operators due to space constraints.}
+\todo{Change this number if we decide to remove some of the operators due to space constraints.}
 types of operators.
-	The output of each such operator is
-	%The output of each operator is
-	%Each such operator outputs
+The output of each such operator is
+%The output of each operator is
+%Each such operator outputs
 a mapping relation and the inputs (if any) are mapping relations as well. Hence, the operators can be combined
-	%to form
-	into
+%to form
+into
 arbitrarily complex algebra expressions, where each such expression defines a mapping from one or more sources of
-	%structured or semi-structured
-	(semi-)structured
+%structured or semi-structured
+(semi-)structured
 data into an~RDF~dataset.\footnote{We assume here that the mapping relation resulting from the root operator of the expression contains the aforementioned attributes $\subjAttr$, $\predAttr$, $\objAttr$, and $\graphAttr$ (see Definition~\ref{def:generated_dataset}).}
 
 
@@ -66,61 +66,59 @@ data into an~RDF~dataset.\footnote{We assume here that the mapping relation resu
 % }
 
 The basis of every
-	expression that defines a mapping using our algebra
-	%algebraic mapping expression
+expression that defines a mapping using our algebra
+%algebraic mapping expression
 are operators that establish a relational view of each source of input data. From the perspective of the algebra, these \emph{source operators} are nullary operators; they do not have any mapping relation as input. The mapping relation that such an operator creates
-	as output
+as output
 depends on the data of the corresponding data source and can be specified based on a language appropriate to identify and extract relevant pieces of data from the data source. As our mapping algebra should be applicable for various types of data sources, for which different such languages are suitable, we introduce an abstraction of this extraction process and define
-	our notion of source operators
-	%the source operator
+our notion of source operators
+%the source operator
 based on this abstraction.
 
-	%For our abstraction we assume
-	Our abstraction considers
+%For our abstraction we assume
+Our abstraction considers
 two infinite sets, $\symDataObjUni$ and $\symDataAccUni$, which are disjoint.
-	\todo{Min Oo, notice that I have removed the set $\symDatasetUni$ of datasets, which we said are collections of data objects. I don't think we need that. After all, a dataset can also be seen as a data object; especially because data objects may contain other data objects. As a consequence, the purpose of having an explicit notion of datasets, distinct from data objects, is not easy to explain. Therefore, I have removed it. Once this change is implemented throughout the rest of the paper, I would prefer to change the symbol $\symDataObjUni$ to $\mathcal{D}$.}
-%
 $\symDataObjUni$ is the set of all possible \emph{data objects}.
-	%In concrete instantiations of our abstraction,
-	In practice,
+%In concrete instantiations of our abstraction,
+In practice,
 there are different kinds of data objects, even within the context of the same type of data source, and data objects may be nested within one another. For instance,
-	%in the context of JSON documents, each JSON object may be seen as a data object, and so may each named field within a JSON object and also the name and the value of such a field.
-	each line of a CSV file may be seen as a data object, and so may each value within such a line, as well as the CSV file as a whole.
-In our abstraction, any particular kind of data objects is considered as a specific subset of $\symDataObjUni$, and to indicate that a data object~$\dataObject \in \symDataObjUni$ is contained in another data object~$\symDataset \in \symDataObjUni$, we write $\dataObject \in \symDataset$.
+%in the context of JSON documents, each JSON object may be seen as a data object, and so may each named field within a JSON object and also the name and the value of such a field.
+each line of a CSV file may be seen as a data object, and so may each value within such a line, as well as the CSV file as a whole.
+In our abstraction, any particular kind of data objects is considered as a specific subset of $\symDataObjUni$, and to indicate that a data object~$\dataObject \in \symDataObjUni$ is contained in another data object~$\bigDataObject \in \symDataObjUni$, we write $\dataObject \in \bigDataObject$.
 
 The set $\symDataAccUni$ captures possible \emph{query languages} to retrieve data objects from other data objects. We consider each such language $\symDataAcc \in \symDataAccUni$ as a set, where every element $\queryExpr \in \symDataAcc$ is one of the expressions
-	admitted by
-	%of
+admitted by
+%of
 the language. In practice, each such language is designed to be used for a specific kind of data objects (i.e., a specific subset of $\symDataObjUni$).
-	%Some languages may also be repurposed to be used for different kinds of data objects.
+%Some languages may also be repurposed to be used for different kinds of data objects.
 Therefore, we define the notion of the \emph{types of data sources} considered for the source operators of our algebra as a structure that specifies the relevant kinds of data objects and the corresponding evaluation semantics of the languages to be used for data sources of such a type.
 
 \begin{definition}
 	\label{def:source_type}
 	\normalfont
 	A \textbf{source type} is a tuple $\sourceTypeTuple$
-\todo{Min Oo, notice that I have changed this one as well. There are two languages now, one for selecting the context objects and one for selecting the values from the context objects. Additionally, the type-cast function is now part of the source type and there are two more sets of data objects to capture explicitly the types of objects in the results of the first and the second language, respectively. This changes still need to be reflected in the rest of the paper.}
+	\todo{Min Oo, notice that I have changed this one as well. There are two languages now, one for selecting the context objects and one for selecting the values from the context objects. Additionally, the type-cast function is now part of the source type and there are two more sets of data objects to capture explicitly the types of objects in the results of the first and the second language, respectively. This changes still need to be reflected in the rest of the paper.}
 	where
 	\begin{itemize}
 		\item
-		$\symSetDataset \subseteq \symDataObjUni$,
-		\, $\symSetContentA\! \subseteq \symDataObjUni$,
-		\, $\symSetContentB\! \subseteq \symDataObjUni$,
+		      $\symSetDataset \subseteq \symDataObjUni$,
+		      \, $\symSetContentA\! \subseteq \symDataObjUni$,
+		      \, $\symSetContentB\! \subseteq \symDataObjUni$,
 
 		\item
-		$\symDataAcc$ and $\symDataAcc'$ are query languages in $\symDataAccUni$,
+		      $\symDataAcc$ and $\symDataAcc'$ are query languages in $\symDataAccUni$,
 
 		\item
-		$\eval$ is a function $\eval \!: \symSetDataset \times \symDataAcc \rightarrow \overline{\symSetContentA}$,
+		      $\eval$ is a function $\eval \!: \symSetDataset \times \symDataAcc \rightarrow \overline{\symSetContentA}$,
 
 		\item
-		$\cbeval$ is a partial function $\cbeval : \symSetDataset \times \symSetContentA\! \times \symDataAcc'\! \rightarrow \overline{\symSetContentB}$, and
+		      $\cbeval$ is a partial function $\cbeval : \symSetDataset \times \symSetContentA\! \times \symDataAcc'\! \rightarrow \overline{\symSetContentB}$, and
 
 		\item
-		$\typeCast$ is a partial function $\typeCast \!: \symSetContentB\! \rightarrow \symAllLiterals$,
+		      $\typeCast$ is a partial function $\typeCast \!: \symSetContentB\! \rightarrow \symAllLiterals$,
 	\end{itemize}
 	where $\overline{\symSetContentA}$, resp.\ $\overline{\symSetContentB}$, is the set of all
-		%possible
+	%possible
 	sequences of data objects in $\symSetContentA\!$, resp.\ $\symSetContentB\!$.
 \end{definition}
 
@@ -129,78 +127,102 @@ Therefore, we define the notion of the \emph{types of data sources} considered f
 	\normalfont
 	A \textbf{data source}~$\dataSource$ is a tuple~$\dataSourceTuple$ in which
 	$\sourceType$ is a source type
-		%$\sourceTypeTuple$
-		$(\symSetDataset, \mathcal{D}^\texttt{\tiny o1}\!, \mathcal{D}^\texttt{\tiny o2}\!, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \mathit{cast})$
+	%$\sourceTypeTuple$
+	$(\symSetDataset, \mathcal{D}^\texttt{\tiny o1}\!, \mathcal{D}^\texttt{\tiny o2}\!, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \mathit{cast})$
 	and
-	$\symDataset \in \symSetDataset$.
+	$\bigDataObject \in \symSetDataset$.
 \end{definition}
 
 As per Definitions~\ref{def:source_type}%
-	\ and~%
-	%--%
+\ and~%
+%--%
 \ref{def:data_source}, the set $\symSetDataset$ of a source type
-	%$\sourceTypeTuple$
+%$\sourceTypeTuple$
 determines the kind of data objects that the data sources of this type may provide access to.
-	For instance, for CSV-based data sources this may be the (infinite) set of all possible CSV files.
+For instance, for CSV-based data sources this may be the (infinite) set of all possible CSV files.
 The
-	%function~$\eval$ is meant to define the evaluation semantics of the language~$\symDataAcc$ when used for data sources of the given type, and $\cbeval$ is meant to define the evaluation semantics of $\symDataAcc'\!$.
-	functions~$\eval$ and $\cbeval$ are meant to define the evaluation semantics of the languages~$\symDataAcc$ and~$\symDataAcc'\!$, respectively.
+%function~$\eval$ is meant to define the evaluation semantics of the language~$\symDataAcc$ when used for data sources of the given type, and $\cbeval$ is meant to define the evaluation semantics of $\symDataAcc'\!$.
+functions~$\eval$ and $\cbeval$ are meant to define the evaluation semantics of the languages~$\symDataAcc$ and~$\symDataAcc'\!$, respectively.
 Notice that the domain of $\cbeval$ consists of 3-tuples that contain an additional data object as their second element, which is meant as a context object for the evaluation. The idea of the source operators shall be to use $\symDataAcc$ to specify relevant context objects and, then, to use $\symDataAcc'$ to retrieve values for
-	creating a mapping tuple
-	%mapping tuples
+creating a mapping tuple
+%mapping tuples
 %
-	%based on each
-	per
+%based on each
+per
 context~object.
 
-	While a formal definition of concrete source types is beyond the scope of this paper, the
-	%The
+While a formal definition of concrete source types is beyond the scope of this paper, the
+%The
 following two examples outline informally how JSON-based data sources and CSV-based data sources may be captured within our abstraction.
 
 \begin{example}
 	\label{ex:source_type_json}
 	To define $\sourceTypeX{\mathsf{json}} = \sourceTypeTupleXXX{\mathsf{json}}{\mathsf{jp}}{\mathsf{jp}}$ as a source type for JSON-based data sources, we let $\symSetDatasetX{\mathsf{json}}$ be
-% 	As a
-% 		%source
-% 	type for
-% 		JSON-based
-% 		%JSON
-% 	data sources, we may define $\sourceTypeX{\mathsf{json}} = \sourceTypeTupleXXX{\mathsf{json}}{\mathsf{jp}}{\mathsf{jp}}$ as follows.
-% 	$\symSetDatasetX{\mathsf{json}}$ is
+	% 	As a
+	% 		%source
+	% 	type for
+	% 		JSON-based
+	% 		%JSON
+	% 	data sources, we may define $\sourceTypeX{\mathsf{json}} = \sourceTypeTupleXXX{\mathsf{json}}{\mathsf{jp}}{\mathsf{jp}}$ as follows.
+	% 	$\symSetDatasetX{\mathsf{json}}$ is
 	the infinite set of all possible JSON documents, both $\symSetContentAX{\mathsf{jp}}$ and $\symSetContentBX{\mathsf{jp}}$ are the infinite set of all possible elements that may occur within JSON documents (i.e., $\symSetContentAX{\mathsf{jp}} = \symSetContentBX{\mathsf{jp}}$),
 	$\symDataAccX{\mathsf{jp}}$ is the set of all JSONPath expressions that begin with the selector for the root element (i.e., \texttt{\$}), and
 	$\symDataAccX{\mathsf{jp}}'$ are all JSONPath expressions that do not begin with~\texttt{\$}.
 	Then, $\evalX{\mathsf{jp}}$ and $\cbevalX{\mathsf{jp}}$ capture the evaluation semantics of JSONPath.
-	That is, for a JSON document $\symDataset \in \symSetDatasetX{\mathsf{json}}$ and a query $\queryExpr \in \symDataAccX{\mathsf{jp}}$, $\evalX{\mathsf{jp}}(\symDataset,\queryExpr)$ returns the elements of $\symDataset$ selected by $\queryExpr$. If $\queryExpr'\! \in \symDataAccX{\mathsf{jp}}'$, and assume $\dataObject \in \symSetContentAX{\mathsf{jp}}$ is a JSON object within $\symDataset$, then $\cbevalX{\mathsf{jp}}(\symDataset,\dataObject,\queryExpr')$ returns the elements of $\symDataset$ that can be reached from $\dataObject$ as per the traversal specified by $\queryExpr'\!$.
+	That is, for a JSON document $\bigDataObject \in \symSetDatasetX{\mathsf{json}}$ and a query $\queryExpr \in \symDataAccX{\mathsf{jp}}$, $\evalX{\mathsf{jp}}(\bigDataObject,\queryExpr)$ returns the elements of $\bigDataObject$ selected by $\queryExpr$. If $\queryExpr'\! \in \symDataAccX{\mathsf{jp}}'$, and assume $\dataObject \in \symSetContentAX{\mathsf{jp}}$ is a JSON object within $\bigDataObject$, then $\cbevalX{\mathsf{jp}}(\bigDataObject,\dataObject,\queryExpr')$ returns the elements of $\bigDataObject$ that can be reached from $\dataObject$ as per the traversal specified by $\queryExpr'\!$.
 	Finally, $\typeCastX{\mathsf{json}}$ maps JSON values to RDF literals. For instance, string values may be mapped to \ttl{xsd:string} literals, numeric values that are integers may be mapped to \ttl{xsd:integer} literals, etc.
 \end{example}
 
 \begin{example}
 	\label{ex:source_type_csv}
 	As a
-		source
+	source
 	type for CSV-based data sources, we may
-		%define
-		introduce
+	%define
+	introduce
 	$\sourceTypeX{\mathsf{csv}} = \sourceTypeTupleX{\mathsf{csv}}$ as follows.
 	$\symSetDatasetX{\mathsf{sv}}$ is the infinite set of all possible CSV files,
 	$\symSetContentAX{\mathsf{jp}}$ is the infinite set of all possible rows of CSV files,
 	$\symSetContentBX{\mathsf{jp}} \subset \symAllStrings$ is the infinite set of strings that may be values within CSV files, and
 	the $\typeCastX{\mathsf{csv}}$ function maps all these string values
-		in $\symSetContentBX{\mathsf{jp}}$
+	in $\symSetContentBX{\mathsf{jp}}$
 	to \ttl{xsd:string} literals.
-	As the language $\symDataAccX{\mathsf{csv}}$, we may use the singleton set that contains (only) the empty string~$\varepsilon$, and $\symDataAccX{\mathsf{csv}} \subset \symAllStrings$ is the set of all strings that may be used as column names in CSV files. Informally, $\evalX{\mathsf{csv}}$ and $\cbevalX{\mathsf{csv}}$ may then be defined as follows. For
-		%the empty string~$\varepsilon$ and
-	every CSV file~$\symDataset \in \symSetDatasetX{\mathsf{csv}}$, $\evalX{\mathsf{csv}}(\symDataset,\varepsilon)$ returns all rows of~$\symDataset$%
-		%, in the order in which they appear within $\symDataset$%
+	As the language $\symDataAccX{\mathsf{csv}}$, we may use the singleton set that contains (only) the empty string~$\varepsilon$, and $\symDataAcc'_{\mathsf{csv}} \subset \symAllStrings$ is the set of all strings that may be used as column names in CSV files. Informally, $\evalX{\mathsf{csv}}$ and $\cbevalX{\mathsf{csv}}$ may then be defined as follows. For
+	%the empty string~$\varepsilon$ and
+	every CSV file~$\bigDataObject \in \symSetDatasetX{\mathsf{csv}}$, $\evalX{\mathsf{csv}}(\bigDataObject,\varepsilon)$ returns all rows of~$\bigDataObject$%
+	%, in the order in which they appear within $\symDataset$%
 	, and for every such row
-		$\dataObject \in \evalX{\mathsf{csv}}(\symDataset,\varepsilon)$
-		%$\dataObject$
-	and every string $c$ that is a column name in~$\symDataset$, $\cbevalX{\mathsf{csv}}(\symDataset,\dataObject,c)$ is the value that
-		the row~%
+	$\dataObject \in \evalX{\mathsf{csv}}(\bigDataObject,\varepsilon)$
+	%$\dataObject$
+	and every string $c$ that is a column name in~$\bigDataObject$, $\cbevalX{\mathsf{csv}}(\bigDataObject,\dataObject,c)$ is the value that
+	the row~%
 	$\dataObject$ has in column~$c$.
 	%$\typeCastX{\mathsf{csv}}$ maps all string values in $\symSetContentBX{\mathsf{jp}}$ to \ttl{xsd:string} literals.
 \end{example}
+
+{\color{blue}
+Furthermore, we also provide a running example that is used throughout the rest
+of this section to provide a practical example after defining each operator.
+\begin{example}
+	\label{ex:running_ex_source_type}
+	First, we start with a concrete example of a source type for a CSV file
+	$\bigDataObject \in \symSetDatasetX{\mathsf{csv}}$ 
+	with the header introducing column names \textsf{id}, \textsf{firstname},
+	\textsf{lastname}, and \textsf{age} and the following two rows of CSV
+	data records on people as:
+	\begin{equation*}
+        \bigDataObject = [(\ttl{1}, \ttl{Alice}, \ttl{Lee}, \ttl{23}), (\ttl{2}, \ttl{Bob}, \ttl{Malice}, \ttl{25})]
+	\end{equation*}
+    The source type for such a CSV file is $\sourceType = (\bigDataObject, \symSetContentA,
+    \symSetContentB, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \typeCast )$ where 
+    $\symDataAcc = \{ \error \}$, 
+    $\symDataAcc' = \{ \textsf{id},  \textsf{firstname},\textsf{lastname},\textsf{age}\}$, 
+    $\symSetContentA$ consists of the two CSV rows after evaluating $\fctEval{\bigDataObject}{\error}$, 
+    $\symSetContentB$ consists of all CSV values (e.g. \ttl{Alice}, \ttl{Malice}, etc\dots), and 
+    $\typeCast$ can transform the CSV values in $\symSetContentB$ to RDF literals (e.g. 
+    $\fctTypeCast{\ttl{Alice}}$ creates RDF literal $(\ttl{"Alice"}, \ttl{xsd:string})$).  
+\end{example}
+}
 
 %The question of how data sources of any such type are actually accessed in practice is irrelevant for our formalization.
 
@@ -208,8 +230,8 @@ Now we are ready to define our notion of source operators. While they are nullar
 the data source from which the data for the produced mapping relation is extracted,
 a query that selects relevant context objects from the data source,
 and a map that associates attributes with
-	%queries to select values for the attributes. The idea is to create a mapping relation with the given attributes and one or more mapping tuple per selected context object.
-	queries, where these queries are meant to select the values that a mapping tuple produced for a context object has for the attributes. 
+%queries to select values for the attributes. The idea is to create a mapping relation with the given attributes and one or more mapping tuple per selected context object.
+queries, where these queries are meant to select the values that a mapping tuple produced for a context object has for the attributes.
 %
 Formally, we define the mapping relation produced by a source operator as follows.
 
@@ -217,25 +239,24 @@ Formally, we define the mapping relation produced by a source operator as follow
 	\label{def:source_operator}
 	\normalfont
 	Let $\dataSource = \dataSourceTuple$ be a data source with
-		%$\sourceType = \sourceTypeTuple$,
-		$\sourceType = (\symSetDataset, \symSetContentA\!, \symSetContentB\!, \symDataAcc, \symDataAcc'\!,$ $\eval, \cbeval, \typeCast)$,
-\todo{Min Oo, notice that I decided to simply use the symbol $\queryExpr$ here, instead of $\queryExpr_{root}$. This change needs to be reflected in the rest of the paper.}
+	%$\sourceType = \sourceTypeTuple$,
+	$\sourceType = (\symSetDataset, \symSetContentA\!, \symSetContentB\!, \symDataAcc, \symDataAcc'\!,$ $\eval, \cbeval, \typeCast)$,
 	$\queryExpr \in \symDataAcc$, and
 	$\symAttrQueryMap$ be a partial function
 	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'\!$.
 	The \textbf{$(\queryExpr,\symAttrQueryMap)$-spe\-cif\-ic mapping relation obtained from $\dataSource$}, denoted by $\sourceOpDflt$, is the mapping relation $\mappingRel$ such that $\symAttrSubSet = \fctDom{\symAttrQueryMap}$ and
 	\begin{align*}
 		\symMappingInst = \big\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n} \} \ \big| \
-		& \dataObject \in \symDataSeq \text{ and}
+		 & \dataObject \in \symDataSeq \text{ and}
 		\\[-1mm]
-		& ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d \big\}
+		 & ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d \big\}
 		,
 	\end{align*}
-	where $\symDataSeq = \fctEval{\symDataset}{\queryExpr}$ and
+	where $\symDataSeq = \fctEval{\bigDataObject}{\queryExpr}$ and
 	\begin{equation*}
 		X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap}}
 		\big\{ (\attr, \var) \ \big| \
-		\var \in \fctCbeval{\symDataset}{\dataObject}{\queryExpr'} \text{ with }  \queryExpr'\! = \symAttrQueryMap(\attr) \big\}
+		\var \in \fctCbeval{\bigDataObject}{\dataObject}{\queryExpr'} \text{ with }  \queryExpr'\! = \symAttrQueryMap(\attr) \big\}
 		.
 	\end{equation*}
 \end{definition}
@@ -243,33 +264,33 @@ Formally, we define the mapping relation produced by a source operator as follow
 \todo[inline]{Min Oo, please modify the following example to adapt it to the terminology and formalism that have used above. Perhaps it is an idea to split the example into two: The first one is only about the running example and the source type for CSV files, including the use of its two languages, and can be moved directly after Example~\ref{ex:source_type_csv}. The second one, then, is only about the source operator. Of course, the first one should already use the root query and one of the context-object queries that are also used by the example source operator.}
 
 \begin{example}
-\label{ex:source_operator}
-We provide a running example used throughout the rest of the paper starting
-with a CSV file with the header,
+	\label{ex:source_operator}
+	We provide a running example used throughout the rest of the paper starting
+	with a CSV file with the header,
 	\todo{Since the column names are not variables / symbols in the formalism, I would not use italic font for them; yet, they should be highlighted in some way. I propose to use 'textsf' with fontsize 'small'; e.g., \textsf{\small id}.}
 	\todo{What kind of a notation is "[( ... )]"? I would simply write: "... with a header introducing columns named \textsf{\small id}, ..."}
-$H= [(id, firstname, lastname, age)]$,
-containing the following 2
+	$H= [(id, firstname, lastname, age)]$,
+	containing the following two
 	\todo{Writing "2" here is not correct English. A number that is meant as a quantifier (i.e., not as a numeric value) should be written as a word, not using digits, unless the number is greater than 12. So, here you should write "two rows"!}
-rows of CSV data records on people as: 
-\begin{equation*}
-    \symDataset = [(1, \text{Alice}, \text{Lee}, 23), (2, \text{Bob}, \text{Malice}, 25)] 
-\end{equation*}
-    A source operator, $\sourceOpDflt$, with $\dataSource = \dataSourceTuple$,
-    $\sourceType = \sourceTypeTuple$, $\queryExpr_{root}$ a CSV root query 
-    which, when evaluated as $\eval(\queryExpr_{root})$, will return the 2 CSV records in $\symDataset$
-    as data objects, and
-\todo{I wouldn't use question marks for attribute names.}
-    $\symAttrQueryMap = \{?id \rightarrow id,  ?name \rightarrow firstname, ?age \rightarrow age\}$    
-    generates a mapping relation $r$  with two mapping tuples
-\todo{Also mention what the attributes of the relation are (i.e., the schema).}
-    $t_1, t_2 \in r$ as:
-\todo{The values in these tuples must be \ttl{xsd:string} literals.}
-    \begin{align*}
-        t_1 &= \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}, ?age \rightarrow 23 \}\quad t_2 = \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}, ?age \rightarrow 25 \} \\
-    \end{align*}
-    Do note that due to the $cast$ function (Definition~\ref{def:cast_function}), 
-    all the mapping tuples $t \in r$ only have RDF literals in the $range(t)$.
+	rows of CSV data records on people as:
+	\begin{equation*}
+		\bigDataObject = [(1, \text{Alice}, \text{Lee}, 23), (2, \text{Bob}, \text{Malice}, 25)]
+	\end{equation*}
+	A source operator, $\sourceOpDflt$, with $\dataSource = \dataSourceTuple$,
+	$\sourceType = \sourceTypeTuple$, $\queryExpr_{root}$ a CSV root query
+	which, when evaluated as $\eval(\queryExpr_{root})$, will return the 2 CSV records in $\bigDataObject$
+	as data objects, and
+	\todo{I wouldn't use question marks for attribute names.}
+	$\symAttrQueryMap = \{?id \rightarrow id,  ?name \rightarrow firstname, ?age \rightarrow age\}$
+	generates a mapping relation $r$  with two mapping tuples
+	\todo{Also mention what the attributes of the relation are (i.e., the schema).}
+	$t_1, t_2 \in r$ as:
+	\todo{The values in these tuples must be \ttl{xsd:string} literals.}
+	\begin{align*}
+		t_1 & = \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}, ?age \rightarrow 23 \}\quad t_2 = \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}, ?age \rightarrow 25 \} \\
+	\end{align*}
+	Do note that due to the $cast$ function (Definition~\ref{def:cast_function}),
+	all the mapping tuples $t \in r$ only have RDF literals in the $range(t)$.
 \end{example}
 
 \subsection{Extend Operator}%
@@ -290,9 +311,9 @@ rows of CSV data records on people as:
 	follows:
 	\begin{enumerate}
 		\item
-		    Every RDF term in $\symTermUniverse$ is an \textbf{extend expression}.
+		      Every RDF term in $\symTermUniverse$ is an \textbf{extend expression}.
 		\item
-            Every attribute in $\symAttrUniverse$ is an \textbf{extend expression}.
+		      Every attribute in $\symAttrUniverse$ is an \textbf{extend expression}.
 		\item
 		      If $\extExpr_1,\dots,\extExpr_n$ are extend expressions and
 		      $\extFunc \in \symExtFuncUni$, then the tuple $\extFuncTuple$ is an
@@ -319,12 +340,12 @@ For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote
 	Let $r = \mappingRel$ be a mapping relation, $\attr \in \symAttrUniverse$ be
 	an attribute that is not in $\symAttrSubSet$ (i.e., $\attr \notin \symAttrSubSet$),
 	and $\extExpr$ be an extend expression that is valid for $r$.
-	The \textbf{$\extExpr$-specific extension of $r$ for $\attr$}, 
-    denoted by $\fctExtOp{r}$,
+	The \textbf{$\extExpr$-specific extension of $r$ for $\attr$},
+	denoted by $\fctExtOp{r}$,
 	is the mapping tuple
 	$(\symAttrSubSet'\!,\symMappingInst')$ such that
 	\begin{align*}
-		\symAttrSubSet'  & = \symAttrSubSet \cup \{ \attr \}, \; \text{ and }                                            \\
+		\symAttrSubSet'  & = \symAttrSubSet \cup \{ \attr \}, \; \text{ and }                                        \\
 		\symMappingInst' & = \bigl\{\mappingTuple \cup \{\attr \rightarrow \fctEval{\extExpr}{\mappingTuple}\} \ | \
 		\mappingTuple \in \symMappingInst \bigr\}
 	\end{align*}
@@ -355,48 +376,48 @@ For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote
 \end{definition}
 
 \begin{example}
-    \label{ex:extend_operator}
-\todo{I propose to use a simpler example with a single Extend operator only. In particular, you can use one that converts the age values of the running example into \ttl{xsd:integer} literals. This is useful to demonstrate another use case of Extend operators, because the use cases about creating IRIs and about adding constants will show up anyways in the translation section. \\ Additionally, this conversion example has another advantage: it allows us to also illustrate a case where the Extend operator adds an error ($\error$). To this end, just change one of the two age values in the CSV to be non-numerical (e.g., the string "unknown").}
-    The mapping relation, $r$, generated in
-    Example~\ref{ex:projection_operator} only contains RDF literals, thus, an
-    RDF dataset containing RDF graphs with triples cannot be generated from
-    $r$. 
-    Extend operators, applied in succession, can generate the IRI terms
-    required for the triples in the resulting RDF dataset. 
-    Let $\extExpr_{iri}^{\attr}=(f, \attr)$ be an extend expression with a function~$f$
-    that generates an IRI, when evaluating $\eval(\extExpr_{iri}^{\attr},
-    \mappingTuple)$, by prepending the URL ``\texttt{example.com/}'' to
-    $\mappingTuple(\attr)$.
-    We apply 4 extend operators in succession on $r$ as follows:
-    \begin{equation*}
-        \fctExtOpXBig{\subjAttr}{\extExpr_{iri}^{?id}}{
-            \fctExtOpXBig{\predAttr}{\texttt{foaf:name}}{
-                \fctExtOpXBig{\objAttr}{?name}{
-                    \fctExtOpXBig{\graphAttr}{\texttt{rr:defaultGraph}}{
-                        r
-                    }
-                }
-            }
-        }
-    \end{equation*}
-    This results in a new mapping relation with $r'$ with the following 
-    mapping tuples $t_1$, and $t_2$ with both having a mapping
-    $\graphAttr \rightarrow \texttt{rr:defaultGraph}$:
-    \begin{align*}
-        t_1 &= \{\dots,
-        \subjAttr \rightarrow \text{<example.com/1>},
-        \predAttr \rightarrow \texttt{foaf:name}, 
-        \objAttr \rightarrow \text{``Alice''}, 
-        \dots
-        \}\\
-        t_2 &= \{\dots,
-        \subjAttr \rightarrow \text{<example.com/2>},
-        \predAttr \rightarrow \texttt{foaf:name}, 
-        \objAttr \rightarrow \text{``Bob''}, 
-        \dots
-        \}
-    \end{align*}
-\end{example} 
+	\label{ex:extend_operator}
+	\todo{I propose to use a simpler example with a single Extend operator only. In particular, you can use one that converts the age values of the running example into \ttl{xsd:integer} literals. This is useful to demonstrate another use case of Extend operators, because the use cases about creating IRIs and about adding constants will show up anyways in the translation section. \\ Additionally, this conversion example has another advantage: it allows us to also illustrate a case where the Extend operator adds an error ($\error$). To this end, just change one of the two age values in the CSV to be non-numerical (e.g., the string "unknown").}
+	The mapping relation, $r$, generated in
+	Example~\ref{ex:projection_operator} only contains RDF literals, thus, an
+	RDF dataset containing RDF graphs with triples cannot be generated from
+	$r$.
+	Extend operators, applied in succession, can generate the IRI terms
+	required for the triples in the resulting RDF dataset.
+	Let $\extExpr_{iri}^{\attr}=(f, \attr)$ be an extend expression with a function~$f$
+	that generates an IRI, when evaluating $\eval(\extExpr_{iri}^{\attr},
+		\mappingTuple)$, by prepending the URL ``\texttt{example.com/}'' to
+	$\mappingTuple(\attr)$.
+	We apply 4 extend operators in succession on $r$ as follows:
+	\begin{equation*}
+		\fctExtOpXBig{\subjAttr}{\extExpr_{iri}^{?id}}{
+			\fctExtOpXBig{\predAttr}{\texttt{foaf:name}}{
+				\fctExtOpXBig{\objAttr}{?name}{
+					\fctExtOpXBig{\graphAttr}{\texttt{rr:defaultGraph}}{
+						r
+					}
+				}
+			}
+		}
+	\end{equation*}
+	This results in a new mapping relation with $r'$ with the following
+	mapping tuples $t_1$, and $t_2$ with both having a mapping
+	$\graphAttr \rightarrow \texttt{rr:defaultGraph}$:
+	\begin{align*}
+		t_1 & = \{\dots,
+		\subjAttr \rightarrow \text{<example.com/1>},
+		\predAttr \rightarrow \texttt{foaf:name},
+		\objAttr \rightarrow \text{``Alice''},
+		\dots
+		\}               \\
+		t_2 & = \{\dots,
+		\subjAttr \rightarrow \text{<example.com/2>},
+		\predAttr \rightarrow \texttt{foaf:name},
+		\objAttr \rightarrow \text{``Bob''},
+		\dots
+		\}
+	\end{align*}
+\end{example}
 
 
 \subsection{Projection Operator}%
@@ -418,28 +439,28 @@ relation to a subset of the attributes of that relation.
 
 \begin{definition}
 	\label{def:projection_operator}
-    \normalfont
+	\normalfont
 	Let $r = \mappingRel$ be a mapping relation and $\symProjSet \subseteq
 		\symAttrSubSet$ be a non-empty subset of the
 	attributes of $r$.
 	The \textbf{$\symProjSet$-specific projection of $r$}, denoted by
-    $\fctProjectOpDflt{r}$, is the mapping relation $(\symAttrSubSet',
-		\symMappingInst')$ such that $\symAttrSubSet' = \symProjSet$ 
-        and $\symMappingInst' = \{ \mappingTuple[\symAttrSubSet'] \ | \
+	$\fctProjectOpDflt{r}$, is the mapping relation $(\symAttrSubSet',
+		\symMappingInst')$ such that $\symAttrSubSet' = \symProjSet$
+	and $\symMappingInst' = \{ \mappingTuple[\symAttrSubSet'] \ | \
 		\mappingTuple \in \symMappingInst \}$.
 \end{definition}
 
 \begin{example}
-    \label{ex:projection_operator}
-\todo{As mentioned in my comment about switching the order of the sections about extend operators and projection operators, it feels a bit weird to do this projection. Given that the age attribute is projected away directly after the source operator, why introduce this attribute in the first place? \\ A much more reasonable example, now after switching the order of the sections, could continue as a direct follow up of the conversion example that I am proposing for the Extend operator; namely, after extending the relation with a column that contains the \ttl{xsd:integer} versions of the age values, it makes sense to project away the original age column.}
-    Let $r$ be the mapping relation generated in Example~\ref{ex:source_operator},
-    and $\symProjSet = \{?id, ?name\}$. 
-    The mapping relation $r'$ generated after applying $\fctProjectOpDflt{r}$
-    has mapping tuples $t'_1, t'_2 \in r'$ as:
-    \begin{equation*}
-        t'_1 = \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}\},
-        t'_2 = \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}\}
-    \end{equation*}
+	\label{ex:projection_operator}
+	\todo{As mentioned in my comment about switching the order of the sections about extend operators and projection operators, it feels a bit weird to do this projection. Given that the age attribute is projected away directly after the source operator, why introduce this attribute in the first place? \\ A much more reasonable example, now after switching the order of the sections, could continue as a direct follow up of the conversion example that I am proposing for the Extend operator; namely, after extending the relation with a column that contains the \ttl{xsd:integer} versions of the age values, it makes sense to project away the original age column.}
+	Let $r$ be the mapping relation generated in Example~\ref{ex:source_operator},
+	and $\symProjSet = \{?id, ?name\}$.
+	The mapping relation $r'$ generated after applying $\fctProjectOpDflt{r}$
+	has mapping tuples $t'_1, t'_2 \in r'$ as:
+	\begin{equation*}
+		t'_1 = \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}\},
+		t'_2 = \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}\}
+	\end{equation*}
 \end{example}
 
 
@@ -498,22 +519,22 @@ relation to a subset of the attributes of that relation.
 
 
 \begin{example}
-    \label{ex:equi_join_operator}
-    Example~\ref{ex:projection_operator} generates a mapping relation $r_1$
-    containing only the first name of the people by projecting away the other
-    attributes. 
-    Assuming there is a mapping relation~$r_2$ derived from 
-    $D$ (Example~\ref{ex:source_operator}), which contains the last names
-    of the people with their corresponding $id$ number, we can get both 
-    the first and last name of the people by applying an equijoin on 
-    the $id$ attribute with $\symJoinAttrPairs = \{ (?id, ?id)\}$. 
-    The resulting mapping relation generated by applying
-    $\fctEquiJoinOpBig{r_1}{r_2}$ contains the following two tuples $t_1$ and
-    $t_2$: 
-    \begin{align*}
-        t_1 &=  \{ ?id \rightarrow 1, ?firstname \rightarrow \text{Alice}, ?lastname \rightarrow \text{Lee} \}\\
-        t_2 &=  \{ ?id \rightarrow 2, ?firstname \rightarrow \text{Bob}, ?lastname \rightarrow \text{Malice} \}\\
-    \end{align*}
+	\label{ex:equi_join_operator}
+	Example~\ref{ex:projection_operator} generates a mapping relation $r_1$
+	containing only the first name of the people by projecting away the other
+	attributes.
+	Assuming there is a mapping relation~$r_2$ derived from
+	$D$ (Example~\ref{ex:source_operator}), which contains the last names
+	of the people with their corresponding $id$ number, we can get both
+	the first and last name of the people by applying an equijoin on
+	the $id$ attribute with $\symJoinAttrPairs = \{ (?id, ?id)\}$.
+	The resulting mapping relation generated by applying
+	$\fctEquiJoinOpBig{r_1}{r_2}$ contains the following two tuples $t_1$ and
+	$t_2$:
+	\begin{align*}
+		t_1 & =  \{ ?id \rightarrow 1, ?firstname \rightarrow \text{Alice}, ?lastname \rightarrow \text{Lee} \}  \\
+		t_2 & =  \{ ?id \rightarrow 2, ?firstname \rightarrow \text{Bob}, ?lastname \rightarrow \text{Malice} \} \\
+	\end{align*}
 \end{example}
 
 
@@ -541,7 +562,7 @@ relation to a subset of the attributes of that relation.
 	\label{def:union_operator}
 	Let $r_{1} = \mappingRelSpec{1}$ and
 	$r_{2} = \mappingRelSpec{2}$ be mapping relations
-    such that $\symAttrSubSet_1 = \symAttrSubSet_2$.
+	such that $\symAttrSubSet_1 = \symAttrSubSet_2$.
 	The \textbf{union of $r_{1}$ and $r_{2}$}, denoted by
 	$\fctUnion{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
 \end{definition}

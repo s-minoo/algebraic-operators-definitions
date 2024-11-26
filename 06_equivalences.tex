@@ -178,14 +178,14 @@ may be removed%
 	\normalfont
 	Let $\dataSource = \dataSourceTuple$ be a data source with
 	$\sourceType=\sourceTypeTuple$,
-	$\queryExpr_{root} \in \symDataAcc$,
+	$\queryExpr \in \symDataAcc$,
 	$\symAttrQueryMap$ be a partial function $\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$,
 	and $\symProjSet \subseteq \fctDom{\symAttrQueryMap}$.
 	It holds that
 	\begin{equation*}
 		\fctProjectOpBig{\symProjSet}{ \sourceOpDflt }
 		=
-		\sourceOp{\dataSource}{\queryExpr_{root}}{\symAttrQueryMap'}
+		\sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}
 		,
 	\end{equation*}
 	where $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$; i.e., $\fctDom{\symAttrQueryMap'} = \symProjSet$ and $\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'}$.

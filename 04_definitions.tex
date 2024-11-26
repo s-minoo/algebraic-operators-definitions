@@ -78,7 +78,7 @@ based on this abstraction.
 	%For our abstraction we assume
 	Our abstraction considers
 two infinite sets, $\symDataObjUni$ and $\symDataAccUni$, which are disjoint.
-	\todo{Min Oo, notice that I have removed the set $\symDatasetUni$ of datasets, which we said are collections of data objects. I don't think we need that. After all, a dataset can also be seen as a data object; especially because data objects may contain other data objects. As a consequence, the purpose of having an explicit notion of datasets, distinct from data objects, is not easy to explain. Therefore, I have removed it. Once this change is implemented throughout the rest of the paper, I would prefer to change the symbol $\symDataObjUni$ to $\mathcal{D}$.}
+%	\todo{Min Oo, notice that I have removed the set $\symDatasetUni$ of datasets, which we said are collections of data objects. I don't think we need that. After all, a dataset can also be seen as a data object; especially because data objects may contain other data objects. As a consequence, the purpose of having an explicit notion of datasets, distinct from data objects, is not easy to explain. Therefore, I have removed it. Once this change is implemented throughout the rest of the paper, I would prefer to change the symbol $\symDataObjUni$ to $\mathcal{D}$.}
 %
 $\symDataObjUni$ is the set of all possible \emph{data objects}.
 	%In concrete instantiations of our abstraction,
@@ -86,7 +86,7 @@ $\symDataObjUni$ is the set of all possible \emph{data objects}.
 there are different kinds of data objects, even within the context of the same type of data source, and data objects may be nested within one another. For instance,
 	%in the context of JSON documents, each JSON object may be seen as a data object, and so may each named field within a JSON object and also the name and the value of such a field.
 	each line of a CSV file may be seen as a data object, and so may each value within such a line, as well as the CSV file as a whole.
-In our abstraction, any particular kind of data objects is considered as a specific subset of $\symDataObjUni$, and to indicate that a data object~$\dataObject \in \symDataObjUni$ is contained in another data object~$\symDataset \in \symDataObjUni$, we write $\dataObject \in \symDataset$.
+In our abstraction, any particular kind of data objects is considered as a specific subset of $\symDataObjUni$, and to indicate that a data object~$\dataObject \in \symDataObjUni$ is contained in another data object~$\bigDataObject \in \symDataObjUni$, we write $\dataObject \in \bigDataObject$.
 
 The set $\symDataAccUni$ captures possible \emph{query languages} to retrieve data objects from other data objects. We consider each such language $\symDataAcc \in \symDataAccUni$ as a set, where every element $\queryExpr \in \symDataAcc$ is one of the expressions
 	admitted by
@@ -132,7 +132,7 @@ Therefore, we define the notion of the \emph{types of data sources} considered f
 		%$\sourceTypeTuple$
 		$(\symSetDataset, \mathcal{D}^\texttt{\tiny o1}\!, \mathcal{D}^\texttt{\tiny o2}\!, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \mathit{cast})$
 	and
-	$\symDataset \in \symSetDataset$.
+	$\bigDataObject \in \symSetDataset$.
 \end{definition}
 
 As per Definitions~\ref{def:source_type}%
@@ -171,7 +171,7 @@ following two examples outline informally how JSON-based data sources and CSV-ba
 	$\symDataAccX{\mathsf{jp}}$ is the set of all JSONPath expressions that begin with the selector for the root element (i.e., \texttt{\$}), and
 	$\symDataAccX{\mathsf{jp}}'$ are all JSONPath expressions that do not begin with~\texttt{\$}.
 	Then, $\evalX{\mathsf{jp}}$ and $\cbevalX{\mathsf{jp}}$ capture the evaluation semantics of JSONPath.
-	That is, for a JSON document $\symDataset \in \symSetDatasetX{\mathsf{json}}$ and a query $\queryExpr \in \symDataAccX{\mathsf{jp}}$, $\evalX{\mathsf{jp}}(\symDataset,\queryExpr)$ returns the elements of $\symDataset$ selected by $\queryExpr$. If $\queryExpr'\! \in \symDataAccX{\mathsf{jp}}'$, and assume $\dataObject \in \symSetContentAX{\mathsf{jp}}$ is a JSON object within $\symDataset$, then $\cbevalX{\mathsf{jp}}(\symDataset,\dataObject,\queryExpr')$ returns the elements of $\symDataset$ that can be reached from $\dataObject$ as per the traversal specified by $\queryExpr'\!$.
+	That is, for a JSON document $\bigDataObject \in \symSetDatasetX{\mathsf{json}}$ and a query $\queryExpr \in \symDataAccX{\mathsf{jp}}$, $\evalX{\mathsf{jp}}(\bigDataObject,\queryExpr)$ returns the elements of $\bigDataObject$ selected by $\queryExpr$. If $\queryExpr'\! \in \symDataAccX{\mathsf{jp}}'$, and assume $\dataObject \in \symSetContentAX{\mathsf{jp}}$ is a JSON object within $\bigDataObject$, then $\cbevalX{\mathsf{jp}}(\bigDataObject,\dataObject,\queryExpr')$ returns the elements of $\bigDataObject$ that can be reached from $\dataObject$ as per the traversal specified by $\queryExpr'\!$.
 	Finally, $\typeCastX{\mathsf{json}}$ maps JSON values to RDF literals. For instance, string values may be mapped to \ttl{xsd:string} literals, numeric values that are integers may be mapped to \ttl{xsd:integer} literals, etc.
 \end{example}
 
@@ -191,12 +191,12 @@ following two examples outline informally how JSON-based data sources and CSV-ba
 	to \ttl{xsd:string} literals.
 	As the language $\symDataAccX{\mathsf{csv}}$, we may use the singleton set that contains (only) the empty string~$\varepsilon$, and $\symDataAccX{\mathsf{csv}} \subset \symAllStrings$ is the set of all strings that may be used as column names in CSV files. Informally, $\evalX{\mathsf{csv}}$ and $\cbevalX{\mathsf{csv}}$ may then be defined as follows. For
 		%the empty string~$\varepsilon$ and
-	every CSV file~$\symDataset \in \symSetDatasetX{\mathsf{csv}}$, $\evalX{\mathsf{csv}}(\symDataset,\varepsilon)$ returns all rows of~$\symDataset$%
+	every CSV file~$\bigDataObject \in \symSetDatasetX{\mathsf{csv}}$, $\evalX{\mathsf{csv}}(\bigDataObject,\varepsilon)$ returns all rows of~$\bigDataObject$%
 		%, in the order in which they appear within $\symDataset$%
 	, and for every such row
-		$\dataObject \in \evalX{\mathsf{csv}}(\symDataset,\varepsilon)$
+		$\dataObject \in \evalX{\mathsf{csv}}(\bigDataObject,\varepsilon)$
 		%$\dataObject$
-	and every string $c$ that is a column name in~$\symDataset$, $\cbevalX{\mathsf{csv}}(\symDataset,\dataObject,c)$ is the value that
+	and every string $c$ that is a column name in~$\bigDataObject$, $\cbevalX{\mathsf{csv}}(\bigDataObject,\dataObject,c)$ is the value that
 		the row~%
 	$\dataObject$ has in column~$c$.
 	%$\typeCastX{\mathsf{csv}}$ maps all string values in $\symSetContentBX{\mathsf{jp}}$ to \ttl{xsd:string} literals.
@@ -231,11 +231,11 @@ Formally, we define the mapping relation produced by a source operator as follow
 		& ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d \big\}
 		,
 	\end{align*}
-	where $\symDataSeq = \fctEval{\symDataset}{\queryExpr}$ and
+	where $\symDataSeq = \fctEval{\bigDataObject}{\queryExpr}$ and
 	\begin{equation*}
 		X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap}}
 		\big\{ (\attr, \var) \ \big| \
-		\var \in \fctCbeval{\symDataset}{\dataObject}{\queryExpr'} \text{ with }  \queryExpr'\! = \symAttrQueryMap(\attr) \big\}
+		\var \in \fctCbeval{\bigDataObject}{\dataObject}{\queryExpr'} \text{ with }  \queryExpr'\! = \symAttrQueryMap(\attr) \big\}
 		.
 	\end{equation*}
 \end{definition}
@@ -253,11 +253,11 @@ containing the following 2
 	\todo{Writing "2" here is not correct English. A number that is meant as a quantifier (i.e., not as a numeric value) should be written as a word, not using digits, unless the number is greater than 12. So, here you should write "two rows"!}
 rows of CSV data records on people as: 
 \begin{equation*}
-    \symDataset = [(1, \text{Alice}, \text{Lee}, 23), (2, \text{Bob}, \text{Malice}, 25)] 
+    \bigDataObject = [(1, \text{Alice}, \text{Lee}, 23), (2, \text{Bob}, \text{Malice}, 25)] 
 \end{equation*}
     A source operator, $\sourceOpDflt$, with $\dataSource = \dataSourceTuple$,
     $\sourceType = \sourceTypeTuple$, $\queryExpr_{root}$ a CSV root query 
-    which, when evaluated as $\eval(\queryExpr_{root})$, will return the 2 CSV records in $\symDataset$
+    which, when evaluated as $\eval(\queryExpr_{root})$, will return the 2 CSV records in $\bigDataObject$
     as data objects, and
 \todo{I wouldn't use question marks for attribute names.}
     $\symAttrQueryMap = \{?id \rightarrow id,  ?name \rightarrow firstname, ?age \rightarrow age\}$    

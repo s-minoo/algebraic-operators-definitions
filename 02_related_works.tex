@@ -2,57 +2,103 @@
 \label{sec:related_works}
 
 According to Van Assche et al.~\cite{VanAssche2022DeclarativeRDFgraph}, 
-declarative mapping languages can be further categorized into two categories: 
-i) \emph{dedicated languages} which extend specifications or use custom
+declarative mapping languages can be further
+	\todo{Saying "further" here requires that you have talked about another categorization before, in which declarative mapping languages are one of the categories.}
+categorized into two categories: 
+i) \emph{dedicated languages} which extend specifications
+	\todo{It is not clear what kinds of "specifications" you are talking about here.}
+or use custom
 syntaxes, and ii) \emph{repurposed languages} which repurpose existing
-specifications or query languages to support knowledge graph construction.
+specifications or query languages to support knowledge graph
+	\todo{I think it is okay to continue using the acronym "KG" that you have introduced in the intro section.}
+construction.
 In this section, we briefly review existing works on formalizations of 
 dedicated mapping languages for knowledge graph construction. 
 
 We do not consider repurposed mapping languages in this work since they 
 inherit the formalizations of the specifications or query languages on which
 they are based upon, limiting them to the syntax of the parent languages and not 
-applicable for formalizing a language-agnostic mapping process. 
+applicable for formalizing a language-agnostic mapping process.
+	\todo{As I tried to convey in some of my comments for the intro section, you should not get hung up too much on whether a formalization is language agnostic or not. The fact that ours is language agnostic is an advantage, yes, but the overall aim of our work (as far as I was assuming up to now) is on a bigger problem, namely the lack of any reasonable formalization. In this sense, language-specific formalizations are related and should be discussed here.}
 
 \subsection{Formalizations in Dedicated Mapping Languages}
 \label{sub:dedicated_mapping_languages}
+	\todo{Having a single subsection within a section make no sense. If you do not add another subsection, you should remove this subsection title.}%
 R2RML~\cite{Seema2012R2RML} is a dedicated mapping language, using
-Turtle-syntax, for generating knowledge graphs from relational databases. 
+Turtle-syntax,
+	\todo{I understand that R2RML descriptions are typically presented using Turtle, I would still not say that the language uses the Turtle syntax. Instead, R2RML descriptions are given as an RDF graph, usually presented using the Turtle syntax.}
+for generating knowledge graphs from relational databases. 
 It has been used as the basis for a family of mapping languages which extends 
-its scope from relational database to (semi)-structured data~\cite{VanAssche2022DeclarativeRDFgraph}, 
-such as RML~\cite{dimou_ldow_2014}, D2RML~\cite{Chortaras2018D2RML}, and xR2RML~\cite{michel2015translation}. 
+its scope from relational database
+	\todo{databases}
+to (semi)-structured data~\cite{VanAssche2022DeclarativeRDFgraph},
+	\todo{Also here, what is "(semi)-structured data"?}
+such as
+	\todo{What exactly does "such as" refer to? Writing the sentence in this way is not 100\% semantically correct. I mean, when you write about "a family of mapping languages", then there is only one such family and you cannot refer to it via "such as". To fix this issue, replace "a family of" by "several" (and then also "extends" $\rightarrow$ "extend").}
+RML~\cite{dimou_ldow_2014}, D2RML~\cite{Chortaras2018D2RML}, and xR2RML~\cite{michel2015translation}. 
 Thus, it is important to consider the formalization studies conducted on 
 R2RML which can have impact on the languages in the R2RML family.  
 
-Sequeda et al.~\cite{Sequeda2013R2RML} provided formalizations of the 
-operational semantics of R2RML using Datalog.
-They proved that the semantics of R2RML can be captured using 57 distinct 
+Sequeda et al.~\cite{Sequeda2013R2RML} provided
+	\todo{Using present tense is not correct. It is kind of okay to write "have provided" instead, but the usual practice is to simply use present tense in such sentences as well (i.e., "provide").}
+formalizations
+	\todo{Multiple?}
+of the 
+operational semantics
+	\todo{Why are you always coming back to this notion of "operational semantics"? I am not really sure what it even means in this context, let alone whether I would call the semantics of R2RML an operational one.}
+of R2RML using Datalog.
+They
+	\todo{No. It is bad style to refer to authors as "they". Write "The authors .." instead.}
+proved
+	\todo{prove}
+that the semantics of R2RML can be captured using 57 distinct 
 Datalog rules to generate RDF from relational databases. 
-However, since R2RML's scope is limited to relational databases, the same 
-formalizations cannot be applied to other languages whose scope is much larger
-than just relational databases.  
+However, since R2RML's
+	\todo{R2RML is not a person. So, you cannot use this construct with "'s". That's not correct English. Instead, you need to write: "the scope of R2RML"}
+scope is limited to relational databases, the same 
+formalizations cannot be applied to other languages whose scope is much
+	\todo{Avoid such quantifiers ("much") because it is not clear what it means (how much is "much").}
+larger
+than just relational databases.
+
+\todo[inline]{I find the argument in the previous paragraph a bit unsatisfying. You are essentially dismissing the approach in that paper only because R2RML is focused on a single type of input data sources. I think the approach can and should still be compared to ours. To some extend, the issue is the slightly negative touch that the last sentence has, which can be fixed by rephrasing the last sentence in a more positive direction ("while this formalization is focused on a single type of input data sources, our approach is designed to capture arbitrary types of (structured and semi-structured) data sources"). Additionally, they may also be something to be said about a Datalog-based formalization in comparison to ours.}
 
 D2RML and xR2ML do not provide any formal operational semantics for executing
 the mapping process described in their respective languages nor were there any
 studies conducted for formalizing these languages.
 In contrast, a few studies on formalization of RML have been published in 
 recent years~\cite{MinOo2023TowardsAlgebra,Iglesias2022ScalingKnowledgeGraph}
-Iglesias et al.~\cite{Iglesias2022ScalingKnowledgeGraph} focused on formalizing 
-the optimization of executing the mapping process in a RML document.
-The formalization relied on the syntax of RML to provide 
+Iglesias et al.~\cite{Iglesias2022ScalingKnowledgeGraph} focused
+	\todo{focus}
+on formalizing 
+the optimization
+	\todo{What is *the* optimization? More generally, it doesn't come across what exactly that formalization is about. Is it a formalization of the semantics of RML? If not, then what exactly is being formalized?}
+of executing the mapping process in a RML document.
+The formalization relied on the syntax of RML
+	\todo{What is "the syntax of RML"?}
+to provide 
 operational semantics such as using RML's concept of triples map to 
-describe mapping assertions. 
+describe mapping assertions.
+	\todo{Notice, I read this previous sentence as a neutral statement. If your intention was to point out that the authors' formalization approach has any downsides, then you need to express this explicitly.}
 Furthermore, the authors did not explore if it is possible to apply the same
 formalizations to provide semantics for other mapping languages where the 
-concept of triples maps do not exist. 
+concept of triples maps do not exist.
+	 \todo{Okay, they didn't explore that; but given that their focus was on RML, why would they? Also here, instead of blaming the authors for something that they didn't do (and for which there is also no immediate need from the perspective of their work!), you may rephrase this in a more positive direction (e.g., "Beyond the direct application to RML, it would be interesting to ..."). Mind you, however, that we are also not *explicitly* exploring the applicability of our formalization beyond RML.}
 
+\todo[inline]{Like in the paragraph about Sequeda et al.'s work, also in this previous paragraph here, I am missing a more explicit statement that relates (or even compares!) Iglesias et al.'s formalization approach to ours.}
+ 
 An initial study explored the provision of formal semantics for the 
 mapping process in a language-agnostic manner through \emph{algebraic mapping
-operators}~\cite{MinOo2023TowardsAlgebra}. 
-However, this preliminary work does not provide a complete semantics for 
+operators}~\cite{MinOo2023TowardsAlgebra}.
+However, this preliminary work does not provide a complete semantics
+	\todo{What is a "complete semantics"? I assume you mean that the semantics does not cover all aspects of the corresponding language (but what language, actually?). That's one limitation, which you can mention (but you need to describe it better---see my next comment). Yet, another limitation is that the definitions in that paper are only "semi-formal"; that is, some definitions are only informal and some definitions are based on concepts that are not defined at all.}
+for 
 mapping processes, since it does not provide a way to capture the semantics of
-joining multiple mapping processes which RML can describe. 
+joining multiple mapping processes which RML can describe.
+	\todo{It is not clear what you mean by "joining multiple mapping processes which RML can describe."}
+	\todo{Moreover, also here it is not clear how the approach in this paper compares to ours.}
 Thus, there is still a lack of study in providing language-agnostic, complete,
 and well-defined semantics to the mapping process of generating knowledge
 graphs from (semi)-structured data.
 
+\todo[inline]{By the way, looking at the bibliography, I notice that this is a mess (not only the entry for your paper but many others). The titles of almost all publications are entirely in lower case (make them all properly capitalized!); some publications have a month, other not (remove months!); some publications have editors in addition to authors, others not (remove editors!); some publications have URLs, some even multiple URLs, others none (remove all URLs!); etc. Generally, the entries for all journal articles should be of the same form and, similarly, the entries for all conference and workshop papers should be of the same form.}

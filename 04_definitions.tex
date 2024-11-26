@@ -2,7 +2,7 @@
 \label{sec:mapping_algebra}
 
 % {
-% \color{blue}
+% \color{gray}
 %     In this section, we define the algebraic mapping operators used
 %     in our formalism of mapping processes to generate RDF datasets 
 %     form (semi-)structured data. 
@@ -38,7 +38,7 @@ data into an~RDF~dataset.\footnote{We assume here that the mapping relation resu
 \subsection{Source Operator}%
 \label{sub:source_operator}
 
-% { \color{blue}
+% { \color{gray}
 % The mapping relations (Definition~\ref{def:mapping_relation}), which serve as
 % the data model for the algebraic operators, must first be generated from
 % (semi-)structured data. 
@@ -47,7 +47,6 @@ data into an~RDF~dataset.\footnote{We assume here that the mapping relation resu
 % data. 
 % Before defining the Source operator, we present essential notations and
 % concepts involved in its definition.
-% }
 % 
 % \noindent \textbf{Notations}  We assume the following pairwise disjoint countably infinite sets:
 % $\symDatasetUni$ (datasets), and  $\symDataObjUni$ (data objects).
@@ -55,6 +54,16 @@ data into an~RDF~dataset.\footnote{We assume here that the mapping relation resu
 % To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in
 % such a dataset~$\symDataset \in \symDatasetUni$, we write
 % $\dataObject \in \symDataset$.
+% 
+% Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
+% entity that could be queried using a query expression to extract
+% one or more data objects \textbf{which can, in turn, be accessible by different data access languages}.
+% For example, a JSON object is considered a data object with JSONPath as the data
+% access language, and it can be further queried using JSONPath expressions to
+% extract JSON arrays (data objects) or a JSON field containing a string
+% representation of CSV rows (data objects), which can be further queried using a CSV specific
+% data access language.
+% }
 
 The basis of every
 	expression that defines a mapping using our algebra
@@ -85,16 +94,6 @@ The set $\symDataAccUni$ captures possible \emph{query languages} to retrieve da
 the language. In practice, each such language is designed to be used for a specific kind of data objects (i.e., a specific subset of $\symDataObjUni$).
 	%Some languages may also be repurposed to be used for different kinds of data objects.
 Therefore, we define the notion of the \emph{types of data sources} considered for the source operators of our algebra as a structure that specifies the relevant kinds of data objects and the corresponding evaluation semantics of the languages to be used for data sources of such a type.
-
-% Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
-% entity that could be queried using a query expression to extract
-% one or more data objects \textbf{which can, in turn, be accessible by different data access languages}.
-% For example, a JSON object is considered a data object with JSONPath as the data
-% access language, and it can be further queried using JSONPath expressions to
-% extract JSON arrays (data objects) or a JSON field containing a string
-% representation of CSV rows (data objects), which can be further queried using a CSV specific
-% data access language.
-
 
 \begin{definition}
 	\label{def:source_type}
@@ -135,7 +134,6 @@ Therefore, we define the notion of the \emph{types of data sources} considered f
 	and
 	$\symDataset \in \symSetDataset$.
 \end{definition}
-
 
 As per Definitions~\ref{def:source_type}%
 	\ and~%
@@ -233,7 +231,7 @@ Formally, we define the mapping relation produced by a source operator as follow
 		& ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d \big\}
 		,
 	\end{align*}
-	where $\symDataSeq = \fctEval{\symDataset}{\queryExpr_{root}}$ and
+	where $\symDataSeq = \fctEval{\symDataset}{\queryExpr}$ and
 	\begin{equation*}
 		X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap}}
 		\big\{ (\attr, \var) \ \big| \

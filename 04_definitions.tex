@@ -206,21 +206,21 @@ of this section to provide a practical example after defining each operator.
 \begin{example}
 	\label{ex:running_ex_source_type}
 	First, we start with a concrete example of a source type for a CSV file
-	$\bigDataObject \in \symSetDatasetX{\mathsf{csv}}$ 
+	$\bigDataObject \in \symSetDatasetX{\mathsf{csv}}$
 	with the header introducing column names \textsf{id}, \textsf{firstname},
 	\textsf{lastname}, and \textsf{age} and the following two rows of CSV
 	data records on people as:
 	\begin{equation*}
-        \bigDataObject = [(\ttl{1}, \ttl{Alice}, \ttl{Lee}, \ttl{23}), (\ttl{2}, \ttl{Bob}, \ttl{Malice}, \ttl{25})]
+		\bigDataObject = [(\ttl{1}, \ttl{Alice}, \ttl{Lee}, \ttl{23}), (\ttl{2}, \ttl{Bob}, \ttl{Malice}, \ttl{25})]
 	\end{equation*}
-    The source type for such a CSV file is $\sourceType = (\bigDataObject, \symSetContentA,
-    \symSetContentB, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \typeCast )$ where 
-    $\symDataAcc = \{ \error \}$, 
-    $\symDataAcc' = \{ \textsf{id},  \textsf{firstname},\textsf{lastname},\textsf{age}\}$, 
-    $\symSetContentA$ consists of the two CSV rows after evaluating $\fctEval{\bigDataObject}{\error}$, 
-    $\symSetContentB$ consists of all CSV values (e.g. \ttl{Alice}, \ttl{Malice}, etc\dots), and 
-    $\typeCast$ can transform the CSV values in $\symSetContentB$ to RDF literals (e.g. 
-    $\fctTypeCast{\ttl{Alice}}$ creates RDF literal $(\ttl{"Alice"}, \ttl{xsd:string})$).  
+	The source type for such a CSV file is $\sourceType = (\bigDataObject, \symSetContentA,
+		\symSetContentB, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \typeCast )$ where
+	$\symDataAcc = \{ \error \}$,
+	$\symDataAcc'$ consists of column names $\{ \textsf{id},  \textsf{firstname},\textsf{lastname},\textsf{age}\}$,
+	$\symSetContentA$ consists of the two CSV rows after evaluating $\fctEval{\bigDataObject}{\error}$,
+	$\symSetContentB$ consists of all CSV values (e.g. \ttl{Alice}, \ttl{Malice}, etc\dots), and
+	$\typeCast$ transforms the CSV values in $\symSetContentB$ to RDF literals (e.g.
+	$\fctTypeCast{\ttl{Alice}}$ creates the RDF literal $(\ttl{"Alice"}, \ttl{xsd:string})$).
 \end{example}
 }
 
@@ -261,37 +261,26 @@ Formally, we define the mapping relation produced by a source operator as follow
 	\end{equation*}
 \end{definition}
 
-\todo[inline]{Min Oo, please modify the following example to adapt it to the terminology and formalism that have used above. Perhaps it is an idea to split the example into two: The first one is only about the running example and the source type for CSV files, including the use of its two languages, and can be moved directly after Example~\ref{ex:source_type_csv}. The second one, then, is only about the source operator. Of course, the first one should already use the root query and one of the context-object queries that are also used by the example source operator.}
 
+{\color{blue}
 \begin{example}
 	\label{ex:source_operator}
-	We provide a running example used throughout the rest of the paper starting
-	with a CSV file with the header,
-	\todo{Since the column names are not variables / symbols in the formalism, I would not use italic font for them; yet, they should be highlighted in some way. I propose to use 'textsf' with fontsize 'small'; e.g., \textsf{\small id}.}
-	\todo{What kind of a notation is "[( ... )]"? I would simply write: "... with a header introducing columns named \textsf{\small id}, ..."}
-	$H= [(id, firstname, lastname, age)]$,
-	containing the following two
-	\todo{Writing "2" here is not correct English. A number that is meant as a quantifier (i.e., not as a numeric value) should be written as a word, not using digits, unless the number is greater than 12. So, here you should write "two rows"!}
-	rows of CSV data records on people as:
-	\begin{equation*}
-		\bigDataObject = [(1, \text{Alice}, \text{Lee}, 23), (2, \text{Bob}, \text{Malice}, 25)]
-	\end{equation*}
 	A source operator, $\sourceOpDflt$, with $\dataSource = \dataSourceTuple$,
-	$\sourceType = \sourceTypeTuple$, $\queryExpr_{root}$ a CSV root query
-	which, when evaluated as $\eval(\queryExpr_{root})$, will return the 2 CSV records in $\bigDataObject$
-	as data objects, and
-	\todo{I wouldn't use question marks for attribute names.}
-	$\symAttrQueryMap = \{?id \rightarrow id,  ?name \rightarrow firstname, ?age \rightarrow age\}$
-	generates a mapping relation $r$  with two mapping tuples
-	\todo{Also mention what the attributes of the relation are (i.e., the schema).}
-	$t_1, t_2 \in r$ as:
-	\todo{The values in these tuples must be \ttl{xsd:string} literals.}
+	$\sourceType$ is the source type from Example~\ref{ex:running_ex_source_type},
+	$\queryExpr = \error$ (as shown in Example~\ref{ex:source_type_csv}), and
+	$\symAttrQueryMap = \{\attr_{\textsf{id}}\rightarrow id,  \attr_{\textsf{name}} \rightarrow firstname, \attr_{\textsf{age}} \rightarrow age\}$
+	generates a mapping relation $r$ such that it has a schema  where all the
+	generated mapping tuples have the attributes $\symAttrSubSet = \{
+		\attr_{\textsf{id}}, \attr_{\textsf{name}}, \attr_{\textsf{age}}\}$,
+	and $r$ contains two mapping tuples $t_1, t_2 \in r $ as:
 	\begin{align*}
-		t_1 & = \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}, ?age \rightarrow 23 \}\quad t_2 = \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}, ?age \rightarrow 25 \} \\
+        t_1 & = \{ \attr_{\textsf{id}} \rightarrow (\ttl{"1"}, \ttl{xsd:integer}), \attr_{\textsf{name}} \rightarrow (\ttl{"Alice"}, \ttl{xsd:string}), 
+        \attr_{\textsf{age}} \rightarrow  (\ttl{"23"}, \ttl{xsd:integer})\} \\
+		t_2 & = \{ \attr_{\textsf{id}} \rightarrow (\ttl{"2"}, \ttl{xsd:integer}), \attr_{\textsf{name}} \rightarrow (\ttl{"Bob"}, \ttl{xsd:string}), 
+        \attr_{\textsf{age}} \rightarrow (\ttl{"25"}, \ttl{xsd:integer}) \}
 	\end{align*}
-	Do note that due to the $cast$ function (Definition~\ref{def:cast_function}),
-	all the mapping tuples $t \in r$ only have RDF literals in the $range(t)$.
 \end{example}
+}
 
 \subsection{Extend Operator}%
 \label{sub:extend_operator}

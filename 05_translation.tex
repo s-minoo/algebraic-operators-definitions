@@ -212,9 +212,9 @@ normalized RML document.
         \Ensure A mapping definition
         \State $\omega \gets$ initially empty algebraic expression
 		\For{$(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
-	    	\State  $(\queryExpr_{root},\symAttrQueryMap) \gets$ \textbf{TranslateSourceOperator}($\symRMLGraph, \triplesMapIRI$) \Comment{Algorithm~\ref{alg:rml_source_op}}
-            \State   $src \gets \textrm{initSrc}(o')$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$ \Comment Definition~\ref{def:init_data_source}
-	    	\State   $\omega' \gets \sourceOp{src}{\queryExpr_{root}}{\symAttrQueryMap}$
+	    	\State  $(\queryExpr,\symAttrQueryMap) \gets$ \textbf{TranslateSourceOperator}($\symRMLGraph, \triplesMapIRI$) \Comment{Algorithm~\ref{alg:rml_source_op}}
+            \State   $\text{src} \gets \textrm{initSrc}(o')$ for $(\triplesMapIRI,\texttt{rr:logicalSource},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$ \Comment Definition~\ref{def:init_data_source}
+            \State   $\omega' \gets \sourceOp{\text{src}}{\queryExpr}{\symAttrQueryMap}$
 
             \State $tm_{sub} \gets o$, where triple $(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
             \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sub}$) \Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
@@ -235,9 +235,9 @@ normalized RML document.
             \State $tm_{obj} \gets o$ where triple $(s,\texttt{rr:objectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$ 
             \If{$(tm_{obj},\texttt{rr:parentTriplesMap},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
 		        \State $s_{ptm} \gets o'$
-		        \State  $(\queryExpr_{root},\symAttrQueryMap) \gets $ \textbf{TranslateSourceOperator}($\symRMLGraph, s_{ptm}$) \Comment{Algorithm~\ref{alg:rml_source_op}}
-                \State   $source_{ptm} \gets \fctInitSrc{o''}$ with $(s'',\texttt{rr:logicalSource},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
-		        \State  $\omega_{ptm} \gets \sourceOp{source_{ptm}}{\queryExpr_{root}}{\symAttrQueryMap}$
+		        \State  $(\queryExpr,\symAttrQueryMap) \gets $ \textbf{TranslateSourceOperator}($\symRMLGraph, s_{ptm}$) \Comment{Algorithm~\ref{alg:rml_source_op}}
+                \State   $\text{src}_{ptm} \gets \fctInitSrc{o''}$ with $(s'',\texttt{rr:logicalSource},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
+                \State  $\omega_{ptm} \gets \sourceOp{\text{src}_{ptm}}{\queryExpr}{\symAttrQueryMap}$
                 \State $\symJoinAttrPairs \gets \emptyset$
                 \For{$(tm_{obj},\texttt{rr:joinCondition},o') \in \triplesMapGraph{TM}{\triplesMapIRI}$}
                     \State  $a \gets \symAttrQueryMap^{-1}(o'') $ for $o''$ in triple $(o',\texttt{rr:child},o'') \in \triplesMapGraph{TM}{\triplesMapIRI}$
@@ -393,16 +393,16 @@ is not empty and has an odd number of elements.
 	\begin{algorithmic}[1]
 		\Require $\symRMLGraph$ an RDF graph of RML document,
 		\Statex \qquad $\triplesMapIRI$ subject IRI of a triples map 
-		\Ensure A tuple containing a root query expression and a partial function $\symAttrUniverse  \rightarrow  \symDataAcc$
+		\Ensure A tuple containing query expression and a partial function $\symAttrUniverse  \rightarrow  \symDataAcc$
 		\State $ls_{iri} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = \triplesMapIRI$  and $p= \texttt{rml:logicalSource}$
-		\State $\queryExpr_{root} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = ls_{iri}$  and $p=  \texttt{rml:iterator }$
+		\State $\queryExpr \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = ls_{iri}$  and $p=  \texttt{rml:iterator }$
 		\State $\symDataAcc \gets$ \textbf{QueryInTriplesMap}($\triplesMapIRI, \symRMLGraph$) \Comment{Algorithm~\ref{alg:query_extraction}}
 		\State $\symAttrQueryMap \gets$ initially empty function from attributes to query expressions in $\symDataAcc$
-		\For{$\queryExpr \in \symDataAcc$}
+		\For{$\queryExpr' \in \symDataAcc$}
 		\State $\attr \gets$ a fresh attribute from $\symAttrUniverse \setminus \{ \attr_\textrm{s}, \attr_\textrm{p}, \attr_\textrm{o}, \attr_\textrm{g} \}$ that has not been used before in this translation process
-		\State $\symAttrQueryMap \gets \symAttrQueryMap \cup \{ a \rightarrow \queryExpr \}$
+		\State $\symAttrQueryMap \gets \symAttrQueryMap \cup \{ a \rightarrow \queryExpr' \}$
 		\EndFor
-		\State \Return  $(\queryExpr_{root}, \symAttrQueryMap)$
+		\State \Return  $(\queryExpr, \symAttrQueryMap)$
 	\end{algorithmic}
 \end{algorithm}
 

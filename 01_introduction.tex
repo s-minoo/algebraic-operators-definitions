@@ -19,24 +19,29 @@ languages~\cite{VanAssche2022DeclarativeRDFgraph}.
 
 Declarative mapping languages specify the mappings for generating KGs from
 heterogeneous data based on a mapping document written in the respective
-language. 
-The RDF Mapping Language
-(RML)~\cite{dimou_ldow_2014} is one example of
-such a declarative mapping language.
-Usage of RML, for generating KGs in RDF format from heterogeneous data sources,
-has gained traction in recent years across diverse domains such as COVID
-research~\cite{Sakor2023KG4Covid}, railway networks~\cite{rojas2021leveraging},
-and incident management in ICT systems~\cite{Tailhardat2024NORIA}. 
-Several
-RML-based mapping engines have been developed to generate KGs from
-heterogeneous data, each with its unique approach to execute the mapping
-process (i.e. generating KG from existing heterogeneous
-data~\cite{VanAssche2022DeclarativeRDFgraph}). 
-For example, FlexRML~\cite{Freund2024FlexRML} focuses on the generation of KGs
-for resource-constrained IoT devices, while
-SDM-RDFizer~\cite{Iglesias2022ScalingKnowledgeGraph} aims for an efficient and
-scalable KG generation through novel optimization techniques and data
-structures. 
+language.
+A single mapping language can have multiple implementations for generating KGs. 
+For example, the RDF Mapping Language (RML)~\cite{dimou_ldow_2014} has several
+implementations~\cite{Freund2024FlexRML,Iglesias2022ScalingKnowledgeGraph,ArenasGuerrero2022MorphKGCScalable,MinOo2022RMLStreamer,Scrocca2020Transport}, 
+each offering distinct advantages for their own unique use cases 
+(i.e. FlexRML~\cite{Freund2024FlexRML} for KG generation on IoT devices). 
+
+%The RDF Mapping Language (RML)~\cite{dimou_ldow_2014} is one example of such a
+%declarative mapping language.
+%Usage of RML, for generating KGs in RDF format from heterogeneous data sources,
+%has gained traction in recent years across diverse domains such as COVID
+%research~\cite{Sakor2023KG4Covid}, railway networks~\cite{rojas2021leveraging},
+%and incident management in ICT systems~\cite{Tailhardat2024NORIA}. 
+%Several
+%RML-based mapping engines have been developed to generate KGs from
+%heterogeneous data, each with its unique approach to execute the mapping
+%process (i.e. generating KG from existing heterogeneous
+%data~\cite{VanAssche2022DeclarativeRDFgraph}). 
+%For example, FlexRML~\cite{Freund2024FlexRML} focuses on the generation of KGs
+%for resource-constrained IoT devices, while
+%SDM-RDFizer~\cite{Iglesias2022ScalingKnowledgeGraph} aims for an efficient and
+%scalable KG generation through novel optimization techniques and data
+%structures. 
 
 % what’s the problem
 Current state-of-the-art mapping engines exhibit varying operational semantics

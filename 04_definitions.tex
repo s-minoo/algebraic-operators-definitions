@@ -213,6 +213,11 @@ of this section to provide a practical example after defining each operator.
 	\begin{equation*}
 		\bigDataObject = [(\ttl{1}, \ttl{Alice}, \ttl{Lee}, \ttl{23}), (\ttl{2}, \ttl{Bob}, \ttl{Malice}, \ttl{25})]
 	\end{equation*}
+\todo[inline]{This whole paragraph below here is not what I meant. In fact, this is not even how the formalism should work. You should not introduce a new source type specific to the given CSV file. Instead, the source type should be the one introduced Example~\ref{ex:source_type_csv}; i.e., $\sourceTypeX{\mathsf{csv}}$. What I wanted you to do is something like the following:
+\\ a)~introduce a data source $\dataSource_\mathsf{ex} = (\sourceTypeX{\mathsf{csv}}, \bigDataObject_\mathsf{ex})$ where $\bigDataObject_\mathsf{ex}$ is this CSV file,
+\\ b)~say that $\evalX{\mathsf{csv}}(\bigDataObject_\mathsf{ex},\varepsilon)$ is the two rows of the CSV file,
+\\ c)~assuming $\dataObject$ is the first of these rows, then $\cbevalX{\mathsf{csv}}(\bigDataObject_\mathsf{ex}, \dataObject, \textsf{firstname})$ is the string \ttl{Alice}, and
+\\ d)~$\typeCastX{\mathsf{csv}}(\ttl{Alice})$ is the RDF literal $(\ttl{"Alice"}, \ttl{xsd:string})$.}
 	The source type for such a CSV file is $\sourceType = (\bigDataObject, \symSetContentA,
 		\symSetContentB, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \typeCast )$ where
 	$\symDataAcc = \{ \error \}$,
@@ -266,19 +271,29 @@ Formally, we define the mapping relation produced by a source operator as follow
 \begin{example}
 	\label{ex:source_operator}
 	A source operator, $\sourceOpDflt$, with $\dataSource = \dataSourceTuple$,
-	$\sourceType$ is the source type from Example~\ref{ex:running_ex_source_type},
-	$\queryExpr = \error$ (as shown in Example~\ref{ex:source_type_csv}), and
+	$\sourceType$ is the source type from
+\todo{Related to my comment on Example~\ref{ex:running_ex_source_type}, you can directly use $\dataSource_\mathsf{ex}$ from Example~\ref{ex:running_ex_source_type} here and, again, the source type is $\sourceTypeX{\mathsf{csv}}$ (from Example~\ref{ex:source_type_csv}), but probably you don't even need to explicitly mention the source type here anymore.}
+	Example~\ref{ex:running_ex_source_type},
+	$\queryExpr = \error$
+\todo{No! The query is not 'error'!! Instead, the query is the empty string, for which I had introduced a separate symbol: $\varepsilon$}
+	(as shown in Example~\ref{ex:source_type_csv}), and
 	$\symAttrQueryMap = \{\attr_{\textsf{id}}\rightarrow id,  \attr_{\textsf{name}} \rightarrow firstname, \attr_{\textsf{age}} \rightarrow age\}$
-	generates a mapping relation $r$ such that it has a schema  where all the
+\todo{Since the queries here are the column names of the CSV file, you should use the same font for them here as you have used in Example~\ref{ex:running_ex_source_type}.}
+	generates
+\todo{Try to avoid the word "generate" if possible, because this word carries the idea that the mapping relation is actually produced, which is not really the point here (and may not even be the case in practice). As a better alternative here, you can talk about the result of the source operator.}
+	a mapping relation $r$ such that it has a schema  where all the
 	generated mapping tuples have the attributes $\symAttrSubSet = \{
 		\attr_{\textsf{id}}, \attr_{\textsf{name}}, \attr_{\textsf{age}}\}$,
-	and $r$ contains two mapping tuples $t_1, t_2 \in r $ as:
+	and $r$ contains two mapping tuples $t_1, t_2 \in r$
+\todo{If possible, try to avoid numbering the tuples in this way because that may give the impression that there is an order, which is not the case (the instance of every mapping relation is a \emph{set} of tuples). So, better $t$ and $t'$ here.}
+	as:
 	\begin{align*}
         t_1 & = \{ \attr_{\textsf{id}} \rightarrow (\ttl{"1"}, \ttl{xsd:integer}), \attr_{\textsf{name}} \rightarrow (\ttl{"Alice"}, \ttl{xsd:string}), 
         \attr_{\textsf{age}} \rightarrow  (\ttl{"23"}, \ttl{xsd:integer})\} \\
 		t_2 & = \{ \attr_{\textsf{id}} \rightarrow (\ttl{"2"}, \ttl{xsd:integer}), \attr_{\textsf{name}} \rightarrow (\ttl{"Bob"}, \ttl{xsd:string}), 
         \attr_{\textsf{age}} \rightarrow (\ttl{"25"}, \ttl{xsd:integer}) \}
 	\end{align*}
+\todo{No! Where does \ttl{xsd:integer} come from? This should all be \ttl{xsd:string}.}
 \end{example}
 }
 

@@ -7,56 +7,35 @@ models (LLMs), enhancing LLMs with external knowledge for tasks such as
 retrieval-augmented generation (RAG)~\cite{Xu2024RAGKGLinkedin}. 
 The KGs required for LLM applications
 	\todo{KGs are not generally "required for LLM applications" (but for different types of RAG applications which, in turn, also use LLMs). \\ In addition to this minor issue, a more general comment is that this paragraph puts too much emphasis on LLMs. I would tone it done and start a bit broader regarding the use cases of KGs, and then you can mention KGs for RAG (and LLMs) as a more recent group of use cases. At the moment, the paragraph is almost more about LLMs and KGs for LLMs and not so much about KGs per se.}
-may already exist or may need to be
-generated from existing (semi-)structured
-	\todo{Besides the issue with the closing parenthesis, what are "(semi-)structured data sources"? Do you mean "structured or semi-structured data sources"?}
-data sources such as 
-tabular data in CSV formats
-	\todo{It is not clear why you are using plural here ("CSV format\textbf{s}").}
-or hierarchical data in JSON.
-	\todo{"hierarchical data " sounds weird (how can data be hierarchical?). etter say: "nested data objects"}
-Naturally, empowering LLMs with the vast amount of existing (semi-)structured
+may already exist or may need to be generated from existing structured or semi-structured 
+(heterogeneous)
+data sources such as tabular data in CSV format or nested data objects in JSON.
+Naturally, empowering LLMs with the vast amount of existing heterogeneous
 data enables the reuse of existing data-generating infrastructures, 
 and eliminating the additional costs of setting up new KG-generating sources.
-One approach to generate KG
-	\todo{As a general comment, please pay attention to correct usage (or omission) of articles, and plural versus singular versions of nouns. Here it needs to be either "to generate a KG" or "to generate KGs"}
-from existing (semi-)structured data sources,
-	\todo{Why do you have a comma here? I have noticed also earlier that you are putting commas in strange places. Please try to avoid that. Here is a prompt for ChatGPT based on which you can check your commas: \\
-	Consider the following sentence, which I will give in quotation marks, is it correct to have the comma in this sentence?
-	"One approach to generate KG from existing (semi-)structured data sources, is through the usage of declarative mapping languages."}
-is
-through the usage of declarative mapping
-languages~\cite{VanAssche2022DeclarativeRDFgraph}.
+One approach to generate KGs from existing heterogeneous data sources is
+through the usage of declarative mapping languages~\cite{VanAssche2022DeclarativeRDFgraph}.
 
-Declarative mapping languages specify the process
-	\todo{No, such languages do not specify any process. They allow users to specify/define mappings.}
-for generating KGs from
-(semi-)structured data based on a mapping document written in the respective
+Declarative mapping languages specify the mappings for generating KGs from
+heterogeneous data based on a mapping document written in the respective
 language. 
-RDF Mapping Language
-	\todo{\textbf{The} RDF Mapping Language ...}
+The RDF Mapping Language
 (RML)~\cite{dimou_ldow_2014} is one example of
 such a declarative mapping language.
-Usage of RML, to generate KGs in RDF format from heterogeneous data sources,
-	\todo{While this sentence, with its commas is not incorrect, it sounds unnatural (a native English speaker would never write it this way). Remove the commas and replace "to generate" by "for generating"}
+Usage of RML, for generating KGs in RDF format from heterogeneous data sources,
 has gained traction in recent years across diverse domains such as COVID
-research~\cite{Sakor2023KG4Covid},
-	%European
-railway networks~\cite{rojas2021leveraging}, and
-incident management in ICT systems~\cite{Tailhardat2024NORIA}. 
-Numerous
-	\todo{"numerous" means many. Of course, it is subjective what many are, but in this context I would not use this word. Better: "A number of .." or "Several .."}
-RML-based mapping engines have been developed to generate KG
-	\todo{KGs}
-from 
-heterogeneous data, each with its unique approach to execute the mapping process
-(i.e. generating KG from existing semi-structured data~\cite{VanAssche2022DeclarativeRDFgraph}). 
-For example, FlexRML~\cite{Freund2024FlexRML} focuses on the generation of
-	\todo{KGs}
-KG for 
-resource-constrained IoT devices, while SDM-RDFizer~\cite{Iglesias2022ScalingKnowledgeGraph} 
-aims for an efficient and scalable KG generation through novel 
-optimization techniques and data structures. 
+research~\cite{Sakor2023KG4Covid}, railway networks~\cite{rojas2021leveraging},
+and incident management in ICT systems~\cite{Tailhardat2024NORIA}. 
+Several
+RML-based mapping engines have been developed to generate KGs from
+heterogeneous data, each with its unique approach to execute the mapping
+process (i.e. generating KG from existing heterogeneous
+data~\cite{VanAssche2022DeclarativeRDFgraph}). 
+For example, FlexRML~\cite{Freund2024FlexRML} focuses on the generation of KGs
+for resource-constrained IoT devices, while
+SDM-RDFizer~\cite{Iglesias2022ScalingKnowledgeGraph} aims for an efficient and
+scalable KG generation through novel optimization techniques and data
+structures. 
 
 % what’s the problem
 Current state-of-the-art mapping engines exhibit varying operational semantics
@@ -92,9 +71,8 @@ mapping languages.
 \todo[inline]{The previous two paragraphs are too RML centric! And they do not clear enough point out the general gap. \\ The message of the first of these two paragraphs should be that there exists several declarative mapping approaches to define and to create KGs (including RML) and that these approaches are being used for many applications. Or perhaps even better the other way around: 
 Declarative mapping approaches are being used for many applications and there are several such approaches (including RML) and corresponding systems/engines. The message of the second paragraph should then be that all these approaches lack a well-defined formal foundation and that this is a problem because ... . (And the part about the advantages of a language-agnostic formalism should not be here because this is not related to the problem, as the problem is the lack of any formal foundation, language specific or language agnostic. So, move the part about these advantages to the next paragraph.)}
 
-% what’s my solution
-In this work, we tackled
-	\todo{The paper should we written in present tense.}
+% what’s my solution + paper outline
+In this work, we tackle
 the challenge
 	\todo{It is not clear why that is a challenge. After changing the previous paragraph as suggested in my previous comment, you can better start here by saying that, in this paper, we fill this gap.}
 of providing mapping language-agnostic
@@ -110,7 +88,7 @@ various mapping languages.
 	\todo{This claim about "various mapping languages" is too strong, considering what we do in this paper.}
 % what comes after my solution
 The set of algebraic mapping operators leads to a unified model for 
-the mapping process of generating KG from (semi-)structured data, 
+the mapping process of generating KG from heterogeneous data, 
 optimization techniques applicable to all implementations of our 
 algebraic operators, and an algebraic mapping engine that could utilize 
 multiple declarative mapping languages without any changes to the 
@@ -118,23 +96,23 @@ implementation.
 
 
 % paper outline
-The paper is outlined as follows.
-	 \todo{I personally find it quite useless and a waste of valuable space to have such a paragraph that simply lists all sections with a brief mention of their respective content. If you think about it, do you ever read these paragraphs?? What I typically do instead, is to integrate the section references into the text that introduces the contributions. As concrete examples, you may look at the following three papers:
+%%The paper is outlined as follows.
+	 %\todo{I personally find it quite useless and a waste of valuable space to have such a paragraph that simply lists all sections with a brief mention of their respective content. If you think about it, do you ever read these paragraphs?? What I typically do instead, is to integrate the section references into the text that introduces the contributions. As concrete examples, you may look at the following three papers:
 	 %https://olafhartig.de/files/ChengHartig_FedQPL_iiWAS2020_Extended.pdf
 	 %https://olafhartig.de/files/ChengHartig_OptPlus_2019.pdf
 	 %https://olafhartig.de/files/ChengHartig_LinGBM_WISE2022_AcceptedManuscript.pdf
-	 }
-Section~\ref{sec:related_works} provides an overview of related work in the domain of  
-formalizing declarative mapping languages. 
-Section~\ref{sec:data_model} introduces the notations and symbols we 
-used to provide the formal definitions of algebraic mapping operators. 
-Section~\ref{sec:mapping_algebra} contains the formal definitions of 
-our algebraic mapping operators and their semantics. 
-In Section~\ref{sec:rml_translation} we provide our translation algorithm
-for transforming RML document into an expression composed of our algebraic 
-mapping operators, thereby formalizing RML. 
-Section~\ref{sec:equivalences} introduces a few equivalences and proofs for 
-optimizations of the generated mapping plan. 
-Finally, we conclude this paper and provides possible future works utilizing
-our algebraic mapping operators in Section~\ref{sec:conclusion}. 
+	 %}
+%Section~\ref{sec:related_works} provides an overview of related work in the domain of  
+%formalizing declarative mapping languages. 
+%Section~\ref{sec:data_model} introduces the notations and symbols we 
+%used to provide the formal definitions of algebraic mapping operators. 
+%Section~\ref{sec:mapping_algebra} contains the formal definitions of 
+%our algebraic mapping operators and their semantics. 
+%In Section~\ref{sec:rml_translation} we provide our translation algorithm
+%for transforming RML document into an expression composed of our algebraic 
+%mapping operators, thereby formalizing RML. 
+%Section~\ref{sec:equivalences} introduces a few equivalences and proofs for 
+%optimizations of the generated mapping plan. 
+%Finally, we conclude this paper and provides possible future works utilizing
+%our algebraic mapping operators in Section~\ref{sec:conclusion}. 
 

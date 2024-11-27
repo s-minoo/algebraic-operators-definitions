@@ -2,19 +2,20 @@
 \label{sec:introduction}
 %Each comment introduces 1-2 sentences 
 % Context 
-Knowledge graphs (KGs) have seen increased usage alongside large language
-models (LLMs), enhancing LLMs with external knowledge for tasks such as
-retrieval-augmented generation (RAG)~\cite{Xu2024RAGKGLinkedin}. 
-The KGs required for LLM applications
-	\todo{KGs are not generally "required for LLM applications" (but for different types of RAG applications which, in turn, also use LLMs). \\ In addition to this minor issue, a more general comment is that this paragraph puts too much emphasis on LLMs. I would tone it done and start a bit broader regarding the use cases of KGs, and then you can mention KGs for RAG (and LLMs) as a more recent group of use cases. At the moment, the paragraph is almost more about LLMs and KGs for LLMs and not so much about KGs per se.}
-may already exist or may need to be generated from existing structured or semi-structured 
-(heterogeneous)
-data sources such as tabular data in CSV format or nested data objects in JSON.
-Naturally, empowering LLMs with the vast amount of existing heterogeneous
-data enables the reuse of existing data-generating infrastructures, 
-and eliminating the additional costs of setting up new KG-generating sources.
-One approach to generate KGs from existing heterogeneous data sources is
-through the usage of declarative mapping languages~\cite{VanAssche2022DeclarativeRDFgraph}.
+Knowledge graphs (KGs) play a vital role in enabling semantic interoperability,
+integration, and querying. 
+They allow systems to execute advanced semantic queries, facilitating the
+integration and reasoning of the data at hand. 
+The importance of KGs is further amplified by the growing adoption of large language
+models (LLMs) alongside KGs for tasks like retrieval-augmented
+generation~\cite{Xu2024RAGKGLinkedin}. 
+However, many existing data infrastructures lack the capability to generate KGs
+dynamically, and migrating legacy databases with diverse data formats to 
+KG-based systems can be costly for organizations.
+Unlocking the wealth of knowledge in these legacy systems require the generation 
+of KGs from heterogeneous data efficiently. 
+One such approach of generating KGs involves the usage of declarative mapping
+languages~\cite{VanAssche2022DeclarativeRDFgraph}. 
 
 Declarative mapping languages specify the mappings for generating KGs from
 heterogeneous data based on a mapping document written in the respective
@@ -39,12 +40,11 @@ structures.
 
 % what’s the problem
 Current state-of-the-art mapping engines exhibit varying operational semantics
-when executing the mapping processes specified within an RML document,
-	\todo{Again, an RML document does not specify any process.}
+when executing the mappings specified within an RML document,
 which is the consequence of the lack of formalizations in RML. 
 The lack of formalizations not only complicates the verification
 of the correctness and the study of the expressiveness of the language, it also
-makes it challenging to optimize the mapping process described by the RML
+makes it challenging to optimize the mappings described by the RML
 document.
 Furthermore, the formalizations should be mapping language-agnostic,
 	\todo{By writing it this way around, this sentence here immediately triggers the question: Why? (Why should the formalizations for RML be language agnostic?)}

@@ -20,10 +20,9 @@ Moreover, $\symAllLiterals$ is a countably infinite set of pairs
 $ \literalTuple \in \symAllStrings \times \symAllIRIs$, which we
 call \emph{literals}.
 For each such literal~$\literal = \literalTuple$, $\lex$ is
-its \emph{lexical form} and $\dt$ is its \emph{datatype
-	IRI}.\footnote{To avoid overly complex formulas in this paper, we ignore the
-	option of literals that have a language tag. Yet, the formalism can easily be
-	extended to cover language-tagged literals as well.}
+its \emph{lexical form} and $\dt$ is its \emph{datatype IRI}.\footnote{To avoid overly complex formulas in this paper, we ignore the option of literals that have a language tag. Yet, the formalism can easily be extended to cover
+	%language-tagged literals as well.}
+	them.}
 Furthermore, we assume a countably infinite set~$\symAllBNodes$ of \emph{blank
 	nodes}, which is disjoint from both $\symAllStrings$ and $\symAllLiterals$.
 The set~$\symTermUniverse$ of all \emph{RDF terms} is defined as
@@ -79,19 +78,22 @@ For the sake of conciseness, we sometimes write $\mappingTuple \in r$ to denote 
 the instance~%
 $\symMappingInst$ of a mapping relation $r=\mappingRel$.
 
-\begin{table}[t!hpb]
+\begin{table}[t]
 	\centering
-	\caption{Mapping relation~$r$ with attributes $\symAttrSubSet = \{ \attr_\mathrm{x}, \subjAttr, \predAttr, \objAttr, \graphAttr \}$ and
-		mapping instance $\symMappingInst = \{ \mappingTuple, \mappingTuple', \mappingTuple'' \}$}
+	\caption{Mapping relation~%
+		%$r=\mappingRel$ with $\symAttrSubSet = \{ \attr_\mathrm{x}, \subjAttr, \predAttr, \objAttr, \graphAttr \}$ and $\symMappingInst = \{ \mappingTuple, \mappingTuple'\!, \mappingTuple'' \}.$}
+		$r$ discussed in Examples~\ref{ex:mapping_relation} and~\ref{ex:generated_dataset}.}
 	\label{tab:mapping_relation}
-	\begin{tabular}{|l|l|l|l|l|l|}
-		\hline
-		Mapping tuple     & $\attr_\mathrm{x}$                & $\subjAttr$    & $\predAttr$      & $\objAttr$                        & $\graphAttr$          \\
-		\hline
-		$\mappingTuple$   & $(\ttl{"12"}, \ttl{xsd:integer})$ & \ttl{ex:alice} & \ttl{foaf:knows} & \ttl{ex:bob}                      & \ttl{rr:defaultGraph} \\
-		$\mappingTuple'$  & \ttl{ex:alice}                    & $\error$       & \ttl{foaf:knows} & $\error$                          & \ttl{ex:g1}           \\
-		$\mappingTuple''$ & $\error$                          & \ttl{ex:bob}   & \ttl{foaf:name}  & $(\ttl{"Bob"}, \ttl{xsd:string})$ & \ttl{ex:g2}           \\
-        \hline
+	\begin{tabular}{c|c|c|c|c|c|}
+		\cline{2-6}
+		                  & $\attr_\mathrm{x}$                & $\subjAttr$    & $\predAttr$      & $\objAttr$                        & $\graphAttr$
+		\\ \cline{2-6}
+		$\mappingTuple$   & $(\ttlSmaller{"12"}, \ttlSmaller{xsd:integer})$ & \ttlSmaller{ex:alice} & \ttlSmaller{foaf:knows} & \ttlSmaller{ex:bob}                      & \ttlSmaller{rr:defaultGraph}
+		\\
+		$\mappingTuple'$  & \ttlSmaller{ex:alice}                    & \ttlSmaller{ex:alice}       & $(\ttlSmaller{"knows"}, \ttlSmaller{xsd:string})$ & \ttlSmaller{ex:charles} & \ttlSmaller{ex:g1}
+		\\
+		$\mappingTuple''$ & $\error$                          & \ttlSmaller{ex:bob}   & \ttlSmaller{foaf:name}  & $(\ttlSmaller{"Bob"}, \ttlSmaller{xsd:string})$ & \ttlSmaller{ex:g2}
+		\\ \cline{2-6}
 	\end{tabular}
 \end{table}
 \begin{example}
@@ -172,5 +174,7 @@ by using the values that the tuples in the relation have for these attributes. T
 	%The RDF dataset resulting from the mapping relation in Example~\ref{ex:mapping_relation}
 	is $D = \bigl\{ G, (\ttl{ex:g2}, G') \bigr\}$
 	with $G = \big\{ (\ttl{ex:alice}, \ttl{foaf:knows}, \ttl{ex:bob}) \big\}$
-	and $G'\! = \big\{ (\ttl{ex:bob}, \ttl{foaf:name}, (\ttl{"Bob"},\ttl{xsd:string})) \big\}$. Notice that $\mappingTuple'\! \notin \symMappingInst_\mathrm{valid}$ because $\big( \mappingTuple'(\subjAttr), \mappingTuple'(\predAttr), \mappingTuple'(\objAttr) \bigr)$ is not an RDF triple.
+	and $G'\! = \big\{ (\ttl{ex:bob}, \ttl{foaf:name}, (\ttl{"Bob"},\ttl{xsd:string})) \big\}$. Notice that $\mappingTuple'\! \notin \symMappingInst_\mathrm{valid}$ because $\big( \mappingTuple'(\subjAttr), \mappingTuple'(\predAttr), \mappingTuple'(\objAttr) \bigr)$ is not an RDF triple%
+		~(since $\mappingTuple'(\predAttr)$ is a literal)%
+	.
 \end{example}

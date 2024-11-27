@@ -40,40 +40,45 @@ built upon.
 This absence of formalizations complicates verifying the correctness of the
 mapping engines and studying the expressiveness of the mapping languages.
 Additionally, it poses challenges in optimizing the mappings described by the
-mapping language.
-
-% why it’s an interesting problem
-A language-agnostic formalization of the mapping process paves the way for a
-unified mapping engine capable of working with the user's choice of language,
-ensuring verified correctness and supporting optimizations across different
 mapping languages.
 
-\todo[inline]{The previous two paragraphs are too RML centric! And they do not clear enough point out the general gap. \\ The message of the first of these two paragraphs should be that there exists several declarative mapping approaches to define and to create KGs (including RML) and that these approaches are being used for many applications. Or perhaps even better the other way around: 
-Declarative mapping approaches are being used for many applications and there are several such approaches (including RML) and corresponding systems/engines. The message of the second paragraph should then be that all these approaches lack a well-defined formal foundation and that this is a problem because ... . (And the part about the advantages of a language-agnostic formalism should not be here because this is not related to the problem, as the problem is the lack of any formal foundation, language specific or language agnostic. So, move the part about these advantages to the next paragraph.)}
+% why it’s an interesting problem
 
 % what’s my solution + paper outline
-In this work, we tackle
-the challenge
-	\todo{It is not clear why that is a challenge. After changing the previous paragraph as suggested in my previous comment, you can better start here by saying that, in this paper, we fill this gap.}
-of providing mapping language-agnostic
-formalizations in two steps.
-First, we provide formal definitions and propose a set of algebraic mapping
-operators which can be composed to formally describe the mapping processes. 
-In the second and last step, we provide an algorithm for translating RML documents
-	\todo{Introducing our work in terms of these two steps is, again, too RML centric. In fact, the first three sentences here can be read as: The authors introduce a language-agnostic formalization to define RML. Or perhaps even: The authors introduce a language-agnostic formalization of RML. Yet, RML is not the main thing here! We are making multiple contributions, the primary one being the introduction of formal approach to define mappings (which is language agnostic and you can emphasize the advantages of this fact here) and another one being that we show that, with our approach, it is possible to capture every mapping that can be defined using RML. As a side effect of this second contribution, we are actually providing a formal semantics for RML, which can be seen as another contribution. (And then we also have algebraic equivalences as another contribution.)}
-to an expression comprising these algebraic mapping operators,
-thereby formalizing RML's operational semantics and demonstrating that our 
-language-agnostic algebra can serve as the foundation for formalizing
+In this paper, we fill the gap in the lack of formalizations in 
+mapping languages by providing mapping language-agnostic
+formalizations with three contributions.
+The first contribution is the introduction of formal definitions and the proposal
+of a set of algebraic mapping operators.
+These operators can be composed to formally define the mappings of
+heterogeneous data for KG generation in a language-agnostic manner
+(Sections~\ref{sec:data_model} and~\ref{sec:mapping_algebra}).
+A language-agnostic formalization of mappings lays the foundation for a unified
+mapping engine that can work with the user's preferred mapping language. 
+This approach ensures verified correctness and enables optimizations across
 various mapping languages.
-	\todo{This claim about "various mapping languages" is too strong, considering what we do in this paper.}
-% what comes after my solution
-The set of algebraic mapping operators leads to a unified model for 
-the mapping process of generating KG from heterogeneous data, 
-optimization techniques applicable to all implementations of our 
-algebraic operators, and an algebraic mapping engine that could utilize 
-multiple declarative mapping languages without any changes to the 
-implementation.
 
+The second contribution demonstrates the expressiveness of our
+language-agnostic formalizations by applying them to a specific mapping
+language. 
+Specifically, we present an algorithm that translates RML documents into
+expressions composed of the algebraic operators defined in our formalism
+(Section~\ref{sec:rml_translation}). 
+This algorithm shows that our formalism can represent every mapping definable
+in RML, proving it to be at least as expressive as RML while also providing
+formal semantics for RML. 
+Lastly, as our final contribution, we introduce a few algebraic equivalences
+to show the potential of algebraic expression rewriting and enabling optimizations of
+the mappings (Section~\ref{sec:equivalences}).
+
+% what comes after my solution
+% TODO: Move the following text to conclusion
+%The set of algebraic mapping operators leads to a unified model for 
+%the mapping process of generating KG from heterogeneous data, 
+%optimization techniques applicable to all implementations of our 
+%algebraic operators, and an algebraic mapping engine that could utilize 
+%multiple declarative mapping languages without any changes to the 
+%implementation.
 
 % paper outline
 %%The paper is outlined as follows.

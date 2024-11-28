@@ -1,65 +1,73 @@
 \section{Related Work}%
 \label{sec:related_works}
 
-According to Van Assche et al.~\cite{VanAssche2022DeclarativeRDFgraph}, 
-declarative mapping languages can be further
-	\todo{Saying "further" here requires that you have talked about another categorization before, in which declarative mapping languages are one of the categories.}
-categorized into two categories: 
-i) \emph{dedicated languages} which extend specifications
-	\todo{It is not clear what kinds of "specifications" you are talking about here.}
-or use custom
-syntaxes, and ii) \emph{repurposed languages} which repurpose existing
-specifications or query languages to support knowledge graph
-	\todo{I think it is okay to continue using the acronym "KG" that you have introduced in the intro section.}
-construction.
+According to Van Assche et al.~\cite{VanAssche2022DeclarativeRDFgraph},
+declarative mapping languages can be categorized into two categories: i)
+\emph{dedicated languages} which extend mapping specifications (e.g.
+R2RML~\cite{Seema2012R2RML} specifications) or use custom syntaxes, and ii)
+\emph{repurposed languages} which repurpose existing non-mapping specifications
+or query languages to support KG construction.
 In this section, we briefly review existing works on formalizations of 
-dedicated mapping languages for knowledge graph construction. 
+declarative mapping languages for KG construction. 
 
-We do not consider repurposed mapping languages in this work since they 
-inherit the formalizations of the specifications or query languages on which
-they are based upon, limiting them to the syntax of the parent languages and not 
-applicable for formalizing a language-agnostic mapping process.
+%We do not consider repurposed mapping languages in this work since they 
+%inherit the formalizations of the specifications or query languages on which
+%they are based upon, limiting them to the syntax of the parent languages and not 
+%applicable for formalizing a language-agnostic mapping process.
 	\todo{As I tried to convey in some of my comments for the intro section, you should not get hung up too much on whether a formalization is language agnostic or not. The fact that ours is language agnostic is an advantage, yes, but the overall aim of our work (as far as I was assuming up to now) is on a bigger problem, namely the lack of any reasonable formalization. In this sense, language-specific formalizations are related and should be discussed here.}
 
+\subsection{Formalizations in Repurposed Mapping Languages}%
+\label{sub:formalizations_in_repurposed_mapping_languages}
+
+To the best of our knowledge, only SPARQL-based mapping languages have defined
+formal
+semantics~\cite{lefrancois_eswc_2017,Lopes2011XSPARQL,Bischof:2012:XSPARQL,asprino2023knowledge}
+in the category of repurposed mapping languages.
+SPARQL-Anything~\cite{asprino2023knowledge} utilizes a two-step approach to providing 
+formal semantics for the language. 
+The first step involves formalizing the Façade-X
+meta-model~\cite{Daga2021FacadeXOpinionated}, which transforms heterogeneous
+data into an intermediate RDF graph that describes the structure of the data. 
+The final step is using SPARQL to query the Façade-X meta-model RDF graph and
+generating RDF KG with SPARQL \ttl{CONSTRUCT} query. 
+This step is fully well-defined with the formal semantics of SPARQL. 
+SPARQL-Generate~\cite{lefrancois_eswc_2017} reuses and modifies concepts from
+SPARQL 1.1 to provide formal semantics for the language. 
+This includes the extensions made by the authors to SPARQL 1.1 to support KG
+generation from heterogeneous data.
+XSPARQL~\cite{Bischof:2012:XSPARQL} combines the formal semantics of
+XQuery and SPARQL to provide formal semantics for mapping between XML and RDF data.
+The authors also extend their work to support mapping relational databases to 
+RDF data and provide formal semantics for the extension by utilizing relational
+algebra~\cite{Lopes2011XSPARQL}. 
+The aforementioned works rely on the semantics of the underlying non-mapping
+languages which they are built upon to provide formal semantics of mapping 
+heterogeneous data for KG generation. 
+We argue that reliance on the semantics of the underlying non-mapping language
+limits the applicability of the formalism proposed in these works to
+dedicated mapping languages specifically designed for mapping heterogeneous
+data to generate knowledge graphs. 
+    
 \subsection{Formalizations in Dedicated Mapping Languages}
 \label{sub:dedicated_mapping_languages}
-	\todo{Having a single subsection within a section make no sense. If you do not add another subsection, you should remove this subsection title.}%
-R2RML~\cite{Seema2012R2RML} is a dedicated mapping language, using
-Turtle-syntax,
-	\todo{I understand that R2RML descriptions are typically presented using Turtle, I would still not say that the language uses the Turtle syntax. Instead, R2RML descriptions are given as an RDF graph, usually presented using the Turtle syntax.}
-for generating knowledge graphs from relational databases. 
-It has been used as the basis for a family of mapping languages which extends 
-its scope from relational database
-	\todo{databases}
-to (semi)-structured data~\cite{VanAssche2022DeclarativeRDFgraph},
-	\todo{Also here, what is "(semi)-structured data"?}
-such as
-	\todo{What exactly does "such as" refer to? Writing the sentence in this way is not 100\% semantically correct. I mean, when you write about "a family of mapping languages", then there is only one such family and you cannot refer to it via "such as". To fix this issue, replace "a family of" by "several" (and then also "extends" $\rightarrow$ "extend").}
-RML~\cite{dimou_ldow_2014}, D2RML~\cite{Chortaras2018D2RML}, and xR2RML~\cite{michel2015translation}. 
+R2RML~\cite{Seema2012R2RML} is a dedicated mapping language for R2RML mappings,
+which are RDF graphs for mapping relational databases to RDF KG.
+These mappings are usually presented using Turtle syntax.
+R2RML has been used as the basis for several mapping languages which extend its
+scope from relational databases to structured or semi-structured
+data~\cite{VanAssche2022DeclarativeRDFgraph}, such as
+RML~\cite{dimou_ldow_2014}, D2RML~\cite{Chortaras2018D2RML}, and
+xR2RML~\cite{michel2015translation}. 
 Thus, it is important to consider the formalization studies conducted on 
 R2RML which can have impact on the languages in the R2RML family.  
 
-Sequeda et al.~\cite{Sequeda2013R2RML} provided
-	\todo{Using present tense is not correct. It is kind of okay to write "have provided" instead, but the usual practice is to simply use present tense in such sentences as well (i.e., "provide").}
-formalizations
-	\todo{Multiple?}
-of the 
-operational semantics
-	\todo{Why are you always coming back to this notion of "operational semantics"? I am not really sure what it even means in this context, let alone whether I would call the semantics of R2RML an operational one.}
+Sequeda et al.~\cite{Sequeda2013R2RML} provide formalization to the semantics
 of R2RML using Datalog.
-They
-	\todo{No. It is bad style to refer to authors as "they". Write "The authors .." instead.}
-proved
-	\todo{prove}
-that the semantics of R2RML can be captured using 57 distinct 
+The authors prove that the semantics of R2RML can be captured using 57 distinct
 Datalog rules to generate RDF from relational databases. 
-However, since R2RML's
-	\todo{R2RML is not a person. So, you cannot use this construct with "'s". That's not correct English. Instead, you need to write: "the scope of R2RML"}
-scope is limited to relational databases, the same 
-formalizations cannot be applied to other languages whose scope is much
-	\todo{Avoid such quantifiers ("much") because it is not clear what it means (how much is "much").}
-larger
-than just relational databases.
+However, since the scope of R2RML is limited to relational databases, the same
+formalizations cannot be applied to other languages whose scope is larger than
+just relational databases.
 
 \todo[inline]{I find the argument in the previous paragraph a bit unsatisfying. You are essentially dismissing the approach in that paper only because R2RML is focused on a single type of input data sources. I think the approach can and should still be compared to ours. To some extend, the issue is the slightly negative touch that the last sentence has, which can be fixed by rephrasing the last sentence in a more positive direction ("while this formalization is focused on a single type of input data sources, our approach is designed to capture arbitrary types of (structured and semi-structured) data sources"). Additionally, they may also be something to be said about a Datalog-based formalization in comparison to ours.}
 
@@ -68,17 +76,14 @@ the mapping process described in their respective languages nor were there any
 studies conducted for formalizing these languages.
 In contrast, a few studies on formalization of RML have been published in 
 recent years~\cite{MinOo2023TowardsAlgebra,Iglesias2022ScalingKnowledgeGraph}
-Iglesias et al.~\cite{Iglesias2022ScalingKnowledgeGraph} focused
-	\todo{focus}
+Iglesias et al.~\cite{Iglesias2022ScalingKnowledgeGraph} focus
 on formalizing 
 the optimization
 	\todo{What is *the* optimization? More generally, it doesn't come across what exactly that formalization is about. Is it a formalization of the semantics of RML? If not, then what exactly is being formalized?}
 of executing the mapping process in a RML document.
-The formalization relied on the syntax of RML
+The formalization relied on RML-specific concepts (e.g. Triples Map), 
 	\todo{What is "the syntax of RML"?}
-to provide 
-operational semantics such as using RML's concept of triples map to 
-describe mapping assertions.
+to provide operational semantics for describing mapping assertions.
 	\todo{Notice, I read this previous sentence as a neutral statement. If your intention was to point out that the authors' formalization approach has any downsides, then you need to express this explicitly.}
 Furthermore, the authors did not explore if it is possible to apply the same
 formalizations to provide semantics for other mapping languages where the 

@@ -23,30 +23,28 @@ To the best of our knowledge, only SPARQL-based mapping languages have defined
 formal
 semantics~\cite{lefrancois_eswc_2017,Lopes2011XSPARQL,Bischof:2012:XSPARQL,asprino2023knowledge}
 in the category of repurposed mapping languages.
-SPARQL-Anything~\cite{asprino2023knowledge} utilizes a two-step approach to providing 
-formal semantics for the language. 
-The first step involves formalizing the Façade-X
+SPARQL-Anything~\cite{asprino2023knowledge} utilizes a two-step approach. 
+First, it formalizes the Façade-X
 meta-model~\cite{Daga2021FacadeXOpinionated}, which transforms heterogeneous
-data into an intermediate RDF graph that describes the structure of the data. 
-The final step is using SPARQL to query the Façade-X meta-model RDF graph and
-generating RDF KG with SPARQL \ttl{CONSTRUCT} query. 
-This step is fully well-defined with the formal semantics of SPARQL. 
-SPARQL-Generate~\cite{lefrancois_eswc_2017} reuses and modifies concepts from
-SPARQL 1.1 to provide formal semantics for the language. 
-This includes the extensions made by the authors to SPARQL 1.1 to support KG
-generation from heterogeneous data.
-XSPARQL~\cite{Bischof:2012:XSPARQL} combines the formal semantics of
-XQuery and SPARQL to provide formal semantics for mapping between XML and RDF data.
-The authors also extend their work to support mapping relational databases to 
-RDF data and provide formal semantics for the extension by utilizing relational
+data into an intermediate RDF graph describing the data's structure.
+The final step uses SPARQL queries on the Façade-X RDF graph to generate RDF KG
+with SPARQL \ttl{CONSTRUCT} query, which is fully compatible with the formal
+semantics of SPARQL. 
+SPARQL-Generate~\cite{lefrancois_eswc_2017} extends concepts from SPARQL 1.1 to
+define the language, including modifications that support KG generation from
+heterogeneous data.
+XSPARQL~\cite{Bischof:2012:XSPARQL} combines the semantics of XQuery and SPARQL
+for mapping between XML and RDF data.
+The authors also extend their work to support mapping relational databases to
+RDF data by utilizing the semantics of relational
 algebra~\cite{Lopes2011XSPARQL}. 
+
 The aforementioned works rely on the semantics of the underlying non-mapping
-languages which they are built upon to provide formal semantics of mapping 
-heterogeneous data for KG generation. 
+languages they build upon. 
 We argue that reliance on the semantics of the underlying non-mapping language
 limits the applicability of the formalism proposed in these works to
 dedicated mapping languages specifically designed for mapping heterogeneous
-data to generate knowledge graphs. 
+data to generate KGs. 
     
 \subsection{Formalizations in Dedicated Mapping Languages}
 \label{sub:dedicated_mapping_languages}

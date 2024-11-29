@@ -181,26 +181,23 @@ of this section to provide a practical example after defining each operator.
 \begin{example}
 	\label{ex:running_ex_source_type}
 	First, we start with a concrete example of a source type for a CSV file
-	$\bigDataObject \in \symSetDatasetX{\mathsf{csv}}$
+    $\bigDataObject_{\mathsf{ex}} \in \symSetDatasetX{\mathsf{csv}}$
 	with the header introducing column names \textsf{id}, \textsf{firstname},
 	\textsf{lastname}, and \textsf{age} and the following two rows of CSV
 	data records on people as:
 	\begin{equation*}
-		\bigDataObject = [(\ttl{1}, \ttl{Alice}, \ttl{Lee}, \ttl{23}), (\ttl{2}, \ttl{Bob}, \ttl{Malice}, \ttl{25})]
+        \bigDataObject_{\mathsf{ex}} = [(\ttl{1}, \ttl{Alice}, \ttl{Lee}, \ttl{23}), (\ttl{2}, \ttl{Bob}, \ttl{Malice}, \ttl{25})]
 	\end{equation*}
-\todo[inline]{This whole paragraph below here is not what I meant. In fact, this is not even how the formalism should work. You should not introduce a new source type specific to the given CSV file. Instead, the source type should be the one introduced Example~\ref{ex:source_type_csv}; i.e., $\sourceTypeX{\mathsf{csv}}$. What I wanted you to do is something like the following:
-\\ a)~introduce a data source $\dataSource_\mathsf{ex} = (\sourceTypeX{\mathsf{csv}}, \bigDataObject_\mathsf{ex})$ where $\bigDataObject_\mathsf{ex}$ is this CSV file,
-\\ b)~say that $\evalX{\mathsf{csv}}(\bigDataObject_\mathsf{ex},\varepsilon)$ is the two rows of the CSV file,
-\\ c)~assuming $\dataObject$ is the first of these rows, then $\cbevalX{\mathsf{csv}}(\bigDataObject_\mathsf{ex}, \dataObject, \textsf{firstname})$ is the string \ttl{Alice}, and
-\\ d)~$\typeCastX{\mathsf{csv}}(\ttl{Alice})$ is the RDF literal $(\ttl{"Alice"}, \ttl{xsd:string})$.}
-	The source type for such a CSV file is $\sourceType = (\bigDataObject, \symSetContentA,
-		\symSetContentB, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \typeCast )$ where
-	$\symDataAcc = \{ \error \}$,
-	$\symDataAcc'$ consists of column names $\{ \textsf{id},  \textsf{firstname},\textsf{lastname},\textsf{age}\}$,
-	$\symSetContentA$ consists of the two CSV rows after evaluating $\fctEval{\bigDataObject}{\error}$,
-	$\symSetContentB$ consists of all CSV values (e.g. \ttl{Alice}, \ttl{Malice}, etc\dots), and
-	$\typeCast$ transforms the CSV values in $\symSetContentB$ to RDF literals (e.g.
-	$\fctTypeCast{\ttl{Alice}}$ creates the RDF literal $(\ttl{"Alice"}, \ttl{xsd:string})$).
+    Given such a CSV file as input data, the data source derived from it is
+    $\dataSource_\mathsf{ex} = (\sourceTypeX{\mathsf{csv}},\bigDataObject_\mathsf{ex})$ 
+    where $\sourceTypeX{\mathsf{csv}}$ is the source type for CSV from Example~\ref{ex:source_type_csv}.
+    Evaluating $\evalX{\mathsf{csv}}(\bigDataObject_\mathsf{ex},\varepsilon)$ produces the 
+    two CSV rows of the input CSV data~$\bigDataObject_{\mathsf{ex}}$. 
+    Assuming that $\dataObject = (\ttl{1}, \ttl{Alice}, \ttl{Lee}, \ttl{23})$ is the first 
+    CSV row, then evaluating $\cbevalX{\mathsf{csv}}(\bigDataObject_\mathsf{ex}, \dataObject, \textsf{firstname})$
+    is the string value \ttl{Alice}.
+    Finally, evaluating $\typeCastX{\mathsf{csv}}(\ttl{Alice})$ returns an 
+    RDF literal $(\ttl{"Alice"}, \ttl{xsd:string})$. 
 \end{example}
 }
 

@@ -23,57 +23,32 @@
 This section introduces our mapping algebra which consists of six
 \todo{Change this number if we decide to remove some of the operators due to space constraints.}
 types of operators.
-The output of each such operator is
-%The output of each operator is
-%Each such operator outputs
-a mapping relation and the inputs (if any) are mapping relations as well. Hence, the operators can be combined
-%to form
-into
-arbitrarily complex algebra expressions, where each such expression defines a mapping from one or more sources of
-%structured or semi-structured
-(semi-)structured
-data into an~RDF~dataset.\footnote{We assume here that the mapping relation resulting from the root operator of the expression contains the aforementioned attributes $\subjAttr$, $\predAttr$, $\objAttr$, and $\graphAttr$ (see Definition~\ref{def:generated_dataset}).}
+The output of each such operator is a mapping relation and the inputs (if any)
+are mapping relations as well.
+Hence, the operators can be combined into arbitrarily complex algebra
+expressions, where each such expression defines a mapping from one or more
+sources of (semi-)structured data into an~RDF~dataset.\footnote{We assume here
+that the mapping relation resulting from the root operator of the expression
+contains the aforementioned attributes $\subjAttr$, $\predAttr$, $\objAttr$,
+and $\graphAttr$ (see Definition~\ref{def:generated_dataset}).}
 
 
 \subsection{Source Operator}%
 \label{sub:source_operator}
 
-% { \color{gray}
-% The mapping relations (Definition~\ref{def:mapping_relation}), which serve as
-% the data model for the algebraic operators, must first be generated from
-% (semi-)structured data. 
-% To accomplish this, a dedicated operator, the Source
-% operator, is introduced to produce mapping relations from (semi-)structured
-% data. 
-% Before defining the Source operator, we present essential notations and
-% concepts involved in its definition.
-% 
-% \noindent \textbf{Notations}  We assume the following pairwise disjoint countably infinite sets:
-% $\symDatasetUni$ (datasets), and  $\symDataObjUni$ (data objects).
-% Each dataset in $\symDatasetUni$ is a collection of data objects.
-% To denote that a data object~$\dataObject \in \symDataObjUni$ is contained in
-% such a dataset~$\symDataset \in \symDatasetUni$, we write
-% $\dataObject \in \symDataset$.
-% 
-% Informally, a data object~$\dataObject \in \symDataObjUni$ is an abstract
-% entity that could be queried using a query expression to extract
-% one or more data objects \textbf{which can, in turn, be accessible by different data access languages}.
-% For example, a JSON object is considered a data object with JSONPath as the data
-% access language, and it can be further queried using JSONPath expressions to
-% extract JSON arrays (data objects) or a JSON field containing a string
-% representation of CSV rows (data objects), which can be further queried using a CSV specific
-% data access language.
-% }
 
-The basis of every
-expression that defines a mapping using our algebra
-%algebraic mapping expression
-are operators that establish a relational view of each source of input data. From the perspective of the algebra, these \emph{source operators} are nullary operators; they do not have any mapping relation as input. The mapping relation that such an operator creates
-as output
-depends on the data of the corresponding data source and can be specified based on a language appropriate to identify and extract relevant pieces of data from the data source. As our mapping algebra should be applicable for various types of data sources, for which different such languages are suitable, we introduce an abstraction of this extraction process and define
-our notion of source operators
-%the source operator
-based on this abstraction.
+The basis of every expression that defines a mapping using our algebra are
+operators that establish a relational view of each source of input data. 
+From the perspective of the algebra, these \emph{source operators} are nullary
+operators; they do not have any mapping relation as input. 
+The mapping relation that such an operator creates as output depends on the
+data of the corresponding data source and can be specified based on a language
+appropriate to identify and extract relevant pieces of data from the data
+source. 
+As our mapping algebra should be applicable for various types of data sources,
+for which different such languages are suitable, we introduce an abstraction of
+this extraction process and define our notion of source operators based on this
+abstraction.
 
 %For our abstraction we assume
 Our abstraction considers

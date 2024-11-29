@@ -64,12 +64,12 @@ The authors prove that the semantics of R2RML can be captured using 57 distinct
 Datalog rules to generate RDF from relational databases. 
 While this formalization is focused on a single type of input data, namely a 
 relational database, our approach is designed to capture arbitrary types of 
-heterogeneous data sources for mapping. 
+heterogeneous data sources for mapping.t  
 Furthermore, Datalog-based formalization limits the accessibility for
 developers aiming to implement mapping engines that comply with these
-formalisms. 
+formalisms due to the lack of control-flow description. 
 In contrast, our approach defines algebraic operators in a clear, and concise
-manner, making it easier to adopt and implement a working mapping engine.
+manner, while also introducing control-flow to make it easier to adopt and implement a working mapping engine.
 \todo{For Olaf: Is it a valid argument to not use Datalog-based formalizations? It seems more 
 intuitive to use algebraic expressions as a reference for mapping engine's semantics when developing one.}
 %D2RML and xR2ML do not provide any formal operational semantics for executing

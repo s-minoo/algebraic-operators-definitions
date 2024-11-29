@@ -1,4 +1,4 @@
-\section{Related Work}%
+esection{Related Work}%
 \label{sec:related_works}
 
 According to Van Assche et al.~\cite{VanAssche2022DeclarativeRDFgraph},
@@ -71,42 +71,31 @@ developers aiming to implement mapping engines that comply with these
 formalisms. 
 In contrast, our approach defines algebraic operators in a clear, and concise
 manner, making it easier to adopt and implement a working mapping engine.
-\todo[inline]{For Olaf: Is it a valid argument to not use Datalog-based formalizations? It seems more 
+\todo{For Olaf: Is it a valid argument to not use Datalog-based formalizations? It seems more 
 intuitive to use algebraic expressions as a reference for mapping engine's semantics when developing one.}
-
-D2RML and xR2ML do not provide any formal operational semantics for executing
-the mapping process described in their respective languages nor were there any
-studies conducted for formalizing these languages.
-In contrast, a few studies on formalization of RML have been published in 
+%D2RML and xR2ML do not provide any formal operational semantics for executing
+%the mapping process described in their respective languages nor were there any
+%studies conducted for formalizing these languages.
+Besides R2RML, a few studies on formalization of RML have been published in 
 recent years~\cite{MinOo2023TowardsAlgebra,Iglesias2022ScalingKnowledgeGraph}
-Iglesias et al.~\cite{Iglesias2022ScalingKnowledgeGraph} focus
-on formalizing 
-the optimization
-	\todo{What is *the* optimization? More generally, it doesn't come across what exactly that formalization is about. Is it a formalization of the semantics of RML? If not, then what exactly is being formalized?}
-of executing the mapping process in a RML document.
-The formalization relied on RML-specific concepts (e.g. Triples Map), 
-	\todo{What is "the syntax of RML"?}
-to provide operational semantics for describing mapping assertions.
-	\todo{Notice, I read this previous sentence as a neutral statement. If your intention was to point out that the authors' formalization approach has any downsides, then you need to express this explicitly.}
-Furthermore, the authors did not explore if it is possible to apply the same
-formalizations to provide semantics for other mapping languages where the 
-concept of triples maps do not exist.
-	 \todo{Okay, they didn't explore that; but given that their focus was on RML, why would they? Also here, instead of blaming the authors for something that they didn't do (and for which there is also no immediate need from the perspective of their work!), you may rephrase this in a more positive direction (e.g., "Beyond the direct application to RML, it would be interesting to ..."). Mind you, however, that we are also not *explicitly* exploring the applicability of our formalization beyond RML.}
-
-\todo[inline]{Like in the paragraph about Sequeda et al.'s work, also in this previous paragraph here, I am missing a more explicit statement that relates (or even compares!) Iglesias et al.'s formalization approach to ours.}
+Iglesias et al.~\cite{Iglesias2022ScalingKnowledgeGraph} provide formal
+semantics to the process of KG generation through Horn clauses. 
+However, their primary focus is on optimizing the KG creation process for
+efficiency, with the formalizations created as a side product to support their
+novel optimization techniques.
+Moreover, it would be interesting to explore the application of their
+formalization to mapping languages beyond RML. 
  
 An initial study explored the provision of formal semantics for the 
 mapping process in a language-agnostic manner through \emph{algebraic mapping
 operators}~\cite{MinOo2023TowardsAlgebra}.
-However, this preliminary work does not provide a complete semantics
-	\todo{What is a "complete semantics"? I assume you mean that the semantics does not cover all aspects of the corresponding language (but what language, actually?). That's one limitation, which you can mention (but you need to describe it better---see my next comment). Yet, another limitation is that the definitions in that paper are only "semi-formal"; that is, some definitions are only informal and some definitions are based on concepts that are not defined at all.}
-for 
-mapping processes, since it does not provide a way to capture the semantics of
-joining multiple mapping processes which RML can describe.
-	\todo{It is not clear what you mean by "joining multiple mapping processes which RML can describe."}
-	\todo{Moreover, also here it is not clear how the approach in this paper compares to ours.}
+This preliminary work does not cover all aspects of the KG generation process that 
+can be described using a dedicated mapping language like RML.
+Notably, it does not provide semantics for joining multiple data sources. 
+Another limitation of this paper is that its definitions are only
+"semi-formal"; meaning that some definitions are either presented informally or rely on
+concepts that are undefined.
 Thus, there is still a lack of study in providing language-agnostic, complete,
 and well-defined semantics to the mapping process of generating knowledge
-graphs from (semi)-structured data.
+graphs from heterogeneous data.
 
-\todo[inline]{By the way, looking at the bibliography, I notice that this is a mess (not only the entry for your paper but many others). The titles of almost all publications are entirely in lower case (make them all properly capitalized!); some publications have a month, other not (remove months!); some publications have editors in addition to authors, others not (remove editors!); some publications have URLs, some even multiple URLs, others none (remove all URLs!); etc. Generally, the entries for all journal articles should be of the same form and, similarly, the entries for all conference and workshop papers should be of the same form.}

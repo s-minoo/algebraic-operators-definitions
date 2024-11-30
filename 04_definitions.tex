@@ -333,7 +333,12 @@ a so-called \emph{extend expression} that can be formed using \emph{extension fu
 % \end{example}
 
 
-% While further extension functions may be defined, we use the notion of extension functions to define so-called \emph{extend expressions} for extend operators.
+% Due to space limitations, we do not introduce any other extension function here, but we emphasize that any function that can be described using the Function Ontology (FnO)~\cite{DeMeester2023:FnO} can also be defined as an extension function.
+% 
+% Further extension functions may be defined, including any function that can be described using the Function Ontology (FnO)~\cite{DeMeester2023:FnO}.
+% %
+% In our formalism, extension functions are used in \emph{extend expressions}, which we define as follows.
+
 
 \begin{definition}
 	\label{def:ExtendExpressions:Syntax}
@@ -474,25 +479,16 @@ Now we can define the semantics of extend operators as follows.
 	\end{align*}
 \end{example}
 
+% In addition to converting literals from one datatype to another (as illustrated in the example), extend operators may also be used to add  ... , etc.
 
-\subsection{Projection Operator}%
-\label{sub:projection_operator}
-
-\todo[inline]{Olaf, continue here ... }
-
-The \textbf{projection} operator restricts the mapping tuples in a mapping
-relation to a subset of the attributes of that relation.
+While the example shows how extend operators can be used to convert literals from one datatype to another, other use cases including adding the same constant RDF term to all tuples of a mapping relation%
+	%~(e.g., a particular string literal or IRI)%
+, creating IRIs from other attribute values, and applying arbitrary functions to one or more other attribute values.
 
 
-\begin{definition}
-	\label{def:tuple_restrict}
-	Given a mapping tuple $\mappingTuple$ and a subset $A \subseteq
-		\mathrm{dom}(\mappingTuple)$ of the attributes for which $\mappingTuple$ is
-	defined, we write $\mappingTuple[A]$ to denote the mapping tuple
-	$\mappingTuple'$ that is the restriction of $\mappingTuple$ to $A$;
-	i.e., $\mathrm{dom}(\mappingTuple') = A$ and $\mappingTuple'(a) =
-		\mappingTuple(a)$ for all $a \in A$.
-\end{definition}
+\subsection{Relational Algebra Operators}
+
+In addition to the operators introduced above, any operator of the relational algebra can also be used for mapping relations. For instance, the following definition introduces the notion of \emph{projection}, adapted to mapping relations.
 
 \begin{definition}
 	\label{def:projection_operator}
@@ -500,11 +496,11 @@ relation to a subset of the attributes of that relation.
 	Let $r = \mappingRel$ be a mapping relation and $\symProjSet \subseteq
 		\symAttrSubSet$ be a non-empty subset of the
 	attributes of $r$.
-	The \textbf{$\symProjSet$-specific projection of $r$}, denoted by
-	$\fctProjectOpDflt{r}$, is the mapping relation $(\symAttrSubSet',
-		\symMappingInst')$ such that $\symAttrSubSet' = \symProjSet$
-	and $\symMappingInst' = \{ \mappingTuple[\symAttrSubSet'] \ | \
-		\mappingTuple \in \symMappingInst \}$.
+	The \textbf{$\symProjSet$-specific projection of $r$}, denoted by $\fctProjectOpDflt{r}$, is the mapping relation
+		%$(\symAttrSubSet',\symMappingInst')$ such that $\symAttrSubSet' = \symProjSet$ and $\symMappingInst' = \{ \mappingTuple[\symAttrSubSet'] \ | \ \mappingTuple \in \symMappingInst \}$,
+		$(\symProjSet,\symMappingInst')$ such that $\symMappingInst' = \{ \mappingTuple[\symProjSet] \ | \ \mappingTuple \in \symMappingInst \}$,
+	where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, $\mappingTuple[\symProjSet]$ denotes the mapping tuple $\mappingTuple'$ that is the restriction of $\mappingTuple$ to $\symProjSet$;
+	i.e., $\mathrm{dom}(\mappingTuple') = \symProjSet$ and $\mappingTuple'(a) = \mappingTuple(a)$ for all $a \in \symProjSet$.
 \end{definition}
 
 \begin{example}
@@ -549,22 +545,30 @@ relation to a subset of the attributes of that relation.
 %\end{definition}
 
 
-\subsection{Binary Operators}%
-\label{sub:equi_join_operator}
+% \subsection{Binary Operators}%
+% \label{sub:equi_join_operator}
+
+As two more examples of adopting traditional relational algebra operators for mapping relations, we present the following two definitions.
 
 \begin{definition}
 	\label{def:equijoin_operator}
+	\normalfont
 	Let $r_{1} = \mappingRelSpec{1}$ and
 	$r_{2} = \mappingRelSpec{2}$ be mapping relations
 	such that $\symAttrSubSet_{1} \cap \symAttrSubSet_{2} = \emptyset$,
-	and let $\symJoinAttrPairs \subseteq \symAttrSubSet_{1} \times \symAttrSubSet_{2}$.
-	The \textbf{$\symJoinAttrPairs$-specific equijoin of $r_{1}$ and $r_{2}$},
+	and
+		%let
+	$\symJoinAttrPairs \subseteq \symAttrSubSet_{1} \times \symAttrSubSet_{2}$.
+	The \textbf{$\symJoinAttrPairs$-%
+		%specific
+		based
+	equijoin of $r_{1}$ and $r_{2}$},
 	denoted by $\fctEquiJoinOp{r_{1}}{r_{2}}$, is the mapping relation
-	$(\symAttrSubSet'\!, \symMappingInst')$
-	such that $\symAttrSubSet'\! = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
+	$(\symAttrSubSet, \symMappingInst)$
+	such that $\symAttrSubSet = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
 	and
 	\begin{equation*}
-		\symMappingInst'\! =  \{ \mappingTuple_1 \cup \mappingTuple_2 \ | \
+		\symMappingInst =  \{ \mappingTuple_1 \cup \mappingTuple_2 \ | \
 		\mappingTuple_1 \in \symMappingInst_{1} \text { and }
 		\mappingTuple_2 \in \symMappingInst_{2} \text{ such that }
 		\mappingTuple_1(\attr_1) = \mappingTuple_2(\attr_2) \text{ for all }
@@ -575,53 +579,55 @@ relation to a subset of the attributes of that relation.
 \end{definition}
 
 
-\begin{example}
-	\label{ex:equi_join_operator}
-	Example~\ref{ex:projection_operator} generates a mapping relation $r_1$
-	containing only the first name of the people by projecting away the other
-	attributes.
-	Assuming there is a mapping relation~$r_2$ derived from
-	$D$ (Example~\ref{ex:source_operator}), which contains the last names
-	of the people with their corresponding $id$ number, we can get both
-	the first and last name of the people by applying an equijoin on
-	the $id$ attribute with $\symJoinAttrPairs = \{ (?id, ?id)\}$.
-	The resulting mapping relation generated by applying
-	$\fctEquiJoinOpBig{r_1}{r_2}$ contains the following two tuples $t_1$ and
-	$t_2$:
-	\begin{align*}
-		t_1 & =  \{ ?id \rightarrow 1, ?firstname \rightarrow \text{Alice}, ?lastname \rightarrow \text{Lee} \}  \\
-		t_2 & =  \{ ?id \rightarrow 2, ?firstname \rightarrow \text{Bob}, ?lastname \rightarrow \text{Malice} \} \\
-	\end{align*}
-\end{example}
+% \begin{example}
+% 	\label{ex:equi_join_operator}
+% 	Example~\ref{ex:projection_operator} generates a mapping relation $r_1$
+% 	containing only the first name of the people by projecting away the other
+% 	attributes.
+% 	Assuming there is a mapping relation~$r_2$ derived from
+% 	$D$ (Example~\ref{ex:source_operator}), which contains the last names
+% 	of the people with their corresponding $id$ number, we can get both
+% 	the first and last name of the people by applying an equijoin on
+% 	the $id$ attribute with $\symJoinAttrPairs = \{ (?id, ?id)\}$.
+% 	The resulting mapping relation generated by applying
+% 	$\fctEquiJoinOpBig{r_1}{r_2}$ contains the following two tuples $t_1$ and
+% 	$t_2$:
+% 	\begin{align*}
+% 		t_1 & =  \{ ?id \rightarrow 1, ?firstname \rightarrow \text{Alice}, ?lastname \rightarrow \text{Lee} \}  \\
+% 		t_2 & =  \{ ?id \rightarrow 2, ?firstname \rightarrow \text{Bob}, ?lastname \rightarrow \text{Malice} \} \\
+% 	\end{align*}
+% \end{example}
 
 
 
-\begin{definition}
-	\label{def:natural_join_operator}
-	Let $r_{1} = \mappingRelSpec{1}$ and
-	$r_{2} = \mappingRelSpec{2}$ be mapping relations.
-	The \textbf{natural join of $r_{1}$ and $r_{2}$}, denoted by
-	$\fctNatJoin{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet', \symMappingInst')$
-	such that $\symAttrSubSet'\! = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
-	and
-	\begin{equation*}
-		\symMappingInst' =  \{ \mappingTuple_1 \cup \mappingTuple_2 \ | \
-		\mappingTuple_1 \in \symMappingInst_{1} \text { and }
-		\mappingTuple_2 \in \symMappingInst_{2} \text{ such that }
-		\mappingTuple_1(\attr) = \mappingTuple_2(\attr) \text{ for all }
-		\attr \in \symAttrSubSet_1 \cap \symAttrSubSet_2
-		\}.
-	\end{equation*}
-\end{definition}
+% \begin{definition}
+% 	\label{def:natural_join_operator}
+% 	Let $r_{1} = \mappingRelSpec{1}$ and
+% 	$r_{2} = \mappingRelSpec{2}$ be mapping relations.
+% 	The \textbf{natural join of $r_{1}$ and $r_{2}$}, denoted by
+% 	$\fctNatJoin{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet', \symMappingInst')$
+% 	such that $\symAttrSubSet'\! = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
+% 	and
+% 	\begin{equation*}
+% 		\symMappingInst' =  \{ \mappingTuple_1 \cup \mappingTuple_2 \ | \
+% 		\mappingTuple_1 \in \symMappingInst_{1} \text { and }
+% 		\mappingTuple_2 \in \symMappingInst_{2} \text{ such that }
+% 		\mappingTuple_1(\attr) = \mappingTuple_2(\attr) \text{ for all }
+% 		\attr \in \symAttrSubSet_1 \cap \symAttrSubSet_2
+% 		\}.
+% 	\end{equation*}
+% \end{definition}
 
 
 \begin{definition}
 	\label{def:union_operator}
+	\normalfont
 	Let $r_{1} = \mappingRelSpec{1}$ and
 	$r_{2} = \mappingRelSpec{2}$ be mapping relations
 	such that $\symAttrSubSet_1 = \symAttrSubSet_2$.
-	The \textbf{union of $r_{1}$ and $r_{2}$}, denoted by
-	$\fctUnion{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
+		The \textbf{union of $r_{1}$ and $r_{2}$}, denoted by $\fctUnion{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
+		%The \textbf{union of $r_{1}$ and $r_{2}$} is the mapping relation $\fctUnion{r_{1}}{r_{2}} = (\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
+		%$\fctUnion{r_{1}}{r_{2}}$ is the mapping relation $(\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
 \end{definition}
 
 

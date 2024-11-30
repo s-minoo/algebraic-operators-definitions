@@ -3,9 +3,13 @@
 
 According to Van Assche et al.~\cite{VanAssche2022DeclarativeRDFgraph},
 declarative mapping languages can be categorized into two categories: i)
-\emph{dedicated languages} which extend mapping specifications (e.g.
+\emph{dedicated languages} which extend mapping specifications
+	\todo{It is not clear what "mapping specifications" are. \\ Also, you mention R2RML as an example. Is that because you see R2RML as a "dedicated language"? But, then, why do you write "R2RML specifications"? That's confusing.}
+(e.g.
+	\todo{As we are using American English here, there should always be a comma after every "e.g." and also after every "i.e."}
 R2RML~\cite{Seema2012R2RML} specifications) or use custom syntaxes, and ii)
 \emph{repurposed languages} which repurpose existing non-mapping specifications
+	\todo{"non-mapping specifications"??}
 or query languages to support KG construction.
 In this section, we briefly review existing works on formalizations of 
 declarative mapping languages for KG construction. 
@@ -23,11 +27,21 @@ formal
 semantics~\cite{lefrancois_eswc_2017,Lopes2011XSPARQL,Bischof:2012:XSPARQL,asprino2023knowledge}
 in the category of repurposed mapping languages.
 SPARQL-Anything~\cite{asprino2023knowledge} utilizes a two-step approach. 
-First, it formalizes the Façade-X
-meta-model~\cite{Daga2021FacadeXOpinionated}, which transforms heterogeneous
-data into an intermediate RDF graph describing the data's structure.
+First, it
+	\todo{Not clear what "it" refers to. An approach is not an actor that can formalize anything, and the same holds for a language (SPARQL-Anything). In the same sense, it is also not correct to say that a language (SPARQL-Anything) "utilizes" anything.}
+formalizes the Façade-X
+meta-model~\cite{Daga2021FacadeXOpinionated}, which transforms
+	\todo{Same issue here: A meta-model is just a model, it cannot transform anything.}
+heterogeneous
+data into an intermediate RDF graph describing the data's
+	\todo{"data" is not a person; you cannot use "'s". Instead, you need to write: "the structure of the data"}
+structure.
+	\todo{Do such intermediate RDF graphs really just describe the structure of the given data?}
 The final step uses SPARQL queries on the Façade-X RDF graph to generate RDF KG
-with SPARQL \ttl{CONSTRUCT} query, which is fully compatible with the formal
+	\todo{"to generate RDF KG" is not correct English}
+with SPARQL \ttl{CONSTRUCT} query,
+	\todo{"with SPARQL \ttl{CONSTRUCT} query" -- there is an article missing here, or you need to change "query" to "queries"}
+which is fully compatible with the formal
 semantics of SPARQL. 
 SPARQL-Generate~\cite{lefrancois_eswc_2017} extends concepts from SPARQL 1.1 to
 define the language, including modifications that support KG generation from
@@ -42,8 +56,11 @@ The aforementioned works rely on the semantics of the underlying non-mapping
 languages they build upon. 
 We argue that reliance on the semantics of the underlying non-mapping language
 limits the applicability of the formalism proposed in these works to
-dedicated mapping languages specifically designed for mapping heterogeneous
+dedicated mapping languages
+	\todo{"the applicability" is limited "to dedicated mapping languages"?}
+specifically designed for mapping heterogeneous
 data to generate KGs. 
+	\todo{for mapping A to B; not for mapping A to generate B}
     
 \subsection{Formalizations in Dedicated Mapping Languages}
 \label{sub:dedicated_mapping_languages}

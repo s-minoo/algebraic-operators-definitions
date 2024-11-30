@@ -273,13 +273,10 @@ Formally, we define the mapping relation produced by a source operator as follow
 \label{sub:extend_operator}
 
 \todo[inline]{Min Oo, notice that I decided to switch the order of the sections about extend operators and projection operators. It feels much more logical to me to do it in this order, primarily because the need for doing a projection right after a source operator is weird (why introduce an attribute in a source operator if this attribute is projected away immediately after?). Notice that this change has an impact on the examples that you wrote (see below)!}
-
+ 
 Extend operators can be used to extend a mapping relation with additional attributes%
-	~(one attribute per extend operator)%
-. The values that the tuples of the relation shall have for such an additional attribute are specified based on an expression that is formed using
-	%functions which can be applied to constants, to values for other attributes, and to the result of other functions. We call these functions
-	so-called
-\emph{extension functions}.
+	%~(one attribute per extend operator)%
+. The values that the tuples of the relation shall have for such additional attributes are specified based on so-called \emph{extend expressions} that are formed using \emph{extension functions}. In the following, we first introduce the notions of such functions and such expressions, and then define extend operators.
 
 \begin{definition}
 	\label{def:ExtensionFunction}
@@ -332,21 +329,25 @@ Extend operators can be used to extend a mapping relation with additional attrib
 % 	$\lex_1$ and $\lex_2$.
 % \end{example}
 
-While further extension functions may be defined, we use the notion of extension functions to define so-called \emph{extend expressions} for extend operators.
+
+% While further extension functions may be defined, we use the notion of extension functions to define so-called \emph{extend expressions} for extend operators.
 
 \begin{definition}
+	\label{def:ExtendExpressions:Syntax}
 	\normalfont
-	An \textbf{extend expression}~$\extExpr$ is an expression that is defined recursively as
-	follows:
+		%An \textbf{extend expression}~$\extExpr$ is an expression that is defined recursively as follows:
+		\textbf{Extend expressions} are defined recursively as follows:
 	\begin{enumerate}
 		\item
-		      Every RDF term in $\symTermUniverse$ is an extend expression.
+		Every RDF term in $\symTermUniverse$ is an extend expression.
+
 		\item
-		      Every attribute in $\symAttrUniverse$ is an extend expression.
+		Every attribute in $\symAttrUniverse$ is an extend expression.
+
 		\item
-		      If $\extExpr_1,\dots,\extExpr_n$ are extend expressions and
-		      $\extFunc$ is an extension function, then the tuple $\extFuncTuple$ is an
-		      extend expression.
+		If $\extExpr_1,\dots,\extExpr_n$ are extend expressions and $\extFunc$ is an extension function%
+			~(as per Definition~\ref{def:ExtensionFunction})%
+		, then the tuple $\extFuncTuple$ is an extend expression.
 	\end{enumerate}
 	% 	Thus, a grammar that accepts such extend expression $\extExpr$ is defined as
 	% 	follows where $x \in \symTermUniverse$, $a \in \symAttrUniverse$, and
@@ -356,9 +357,6 @@ While further extension functions may be defined, we use the notion of extension
 	% 	\end{equation*}
 \end{definition}
 
-
-\todo[inline]{Olaf, continue here ... }
-
 For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote the set of all attributes mentioned in $\extExpr$. Formally, this set is defined recursively as follows.
 \begin{enumerate}
 	\item If $\extExpr$ is an RDF term, then $\fctAttrs{\extExpr} = \emptyset$.
@@ -366,46 +364,69 @@ For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote
 	\item If $\extExpr$ is of the form $\extFuncTuple$, then $\fctAttrs{\extExpr} = \bigcup_{i \in \{1,\ldots,n\}} \fctAttrs{\extExpr_i}$.
 \end{enumerate}
 
+While Definition~\ref{def:ExtendExpressions:Syntax} introduces the syntax of extend expressions, their interpretation as a function to obtain values for mappings tuples is defined as follows.
 
 \begin{definition}
-	\label{def:extend_operator}
-	Let $r = \mappingRel$ be a mapping relation, $\attr \in \symAttrUniverse$ be
-	an attribute that is not in $\symAttrSubSet$ (i.e., $\attr \notin \symAttrSubSet$),
-	and $\extExpr$ be an extend expression that is valid for $r$.
-	The \textbf{$\extExpr$-specific extension of $r$ for $\attr$},
-	denoted by $\fctExtOp{r}$,
-	is the mapping tuple
-	$(\symAttrSubSet'\!,\symMappingInst')$ such that
-	\begin{align*}
-		\symAttrSubSet'  & = \symAttrSubSet \cup \{ \attr \}, \; \text{ and }                                        \\
-		\symMappingInst' & = \bigl\{\mappingTuple \cup \{\attr \rightarrow \fctEval{\extExpr}{\mappingTuple}\} \ | \
-		\mappingTuple \in \symMappingInst \bigr\}
-	\end{align*}
-	where, for every mapping tuple~$\mappingTuple \in \symMappingInst$, $\fctEval{\extExpr}{\mappingTuple}$ is either an RDF term or the
-	error value ($\error$), which is determined recursively as follows:
-
-	\begin{enumerate}
-		\item If $\extExpr$ is an RDF term $x$, then $\fctEval{\extExpr}{\mappingTuple} = x$.
-		\item If $\extExpr$ is an attribute $\attr$ and $\attr \in \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \mappingTuple(\attr)$.
-		\item If $\extExpr$ is an attribute $\attr$ and $\attr \notin \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \error$.
-		\item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is an $n$-ary function, then
-		      $\fctEval{\extExpr}{\mappingTuple} =  \fctExtFuncEvalN{\extExpr}{\mappingTuple}$.
-		\item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is not an $n$-ary function, then
-		      $\fctEval{\extExpr}{\mappingTuple} =  \error$.
-	\end{enumerate}
-
+	\label{def:ExtendExpressions:Semantics}
+	\normalfont
+	Let $\extExpr$ be an extend expression and $\mappingTuple$ be a mapping tuple.
+	The \textbf{evaluation of $\extExpr$ over $\mappingTuple$}, denoted by $\fctEval{\extExpr}{\mappingTuple}$, is either an RDF term or the error value ($\error$), and is determined recursively as follows:
+%
+% 	\begin{enumerate}
+% 		\item If $\extExpr$ is an RDF term $x$, then $\fctEval{\extExpr}{\mappingTuple} = x$.
+% 		\item If $\extExpr$ is an attribute $\attr$ and $\attr \in \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \mappingTuple(\attr)$.
+% 		\item If $\extExpr$ is an attribute $\attr$ and $\attr \notin \fctDom{\mappingTuple}$, then $\fctEval{\extExpr}{\mappingTuple} = \error$.
+% 		\item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is an $n$-ary function, then
+% 		      $\fctEval{\extExpr}{\mappingTuple} =  \fctExtFuncEvalN{\extExpr}{\mappingTuple}$.
+% 		\item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is not an $n$-ary function, then
+% 		      $\fctEval{\extExpr}{\mappingTuple} =  \error$.
+% 	\end{enumerate}
+%
 	\begin{equation*}
 		\fctEval{\extExpr}{\mappingTuple} =
 		\begin{cases}
-			\extExpr                                  & \text{if $\extExpr$ is an RDF term;}                                                        \\
-			\mappingTuple(\extExpr)                   & \text{if $\extExpr \in \symAttrUniverse$ and $\extExpr \in \fctDom{\mappingTuple}$;}        \\
-			\fctExtFuncEvalN{\extExpr}{\mappingTuple} & \ \parbox{15em}{if $\extExpr = \extFuncTuple$ such that $\extFunc$ is an $n$-ary function;} \\
-			\error                                    & \text{else.}
+			\extExpr
+			& \text{if $\extExpr$ is an RDF term,}
+			\\
+			\mappingTuple(\extExpr)
+			& \text{if $\extExpr \in \symAttrUniverse$ and $\extExpr \in \fctDom{\mappingTuple}$,}
+			\\
+			\fctExtFuncEvalN{\extExpr}{\mappingTuple}
+			& \text{if $\extExpr$ is of the form $\extFuncTuple$} \\[-1mm]
+			& \text{such that $\extFunc$ is an $n$-ary function,} \\
+			\error
+			& \text{else.}
 		\end{cases}
 	\end{equation*}
-
-
 \end{definition}
+
+\begin{example}
+	\label{ex:ExtendExpressions:Semantics}
+	If $\extExpr$ is the extend expression $(\texttt{toInt}, \attr_\textsf{age})$, for the
+		%mapping
+	tuples~$\mappingTuple_1$ and~$\mappingTuple_2$ of Example~\ref{ex:source_operator}, $\fctEval{\extExpr}{\mappingTuple_1}$ is the literal $(\ttl{"23"}, \ttl{xsd:integer})$ and $\fctEval{\extExpr}{\mappingTuple_2} = \error$.
+\todo{Min Oo, notice that this assume that you change the CSV file of the running example as proposed in my comment for the next example below.}
+\end{example}
+
+
+\todo[inline]{Olaf, continue here ... }
+
+\begin{definition}
+	\label{def:extend_operator}
+	\normalfont
+	Let $r = \mappingRel$ be a mapping relation,
+		%$\attr \in \symAttrUniverse$ be an attribute that is not in $\symAttrSubSet$ (i.e., $\attr \notin \symAttrSubSet$),
+		$\attr$ be an attribute that is not in $\symAttrSubSet$ (i.e., $\attr \in \symAttrUniverse \setminus \symAttrSubSet$),
+		%$\attr \in \symAttrUniverse \setminus \symAttrSubSet$ be an attribute that is not in $\symAttrSubSet$,
+	and $\extExpr$ be an extend expression.
+	The \textbf{$(\attr, \extExpr)$-extension of~$r$},
+	denoted by $\fctExtOp{r}$,
+	is the mapping relation
+	$(\symAttrSubSet'\!,\symMappingInst')$ such that
+	$\symAttrSubSet'\! = \symAttrSubSet \cup \{ \attr \}$ and
+	$\symMappingInst'\! = \bigl\{\mappingTuple \cup \{\attr \rightarrow \fctEval{\extExpr}{\mappingTuple}\} \ | \ \mappingTuple \in \symMappingInst \bigr\}$.
+\end{definition}
+
 
 \begin{example}
 	\label{ex:extend_operator}

@@ -274,25 +274,78 @@ Formally, we define the mapping relation produced by a source operator as follow
 
 \todo[inline]{Min Oo, notice that I decided to switch the order of the sections about extend operators and projection operators. It feels much more logical to me to do it in this order, primarily because the need for doing a projection right after a source operator is weird (why introduce an attribute in a source operator if this attribute is projected away immediately after?). Notice that this change has an impact on the examples that you wrote (see below)!}
 
-\todo[inline]{Olaf, continue here ... }
+Extend operators can be used to extend a mapping relation with additional attributes%
+	~(one attribute per extend operator)%
+. The values that the tuples of the relation shall have for such an additional attribute are specified based on an expression that is formed using
+	%functions which can be applied to constants, to values for other attributes, and to the result of other functions. We call these functions
+	so-called
+\emph{extension functions}.
 
 \begin{definition}
 	\label{def:ExtensionFunction}
-	An \textbf{extension function} is a function $\extFunc: \extFuncType \times \dots \times \extFuncType \rightarrow \extFuncType$.
-	We denote the set of all possible \textbf{extension function} as $\symExtFuncUni$.
+	\normalfont
+		An \textbf{extension function} is a function $\extFunc$ of the form $$\extFunc \!: \extFuncType \times \dots \times \extFuncType \rightarrow \extFuncType.$$
+		%Every function $\extFunc\!: \extFuncType \times \dots \times \extFuncType \rightarrow \extFuncType$ is an \textbf{extension function}.
 \end{definition}
 
+\begin{example}
+	\label{ex:ExtensionFunction:toInt}
+	A concrete example of such an extension function may be a unary function called \texttt{toInt} that converts \ttl{xsd:string} literals representing integers into \ttl{xsd:integer} literals. Formally, for every $v \in (\symTermUniverse \cup \error)$, we define:
+	\begin{equation*}
+		\texttt{toInt}(v) \!=\!
+		\begin{cases}
+			(\lex, \ttl{xsd:integer})
+			& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is in the}
+			\\[-1mm]
+			& \text{lexical space of the datatype denoted by the}
+			\\[-1mm]
+			& \text{IRI \ttl{xsd:integer} and $\dt$ is the IRI \ttl{xsd:string},}
+			\\
+			\error
+			& \text{else.}
+		\end{cases}
+	\end{equation*}
+\end{example}
+
+% \begin{example}
+% 	\label{ex:ExtensionFunction:concat}
+% 	A binary extension function
+% 		%that concatenates
+% 		to concatenate
+% 	two \ttl{xsd:string} literals may be
+% 		%called $\concat$ and be
+% 	defined as follows. For every pair $(v_1, v_2) \in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$, we define:
+% 	\begin{equation*}
+% 		\fctConcat{v_1}{v_2} =
+% 		\begin{cases}
+% 			(\lex_1 \circ \lex_2, \ttl{xsd:string})  &\text{if $v_1$ and $v_2$ are literals $(\lex_1,\dt_1)$ and}
+% 			\\[-1mm]
+% 			& \text{$(\lex_2,\dt_2)$, respectively, such that both}
+% 			\\[-1mm]
+% 			& \text{$\dt_1$ and $\dt_2$ are the IRI \ttl{xsd:string},}
+% 			\\
+% 			\error &\text{else,}
+% 		\end{cases}
+% 	\end{equation*}
+% 	where $\lex_1 \circ \lex_2$ is the string obtained from concatenating
+% 		%the strings
+% 	$\lex_1$ and $\lex_2$.
+% \end{example}
+
+While further extension functions may be defined, we use the notion of extension functions to define so-called \emph{extend expressions} for extend operators.
+
 \begin{definition}
+	\normalfont
 	An \textbf{extend expression}~$\extExpr$ is an expression that is defined recursively as
 	follows:
 	\begin{enumerate}
 		\item
-		      Every RDF term in $\symTermUniverse$ is an \textbf{extend expression}.
+		      Every RDF term in $\symTermUniverse$ is an extend expression.
 		\item
-		      Every attribute in $\symAttrUniverse$ is an \textbf{extend expression}.
+		      Every attribute in $\symAttrUniverse$ is an extend expression.
 		\item
 		      If $\extExpr_1,\dots,\extExpr_n$ are extend expressions and
-		      $\extFunc \in \symExtFuncUni$, then the tuple $\extFuncTuple$ is an
+		      $\extFunc$ is an extension function, then the tuple $\extFuncTuple$ is an
 		      extend expression.
 	\end{enumerate}
 	% 	Thus, a grammar that accepts such extend expression $\extExpr$ is defined as
@@ -302,6 +355,9 @@ Formally, we define the mapping relation produced by a source operator as follow
 	% 		\extExpr ::= x \ |\ a \ |\  (\extFunc, \extExpr, \dots, \extExpr)
 	% 	\end{equation*}
 \end{definition}
+
+
+\todo[inline]{Olaf, continue here ... }
 
 For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote the set of all attributes mentioned in $\extExpr$. Formally, this set is defined recursively as follows.
 \begin{enumerate}
@@ -353,7 +409,7 @@ For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote
 
 \begin{example}
 	\label{ex:extend_operator}
-	\todo{I propose to use a simpler example with a single Extend operator only. In particular, you can use one that converts the age values of the running example into \ttl{xsd:integer} literals. This is useful to demonstrate another use case of Extend operators, because the use cases about creating IRIs and about adding constants will show up anyways in the translation section. \\ Additionally, this conversion example has another advantage: it allows us to also illustrate a case where the Extend operator adds an error ($\error$). To this end, just change one of the two age values in the CSV to be non-numerical (e.g., the string "unknown").}
+	\todo{I propose to use a simpler example with a single Extend operator only. In particular, you can use one that converts the age values of the running example into \ttl{xsd:integer} literals. I have already introduced the relevant extension function that you can use for this purpose: see Example~\ref{ex:ExtensionFunction:toInt}. \\ Changing this example as I propose is useful to demonstrate another use case of Extend operators, because the use cases about creating IRIs and about adding constants will show up anyways in the translation section. \\ Additionally, this conversion example has another advantage: it allows us to also illustrate a case where the Extend operator adds an error ($\error$). To this end, just change one of the two age values in the CSV to be non-numerical (e.g., the string "unknown").}
 	The mapping relation, $r$, generated in
 	Example~\ref{ex:projection_operator} only contains RDF literals, thus, an
 	RDF dataset containing RDF graphs with triples cannot be generated from

@@ -274,9 +274,12 @@ Formally, we define the mapping relation produced by a source operator as follow
 
 \todo[inline]{Min Oo, notice that I decided to switch the order of the sections about extend operators and projection operators. It feels much more logical to me to do it in this order, primarily because the need for doing a projection right after a source operator is weird (why introduce an attribute in a source operator if this attribute is projected away immediately after?). Notice that this change has an impact on the examples that you wrote (see below)!}
  
-Extend operators can be used to extend a mapping relation with additional attributes%
-	%~(one attribute per extend operator)%
-. The values that the tuples of the relation shall have for such additional attributes are specified based on so-called \emph{extend expressions} that are formed using \emph{extension functions}. In the following, we first introduce the notions of such functions and such expressions, and then define extend operators.
+Extend operators are unary operators that
+	can be used to
+extend a mapping relation with an additional attribute. The values that the tuples of the relation shall have for this attribute are specified
+	%based on
+	via
+a so-called \emph{extend expression} that can be formed using \emph{extension functions}. In the following, we first introduce the notions of such functions and such expressions, and then define extend~operators.
 
 \begin{definition}
 	\label{def:ExtensionFunction}
@@ -408,8 +411,7 @@ While Definition~\ref{def:ExtendExpressions:Syntax} introduces the syntax of ext
 \todo{Min Oo, notice that this assume that you change the CSV file of the running example as proposed in my comment for the next example below.}
 \end{example}
 
-
-\todo[inline]{Olaf, continue here ... }
+Now we can define the semantics of extend operators as follows.
 
 \begin{definition}
 	\label{def:extend_operator}
@@ -475,6 +477,8 @@ While Definition~\ref{def:ExtendExpressions:Syntax} introduces the syntax of ext
 
 \subsection{Projection Operator}%
 \label{sub:projection_operator}
+
+\todo[inline]{Olaf, continue here ... }
 
 The \textbf{projection} operator restricts the mapping tuples in a mapping
 relation to a subset of the attributes of that relation.

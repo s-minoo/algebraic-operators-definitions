@@ -175,12 +175,11 @@ following two examples outline informally how JSON-based data sources and CSV-ba
 	%$\typeCastX{\mathsf{csv}}$ maps all string values in $\symSetContentBX{\mathsf{jp}}$ to \ttl{xsd:string} literals.
 \end{example}
 
-{\color{blue}
 Furthermore, we also provide a running example that is used throughout the rest
 of this section to provide a practical example after defining each operator.
 \begin{example}
 	\label{ex:running_ex_source_type}
-	First, we start with a concrete example of a source type for a CSV file
+	First, we start with a concrete example of a data source for a CSV file
     $\bigDataObject_{\mathsf{ex}} \in \symSetDatasetX{\mathsf{csv}}$
 	with the header introducing column names \textsf{id}, \textsf{firstname},
 	\textsf{lastname}, and \textsf{age} and the following two rows of CSV
@@ -199,7 +198,6 @@ of this section to provide a practical example after defining each operator.
     Finally, evaluating $\typeCastX{\mathsf{csv}}(\ttl{Alice})$ returns an 
     RDF literal $(\ttl{"Alice"}, \ttl{xsd:string})$. 
 \end{example}
-}
 
 %The question of how data sources of any such type are actually accessed in practice is irrelevant for our formalization.
 
@@ -218,10 +216,10 @@ Formally, we define the mapping relation produced by a source operator as follow
 	Let $\dataSource = \dataSourceTuple$ be a data source with
 	%$\sourceType = \sourceTypeTuple$,
 	$\sourceType = (\symSetDataset, \symSetContentA\!, \symSetContentB\!, \symDataAcc, \symDataAcc'\!,$ $\eval, \cbeval, \typeCast)$,
-	$\queryExpr \in \symDataAcc$, and
+    $\queryExpr \in \symDataAcc$, and
 	$\symAttrQueryMap$ be a partial function
 	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'\!$.
-	The \textbf{$(\queryExpr,\symAttrQueryMap)$-spe\-cif\-ic mapping relation obtained from $\dataSource$}, denoted by $\sourceOpDflt$, is the mapping relation $\mappingRel$ such that $\symAttrSubSet = \fctDom{\symAttrQueryMap}$ and
+	The \textbf{$\symAttrQueryMap$-spe\-cif\-ic mapping relation obtained from $\dataSource$}, denoted by $\sourceOpDflt$, is the mapping relation $\mappingRel$ such that $\symAttrSubSet = \fctDom{\symAttrQueryMap}$ and
 	\begin{align*}
 		\symMappingInst = \big\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n} \} \ \big| \
 		 & \dataObject \in \symDataSeq \text{ and}
@@ -239,35 +237,26 @@ Formally, we define the mapping relation produced by a source operator as follow
 \end{definition}
 
 
-{\color{blue}
 \begin{example}
 	\label{ex:source_operator}
-	A source operator, $\sourceOpDflt$, with $\dataSource = \dataSourceTuple$,
-	$\sourceType$ is the source type from
-\todo{Related to my comment on Example~\ref{ex:running_ex_source_type}, you can directly use $\dataSource_\mathsf{ex}$ from Example~\ref{ex:running_ex_source_type} here and, again, the source type is $\sourceTypeX{\mathsf{csv}}$ (from Example~\ref{ex:source_type_csv}), but probably you don't even need to explicitly mention the source type here anymore.}
+    A source operator, $\sourceOp{\dataSource_\mathsf{ex}}{\error}{\symAttrQueryMap}$, 
+    with $\dataSource_\mathsf{ex}$ the data source from 
 	Example~\ref{ex:running_ex_source_type},
-	$\queryExpr = \error$
-\todo{No! The query is not 'error'!! Instead, the query is the empty string, for which I had introduced a separate symbol: $\varepsilon$}
+	$\queryExpr$ is $\varepsilon$
 	(as shown in Example~\ref{ex:source_type_csv}), and
-	$\symAttrQueryMap = \{\attr_{\textsf{id}}\rightarrow id,  \attr_{\textsf{name}} \rightarrow firstname, \attr_{\textsf{age}} \rightarrow age\}$
-\todo{Since the queries here are the column names of the CSV file, you should use the same font for them here as you have used in Example~\ref{ex:running_ex_source_type}.}
-	generates
-\todo{Try to avoid the word "generate" if possible, because this word carries the idea that the mapping relation is actually produced, which is not really the point here (and may not even be the case in practice). As a better alternative here, you can talk about the result of the source operator.}
-	a mapping relation $r$ such that it has a schema  where all the
-	generated mapping tuples have the attributes $\symAttrSubSet = \{
-		\attr_{\textsf{id}}, \attr_{\textsf{name}}, \attr_{\textsf{age}}\}$,
-	and $r$ contains two mapping tuples $t_1, t_2 \in r$
-\todo{If possible, try to avoid numbering the tuples in this way because that may give the impression that there is an order, which is not the case (the instance of every mapping relation is a \emph{set} of tuples). So, better $t$ and $t'$ here.}
+    $\symAttrQueryMap = \{\attr_{\textsf{id}}\rightarrow \textsf{id},  \attr_{\textsf{name}} \rightarrow \textsf{firstname}, \attr_{\textsf{age}} \rightarrow \textsf{age}\}$
+    results in a mapping relation $r$ such that it has a schema  where all the
+    generated mapping tuples have the attributes $\symAttrSubSet = \{
+        \attr_{\textsf{id}}, \attr_{\textsf{name}}, \attr_{\textsf{age}}\}$,
+    and $r$ contains two mapping tuples $t, t' \in r$
 	as:
 	\begin{align*}
-        t_1 & = \{ \attr_{\textsf{id}} \rightarrow (\ttl{"1"}, \ttl{xsd:integer}), \attr_{\textsf{name}} \rightarrow (\ttl{"Alice"}, \ttl{xsd:string}), 
-        \attr_{\textsf{age}} \rightarrow  (\ttl{"23"}, \ttl{xsd:integer})\} \\
-		t_2 & = \{ \attr_{\textsf{id}} \rightarrow (\ttl{"2"}, \ttl{xsd:integer}), \attr_{\textsf{name}} \rightarrow (\ttl{"Bob"}, \ttl{xsd:string}), 
-        \attr_{\textsf{age}} \rightarrow (\ttl{"25"}, \ttl{xsd:integer}) \}
+        t & = \{ \attr_{\textsf{id}} \rightarrow (\ttl{"1"}, \ttl{xsd:string}), \attr_{\textsf{name}} \rightarrow (\ttl{"Alice"}, \ttl{xsd:string}), 
+        \attr_{\textsf{age}} \rightarrow  (\ttl{"23"}, \ttl{xsd:string})\} \\
+		t' & = \{ \attr_{\textsf{id}} \rightarrow (\ttl{"2"}, \ttl{xsd:string}), \attr_{\textsf{name}} \rightarrow (\ttl{"Bob"}, \ttl{xsd:string}), 
+        \attr_{\textsf{age}} \rightarrow (\ttl{"25"}, \ttl{xsd:string}) \}
 	\end{align*}
-\todo{No! Where does \ttl{xsd:integer} come from? This should all be \ttl{xsd:string}.}
 \end{example}
-}
 
 \subsection{Extend Operator}%
 \label{sub:extend_operator}

@@ -42,19 +42,26 @@ below:
           maps.
 \end{enumerate}
 After normalizations, all triples map in the normalized RML document have only
-a single predicate-object map and if present, a single graph map. Moreover, all
-term maps do not have shortcuts. 
+a single predicate-object map and if present, a single graph map. 
+Moreover, all term maps do not have shortcuts. 
+Normalizing the RML document reduces the complexity when parsing the RML
+document by simplifying complex triples maps. 
 
 \subsubsection{Triples Map-specific RDF Graph}%
 \label{ssub:tm_specific_rdf_graph}
 Secondly, to support the translation process, we define two types of RDF
 graphs within an RML document: i)~\textbf{$\triplesMapIRI$-specific triples map
 graph}, and ii)~\textbf{$\triplesMapIRI$-specific parent triples map graph}. 
-These graphs are used throughout the translation algorithm to translate the
-relevant algebraic expressions associated with the chosen triples
-map~$\triplesMapIRI$.
+\textbf{$\triplesMapIRI$-specific triples map graph} contains all triples describing 
+the given triples map $\triplesMapIRI$, while  
+\textbf{$\triplesMapIRI$-specific parent triples map graph} contains triples 
+from all triples map $\triplesMapIRI'$ that refers to $\triplesMapIRI$ for 
+creating join relations. 
+Together, both RDF graph are used to translate relevant algebraic expressions 
+for the mapping described by the triples map $\triplesMapIRI$. 
 
 \begin{definition}
+    \normalfont
 	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
 	$\triplesMapIRI$ an IRI of a RML triples map.
 	A \textbf{$\triplesMapIRI$-specific triples map graph
@@ -70,6 +77,7 @@ map~$\triplesMapIRI$.
 \end{definition}
 
 \begin{definition}
+    \normalfont
 	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
 	$\triplesMapIRI$ an IRI of a RML triples map.
 	A \textbf{$\triplesMapIRI$-specific parent triples map graph

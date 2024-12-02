@@ -101,6 +101,12 @@ for the mapping described by the triples map $\triplesMapIRI$.
 Lastly, we define the following extension functions~(as per Definition~\ref{def:ExtensionFunction})
 to support the creation of Extend operators during the translation 
 of RML descriptions into our formalism. 
+Most of the extend functions are used for type casting the RDF terms for the 
+generation of RDF datasets.
+The extend function $\concat$ is used in
+Algorithm~\ref{alg:template_function} to resolve the template string
+according to the RML
+specification~\footnote{\url{https://rml.io/specs/rml/\#from-template}}. 
 \begin{itemize}
 	\item
 	$\toIRI$ is a unary extension function that converts string literals representing IRIs into these IRIs. Formally,  for every $v \in (\symTermUniverse \cup \error)$, we define:
@@ -158,6 +164,122 @@ of RML descriptions into our formalism.
 where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the strings $\lex_1$ and $\lex_2$.
 \end{itemize}
 
+\begin{algorithm}[h!tbp]
+	\caption{ExtractExtendExpr: Extend expression translation from an RML term map}
+	\label{alg:rml_termmap_extend_expr}
+	\begin{algorithmic}[1]
+		\Require 
+            $\symRMLGraph$ an RDF graph of RML document,
+            \Statex \qquad $\LTB$ an injective function mapping literals to blank nodes, 
+            \Statex \qquad $\symAttrQueryMap$ a partial function mapping attributes to query expression,
+            \Statex \qquad $tm$ subject IRI of the RML term map to translate the extend operator for
+		\Ensure An extend expression
+        \State $\extExpr \gets $ initially empty extend expression
+
+        \If{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$ }
+    		\State $\extExpr \gets a$, where $a$ is the attribute in $\fctDom{\symAttrQueryMap}$ such that $\symAttrQueryMap(a) = \lex$
+		\ElsIf{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:constant}, o)$}
+    		\State $\extExpr \gets o$
+		\ElsIf{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:template}, o)$ such that $o$ is a literal}
+            \State  $\extExpr \gets $ \textbf{Template}($o, \symAttrQueryMap$)  \Comment Algorithm~\ref{alg:template_function}
+		\EndIf
+\medskip
+        \If{$\triplesMapGraph{TM}{tm}$ contains the triple $(tm,\texttt{rr:termType}, \texttt{rr:BlankNode})$}
+            \State \Return $\fctToBNode{\extExpr}$
+        \ElsIf{$\triplesMapGraph{TM}{tm}$ contains the triple $(tm,\texttt{rr:termType}, \texttt{rr:IRI})$}
+            \State \Return $\fctToIRI{\extExpr}$
+        \ElsIf{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:datatype}, o)$ such that $o \in \symAllIRIs$}
+            \State \Return $\fctToLiteral{\extExpr, o}$
+        \Else 
+            \State \Return $\fctToLiteral{\extExpr, \texttt{xsd:string}}$
+		\EndIf
+	\end{algorithmic}
+\end{algorithm}
+
+In RML, there are three ways to map data to RDF terms using RML term maps; 
+i) \textbf{constant-valued}~\footnote{\url{https://rml.io/specs/rml/\#constant}} term map, 
+ii) \textbf{reference-valued}~\footnote{\url{https://rml.io/specs/rml/\#reference}} term map, and
+iii) \textbf{template-valued}~\footnote{\url{https://rml.io/specs/rml/\#from-template}} term map. 
+During the RML translation process, extend expressions are translated from 
+these term maps to create new RDF terms as follows. 
+A constant-valued term map contains a triple $(s,\ttl{rr:constant},o)$, and 
+the extend expression translated from this term map is the object RDF term $o$. 
+A reference-valued term map contains a triple $(s,\ttl{rr:reference},(\lex,\ttl{xsd:string}))$ where 
+the string value $\lex$ is the query to retrieve the value for the RDF term. 
+Given a map~$\symAttrQueryMap$ that associates the attributes with the queries,
+the extend expression translated from a reference-valued term map is the
+attribute value $\attr$ such that $\symAttrQueryMap(\attr) = \lex$.
+
+For the translation of extend expression from template-valued term map containing  
+a triple $(s,\ttl{rr:template},(\lex,\ttl{xsd:string}))$, we provide a
+definition for the semantics of processing the template string $\lex$ as
+follows. 
+
+\begin{definition}
+    \label{def:tempSubStrs}
+    \normalfont
+    Let $v = (\lex, \dt)$ an input literal string such that $\dt$ is \texttt{xsd:string}.  
+    For ease of reading, we call a substring of $\lex$ an \textbf{enclosed query substring} 
+    if it is the substring starting and ending with the curly braces \{ and \} respectively, as defined in 
+    RML specification, 
+    otherwise it is called as \textbf{normal substring}.
+    $\tempSubStrs$ is a unary function which splits $\lex$ into a sequence~$\substrSeq$
+    of substrings of $\lex$ that contains alternating normal substrings and
+    enclosed query substrings in two pass as follows: 
+    \begin{enumerate}
+        \item  An intermediate sequence~$\substrSeq'$ of substrings is generated that 
+            contains substrings that are \textbf{normal} or \textbf{enclosed query}  
+            substrings in the order that these substrings appear in $\lex$ from 
+            left to right. 
+        \item $\substrSeq'$ is further processed as follows to produce $\substrSeq$: 
+            \begin{enumerate}
+                \item If $\substrSeq'$ is empty, a new empty substring is inserted into $\substrSeq'$.
+                \item For every two enclosed query substrings that occur directly after one another in $\substrSeq'$, a new empty substring is inserted into $\substrSeq'$ in between these two enclosed query substrings.
+                \item If the first element in $\substrSeq'$ is an enclosed query substring, 
+                    a new empty substring is inserted into $\substrSeq'$ as the new first substring.
+                \item If the last element in $\substrSeq'$ is an enclosed query substring, 
+                    a new empty substring is appended to the end of $\substrSeq'$.
+            \end{enumerate}
+    \end{enumerate}
+\end{definition}
+
+After the aforementioned processing, $\substrSeq$ is an
+alternating sequence of normal substrings and enclosed query substrings
+with the enclosed query substrings at every second position, and $\substrSeq$ 
+is not empty and has an odd number of elements.
+$\substrSeq$ is used to generate the extend expression consisting of 
+$\concat$ functions where each enclosed query substrings, $\queryExpr$, are 
+replaced with an attribute $\attr$ such that $\symAttrQueryMap(\attr) = \queryExpr$. 
+The result is the extend expression translated from the template-valued term map, 
+and we provide the pseudocode code in Algorithm~\ref{alg:template_function}.
+
+\begin{algorithm}[htbp]
+	\caption{Template: An algorithm which extracts an extend expression for 
+        resolving the template string of the input literal node.}
+	\label{alg:template_function}
+	\begin{algorithmic}[1]
+        \Require $(\lex, \dt)$ a literal, 
+        \Statex \qquad $\symAttrQueryMap$ a mapping of attributes in $\symAttrUniverse$ to query expressions in $\symDataAcc$
+		\Ensure An extend expression
+        \State $\substrSeq \gets \fctTempSubStrs{\lex}$ \Comment Definition~\ref{def:tempSubStrs}
+        \State $\extExpr \gets (s_1, \texttt{xsd:string})$, where $s_1$ is the first element in $\substrSeq$
+        \If{$|\substrSeq| > 1$}
+            \For {$i \in 2,\dots,|\substrSeq|$}
+                \State $s_i \gets $
+                    the $i$-th element in $\substrSeq$
+                \If{$s_i$ is a string that starts with ``\{" and ends with ``\}"}
+                    \State $\queryExpr \gets $ substring of $s_i$ without the enclosing ``\{" and ``\}"
+                    \State $\extExpr \gets \fctConcat{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$ 
+                \Else
+                    \State $\extExpr \gets \fctConcat{\extExpr}{(s_i, \texttt{xsd:string})}$   
+                \EndIf
+		    \EndFor
+        \EndIf
+		\State \Return $\extExpr$
+	\end{algorithmic}
+\end{algorithm}
+Now we have all the ingredients to translate any given RML document to our 
+algebraic expressions. 
 
 \subsection{Translation Algorithms}%
 \label{sub:translation_algorithms}
@@ -297,100 +419,6 @@ normalized RML document.
 		    \State $\symDataAcc \gets \symDataAcc \cup \{ \lex \}$
 		\EndFor
 		\State \Return $\symDataAcc$
-	\end{algorithmic}
-\end{algorithm}
-
-
-\begin{algorithm}[htbp]
-	\caption{ExtractExtendExpr: Extend expression translation from an RML term map}
-	\label{alg:rml_termmap_extend_expr}
-	\begin{algorithmic}[1]
-		\Require 
-            $\symRMLGraph$ an RDF graph of RML document,
-            \Statex \qquad $\LTB$ an injective function mapping literals to blank nodes, 
-            \Statex \qquad $\symAttrQueryMap$ a partial function mapping attributes to query expression,
-            \Statex \qquad $tm$ subject IRI of the RML term map to translate the extend operator for
-		\Ensure An extend expression
-        \State $\extExpr \gets $ initially empty extend expression
-
-        \If{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$ }
-    		\State $\extExpr \gets a$, where $a$ is the attribute in $\fctDom{\symAttrQueryMap}$ such that $\symAttrQueryMap(a) = \lex$
-		\ElsIf{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:constant}, o)$}
-    		\State $\extExpr \gets o$
-		\ElsIf{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:template}, o)$ such that $o$ is a literal}
-            \State  $\extExpr \gets $ \textbf{Template}($o, \symAttrQueryMap$)  \Comment Algorithm~\ref{alg:template_function}
-		\EndIf
-\medskip
-        \If{$\triplesMapGraph{TM}{tm}$ contains the triple $(tm,\texttt{rr:termType}, \texttt{rr:BlankNode})$}
-            \State \Return $\fctToBNode{\extExpr}$
-        \ElsIf{$\triplesMapGraph{TM}{tm}$ contains the triple $(tm,\texttt{rr:termType}, \texttt{rr:IRI})$}
-            \State \Return $\fctToIRI{\extExpr}$
-        \ElsIf{$\triplesMapGraph{TM}{tm}$ contains a triple $(tm, \texttt{rr:datatype}, o)$ such that $o \in \symAllIRIs$}
-            \State \Return $\fctToLiteral{\extExpr, o}$
-        \Else 
-            \State \Return $\fctToLiteral{\extExpr, \texttt{xsd:string}}$
-		\EndIf
-	\end{algorithmic}
-\end{algorithm}
-
-
-\break
-\begin{definition}
-    \label{def:tempSubStrs}
-    Let $v = (\lex, \dt)$ an input literal string such that $\dt$ is \texttt{xsd:string}.  
-    For ease of reading, we call a substring of $\lex$ an \textbf{enclosed query substring} 
-    if it is the substring starting and ending with the curly braces \{ and \} respectively, as defined in R2RML~\citeneeded, 
-    otherwise it is called as \textbf{normal substring}.
-    $\tempSubStrs$ is a unary function which splits $\lex$ into a sequence~$\substrSeq$
-    of substrings of $\lex$ that contains alternating normal substrings and
-    enclosed query substrings in two pass as follows: 
-
-    \begin{enumerate}
-        \item  An intermediate sequence~$\substrSeq'$ of substrings is generated that 
-            contains substrings that are \textbf{normal} or \textbf{enclosed query}  
-            substrings in the order that these substrings appear in $\lex$ from 
-            left to right. 
-        \item $\substrSeq'$ is further processed as follows to produce $\substrSeq$: 
-            \begin{enumerate}
-                \item If $\substrSeq'$ is empty, a new empty substring is inserted into $\substrSeq'$.
-                \item For every two enclosed query substrings that occur directly after one another in $\substrSeq'$, a new empty substring is inserted into $\substrSeq'$ in between these two enclosed query substrings.
-                \item If the first element in $\substrSeq'$ is an enclosed query substring, 
-                    a new empty substring is inserted into $\substrSeq'$ as the new first substring.
-                \item If the last element in $\substrSeq'$ is an enclosed query substring, 
-                    a new empty substring is appended to the end of $\substrSeq'$.
-            \end{enumerate}
-    \end{enumerate}
-\end{definition}
-
-After the aforementioned processing, $\substrSeq$ is an
-alternating sequence of normal substrings and enclosed query substrings
-with the enclosed query substrings at every second position, and $\substrSeq$ 
-is not empty and has an odd number of elements.
-
-
-\begin{algorithm}[htbp]
-	\caption{Template: An algorithm which extracts an extend expression for 
-        resolving the template string of the input literal node.}
-	\label{alg:template_function}
-	\begin{algorithmic}[1]
-        \Require $(\lex, \dt)$ a literal, 
-        \Statex \qquad $\symAttrQueryMap$ a mapping of attributes in $\symAttrUniverse$ to query expressions in $\symDataAcc$
-		\Ensure An extend expression
-        \State $\substrSeq \gets \fctTempSubStrs{\lex}$ \Comment Definition~\ref{def:tempSubStrs}
-        \State $\extExpr \gets (s_1, \texttt{xsd:string})$, where $s_1$ is the first element in $\substrSeq$
-        \If{$|\substrSeq| > 1$}
-            \For {$i \in 2,\dots,|\substrSeq|$}
-                \State $s_i \gets $
-                    the $i$-th element in $\substrSeq$
-                \If{$s_i$ is a string that starts with ``\{" and ends with ``\}"}
-                    \State $\queryExpr \gets $ substring of $s_i$ without the enclosing ``\{" and ``\}"
-                    \State $\extExpr \gets \fctConcat{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$ 
-                \Else
-                    \State $\extExpr \gets \fctConcat{\extExpr}{(s_i, \texttt{xsd:string})}$   
-                \EndIf
-		    \EndFor
-        \EndIf
-		\State \Return $\extExpr$
 	\end{algorithmic}
 \end{algorithm}
 

@@ -1,4 +1,24 @@
 \section{Conclusion}%
 \label{sec:conclusion}
 
-
+In this paper, we provide a set of formal definitions using algebraic 
+mapping operators to introduce semantics to the process of KG generation 
+from heterogeneous data.
+The proposed formalism is language-agnostic, and provides a unified model 
+for describing mappings used in KG generation.
+This formalism provides the basis for implementing a mapping engine that 
+is capable of supporting multiple declarative mapping languages without 
+changes to the implementation.
+Additionally, we show that our formalism fully captures the semantics of RML by
+providing a translation algorithm that translate the mappings from any RML
+document to our formalism. 
+Consequently, the formalism is shown to be at least as expressive as RML for
+mapping heterogeneous data to KG. 
+Lastly, we provide a set of algebraic equivalences to show that mapping plans
+generated as a result of our formalism are optimizable.
+As future works, this theoretical foundation opens the door to three 
+frontiers in the domain of KG generation from heterogeneous data; 
+i) a unified algebraic mapping engine, 
+ii) further studies into the optimizations of mapping plans based on this formalism, and
+iii) expansion upon this formalism to capture the semantics of all existing 
+mapping languages. 

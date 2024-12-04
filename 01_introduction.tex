@@ -29,7 +29,7 @@ On the other hand, dedicated mapping languages, such as the RDF Mapping Language
 Furthermore, a single mapping language can have multiple implementations for
 generating KGs. For example, RML has several
 implementations~\cite{Freund2024FlexRML,Iglesias2022ScalingKnowledgeGraph,ArenasGuerrero2022MorphKGCScalable,MinOo2022RMLStreamer,Scrocca2020Transport},
-each offering distinct advantages for their own unique use cases (i.e.
+each offering distinct advantages for their own unique use cases (i.e.,
 FlexRML~\cite{Freund2024FlexRML} for KG generation on IoT devices). 
 
 
@@ -50,17 +50,16 @@ mapping languages by providing mapping language-agnostic
 formalizations with three contributions.
 The first contribution is the introduction of formal definitions and the proposal
 of a set of algebraic mapping operators.
-These operators can be composed to formally define the mappings of
-heterogeneous data for KG generation in a language-agnostic manner
+These operators can be composed to formally define the mapping of
+heterogeneous data to KG in a language-agnostic manner
 (Sections~\ref{sec:data_model} and~\ref{sec:mapping_algebra}).
-A language-agnostic formalization of mappings lays the foundation for a unified
-mapping engine that can work with the user's preferred mapping language. 
+A language-agnostic formalization of mapping heterogeneous data to KG lays the
+foundation for a unified mapping engine that can work with the user's preferred
+mapping language. 
 This approach ensures verified correctness and enables optimizations across
 various mapping languages.
-
-The second contribution demonstrates the expressiveness of our
-language-agnostic formalizations by applying them to a specific mapping
-language. 
+The second contribution demonstrates the expressiveness of our formalisms by
+applying them to a specific mapping language. 
 Specifically, we present an algorithm that translates RML documents into
 expressions composed of the algebraic operators defined in our formalism
 (Section~\ref{sec:rml_translation}). 
@@ -69,7 +68,7 @@ in RML, proving it to be at least as expressive as RML while also providing
 formal semantics for RML. 
 Lastly, as our final contribution, we introduce a few algebraic equivalences
 to show the potential of algebraic expression rewriting and thus, enabling the
-optimizations of the mappings to generate KG from heterogeneous data (Section~\ref{sec:equivalences}).
+optimizations of mapping heterogeneous data to KG (Section~\ref{sec:equivalences}).
 
 %
 % paper outline

@@ -471,15 +471,17 @@ In addition to the operators introduced above, any operator of the relational al
 
 \begin{example}
 	\label{ex:projection_operator}
-	\todo{As mentioned in my comment about switching the order of the sections about extend operators and projection operators, it feels a bit weird to do this projection. Given that the age attribute is projected away directly after the source operator, why introduce this attribute in the first place? \\ A much more reasonable example, now after switching the order of the sections, could continue as a direct follow up of the conversion example that I am proposing for the Extend operator; namely, after extending the relation with a column that contains the \ttl{xsd:integer} versions of the age values, it makes sense to project away the original age column.}
-	Let $r$ be the mapping relation generated in Example~\ref{ex:source_operator},
-	and $\symProjSet = \{?id, ?name\}$.
+	Let $r$ be the mapping relation generated in Example~\ref{ex:extend_operator},
+    and $\symProjSet = \{\attr_\textsf{name}, \attr_\textsf{ext}\}$.
+    A projection operator with $\symProjSet$ can be used to project away attributes 
+    unwanted attributes, such as $\attr_\textsf{age}$, not in $\symProjSet$.
 	The mapping relation $r'$ generated after applying $\fctProjectOpDflt{r}$
-	has mapping tuples $t'_1, t'_2 \in r'$ as:
-	\begin{equation*}
-		t'_1 = \{ ?id \rightarrow 1, ?name \rightarrow \text{Alice}\},
-		t'_2 = \{ ?id \rightarrow 2, ?name \rightarrow \text{Bob}\}
-	\end{equation*}
+	has mapping tuples $t'', t''' \in r'$ as:
+	\begin{align*}
+        t'' &= \{ \attr_\textsf{name} \rightarrow (\ttl{"Alice"}, \ttl{xsd:string}), \attr_\textsf{ext} \rightarrow (\ttl{"23"}, \ttl{xsd:integer})\}
+        \\
+        t''' &= \{ \attr_\textsf{name} \rightarrow (\ttl{"Bob"}, \ttl{xsd:string}), \attr_\textsf{ext} \rightarrow \error\}
+	\end{align*}
 \end{example}
 
 

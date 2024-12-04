@@ -72,7 +72,6 @@ Therefore, we define the notion of the \emph{types of data sources} considered f
 	\label{def:source_type}
 	\normalfont
 	A \textbf{source type} is a tuple $\sourceTypeTuple$
-	\todo{Min Oo, notice that I have changed this one as well. There are two languages now, one for selecting the context objects and one for selecting the values from the context objects. Additionally, the type-cast function is now part of the source type and there are two more sets of data objects to capture explicitly the types of objects in the results of the first and the second language, respectively. This changes still need to be reflected in the rest of the paper.}
 	where
 	\begin{itemize}
 		\item
@@ -185,7 +184,7 @@ of this section to provide a practical example after defining each operator.
 	\textsf{lastname}, and \textsf{age} and the following two rows of CSV
 	data records on people as:
 	\begin{equation*}
-        \bigDataObject_{\mathsf{ex}} = [(\ttl{1}, \ttl{Alice}, \ttl{Lee}, \ttl{23}), (\ttl{2}, \ttl{Bob}, \ttl{Malice}, \ttl{25})]
+        \bigDataObject_{\mathsf{ex}} = [(\ttl{1}, \ttl{Alice}, \ttl{Lee}, \ttl{23}), (\ttl{2}, \ttl{Bob}, \ttl{Malice}, \ttl{null})]
 	\end{equation*}
     Given such a CSV file as input data, the data source derived from it is
     $\dataSource_\mathsf{ex} = (\sourceTypeX{\mathsf{csv}},\bigDataObject_\mathsf{ex})$ 
@@ -254,7 +253,7 @@ Formally, we define the mapping relation produced by a source operator as follow
         t & = \{ \attr_{\textsf{id}} \rightarrow (\ttl{"1"}, \ttl{xsd:string}), \attr_{\textsf{name}} \rightarrow (\ttl{"Alice"}, \ttl{xsd:string}), 
         \attr_{\textsf{age}} \rightarrow  (\ttl{"23"}, \ttl{xsd:string})\} \\
 		t' & = \{ \attr_{\textsf{id}} \rightarrow (\ttl{"2"}, \ttl{xsd:string}), \attr_{\textsf{name}} \rightarrow (\ttl{"Bob"}, \ttl{xsd:string}), 
-        \attr_{\textsf{age}} \rightarrow (\ttl{"25"}, \ttl{xsd:string}) \}
+        \attr_{\textsf{age}} \rightarrow (\ttl{"null"}, \ttl{xsd:string}) \}
 	\end{align*}
 \end{example}
 
@@ -401,8 +400,10 @@ While Definition~\ref{def:ExtendExpressions:Syntax} introduces the syntax of ext
 	\label{ex:ExtendExpressions:Semantics}
 	If $\extExpr$ is the extend expression $(\texttt{toInt}, \attr_\textsf{age})$, for the
 		%mapping
-	tuples~$\mappingTuple_1$ and~$\mappingTuple_2$ of Example~\ref{ex:source_operator}, $\fctEval{\extExpr}{\mappingTuple_1}$ is the literal $(\ttl{"23"}, \ttl{xsd:integer})$ and $\fctEval{\extExpr}{\mappingTuple_2} = \error$.
-\todo{Min Oo, notice that this assume that you change the CSV file of the running example as proposed in my comment for the next example below.}
+    tuples~$\mappingTuple$ and~$\mappingTuple'$ of
+    Example~\ref{ex:source_operator}, $\fctEval{\extExpr}{\mappingTuple}$ is
+    the literal $(\ttl{"23"}, \ttl{xsd:integer})$ and
+    $\fctEval{\extExpr}{\mappingTuple'} = \error$.
 \end{example}
 
 Now we can define the semantics of extend operators as follows.
@@ -426,52 +427,28 @@ Now we can define the semantics of extend operators as follows.
 
 \begin{example}
 	\label{ex:extend_operator}
-	\todo{I propose to use a simpler example with a single Extend operator only. In particular, you can use one that converts the age values of the running example into \ttl{xsd:integer} literals. I have already introduced the relevant extension function that you can use for this purpose: see Example~\ref{ex:ExtensionFunction:toInt}. \\ Changing this example as I propose is useful to demonstrate another use case of Extend operators, because the use cases about creating IRIs and about adding constants will show up anyways in the translation section. \\ Additionally, this conversion example has another advantage: it allows us to also illustrate a case where the Extend operator adds an error ($\error$). To this end, just change one of the two age values in the CSV to be non-numerical (e.g., the string "unknown").}
-	The mapping relation, $r$, generated in
-	Example~\ref{ex:projection_operator} only contains RDF literals, thus, an
-	RDF dataset containing RDF graphs with triples cannot be generated from
-	$r$.
-	Extend operators, applied in succession, can generate the IRI terms
-	required for the triples in the resulting RDF dataset.
-	Let $\extExpr_{iri}^{\attr}=(f, \attr)$ be an extend expression with a function~$f$
-	that generates an IRI, when evaluating $\eval(\extExpr_{iri}^{\attr},
-		\mappingTuple)$, by prepending the URL ``\texttt{example.com/}'' to
-	$\mappingTuple(\attr)$.
-	We apply 4 extend operators in succession on $r$ as follows:
+    Let $r$ be a mapping relation from Example~\ref{ex:source_operator}, and 
+    $\extExpr$, is an extend expression $(\ttl{toInt}, \attr_{\textsf{age}})$ from Example~\ref{ex:ExtensionFunction:toInt}. 
+    Applying the extend function on $r$ as $\fctExtOpX{\attr_{\textsf{ext}}}{\extExpr}{r}$
+    results in a mapping relation $r'$ with the mapping tuples $\mappingTuple''$, and $\mappingTuple'''$ 
+    where the literal value for the attribute $\attr_{\textsf{age}}$, in the 
+    mapping tuples, is converted to a literal with datatype $\ttl{xsd:string}$. 
+    For mapping tuple $\mappingTuple'$ where the literal value, $(\ttl{"null"}, \ttl{xsd:string})$,
+    cannot be converted to $\ttl{xsd:integer}$, the extend operator maps 
+    $\attr_\textsf{ext}$ to an error $\error$. 
+    The following two tuples are the results of applying the extend operator: 
 	\begin{equation*}
-		\fctExtOpXBig{\subjAttr}{\extExpr_{iri}^{?id}}{
-			\fctExtOpXBig{\predAttr}{\texttt{foaf:name}}{
-				\fctExtOpXBig{\objAttr}{?name}{
-					\fctExtOpXBig{\graphAttr}{\texttt{rr:defaultGraph}}{
-						r
-					}
-				}
-			}
-		}
-	\end{equation*}
-	This results in a new mapping relation with $r'$ with the following
-	mapping tuples $t_1$, and $t_2$ with both having a mapping
-	$\graphAttr \rightarrow \texttt{rr:defaultGraph}$:
-	\begin{align*}
-		t_1 & = \{\dots,
-		\subjAttr \rightarrow \text{<example.com/1>},
-		\predAttr \rightarrow \texttt{foaf:name},
-		\objAttr \rightarrow \text{``Alice''},
-		\dots
-		\}               \\
-		t_2 & = \{\dots,
-		\subjAttr \rightarrow \text{<example.com/2>},
-		\predAttr \rightarrow \texttt{foaf:name},
-		\objAttr \rightarrow \text{``Bob''},
-		\dots
+		t''  = \{\dots,
+        \attr_{\textsf{ext}} \rightarrow (\ttl{"23"}, \ttl{xsd:integer})
+		\}  \quad         
+		t''' = \{\dots,
+        \attr_{\textsf{ext}} \rightarrow \error
 		\}
-	\end{align*}
+	\end{equation*}
 \end{example}
 
-% In addition to converting literals from one datatype to another (as illustrated in the example), extend operators may also be used to add  ... , etc.
 
 While the example shows how extend operators can be used to convert literals from one datatype to another, other use cases including adding the same constant RDF term to all tuples of a mapping relation%
-	%~(e.g., a particular string literal or IRI)%
 , creating IRIs from other attribute values, and applying arbitrary functions to one or more other attribute values.
 
 

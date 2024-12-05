@@ -179,14 +179,13 @@ may be removed%
 	Let $\dataSource = \dataSourceTuple$ be a data source with
 	$\sourceType=\sourceTypeTuple$,
 	$\queryExpr \in \symDataAcc$,
-	$\symAttrQueryMap$ be a partial function $\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$,
+	$\symAttrQueryMap$ be a partial function $\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'$,
 	and $\symProjSet \subseteq \fctDom{\symAttrQueryMap}$.
 	It holds that
 	\begin{equation*}
 		\fctProjectOpBig{\symProjSet}{ \sourceOpDflt }
 		=
 		\sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}
-		,
 	\end{equation*}
 	where $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$; i.e., $\fctDom{\symAttrQueryMap'} = \symProjSet$ and $\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'}$.
 \end{proposition}
@@ -199,6 +198,27 @@ project operator may also be removed completely (anywhere in a
 plan) if its set of projection attributes coincides with the attributes of the input relation%
 	%, as shown by the following result%
 .
+
+\begin{proof}
+    Let $(\symAttrSubSet,\symMappingInst) = \fctProjectOpBig{\symProjSet}{ \sourceOpDflt }$, 
+    and $(\symAttrSubSet',\symMappingInst') = \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}$, 
+    where $\symProjSet = \fctDom{\symAttrQueryMap'}$.
+    To show that $(\symAttrSubSet,\symMappingInst) = (\symAttrSubSet',\symMappingInst')$, 
+    we notice that, by Definition~\ref{def:projection_operator}, $\symAttrSubSet = \symProjSet$, 
+    and by Definition~\ref{def:source_operator}, $\symAttrSubSet' = \fctDom{\symAttrQueryMap'} = \symProjSet$. 
+    Hence, we have $\symAttrSubSet = \symAttrSubSet'$ and, thus, it remains to
+    show that $\symMappingInst = \symMappingInst'$.
+
+    We first show that $\symMappingInst \subseteq \symMappingInst'$ by considering
+    an arbitrary mapping tuple $\mappingTuple \in \symMappingInst$ and show 
+    that $\mappingTuple \in \symMappingInst'$.
+    Given $\mappingTuple \in \symMappingInst$ with Definition~\ref{def:projection_operator}, 
+    it holds that there exists a mapping tuple $\mappingTuple' \in \sourceOpDflt$ such 
+    that $\mappingTuple$ is the restriction of $\mappingTuple'$ to $\symProjSet$;
+    i.e., $\mappingTuple = \mappingTuple'[\symProjSet]$, $\mappingTuple(\attr) = \mappingTuple'(\attr)$
+    for all $\attr \in \symProjSet$, and $\fctDom{\mappingTuple} = \symProjSet$. 
+    \qed
+\end{proof}
 
 \begin{proposition}
 	\label{prop:ProjectionRemoval}

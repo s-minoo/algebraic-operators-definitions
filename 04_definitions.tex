@@ -425,12 +425,12 @@ While Definition~\ref{def:ExtendExpressions:Syntax} introduces the syntax of ext
 
 \begin{example}
 	\label{ex:ExtendExpressions:Semantics}
-	If $\extExpr$ is the extend expression $(\texttt{toInt}, \attr_3)$, for the
+	If $\extExpr_\mathsf{ex}$ is the extend expression $(\texttt{toInt}, \attr_3)$, for the
 		%mapping
     tuples~$\mappingTuple_1$ and~$\mappingTuple_2$ of
-    Example~\ref{ex:source_operator}, $\fctEval{\extExpr}{\mappingTuple_1}$ is
+    Example~\ref{ex:source_operator}, $\fctEval{\extExpr_\mathsf{ex}}{\mappingTuple_1}$ is
     the literal $(\ttl{"23"}, \ttl{xsd:integer})$ and
-    $\fctEval{\extExpr}{\mappingTuple_2} = \error$.
+    $\fctEval{\extExpr_\mathsf{ex}}{\mappingTuple_2} = \error$.
 \end{example}
 
 Now we can define the semantics of extend operators as follows.
@@ -451,26 +451,27 @@ Now we can define the semantics of extend operators as follows.
 	$\symMappingInst'\! = \bigl\{\mappingTuple \cup \{\attr \rightarrow \fctEval{\extExpr}{\mappingTuple}\} \ | \ \mappingTuple \in \symMappingInst \bigr\}$.
 \end{definition}
 
-\todo{Olaf, continue here. Some of the tuple names in the example are messed up, and the text may be made a bit more concise.}
 \begin{example}
 	\label{ex:extend_operator}
-    Let $r$ be a mapping relation from Example~\ref{ex:source_operator}, and 
-    $\extExpr$, is an extend expression $(\ttl{toInt}, \attr_3)$ from Example~\ref{ex:ExtensionFunction:toInt}. 
-    Applying the extend function on $r$ as $\fctExtOpX{\attr_4}{\extExpr}{r}$
-    results in a mapping relation $r'$ with the mapping tuples $\mappingTuple''$, and $\mappingTuple'''$ 
-    where the literal value for the attribute $\attr_3$, in the 
-    mapping tuples, is converted to a literal with datatype $\ttl{xsd:string}$. 
-    For mapping tuple $\mappingTuple'$ where the literal value, $(\ttl{"null"}, \ttl{xsd:string})$,
-    cannot be converted to $\ttl{xsd:integer}$, the extend operator maps 
-    $\attr_4$ to an error $\error$. 
-    The following two tuples are the results of applying the extend operator: 
+	Let $r$ be the mapping relation
+		%defined by the source operator in
+		of
+	Example~\ref{ex:source_operator}. We may extend this relation with an attribute $\attr_4$ for which each of the
+		two tuples of $r$
+		%tuple
+	gets the value obtained by applying the extend expression~%
+		%$\extExpr_\mathsf{ex} = (\ttl{toInt}, \attr_3)$
+		$\extExpr_\mathsf{ex}$
+	of Example~\ref{ex:ExtendExpressions:Semantics}. This operation can be captured as $\fctExtOpX{\attr_4}{\extExpr_\mathsf{ex}}{r}$ and results in the mapping relation $\big(\{ \attr_1, \attr_2, \attr_3, \attr_4\}, \{\mappingTuple_1',\mappingTuple_2'\}\big)$ with
 	\begin{equation*}
-		\mappingTuple_1'\! = \mappingTuple_1 \cup \{
+		\mappingTuple_1' = \mappingTuple_1 \cup \{
         \attr_4 \rightarrow (\ttl{"23"}, \ttl{xsd:integer})
-		\}  \quad         
-		\mappingTuple_2'\! = \mappingTuple_2 \cup \{
+		\}
+		\quad \text{ and } \quad
+		\mappingTuple_2' = \mappingTuple_2 \cup \{
         \attr_4 \rightarrow \error
 		\}
+		.
 	\end{equation*}
 \end{example}
 
@@ -496,19 +497,19 @@ In addition to the operators introduced above, any operator of the relational al
 	i.e., $\mathrm{dom}(\mappingTuple') = \symProjSet$ and $\mappingTuple'(a) = \mappingTuple(a)$ for all $a \in \symProjSet$.
 \end{definition}
 
-\todo{TODO (Olaf): Check the example and, perhaps, make it a bit more concise.}
 \begin{example}
 	\label{ex:projection_operator}
-	Let $r$ be the mapping relation generated in Example~\ref{ex:extend_operator},
-    and $\symProjSet = \{\attr_2, \attr_4\}$.
-    A projection operator with $\symProjSet$ can be used to project away attributes 
-    unwanted attributes, such as $\attr_3$, not in $\symProjSet$.
-	The mapping relation $r'$ generated after applying $\fctProjectOpDflt{r}$
-	has mapping tuples $\mappingTuple_1''\!, \mappingTuple_2''\! \in r'$ as:
+		Let $r$ is the mapping relation of Example~\ref{ex:extend_operator}. Assuming that further steps of a potential mapping process that involve this relation use only the attributes $\attr_2$ and $\attr_4$ of $r$, we may project away the rest of the attributes. To this end, we use $\fctProjectOp{\{\attr_2, \attr_4\}}{r}$ and obtain
+		%If $r$ is the mapping relation of Example~\ref{ex:extend_operator} and $\symProjSet_\mathsf{ex} = \{\attr_2, \attr_4\}$, then $\fctProjectOp{\symProjSet_\mathsf{ex}}{r}$ is
+	the
+		%mapping
+	relation $\big(\{ \attr_2, \attr_4\}, \{\mappingTuple_1'',\mappingTuple_2''\}\big)$~with 
 	\begin{align*}
-        \mappingTuple_1''\! &= \big\{ \attr_2 \rightarrow (\ttl{"Alice"}, \ttl{xsd:string}), \attr_4 \rightarrow (\ttl{"23"}, \ttl{xsd:integer}) \big\}
+        \mappingTuple_1'' &= \big\{ \attr_2 \rightarrow (\ttl{"Alice"}, \ttl{xsd:string}), \, \attr_4 \rightarrow (\ttl{"23"}, \ttl{xsd:integer}) \big\}
+        \text{ and}
         \\
-        \mappingTuple_2''\! &= \big\{ \attr_2 \rightarrow (\ttl{"Bob"}, \ttl{xsd:string}), \attr_4 \rightarrow \error \big\}
+        \mappingTuple_2'' &= \big\{ \attr_2 \rightarrow (\ttl{"Bob"}, \ttl{xsd:string}), \, \attr_4 \rightarrow \error \big\}
+        .
 	\end{align*}
 \end{example}
 

@@ -190,15 +190,6 @@ may be removed%
 	where $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$; i.e., $\fctDom{\symAttrQueryMap'} = \symProjSet$ and $\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'}$.
 \end{proposition}
 
-	As a final (and not particularly surprising) example, a
-	%Not surprisingly, a
-	%A
-project operator may also be removed completely (anywhere in a
-	mapping
-plan) if its set of projection attributes coincides with the attributes of the input relation%
-	%, as shown by the following result%
-.
-
 \begin{proof}
     Let $(\symAttrSubSet,\symMappingInst) = \fctProjectOpBig{\symProjSet}{ \sourceOpDflt }$, 
     and $(\symAttrSubSet',\symMappingInst') = \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}$, 
@@ -217,9 +208,18 @@ plan) if its set of projection attributes coincides with the attributes of the i
     that $\mappingTuple$ is the restriction of $\mappingTuple'$ to $\symProjSet$;
     i.e., $\mappingTuple = \mappingTuple'[\symProjSet]$, $\mappingTuple(\attr) = \mappingTuple'(\attr)$
     for all $\attr \in \symProjSet$, and $\fctDom{\mappingTuple} = \symProjSet$. 
+	
+	
     \qed
 \end{proof}
-
+	As a final (and not particularly surprising) example, a
+	%Not surprisingly, a
+	%A
+project operator may also be removed completely (anywhere in a
+	mapping
+plan) if its set of projection attributes coincides with the attributes of the input relation%
+	%, as shown by the following result%
+.
 \begin{proposition}
 	\label{prop:ProjectionRemoval}
 	\normalfont

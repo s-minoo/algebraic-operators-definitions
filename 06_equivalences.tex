@@ -208,6 +208,18 @@ may be removed%
     that $\mappingTuple$ is the restriction of $\mappingTuple'$ to $\symProjSet$;
     i.e., $\mappingTuple = \mappingTuple'[\symProjSet]$, $\mappingTuple(\attr) = \mappingTuple'(\attr)$
     for all $\attr \in \symProjSet$, and $\fctDom{\mappingTuple} = \symProjSet$. 
+	Considering $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$,
+	there exits a mapping tuple~$\mappingTuple'' \in \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}$,
+	with Definition~\ref{def:source_operator}, such that $\fctDom{\mappingTuple''} = \symProjSet$, and 
+	$\mappingTuple''(\attr) = \mappingTuple'(\attr)$ for all $\attr \in \symProjSet$. 
+	Combining all the properties that we have shown, we can conclude that 
+	$\fctDom{\mappingTuple} = \fctDom{\mappingTuple''} = \symProjSet$, and 
+	$\mappingTuple(\attr) = \mappingTuple'(\attr) = \mappingTuple''(\attr)$ for all $\attr \in \symProjSet$
+	and, thus, $\mappingTuple \in \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}$; i.e, $\mappingTuple \in \symMappingInst'$.
+
+
+
+
 	
 	
     \qed

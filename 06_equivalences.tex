@@ -216,7 +216,18 @@ may be removed%
 	$\fctDom{\mappingTuple} = \fctDom{\mappingTuple''} = \symProjSet$, and 
 	$\mappingTuple(\attr) = \mappingTuple'(\attr) = \mappingTuple''(\attr)$ for all $\attr \in \symProjSet$
 	and, thus, $\mappingTuple \in \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}$; i.e, $\mappingTuple \in \symMappingInst'$.
-
+	
+	Lastly, we show that $\symMappingInst'  \subseteq \symMappingInst$ by considering an arbitrary mapping tuple 
+    $\mappingTuple \in \symMappingInst'$ and prove that $\mappingTuple \in \symMappingInst$. 
+	Given $\mappingTuple \in \symMappingInst'$ with Definition~\ref{def:source_operator}, and 
+	$\fctDom{\symAttrQueryMap'} = \symProjSet$, it holds that 
+	i) $\fctDom{\mappingTuple} = \symProjSet$, and 
+	ii) $\mappingTuple(\attr)$ is defined for all $\attr \in \symProjSet$.
+	Now, consider a mapping tuple $\mappingTuple'$ for which it holds that 
+	i) $\fctDom{\mappingTuple'} = \fctDom{\symAttrQueryMap}$, and 
+	ii) $\mappingTuple'(\attr)$ is defined for all $\attr \in \fctDom{\symAttrQueryMap}$. 
+	Thus, by Definition~\ref{def:source_operator}, $\mappingTuple' \in  \sourceOpDflt$. 
+	
 
 
 

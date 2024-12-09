@@ -176,21 +176,91 @@ may be removed%
 \begin{proposition}
 	\label{prop:ProjectionIntoSource}
 	\normalfont
-	Let $\dataSource = \dataSourceTuple$ be a data source with
-	$\sourceType=\sourceTypeTuple$,
+	Let $\dataSource = \dataSourceTuple$ be a data source such that \\ 
+	$\sourceType = \sourceTypeTuple$,
 	$\queryExpr \in \symDataAcc$,
-	$\symAttrQueryMap$ be a partial function $\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc$,
+	$\symAttrQueryMap$ be a partial function \\ 
+	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'$,
 	and $\symProjSet \subseteq \fctDom{\symAttrQueryMap}$.
 	It holds that
 	\begin{equation*}
 		\fctProjectOpBig{\symProjSet}{ \sourceOpDflt }
 		=
 		\sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}
-		,
 	\end{equation*}
 	where $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$; i.e., $\fctDom{\symAttrQueryMap'} = \symProjSet$ and $\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'}$.
 \end{proposition}
 
+\begin{proof}
+    Let $(\symAttrSubSet,\symMappingInst) = \fctProjectOpBig{\symProjSet}{ \sourceOpDflt }$, 
+    and $(\symAttrSubSet',\symMappingInst') = \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}$, 
+    where $\symProjSet = \fctDom{\symAttrQueryMap'}$.
+    To show that $(\symAttrSubSet,\symMappingInst) = (\symAttrSubSet',\symMappingInst')$, 
+    we notice that, by Definition~\ref{def:projection_operator}, $\symAttrSubSet = \symProjSet$, 
+    and by Definition~\ref{def:source_operator}, $\symAttrSubSet' = \fctDom{\symAttrQueryMap'} = \symProjSet$. 
+    Hence, we have $\symAttrSubSet = \symAttrSubSet'$ and, thus, it remains to
+    show that $\symMappingInst = \symMappingInst'$.
+
+    We first show that $\symMappingInst \subseteq \symMappingInst'$ by considering
+    an arbitrary mapping tuple $\mappingTuple \in \symMappingInst$ and show 
+    that $\mappingTuple \in \symMappingInst'$.
+    Given $\mappingTuple \in \symMappingInst$ with Definition~\ref{def:projection_operator}, 
+    it holds that there exists a mapping tuple $\mappingTuple'_{\dataObject} \in \sourceOpDflt$ such 
+    that $\mappingTuple$ is the restriction of $\mappingTuple'_{\dataObject}$ to $\symProjSet$;
+    i.e., $\mappingTuple = \mappingTuple'_{\dataObject}[\symProjSet]$, 
+	$\fctDom{\mappingTuple} = \symProjSet$, and 
+	$\mappingTuple(\attr) = \mappingTuple'_{\dataObject}(\attr)$ for all $\attr \in \symProjSet$. 
+	Since $\mappingTuple'_{\dataObject} \in \sourceOpDflt$ with Definition~\ref{def:source_operator}, it holds that
+	i)~$\dataObject \in \fctEval{\bigDataObject}{\queryExpr}$,
+	ii)~$X_{\dataObject} = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap}}
+		\big\{ (\attr, \var) \ \big| \
+		\var \in \fctCbeval{\bigDataObject}{\dataObject}{\queryExpr'} \text{ with }  \queryExpr'\! = \symAttrQueryMap(\attr) \big\}$, 
+	iii)~$\fctDom{\mappingTuple'_{\dataObject}} = \fctDom{\symAttrQueryMap}$, and
+	iv)~$\mappingTuple'_{\dataObject}(\attr_i) = \fctTypeCast{v_i}$, with $((\attr_1,v_1),\dots,(\attr_n,v_n)) \in X_\dataObject$, 
+	$n = |\fctDom{\symAttrQueryMap}|$, and $\{\attr_1,\dots,\attr_n\} = \fctDom{\symAttrQueryMap}$.
+	Considering $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$,
+	there exits a mapping tuple~$\mappingTuple''_{\dataObject} \in \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}$,
+	with Definition~\ref{def:source_operator}, such that $\fctDom{\mappingTuple''_\dataObject} = \symProjSet$, and 
+	$\mappingTuple''_\dataObject(\attr) = \mappingTuple'_\dataObject(\attr)$ for all $\attr \in \symProjSet$. 
+	Combining all the properties that we have shown, we can conclude that 
+	$\fctDom{\mappingTuple} = \fctDom{\mappingTuple''_\dataObject} = \symProjSet$, and 
+	$\mappingTuple(\attr) = \mappingTuple'_\dataObject(\attr) = \mappingTuple''_\dataObject(\attr)$ for all $\attr \in \symProjSet$
+	and, thus, $\mappingTuple \in \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}$; i.e, $\mappingTuple \in \symMappingInst'$.
+	
+	Lastly, we show that $\symMappingInst'  \subseteq \symMappingInst$ by considering an arbitrary mapping tuple 
+    $\mappingTuple_\dataObject \in \symMappingInst'$ and prove that $\mappingTuple_\dataObject \in \symMappingInst$. 
+	Given $\mappingTuple_\dataObject \in \symMappingInst'$ with Definition~\ref{def:source_operator}, and 
+	$\fctDom{\symAttrQueryMap'} = \symProjSet$, it holds that 
+	i)~$\dataObject \in \fctEval{\bigDataObject}{\queryExpr}$,
+	ii)~$X_{\dataObject} = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap'}}
+		\big\{ (\attr, \var) \ \big| \
+		\var \in \fctCbeval{\bigDataObject}{\dataObject}{\queryExpr'} \text{ with }  \queryExpr'\! = \symAttrQueryMap'(\attr) \big\}$, 
+	iii)~$\fctDom{\mappingTuple_\dataObject} = \fctDom{\symAttrQueryMap'} = \symProjSet$, and
+	iv)~$\mappingTuple_{\dataObject}(\attr_i) = \fctTypeCast{v_i}$, 
+	with \\$((\attr_1,v_1),\dots,(\attr_n,v_n)) \in X_\dataObject$. 
+	Now, provided with the conditions 
+	$\fctDom{\symAttrQueryMap'} = \symProjSet$ and $\symProjSet \subseteq \fctDom{\symAttrQueryMap}$,
+ 	consider a mapping tuple $\mappingTuple'_\dataObject$
+	for which it holds that 
+	i)~$\fctDom{\mappingTuple'_\dataObject} = \fctDom{\symAttrQueryMap}$,
+	ii)~$\mappingTuple'_\dataObject(\attr)$ is defined for all $\attr \in \fctDom{\symAttrQueryMap}$, and 
+	iii)~$\mappingTuple_\dataObject'(\attr') = \mappingTuple_\dataObject(\attr')$ for all $\attr' \in \fctDom{\symProjSet}$.
+	Thus, by Definition~\ref{def:source_operator}, $\mappingTuple'_\dataObject \in  \sourceOpDflt$. 	
+	Next, let $\mappingTuple''$ be a mapping tuple that is the restriction of $\mappingTuple'_\dataObject$ to $\symProjSet$; 
+	i.e, $\mappingTuple'' = \mappingTuple'_\dataObject[\symProjSet]$, which, by Definition~\ref{def:projection_operator}, 
+	means that $\mappingTuple'' \in \fctProjectOpBig{\symProjSet}{ \sourceOpDflt }$.
+	Combining everything together, we have that 
+	i)~$\fctDom{\mappingTuple''} = \symProjSet = \fctDom{\mappingTuple_\dataObject}$, and 
+	ii)~$\mappingTuple''(\attr) =\mappingTuple'_\dataObject(\attr) = \mappingTuple_\dataObject(\attr)$ for all $\attr \in \symProjSet$. 
+	As a consequence, $\mappingTuple'' = \mappingTuple_\dataObject$ and, thus, 
+	$\mappingTuple_\dataObject \in \fctProjectOpBig{\symProjSet}{\sourceOpDflt}$;i.e, $\mappingTuple_\dataObject \in \symMappingInst$.
+
+
+
+	
+	
+    \qed
+\end{proof}
 	As a final (and not particularly surprising) example, a
 	%Not surprisingly, a
 	%A
@@ -199,7 +269,6 @@ project operator may also be removed completely (anywhere in a
 plan) if its set of projection attributes coincides with the attributes of the input relation%
 	%, as shown by the following result%
 .
-
 \begin{proposition}
 	\label{prop:ProjectionRemoval}
 	\normalfont

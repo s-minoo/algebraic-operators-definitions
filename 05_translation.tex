@@ -60,6 +60,7 @@ creating join relations.
 Together, both RDF graph are used to translate relevant algebraic expressions 
 for the mapping described by the triples map $\triplesMapIRI$. 
 
+{\color{red}
 \begin{definition}
     \normalfont
 	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
@@ -75,7 +76,27 @@ for the mapping described by the triples map $\triplesMapIRI$.
 		      $(s',p',o') \in \symRMLGraph$ where $s' = o$.
 	\end{enumerate}
 \end{definition}
+}
 
+{\color{blue}
+\begin{definition}
+    \normalfont
+	Let $\symRMLGraph$ be an RDF graph and $\triplesMapIRI$ be an IRI.
+	The \textbf{$\triplesMapIRI$-rooted subgraph of $\symRMLGraph$}
+	is an RDF graph $\symRMLGraph'\! \subseteq \symRMLGraph$
+	that is defined recursively as follows:
+	\begin{enumerate}
+		\item $\symRMLGraph'$ contains every triple $(s,p,o) \in \symRMLGraph$ for which it holds that $s = \triplesMapIRI$.
+		\item $\symRMLGraph'$ contains every triple $(s,p,o) \in \symRMLGraph$ for which there
+			%exists
+			is
+		a triple $(s'\!,p'\!,o') \in \symRMLGraph'$ such that $s = o'\!$.
+	\end{enumerate}
+\end{definition}
+}
+
+
+{\color{red}
 \begin{definition}
     \normalfont
 	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
@@ -94,6 +115,39 @@ for the mapping described by the triples map $\triplesMapIRI$.
 		      such that $s' = o$ and  $p'$ is the IRI \texttt{rr:parent}.
 	\end{enumerate}
 \end{definition}
+}
+
+{\color{blue}
+\begin{definition}
+	\normalfont
+	Let $\symRMLGraph$ be an RDF graph and $\triplesMapIRI$ be an IRI.
+	The \textbf{$\triplesMapIRI$-specific parent-triples-map subgraph of $\symRMLGraph$}%
+		, denoted by $\triplesMapGraph{\textsf{PTM}}{\triplesMapIRI}$,
+	is the RDF graph $\triplesMapGraph{\mathsf{PTM}}{\triplesMapIRI} = \symRMLGraph_1 \cup \symRMLGraph_2 \cup \symRMLGraph_3$ where
+	\begin{align*}
+		\symRMLGraph_1 = & 
+		\{ (s,p,o) \in \symRMLGraph \,|\, p
+			%\text{ is the IRI \ttl{rr:parentTriplesMap} and }
+			= \ttl{rr:parentTriplesMap} \text{ and }
+		o = \triplesMapIRI \}
+		,
+		\\
+		\symRMLGraph_2 = & 
+		\{ (s,p,o) \in \symRMLGraph \,|\, p
+			%\text{ is the IRI \ttl{rr:joinCondition} and }
+			= \ttl{rr:joinCondition} \text{ and }
+		s = s' \text{ for some } (s'\!,p'\!,o') \in \symRMLGraph_1 \}
+		,
+		\\
+		\symRMLGraph_3 = & 
+		\{ (s,p,o) \in \symRMLGraph \,|\, p
+			%\text{ is the IRI \ttl{rr:parent} and }
+			= \ttl{rr:parent} \text{ and }
+		s = o' \text{ for some } (s'\!,p'\!,o') \in \symRMLGraph_2 \}
+		.
+	\end{align*}
+\end{definition}
+}
 
 
 \subsubsection{Relevant Extension Functions}%

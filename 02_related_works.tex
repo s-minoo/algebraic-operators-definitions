@@ -4,6 +4,7 @@
 According to Van Assche et al.~\cite{VanAssche2022DeclarativeRDFgraph},
 declarative mapping languages can be categorized into two categories: i)
 \emph{dedicated languages} which extend mapping languages
+	\todo{I still find this "definition" weird. In which category does R2RML fit?}
 (e.g., 
 R2RML~\cite{Seema2012R2RML} specifications) or use custom syntaxes, and ii)
 \emph{repurposed languages} which repurpose existing non-mapping languages, 
@@ -16,9 +17,8 @@ declarative mapping languages for KG construction.
 %they are based upon, limiting them to the syntax of the parent languages and not 
 %applicable for formalizing a language-agnostic mapping process.
 
-\subsection{Formalizations in Repurposed Mapping Languages}%
-\label{sub:formalizations_in_repurposed_mapping_languages}
 
+\paragraph{Formalizations in Repurposed Mapping Languages.}
 To the best of our knowledge, only SPARQL-based mapping languages have defined
 formal
 semantics~\cite{lefrancois_eswc_2017,Lopes2011XSPARQL,Bischof:2012:XSPARQL,asprino2023knowledge}
@@ -45,8 +45,7 @@ We argue that reliance on the semantics of the underlying non-mapping language
 complicates the application of the proposed formalisms in these works to dedicated
 mapping languages specifically designed for mapping heterogeneous data to KGs. 
     
-\subsection{Formalizations in Dedicated Mapping Languages}
-\label{sub:dedicated_mapping_languages}
+\paragraph{Formalizations in Dedicated Mapping Languages.}
 R2RML~\cite{Seema2012R2RML} is a dedicated mapping language for R2RML mappings,
 which are RDF graphs for mapping relational databases to RDF KG.
 These mappings are usually presented using Turtle syntax.

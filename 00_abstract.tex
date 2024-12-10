@@ -1,31 +1,33 @@
 \begin{abstract}
 % Context (What is needed to understand the "need"?)
-Mapping languages such as RML and R2RML describe the mapping process to
-construct knowledge graphs from heterogeneous data sources. 
+Declarative mapping languages describe the mapping of heterogeneous data 
+to knowledge graph (KG). 
+Different flavours of mapping languages exist and each of these mapping languages
+has diverse implementations.  
 % Need (Why something needed to be done at all?)
-Due to the lack of formalizations of the mapping languages, 
+However, due to the lack of language-agnostic well-defined formalizations, 
 several implementations of these mapping languages exhibit 
 operational semantics distinct from each other. 
 This lack of formalizations has lead to discrepancies across the
-implementations, both in the features supported and in the optimization
-techniques.
+implementations, complications in verifying the correctness of the implementations, 
+and difficulty in studying the expressiveness of the mapping languages.  
 % Task (What was undertaken to address the need? It’s here that you write ‘in this paper, we …’)
 % Object (What the present document does or covers)
-In this paper, we present the formal definitions of algebraic mapping operators that can
-be composed to create executable mapping definitions, enabling the
-construction of knowledge graphs from heterogeneous data sources. 
-We also provide a translation algorithm for transforming RML documents into the 
-mapping definitions based on algebraic mapping operators. 
 % Findings (What the work done yielded or revealed)
-This approach establishes a formal operational semantics for the RML mapping language, 
-and consequently for R2RML, as RML is a superset of R2RML.
-Furthermore, we provide a few equivalences to show the possible optimizations 
-with the algebraic expressions. 
+In this paper, we provide a solid theoretical foundation for current and future
+works on mapping heterogeneous data to KG. 
+The main contribution is the formal definitions and a set of algebraic 
+mapping operators.
+Additionally, to show the expressiveness of our formalism, we provide a 
+translation algorithm from RML to our formalism; as a consequence, RML 
+is formalized using our formalism. 
+Furthermore, we provide a few rewriting rules to show the possible optimizations 
+with our formalism. 
 % Conclusion (What the findings mean for the audience)
 % Perspectives (What the future holds, beyond this work)
-The algebraic mapping operators offer a theoretical foundation for defining the
-operational semantics of both current and future mapping languages,
-promoting a more unified approach to constructing knowledge graphs from
-heterogeneous data sources.
+%The algebraic mapping operators offer a theoretical foundation for defining the
+%operational semantics of both current and future mapping languages,
+%promoting a more unified approach to constructing knowledge graphs from
+%heterogeneous data sources.
 \keywords{Mapping Algebra \and Formalization \and RML \and Knowledge Graph Construction.}
 \end{abstract}

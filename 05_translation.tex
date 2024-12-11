@@ -206,23 +206,29 @@ where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the string
 \end{itemize}
 
 \begin{algorithm}[h!tbp]
-	\caption{ExtractExtendExpr: Extend expression translation from an RML term map}
+	\caption{\textsc{CreateExtendExpr}:
+		%Create an extend expression for an RML term~map.}
+		%Create an extend expression for a term~map.}
+		Creates extend expressions for term~maps.}
 	\label{alg:rml_termmap_extend_expr}
 	\begin{algorithmic}[1]
 		\Require 
-            $\symRMLGraph$ an RDF graph of RML document,
-            \Statex \qquad $\LTB$ an injective function mapping literals to blank nodes, 
-            \Statex \qquad $\symAttrQueryMap$ a partial function mapping attributes to query expression,
-            \Statex \qquad $tm$ subject IRI of the RML term map to translate the extend operator for
-		\Ensure An extend expression
+            $u$ - IRI of the RML term map for which the extend expression is to be created
+            \Statex \qquad $\symRMLGraph$ - an RDF graph (assumed to describe an RML mapping, incl.\ term map~$u$)
+            \Statex \qquad $\LTB$ - an injective function that maps all literals to blank nodes
+            \Statex \qquad $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions
+		\Ensure an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})
         \State $\extExpr \gets $ initially empty extend expression
 
-        \If{$\symRMLGraph$ contains a triple $(tm, \texttt{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$ }
+        \If{$\symRMLGraph$ contains a triple $(tm, \texttt{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$}
     		\State $\extExpr \gets a$, where $a$ is the attribute in $\fctDom{\symAttrQueryMap}$ such that $\symAttrQueryMap(a) = \lex$
 		\ElsIf{$\symRMLGraph$ contains a triple $(tm, \texttt{rr:constant}, o)$}
     		\State $\extExpr \gets o$
-		\ElsIf{$\symRMLGraph$ contains a triple $(tm, \texttt{rr:template}, o)$ such that $o$ is a literal}
-            \State  $\extExpr \gets $ \textbf{Template}($o, \symAttrQueryMap$)  \Comment Algorithm~\ref{alg:template_function}
+		\ElsIf{$\symRMLGraph$ contains a triple $(tm, \texttt{rr:template}, o)$
+			%such that
+			s.t.\
+		$o$ is a literal $\literalTuple$}
+            \State  $\extExpr \gets $ \textsc{Template}($\lex, \symAttrQueryMap$)  \Comment Algorithm~\ref{alg:template_function}
 		\EndIf
 \medskip
         \If{$\symRMLGraph$ contains the triple $(tm,\texttt{rr:termType}, \texttt{rr:BlankNode})$}
@@ -295,24 +301,28 @@ The result is the extend expression translated from the template-valued term map
 and we provide the pseudocode code in Algorithm~\ref{alg:template_function}.
 
 \begin{algorithm}[htbp]
-	\caption{Template: An algorithm which extracts an extend expression for 
-        resolving the template string of the input literal node.}
+	\caption{\textsc{Template}:
+		%Creates an extend expression for resolving an IRI template.}
+		%Creates an extend expression to resolve an IRI template.}
+		%Creates extend expressions for resolving IRI templates.}
+		Creates extend expressions to resolve IRI templates.}
 	\label{alg:template_function}
 	\begin{algorithmic}[1]
-        \Require $(\lex, \dt)$ a literal, 
-        \Statex \qquad $\symAttrQueryMap$ a mapping of attributes in $\symAttrUniverse$ to query expressions in $\symDataAcc$
-		\Ensure An extend expression
-        \State $\substrSeq \gets \fctTempSubStrs{\lex}$ \Comment Definition~\ref{def:tempSubStrs}
+        \Require \textit{tmpl} - a string (assumed to be an RML string template)
+        \Statex \qquad $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions
+		\Ensure an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})
+        \State $\substrSeq \gets \fctTempSubStrs{\textit{tmpl}}$ \Comment Definition~\ref{def:tempSubStrs}
         \State $\extExpr \gets (s_1, \texttt{xsd:string})$, where $s_1$ is the first element in $\substrSeq$
         \If{$|\substrSeq| > 1$}
-            \For {$i \in 2,\dots,|\substrSeq|$}
+            \ForAll {$i = 2,\dots,|\substrSeq|$}
                 \State $s_i \gets $
                     the $i$-th element in $\substrSeq$
-                \If{$s_i$ is a string that starts with ``\{" and ends with ``\}"}
-                    \State $\queryExpr \gets $ substring of $s_i$ without the enclosing ``\{" and ``\}"
-                    \State $\extExpr \gets \fctConcat{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$ 
+                \If{$s_i$ is a string that starts with "\{" and ends with "\}"}
+                    \State $\extExpr \gets \fctConcatBig{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$, where $\queryExpr$ is
+	                    %the substring of
+                    $s_i$ without the enclosing "\{" and "\}"
                 \Else
-                    \State $\extExpr \gets \fctConcat{\extExpr}{(s_i, \texttt{xsd:string})}$   
+                    \State $\extExpr \gets \fctConcatBig{\extExpr}{(s_i, \texttt{xsd:string})}$
                 \EndIf
 		    \EndFor
         \EndIf
@@ -388,10 +398,10 @@ normalized RML document.
             \State   $\omega' \gets \sourceOp{\text{src}}{\queryExpr}{\symAttrQueryMap}$
 
             \State $tm_{sub} \gets o$, where triple $(s,\texttt{rr:subjectMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
-            \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sub}$) \Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
+            \State $\extExpr \gets $\textsc{CreateExtendExpr}($tm_{sub}, \symRMLGraph, \LTB, \symAttrQueryMap$) \Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
             \State $\omega' \gets \extOpAttr{\attr_{s}}(\omega')$
             \State $tm_{pred} \gets o$, where triple $(s,\texttt{rr:predicateMap},o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $s = \triplesMapIRI$
-            \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{pred}$)
+            \State $\extExpr \gets $\textsc{CreateExtendExpr}($tm_{pred}, \symRMLGraph, \LTB, \symAttrQueryMap$)
             \State $\omega' \gets \extOpAttr{\attr_{p}}(\omega')$
 		    \State\dots  \Comment Continued in Algorithm~\ref{alg:rml2algebra_part2}
 		    \algstore{state:full_translation}
@@ -417,14 +427,14 @@ normalized RML document.
                 \EndFor
 		        \State  $\omega' \gets \fctEquiJoinOp{\omega'}{\omega_{ptm}}$
                 \State $tm_{sptm} \gets  o''$ with $(s'',\texttt{rr:subjectMap},o'') \in \triplesMapGraph{TM}{s_{ptm}}$ 
-                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{sptm}$)
+                \State $\extExpr \gets $\textsc{CreateExtendExpr}($tm_{sptm}, \symRMLGraph, \LTB, \symAttrQueryMap$)
                 \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
             \Else
-                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{obj}$)
+                \State $\extExpr \gets $\textsc{CreateExtendExpr}($tm_{obj}, \symRMLGraph, \LTB, \symAttrQueryMap$)
                 \State  $\omega' \gets \extOpAttr{a_{o}}(\omega')$
 		    \EndIf
             \If{$(s,\texttt{rr:graphMap},tm_{graph}) \in \triplesMapGraph{TM}{\triplesMapIRI}$} 
-                \State $\extExpr \gets $\textbf{ExtractExtendExpr}($\symRMLGraph, \LTB, \symAttrQueryMap, tm_{graph}$) 
+                \State $\extExpr \gets $\textsc{CreateExtendExpr}($tm_{graph}, \symRMLGraph, \LTB, \symAttrQueryMap$) 
                 \State $\omega' \gets \extOpAttr{\attr_{g}}(\omega')$
             \Else
                 \State $\extExpr \gets \texttt{rr:defaultGraph}$

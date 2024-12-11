@@ -96,29 +96,6 @@ for the mapping described by the triples map $\triplesMapIRI$.
 % \end{definition}
 % }
 
-
-{\color{red}
-\begin{definition}
-    \normalfont
-	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
-	$\triplesMapIRI$ an IRI of a RML triples map.
-	A \textbf{$\triplesMapIRI$-specific parent triples map graph
-		$\triplesMapGraph{PTM}{\triplesMapIRI} \in \symRMLGraph$} is an RDF graph
-	defined as follows:
-	\begin{enumerate}
-		\item  $\triplesMapGraph{PTM}{\triplesMapIRI}$  contain every triple $(s,p,o) \in \symRMLGraph$
-		      such that $p$ is the IRI \texttt{rr:parentTriplesMap} and $o = \triplesMapIRI$.
-		\item If $(s,\texttt{rr:parentTriplesMap},o) \subseteq \triplesMapGraph{PTM}{\triplesMapIRI}$, then
-		      $\triplesMapGraph{PTM}{\triplesMapIRI}$ also contains every triple $(s',p',o') \in \symRMLGraph$
-		      such that $s'=s$ and  $p'$ is the IRI \texttt{rr:joinCondition}.
-		\item If $(s,\texttt{rr:joinCondition},o) \in \triplesMapGraph{PTM}{\triplesMapIRI}$, then
-		      $\triplesMapGraph{PTM}{\triplesMapIRI}$ also contains every triple $(s',p',o') \in \symRMLGraph$
-		      such that $s' = o$ and  $p'$ is the IRI \texttt{rr:parent}.
-	\end{enumerate}
-\end{definition}
-}
-
-{\color{blue}
 \begin{definition}
 	\normalfont
 	Let $\symRMLGraph$ be an RDF graph and $\triplesMapIRI$ be an IRI.
@@ -148,7 +125,6 @@ for the mapping described by the triples map $\triplesMapIRI$.
 		.
 	\end{align*}
 \end{definition}
-}
 
 
 \subsubsection{Relevant Extension Functions}%

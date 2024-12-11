@@ -1,10 +1,18 @@
-\section*{Appendix}
-\label{sec:appendix}
-\begin{figure}[htpb!]
-    \begin{minipage}[t]{0.4\textwidth}
+\appendix
+% \section*{Appendix} \label{sec:appendix}
+
+%\section{SPARQL Update Queries for Normalization of RML Descriptions}
+%\section{SPARQL Update Queries to Produce Normalized RML}
+\section{SPARQL Update Queries to Create Normalized RML}
+%\section{SPARQL Update Queries for Normalized RML}
+\label{appdx:queries}
+
+\vspace{-2em}
+	\begin{minipage}[t]{0.43\textwidth}
 		\centering
-        \begin{lstlisting}[language=sparql, caption={Replace \texttt{rr:class} definitions with predicate object maps},
-        label={lst:sparql_class_expand}]
+		\begin{lstlisting}[language=sparql, label={lst:sparql_class_expand}, caption={Normalization step~\ref{item:NormalizationStep:ClassExpansion} (expand \texttt{rr:class} definitions%
+			%\ into predicate-object maps%
+		).}]
 DELETE { ?sm rr:class ?sm_class . }
 INSERT { ?tm rr:predicateObjectMap [
       rr:predicateMap [
@@ -15,14 +23,16 @@ INSERT { ?tm rr:predicateObjectMap [
          rr:constant ?sm_class ; 
     ] ; ] . }
 WHERE { ?tm rr:subjectMap ?sm . 
-  ?sm rr:class ?sm_class . }
+        ?sm rr:class ?sm_class . }
 \end{lstlisting}
-	\end{minipage}
-    \hspace{0.1\textwidth}%
-    \begin{minipage}[t]{0.5\textwidth}
+	\end{minipage}%
+    \hfill%
+    \begin{minipage}[t]{0.53\textwidth}
         \centering
-\begin{lstlisting}[language=sparql, caption={Replace complex predicate-object maps with
-simple predicate-object maps},
+\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:POMDuplication} (duplicate multi-predicate-object maps
+	%\ into singleton predicate-object maps%
+	\ into singletons%
+).},
 label={lst:sparql_simple_pom}]
 DELETE{ ?tm rr:predicateObjectMap  ?pom. 
   ?pom rr:predicateMap ?pm;
@@ -37,10 +47,11 @@ WHERE{ ?tm rr:predicateObjectMap  ?pom.
   OPTIONAL {?pom rr:graphMap ?gm.} } 
 \end{lstlisting}
     \end{minipage}
-    \vspace{0.00mm}
-    \begin{minipage}{\textwidth}
-\begin{lstlisting}[language=sparql, caption={SPARQL update query to expand shortcuts
-for constant-term maps},
+%
+    \begin{minipage}[t]{\textwidth}
+\vspace{-2mm}
+\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:ConstantsExpansion} (expand shortcuts
+for constant-valued term maps).},
 label={lst:sparql_shortcut}]
 DELETE { ?tm rr:subject ?sm_constant .
   ?pompm rr:predicate ?pm_constant; rr:object ?om_constant .
@@ -56,10 +67,12 @@ WHERE { {?tm rr:subject ?sm_constant .} UNION
   {?termMap rr:graph ?gm_constant .} }
 \end{lstlisting}
     \end{minipage}
-    \vspace{0.00mm}
+\vspace{-2mm}
     \begin{minipage}[t]{0.4\textwidth}
-\begin{lstlisting}[language=sparql, caption={Replace referencing object maps without 
-join conditions with simple object map},
+\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:JoinRemoval} (replace referencing object maps
+  that do not have a join condition%
+  %without join conditions%
+).},
 label={lst:sparql_selfjoin}]
 DELETE{ ?om rr:parentTriplesMap ?ptm .}
 INSERT{ ?om rr:reference  ?ref ;
@@ -75,10 +88,10 @@ FILTER NOT EXISTS
 {?om rr:joinCondition ?jc .} } 
 \end{lstlisting}
     \end{minipage}
-    \hspace{0.1\textwidth}
+    \hfill
     \begin{minipage}[t]{0.5\textwidth}
-\begin{lstlisting}[language=sparql, caption={Replace triples map with multiple 
-predicate-object map with single predicate-object map},
+\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication1} (duplicate triples maps that contain multiple 
+pred\-i\-cate-ob\-ject maps).},
 label={lst:sparql_tm_singlepom}]
 DELETE{ ?tm a rr:TriplesMap;
     rml:logicalSource ?ls; rr:subjectMap ?sm;
@@ -92,9 +105,13 @@ WHERE{ ?tm rml:logicalSource ?ls;
     rr:predicateObjectMap ?pom . }
 \end{lstlisting}
     \end{minipage}
+\vspace{-2mm}
     \begin{minipage}[t]{\textwidth}
-\begin{lstlisting}[language=sparql, caption={SPARQL update query to ensure 
-that each triples map contain only one graph map if it exists},
+\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2} (duplicate triples maps
+   %that contain multiple graph~maps%
+   %containing multiple graph~maps%
+   to contain one graph map%
+ ).},
 label={lst:sparql_graphmap_norm}]
 DELETE{ ?tm a rrTriplesMap; rml:logicalSource ?ls; rr:subjectMap ?sm;
             rr:predicateObjectMap ?pom.
@@ -112,8 +129,108 @@ WHERE { ?tm rml:logicalSource ?ls; rr:subjectMap ?sm;
     ?pom rr:graphMap ?gm2 . }
 \end{lstlisting}
     \end{minipage}
-\end{figure}
 
 
+\vspace{-3mm}
+
+\section{Definition of Relevant Extension Functions} \label{appdx:functions}
+
+\vspace{-2mm}
+
+For every $v \in (\symTermUniverse \cup \error)$, $\dt \in (\symTermUniverse \cup \error)$, and $v'\! \in (\symTermUniverse \cup \error)$, we define:
+%
+\begin{equation*}
+	\fctToIRI{v} =
+	\begin{cases}
+		\mathit{lex}
+		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is a valid IRI}
+		\\[-1mm]
+		& \text{and $\dt$ is the IRI \ttl{xsd:string},}
+		\\
+		\error
+		& \text{else.}
+	\end{cases}
+\end{equation*}
+\begin{equation*}
+	\fctToBNode{v} =
+	\begin{cases}
+		\LTB(\lex)
+		& \text{if $v$ is a literal $\literalTuple$
+%such that
+s.t.\
+%
+%$\dt$ is the IRI \ttl{xsd:string}%
+$\dt = \ttl{xsd:string}$%
+        ,}
+        \\ 
+		\error
+		& \text{else.}
+	\end{cases}
+\end{equation*}
+\begin{equation*}
+    \fctToLiteral{v, \dt} = 
+    \begin{cases}
+        (\lex, \dt) &\text{if $v$ is a literal~$(\lex, \dt')$
+%such that
+s.t.\
+%
+%$\dt$ is the IRI \ttl{xsd:string}%
+$\dt = \ttl{xsd:string}$%
+        }, \\
+        \error & \text{else.}
+    \end{cases}
+\end{equation*}
+\begin{equation*}
+    \fctConcat{v}{v'} = 
+    \begin{cases}
+        (\lex \circ \lex'\!, \ttl{xsd:string})  &\text{if $v$ and $v'$ are literals $(\lex,\dt)$ and}
+		\\[-1mm]
+        & \text{$(\lex'\!,\dt')$, respectively,
+          %such that both}
+          such that}
+		\\[-1mm]
+        &
+          %\text{$\dt$ and $\dt'$ are the IRI \ttl{xsd:string},}
+          \dt = \dt'\! = \ttl{xsd:string},
+        \\ 
+        \error &\text{else,}
+		\\
+    \end{cases}
+\end{equation*}
+where $\lex \circ \lex'$ is the string obtained from concatenating the strings $\lex$ and~$\lex'\!$.
 
 
+\vspace{-3mm}
+
+%\section{Example Proof of Algebraic Equivalences}
+\section{Proof of Proposition~\ref{prop:FullProjectPushing}}
+\label{appdx:proof}
+
+\vspace{-2mm}
+
+% \begin{proof}[dsfds]
+		%For the proof we
+		We
+	assume that $( \fctAttrs{\extExpr} \cap \symAttrSubSet ) \subseteq \symProjSet$, and
+		%we
+	let $(\symAttrSubSet_1,\symMappingInst_1) = \fctProjectOpBig{\symProjSet \,\cup\, \{\attr\}\!}{ \fctExtOp{r} }$ and $(\symAttrSubSet_2,\symMappingInst_2) = \fctExtOpBig{ \fctProjectOp{\symProjSet}{r} }$.
+	To show that $(\symAttrSubSet_1,\symMappingInst_1) = (\symAttrSubSet_2,\symMappingInst_2)$ we first note that, by Definition~\ref{def:projection_operator}, it holds that $\symAttrSubSet_1 = \symProjSet \cup \{\attr\}$, and by Definition~\ref{def:extend_operator}, $\symAttrSubSet_2 = \symProjSet \cup \{\attr\}$. Hence, $\symAttrSubSet_1 = \symAttrSubSet_2$ and, thus, it remains to show that $\symMappingInst_1 = \symMappingInst_2$.
+
+	We first show that $\symMappingInst_1 \subseteq \symMappingInst_2$, for which we consider an arbitrary mapping tuple~$\mappingTuple \in \symMappingInst_1$ and show that $\mappingTuple \in \symMappingInst_2$.
+	Given that $\mappingTuple \in \symMappingInst_1$, by Definition~\ref{def:projection_operator}, it holds that i)~$\fctDom{\mappingTuple}=\symProjSet \cup \{\attr\}$ and ii)~there exists a mapping tuple $\mappingTuple'\! \in \fctExtOp{r}$ such that $\mappingTuple(\attr') = \mappingTuple'(\attr')$ for all $\attr'\! \in \symProjSet \cup \{\attr\}$.
+	Since $\mappingTuple'\! \in \fctExtOp{r}$, by Definition~\ref{def:extend_operator}, it holds that i)~$\fctDom{\mappingTuple'} = \symAttrSubSet \cup \{\attr\}$ and ii)~there exists a mapping tuple $\mappingTuple''\! \in r$ such that $\fctEval{\extExpr}{\mappingTuple''} = \mappingTuple'(\attr)$ and $\mappingTuple''(\attr') = \mappingTuple'(\attr')$ for all $\attr'\! \in \symAttrSubSet$.
+	Now, let $\mappingTuple'''$ be the restriction of $\mappingTuple''$ to $\symProjSet$; i.e., $\mappingTuple'''\! = \mappingTuple''[\symProjSet]$, which, by Definition~\ref{def:projection_operator}, also means that $\fctDom{\mappingTuple'''} = \symProjSet$ and $\mappingTuple'''\! \in \fctProjectOp{\symProjSet}{r}$.
+	Then, since $( \fctAttrs{\extExpr} \cap \symAttrSubSet ) \subseteq \symProjSet$ and $\mappingTuple'''(\attr') = \mappingTuple''(\attr')$ for all $\attr' \in \symProjSet$, it holds that $\fctEval{\extExpr}{\mappingTuple'''} = \fctEval{\extExpr}{\mappingTuple''}$.
+	As a consequence, there exists a tuple $\mappingTuple^{(4)}\! \in \fctExtOpBig{ \fctProjectOp{\symProjSet}{r} }$ such that i)~$\fctDom{\mappingTuple^{(4)}} = \fctDom{\mappingTuple'''} \cup \{\attr\}$, ii)~$\mappingTuple^{(4)}(\attr) = \mappingTuple'(\attr)$, and iii)~$\mappingTuple^{(4)}(\attr') = \mappingTuple'''(\attr')$ for all $\attr' \in \symProjSet$.
+	Since $\fctDom{\mappingTuple'''} \cup \{\attr\} = \symProjSet \cup \{\attr\} = \fctDom{\mappingTuple}$ and $\mappingTuple'(\attr) = \mappingTuple(\attr)$ and $\mappingTuple'''(\attr') = \mappingTuple''(\attr') = \mappingTuple'(\attr') = \mappingTuple(\attr')$ for all $\attr' \in \symProjSet$, we can conclude that $\mappingTuple^{(4)}\! = \mappingTuple$ and, thus, $\mappingTuple \in \fctExtOpBig{ \fctProjectOp{\symProjSet}{r} }$; i.e., $\mappingTuple \in \symMappingInst_2$.
+
+	Now we show that $\symMappingInst_1 \supseteq \symMappingInst_2$, for which we consider a
+		%mapping
+	tuple~$\mappingTuple \in \symMappingInst_2$ and show that $\mappingTuple \in \symMappingInst_1$.
+	Given that $\mappingTuple \in \symMappingInst_2$, by Definitions~\ref{def:extend_operator} and~\ref{def:projection_operator}, it holds that i)~$\fctDom{\mappingTuple}=\{\attr\} \cup \symProjSet$ and ii)~there exists a mapping tuple $\mappingTuple'\! \in \fctProjectOp{\symProjSet}{r}$ such that $\mappingTuple(\attr) = \fctEval{\extExpr}{\mappingTuple'}$ and $\mappingTuple(\attr') = \mappingTuple'(\attr')$ for all $\attr'\! \in \symProjSet$.
+	Since $\mappingTuple'\! \in \fctProjectOp{\symProjSet}{r}$, it holds that i)~$\fctDom{\mappingTuple'}=\symProjSet$ and ii)~there exists a mapping tuple $\mappingTuple''\! \in r$ such that $\fctDom{\mappingTuple''} = \symAttrSubSet$ and $\mappingTuple''(\attr') = \mappingTuple'(\attr')$ for all $\attr'\! \in \symProjSet$.
+	Now, let $\mappingTuple'''$ be the mapping tuple for which it holds that i)~$\fctDom{\mappingTuple'''} = \symAttrSubSet \cup \{\attr\}$, ii)~$\mappingTuple'''(\attr) = \fctEval{\extExpr}{\mappingTuple''}$, and iii)~$\mappingTuple'''(\attr') = \mappingTuple''(\attr')$ for all $\attr'\! \in \symAttrSubSet$. Hence, by Definition~\ref{def:extend_operator}, $\mappingTuple'''\! \in \fctExtOp{r}$.
+	Next, let $\mappingTuple^{(4)}$ be the restriction of $\mappingTuple'''$ to $\symProjSet \cup \{\attr\}$; i.e., $\mappingTuple^{(4)}\! = \mappingTuple'''[\symProjSet \cup \{\attr\}]$, which, by Definition~\ref{def:projection_operator}, means that $\mappingTuple^{(4)}\! \in \fctProjectOpBig{\symProjSet \,\cup\, \{\attr\}\!}{ \fctExtOp{r} }$.
+	Putting everything together, we have that i)~$\fctDom{\mappingTuple^{(4)}} = \symProjSet \cup \{\attr\} = \fctDom{\mappingTuple}$, ii)~$\mappingTuple^{(4)}(\attr) = \mappingTuple'''(\attr) = \fctEval{\extExpr}{\mappingTuple''} = \fctEval{\extExpr}{\mappingTuple'} = \mappingTuple(\attr)$, and iii)~$\mappingTuple^{(4)}(\attr') = \mappingTuple'''(\attr') = \mappingTuple''(\attr') = \mappingTuple(\attr)$ for all $\attr'\! \in \symProjSet$. As a consequence, $\mappingTuple^{(4)} = \mappingTuple$ and, thus, $\mappingTuple \in \fctProjectOpBig{\symProjSet \,\cup\, \{\attr\}\!}{ \fctExtOp{r} }$; i.e.,~$\mappingTuple \in \symMappingInst_1$.
+% 	\qed
+% \end{proof}

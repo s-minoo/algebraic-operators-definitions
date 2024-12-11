@@ -22,25 +22,34 @@ operator creation.
 
 \subsubsection{RML normalization}%
 \label{ssub:rml_normalization}
-First, the input RML document is \emph{normalized} by following the steps outlined
-in~\cite{Mariano2015SPARQL2SQL}, with adaptations specific to RML, as detailed
-below:
+First, the input RML document is \emph{normalized} by applying the following sequence of rewriting steps. We have adopted these steps from Rodríguez-Muro and Rezk~\cite{Mariano2015SPARQL2SQL}, with adaptations specific to RML. None of these steps changes the meaning of the defined mapping.
+	\todo{TODO: explicitly refer to the SPARQL Update queries in Appendix~\ref{appdx:queries}.}
 \begin{enumerate}
-    \item All \texttt{rr:class} definitions are replaced by predicate object maps,
-	\item All shortcuts for constant-term maps have been expanded,
-	\item All predicate-object maps with multiple predicate or object
-	      maps are expanded into predicate-object maps with a single 
-	      predicate map and a single object map,
-	\item All referencing-object maps with a parent triples map without join
-          conditions are replaced by an object map with the 
-          subject IRI of the parent triples map as the reference value,
-	\item All triples map with multiple predicate-object maps are
-	      replaced by equivalent triples maps that each have one of
-	      the predicate-object maps,
-    \item All triples maps with multiple graph maps are replaced by a
-          equivalent set of triples maps that each have one of the graph
-          maps.
+	\item
+	\label{item:NormalizationStep:ClassExpansion}
+	Every \ttl{rr:class} definition is expanded into a predicate-object map.
+
+	\item
+	\label{item:NormalizationStep:ConstantsExpansion}
+	All shortcuts for constant-valued term maps are expanded.
+
+	\item
+	\label{item:NormalizationStep:POMDuplication}
+	Predicate-object maps with multiple predicate maps or multiple object maps are duplicated to have a single predicate map and a single object map each.
+
+	\item
+	\label{item:NormalizationStep:JoinRemoval}
+	Referencing object maps without a join condition are replaced by an object map with the subject IRI of the parent triples map as the reference value.
+
+	\item
+	\label{item:NormalizationStep:TMDuplication1}
+	Every triples map with multiple predicate-object maps is duplicated such that each of the resulting triples maps has a single predicate-object map~only.
+
+	\item
+	\label{item:NormalizationStep:TMDuplication2}
+	Every triples map with multiple graph maps is duplicated such that each of the resulting triples maps has one of these graph maps.
 \end{enumerate}
+%
 After normalizations, all triples map in the normalized RML document have only
 a single predicate-object map and if present, a single graph map. 
 Moreover, all term maps do not have shortcuts. 
@@ -138,6 +147,7 @@ The extend function $\concat$ is used in
 Algorithm~\ref{alg:template_function} to resolve the template string
 according to the RML
 specification~\footnote{\url{https://rml.io/specs/rml/\#from-template}}. 
+	\todo{TODO: remove the formal parts of the following definitions and refer to Appendix~\ref{appdx:functions} for the formal definitions.}
 \begin{itemize}
 	\item
 	$\toIRI$ is a unary extension function that converts string literals representing IRIs into these IRIs. Formally,  for every $v \in (\symTermUniverse \cup \error)$, we define:

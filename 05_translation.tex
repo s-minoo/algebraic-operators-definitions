@@ -445,28 +445,38 @@ normalized RML document.
 
 
 \begin{algorithm}[htbp]
-	\caption{QueryInTriplesMap: Extract query expressions from RML triples maps}
+	\caption{\textsc{ExtractQueries}: Extract query expressions from triples maps.}
 	\label{alg:query_extraction}
 	\begin{algorithmic}[1]
-		\Require  $\symRMLGraph$ an RDF graph of RML document,
-		\Statex  \qquad $\triplesMapIRI$ the subject IRI of a triples map
-{\color{red} TODO: We need to support blank nodes here too (a triples map may be denoted by a blank node)}
-		\Ensure  A set of query expressions
+		\Require $\triplesMapIRI_\textsf{tm}$ - IRI or blank node of the triples map
+	            %for which query expressions are to be extracted
+	            to extract query expressions from
+		\Statex \qquad $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
 
-		\State $\symDataAcc \gets \emptyset$ \Comment Initially empty set of query expressions
-		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ s.t.\ $p$ is the IRI \texttt{rml:reference} and $o$ is a literal $(\lex,\dt) \in \symAllLiterals$}
-		    \State $\symDataAcc \gets \symDataAcc \cup \{ \lex \}$
+{\color{red} TODO: We need to support blank nodes here too (a triples map may be denoted by a blank node)}
+		\Ensure  a set of query expressions
+
+		\State $\symRMLGraph_\mathsf{tm} \gets$ the $\triplesMapIRI_\mathsf{tm}$-rooted subgraph of $\symRMLGraph$ \Comment{Definition~\ref{def:rooted_subgraph}}
+
+		\State $Q \gets \emptyset$ \Comment Initially empty set of query expressions
+
+		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rml:reference},o) \in \symRMLGraph_\mathsf{tm}$}
+		    \State $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$
 		\EndFor
-		\For{$(s,p ,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$ such that $p$ is the IRI \texttt{rr:template} and  $o$ is a literal $(\lex,\dt) \in \symAllLiterals$}
-		    \State $\symDataAcc' \gets$ set of all substrings in $\lex$ that are enclosed by \{ and \}
-		    \State $\symDataAcc \gets \symDataAcc \cup \symDataAcc'$
+		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rr:template}, o) \in \symRMLGraph_\mathsf{tm}$}
+			\State $Q \gets Q \cup Q'\!$, where $o = (\lex,\dt)$ and $Q'$
+				is the set of
+				%contains
+			all substrings of $\lex$ that \par\hspace{16mm} are enclosed by "\{" and "\}"
+
 		\EndFor
-		\State $T_\textrm{child} \gets \{ (s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI} \, | \, p \text{ is the IRI } \texttt{rr:child} \}$
-		\State $T_\textrm{parent} \gets \{(s,p,o) \in \triplesMapGraph{PTM}{\triplesMapIRI} \, | \, p \text{ is the IRI } \texttt{rr:parent} \}$
-		\For{$(s,p,o) \in (T_\textrm{child} \cup T_\textrm{parent})$ such that $o$ is a literal $(\lex,\dt) \in \symAllLiterals$ }
-		    \State $\symDataAcc \gets \symDataAcc \cup \{ \lex \}$
+		\State $T_\textrm{child} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \}$
+		\State $T_\textrm{parent} \gets \{(s,p,o) \in \triplesMapGraph{PTM}{\triplesMapIRI} \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent} \}$
+
+		\ForAll{$(s,p,o) \in (T_\textrm{child} \cup T_\textrm{parent})$ such that $o \in \symAllLiterals$ }
+		    \State $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$
 		\EndFor
-		\State \Return $\symDataAcc$
+		\State \Return $Q$
 	\end{algorithmic}
 \end{algorithm}
 
@@ -494,7 +504,7 @@ normalized RML document.
 
 		\State $\queryExpr \gets \lex$, where $o \in \symAllLiterals$ such that $(u_\textsf{ls},\ttlSmaller{rml:iterator},o) \in \symRMLGraph$, with $o = (\lex,\dt)$
 
-		\State $\symDataAcc \gets$ \textbf{QueryInTriplesMap}($\triplesMapIRI_\textsf{tm}, \symRMLGraph$)
+		\State $\symDataAcc \gets$ \textsc{ExtractQueries}($\triplesMapIRI_\textsf{tm}, \symRMLGraph$)
 		\Comment{Algorithm~\ref{alg:query_extraction}}
 
 		\State $\symAttrQueryMap \gets$ (initially) empty function from attributes to query expressions

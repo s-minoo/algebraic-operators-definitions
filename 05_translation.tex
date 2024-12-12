@@ -4,11 +4,9 @@ After establishing the formalism of our mapping algebra in
 Section~\ref{sec:mapping_algebra}, we demonstrate its expressiveness by using
 it to define the semantics of the RML mapping language, specifically version
 1.1.2~\footnote{\url{https://rml.io/specs/rml/v/1.1.2/}}.
-This section provides an algorithm that, given a valid arbitrary RML document,
-	\todo{The input to our overall process (including the normalization) is not an "RML document".}
-generates an algebraic expression that captures the semantics of the mapping
-process
-	\todo{I don't think that an RML document describes a "mapping process". Instead, it defines a mapping.}
+This section provides an algorithm that, given a valid arbitrary 
+{\color{blue}RDF graph representing an RML document},
+generates an algebraic expression that captures the semantics of the mappings
 described in the input RML document.
 We demonstrate that our mapping algebra is \textbf{at least as expressive as} RML, and 
 provide a \textbf{well-defined formal semantics} for RML v1.1.2. 

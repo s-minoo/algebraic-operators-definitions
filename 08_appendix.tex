@@ -29,11 +29,11 @@ WHERE { ?tm rr:subjectMap ?sm .
     \hfill%
     \begin{minipage}[t]{0.53\textwidth}
         \centering
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:POMDuplication} (duplicate multi-predicate-object maps
+        \begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:POMDuplication} (duplicate multi-predicate-object maps
 	%\ into singleton predicate-object maps%
 	\ into singletons%
 ).},
-label={lst:sparql_simple_pom}]
+label={lst:sparql_deduplication}]
 DELETE{ ?tm rr:predicateObjectMap  ?pom. 
   ?pom rr:predicateMap ?pm;
   rr:objectMap ?om; rr:graphMap ?gm. }
@@ -50,7 +50,7 @@ WHERE{ ?tm rr:predicateObjectMap  ?pom.
 %
     \begin{minipage}[t]{\textwidth}
 \vspace{-2mm}
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:ConstantsExpansion} (expand shortcuts
+\begin{lstlisting}[language=sparql,  caption={Normalization step~\ref{item:NormalizationStep:ConstantsExpansion} (expand shortcuts
 for constant-valued term maps).},
 label={lst:sparql_shortcut}]
 DELETE { ?tm rr:subject ?sm_constant .

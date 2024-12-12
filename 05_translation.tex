@@ -4,60 +4,63 @@ After establishing the formalism of our mapping algebra in
 Section~\ref{sec:mapping_algebra}, we demonstrate its expressiveness by using
 it to define the semantics of the RML mapping language, specifically version
 1.1.2~\footnote{\url{https://rml.io/specs/rml/v/1.1.2/}}.
-This section provides an algorithm that, given a valid arbitrary 
-{\color{blue}RDF graph representing an RML document},
+This section provides an algorithm that, 
+given a valid arbitrary RDF graph representing an RML document,
 generates an algebraic expression that captures the semantics of the mappings
-described in the input RML document.
+described in the RML document.
 We demonstrate that our mapping algebra is \textbf{at least as expressive as} RML, and 
 provide a \textbf{well-defined formal semantics} for RML v1.1.2. 
 
 \subsection{Translation Preliminaries}%
 \label{sub:translation_preliminaries}
-Before translating an RML document into our algebraic expression, a few
-preparations are required: i)~normalization of the RML document,
-ii)~identification of RDF sub-graph to translate algebraic expressions relevant
-to a specific triples map, and iii)~definitions of extend functions for Extend
+Before translating an RDF graph of the RML document into our algebraic expression, a
+few preparations are required: 
+i)~normalization of the RDF graph,
+ii)~identification of RDF sub-graph to translate algebraic expressions relevant to a specific triples map, and 
+iii)~definitions of extend functions for Extend
 operator creation.
 
 
 
 \subsubsection{RML normalization}%
 \label{ssub:rml_normalization}
-First, the input RML document
-	\todo{Again, the input to our normalization procedure is not an "RML document".}
+First, the RDF graph of the RML document
 is \emph{normalized} by applying the following sequence of rewriting steps. We have adopted these steps from Rodríguez-Muro and Rezk~\cite{Mariano2015SPARQL2SQL}, with adaptations specific to RML. None of these steps changes the meaning of the defined mapping.
 	\todo{TODO: explicitly refer to the SPARQL Update queries in Appendix~\ref{appdx:queries}.}
 \begin{enumerate}
 	\item
 	\label{item:NormalizationStep:ClassExpansion}
-	Every \ttl{rr:class} definition is expanded into a predicate-object map.
+	Every \ttl{rr:class} definition is expanded into a predicate-object map. (Listing~\ref{lst:sparql_class_expand})
 
 	\item
 	\label{item:NormalizationStep:ConstantsExpansion}
-	All shortcuts for constant-valued term maps are expanded.
+	All shortcuts for constant-valued term maps are expanded. (Listing~\ref{lst:sparql_shortcut})
 
 	\item
 	\label{item:NormalizationStep:POMDuplication}
-	Predicate-object maps with multiple predicate maps or multiple object maps are duplicated to have a single predicate map and a single object map each.
+        Predicate-object maps with multiple predicate maps or multiple object maps are duplicated to have a single predicate map and a single object map each. (Listing~\ref{lst:sparql_deduplication})
 
 	\item
 	\label{item:NormalizationStep:JoinRemoval}
 	Referencing object maps without a join condition are replaced by an object map with the subject IRI of the parent triples map as the reference value.
+        (Listing~\ref{lst:sparql_selfjoin})
 
 	\item
 	\label{item:NormalizationStep:TMDuplication1}
 	Every triples map with multiple predicate-object maps is duplicated such that each of the resulting triples maps has a single predicate-object map~only.
+        (Listing~\ref{lst:sparql_tm_singlepom})
 
 	\item
 	\label{item:NormalizationStep:TMDuplication2}
 	Every triples map with multiple graph maps is duplicated such that each of the resulting triples maps has one of these graph maps.
+        (Listing~\ref{lst:sparql_graphmap_norm})
 \end{enumerate}
 %
-After normalizations, all triples map in the normalized RML document have only
+After normalizations, all triples map in the normalized RDF graph have only
 a single predicate-object map and if present, a single graph map. 
 Moreover, all term maps do not have shortcuts. 
-Normalizing the RML document reduces the complexity when parsing the RML
-document by simplifying complex triples maps. 
+The normalization reduces the complexity of the translation steps
+by simplifying complex triples maps. 
 
 \subsubsection{Triples Map-specific RDF Graph}%
 \label{ssub:tm_specific_rdf_graph}
@@ -72,25 +75,6 @@ creating join relations.
 Together, both RDF graph are used to translate relevant algebraic expressions 
 for the mapping described by the triples map $\triplesMapIRI$. 
 
-{\color{red}
-\begin{definition}
-    \normalfont
-	Let $\symRMLGraph$ be an RDF graph of an RML mapping document, and
-	$\triplesMapIRI$ an IRI of a RML triples map.
-	A \textbf{$\triplesMapIRI$-specific triples map graph
-		$\triplesMapGraph{TM}{\triplesMapIRI} \subseteq \symRMLGraph$} is an RDF graph
-	recursively defined as follows:
-	\begin{enumerate}
-		\item  $\triplesMapGraph{TM}{\triplesMapIRI}$ contains every triple
-		      $(s,p,o) \in \symRMLGraph$ for which $s = \triplesMapIRI$
-		\item if $(s,p,o) \in \triplesMapGraph{TM}{\triplesMapIRI}$, then
-		      $\triplesMapGraph{TM}{\triplesMapIRI}$ also contains every triple
-		      $(s',p',o') \in \symRMLGraph$ where $s' = o$.
-	\end{enumerate}
-\end{definition}
-}
-
-{\color{blue}
 \begin{definition}
 	\label{def:rooted_subgraph}
 	\normalfont
@@ -109,7 +93,6 @@ for the mapping described by the triples map $\triplesMapIRI$.
 		a triple $(s'\!,p'\!,o') \in \symRMLGraph'$ such that $s = o'\!$.
 	\end{enumerate}
 \end{definition}
-}
 
 \begin{definition}
 	\normalfont

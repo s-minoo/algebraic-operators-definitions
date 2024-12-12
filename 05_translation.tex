@@ -406,16 +406,11 @@ normalized RML document.
 
 			\State $\symRMLGraph_\mathsf{tm} \gets$ the $\triplesMapIRI_\mathsf{tm}$-rooted subgraph of $\symRMLGraph$ \Comment{Definition~\ref{def:rooted_subgraph}}
 
-			\State  $\mathit{src} \gets \fctInitSrc{o}$,
-				%where $o \in \symAllIRIs$ such that
-				for
-			$(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:logicalSource},o) \in \symRMLGraph_\mathsf{tm}$
-			\Comment Definition~\ref{def:init_data_source}
-
-			\State  $(\queryExpr,\symAttrQueryMap) \gets$ \textsc{TranslateSourceOperator}($\triplesMapIRI_\mathsf{tm},\symRMLGraph$)
+			\State  $\omega \gets \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap}$\!,
+				%where
+				with
+			$(\dataSource, \queryExpr,\symAttrQueryMap) \!=\!$ \textsc{CreateSrcOpParam}($\triplesMapIRI_\mathsf{tm},\symRMLGraph$)
 			\Comment{Algorithm~\ref{alg:rml_source_op}}
-
-			\State  $\omega \gets \sourceOp{\mathit{src}}{\queryExpr}{\symAttrQueryMap}$
 
 			\State $u_\textsf{sm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph_\mathsf{tm}$
 
@@ -431,14 +426,6 @@ normalized RML document.
 
 			\If{there is a $u_\mathsf{ptm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{om},\ttlSmaller{rr:parentTriplesMap},u_\mathsf{ptm}) \in \symRMLGraph_\mathsf{tm}$}
 
-				\State  $\mathit{src}_\mathsf{ptm} \gets \fctInitSrc{o}$, for $(u_\mathsf{ptm},\ttlSmaller{rr:logicalSource},o) \in \triplesMapGraph{TM}{u_\mathsf{ptm}}$
-				%\Comment Definition~\ref{def:init_data_source}
-
-				\State  $(\queryExpr_\mathsf{ptm},\symAttrQueryMap_\mathsf{ptm}) \gets $ \textsc{TranslateSourceOperator}($u_\mathsf{ptm},\symRMLGraph$)
-				\Comment{Algorithm~\ref{alg:rml_source_op}}
-
-				\State  $\omega_\mathsf{ptm} \gets \sourceOp{\mathit{src}_\mathsf{ptm}}{\queryExpr_\mathsf{ptm}}{\symAttrQueryMap_\mathsf{ptm}}$
-
 				\State $\symJoinAttrPairs \gets \emptyset$
 				\ForAll{$u_\mathsf{jc} \in \symAllIRIs \cup \symAllBNodes$ for which
 					%there is a triple
@@ -451,7 +438,8 @@ normalized RML document.
 					\State  $\symJoinAttrPairs \gets \symJoinAttrPairs \cup \{ (\attr, \attr') \}$
 				\EndFor
 
-				\State  $\omega \gets \fctEquiJoinOp{\omega}{\omega_\mathsf{ptm}}$
+				\State  $\omega \gets \fctEquiJoinOpBig{\omega}{ \sourceOp{\dataSource_\mathsf{ptm}}{\queryExpr_\mathsf{ptm}}{\symAttrQueryMap_\mathsf{ptm}} }$, where \par\hspace{15mm} $(\dataSource_\mathsf{ptm}, \queryExpr_\mathsf{ptm},\symAttrQueryMap_\mathsf{ptm}) =$ \textsc{CreateSrcOpParam}($u_\mathsf{ptm},\symRMLGraph$)
+				\Comment{Algorithm~\ref{alg:rml_source_op}}
 
 				\State $u_\mathsf{sptm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{ptm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph$
 
@@ -501,22 +489,36 @@ normalized RML document.
 
 
 \begin{algorithm}[htbp]
-	\caption{\textsc{TranslateSourceOperator}: Source operator translation for a given triples map IRI $\triplesMapIRI$}
+	\caption{\textsc{CreateSrcOpParam}: Creates
+		%the parameters for a source operator to be created for a given triples map.}
+		parameters for a source operator.}
 	\label{alg:rml_source_op}
 	\begin{algorithmic}[1]
-		\Require $\triplesMapIRI$ subject IRI of a triples map
-{\color{red} TODO: We need to support blank nodes here too (a triples map may be denoted by a blank node)}
-		\Statex \qquad $\symRMLGraph$ an RDF graph of RML document
-		\Ensure A tuple containing query expression and a partial function $\symAttrUniverse  \rightarrow  \symDataAcc$
-		\State $ls_{iri} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = \triplesMapIRI$  and $p= \texttt{rml:logicalSource}$
-		\State $\queryExpr \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = ls_{iri}$  and $p=  \texttt{rml:iterator }$
-		\State $\symDataAcc \gets$ \textbf{QueryInTriplesMap}($\triplesMapIRI, \symRMLGraph$) \Comment{Algorithm~\ref{alg:query_extraction}}
-		\State $\symAttrQueryMap \gets$ initially empty function from attributes to query expressions in $\symDataAcc$
-		\For{$\queryExpr' \in \symDataAcc$}
-		\State $\attr \gets$ a fresh attribute from $\symAttrUniverse \setminus \{ \attr_\textrm{s}, \attr_\textrm{p}, \attr_\textrm{o}, \attr_\textrm{g} \}$ that has not been used before in this translation process
-		\State $\symAttrQueryMap \gets \symAttrQueryMap \cup \{ a \rightarrow \queryExpr' \}$
+		\Require $\triplesMapIRI_\textsf{tm}$ - IRI or blank node of the triples map
+	            %for which the source operator is to be created
+	            to create the source operator for
+		\Statex \qquad $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
+
+		\Ensure a tuple $(\dataSource, \queryExpr, \symAttrQueryMap)$
+			%to be used as
+			of
+		parameters for a source operator (as per Definition~\ref{def:source_operator})
+
+		\State $u_\textsf{ls} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\textsf{tm},\ttlSmaller{rml:logicalSource},o) \in \symRMLGraph$
+
+		\State $\dataSource \gets \fctInitSrc{u_\textsf{ls}}$
+		\Comment Definition~\ref{def:init_data_source}
+
+		\State $\queryExpr \gets \lex$, where $o \in \symAllLiterals$ such that $(u_\textsf{ls},\ttlSmaller{rml:iterator},o) \in \symRMLGraph$, with $o = (\lex,\dt)$
+
+		\State $\symDataAcc \gets$ \textbf{QueryInTriplesMap}($\triplesMapIRI_\textsf{tm}, \symRMLGraph$)
+		\Comment{Algorithm~\ref{alg:query_extraction}}
+
+		\State $\symAttrQueryMap \gets$ (initially) empty function from attributes to query expressions
+		\ForAll{query expressions $\queryExpr'\! \in \symDataAcc$}
+			\State $\symAttrQueryMap \gets \symAttrQueryMap \cup \{ a \rightarrow \queryExpr' \}$, where $\attr$ is a fresh attribute from $\symAttrUniverse \setminus \{ \subjAttr, \predAttr, \objAttr, \graphAttr \}$ that has \par \hspace{24mm} not been used before in the whole translation process
 		\EndFor
-		\State \Return  $(\queryExpr, \symAttrQueryMap)$
+		\State \Return $(\dataSource, \queryExpr, \symAttrQueryMap)$
 	\end{algorithmic}
 \end{algorithm}
 

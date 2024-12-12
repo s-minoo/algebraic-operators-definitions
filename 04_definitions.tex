@@ -239,7 +239,7 @@ Formally, we define the mapping relation produced by a source operator as follow
     $\queryExpr \in \symDataAcc$, and
 	$\symAttrQueryMap$ be a partial function
 	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'\!$.
-	The \textbf{$\symAttrQueryMap$-spe\-cif\-ic mapping relation obtained from $\dataSource$}, denoted by $\sourceOpDflt$, is the mapping relation $\mappingRel$ such that $\symAttrSubSet = \fctDom{\symAttrQueryMap}$ and
+	The \textbf{$(\queryExpr, \symAttrQueryMap)$-spe\-cif\-ic mapping relation obtained from $\dataSource$}, denoted by $\sourceOpDflt$, is the mapping relation $\mappingRel$ such that $\symAttrSubSet = \fctDom{\symAttrQueryMap}$ and
 	\begin{align*}
 		\symMappingInst = \big\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n} \} \ \big| \
 		 & \dataObject \in \symDataSeq \text{ and}

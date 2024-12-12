@@ -136,62 +136,19 @@ The extend function $\concat$ is used in
 Algorithm~\ref{alg:template_function} to resolve the template string
 according to the RML
 specification~\footnote{\url{https://rml.io/specs/rml/\#from-template}}. 
-	\todo{TODO: remove the formal parts of the following definitions and refer to Appendix~\ref{appdx:functions} for the formal definitions.}
+The formal definitions of the following extension functions can be found in Appendix~\ref{appdx:functions}. 
 \begin{itemize}
 	\item
-	$\toIRI$ is a unary extension function that converts string literals representing IRIs into these IRIs. Formally,  for every $v \in (\symTermUniverse \cup \error)$, we define:
-\begin{equation*}
-	\fctToIRI{v} =
-	\begin{cases}
-		\mathit{lex}
-		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is a valid IRI}
-		\\[-2mm]
-		& \text{and $\dt$ is the IRI \texttt{xsd:string},}
-		\\
-		\error
-		& \text{else.}
-	\end{cases}
-\end{equation*}
+	$\toIRI$ is a unary extension function that converts string literals representing IRIs into these IRIs. 
 
 	\item
-	$\toBNode$ is a unary extension function for which we assume a function $\LTB: \symAllLiterals \rightarrow \symAllBNodes$ that is injective. Then, $\toBNode$ uses $\LTB$ to convert string literals into blank nodes. Formally, for every $v \in (\symTermUniverse \cup \error)$, we define:
-\begin{equation*}
-	\fctToBNode{v} =
-	\begin{cases}
-		\LTB(\lex)
-		& \text{if $v$ is a literal $\literalTuple$ such that $\dt$ is the IRI \texttt{xsd:string},}
-        \\ 
-		\error
-		& \text{else.}
-	\end{cases}
-\end{equation*}
+	$\toBNode$ is a unary extension function for which we assume a function $\LTB: \symAllLiterals \rightarrow \symAllBNodes$ that is injective. Then, $\toBNode$ uses $\LTB$ to convert string literals into blank nodes.
 
 	\item
-	$\toLiteral$ is a binary extension function that converts string literals into literals with a datatype IRI that is given as the second argument. Formally, for every pair $(v, \dt)\in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$, we define:
-\begin{equation*}
-    \fctToLiteral{v, \dt} = 
-    \begin{cases}
-        (\lex, \dt) &\text{if $v$ is a literal~$(\lex, \dt')$ such that $\dt'$ is the IRI \texttt{xsd:string}}, \\
-        \error & \text{else.}
-    \end{cases}
-\end{equation*}
+	$\toLiteral$ is a binary extension function that converts string literals into literals with a datatype IRI that is given as the second argument.
 
 	\item
-	$\concat$ is a binary extension function that concatenates two string literals. Formally, for every pair $(v_1, v_2) \in (\symTermUniverse \cup \error) \times (\symTermUniverse \cup \error)$, we define,
-\begin{equation*}
-    \fctConcat{v_1}{v_2} = 
-    \begin{cases}
-        (\lex_1 \circ \lex_2, \texttt{xsd:string})  &\text{if $v_1$ and $v_2$ are literals $(\lex_1,\dt_1)$ and}
-		\\[-1mm]
-        & \text{$(\lex_2,\dt_2)$, respectively, such that both}
-		\\[-1mm]
-        & \text{$\dt_1$ and $\dt_2$ are the IRI \texttt{xsd:string},}
-        \\ 
-        \error &\text{else,}
-		\\
-    \end{cases}
-\end{equation*}
-where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the strings $\lex_1$ and $\lex_2$.
+	$\concat$ is a binary extension function that concatenates two string literals. 
 \end{itemize}
 
 \begin{algorithm}[h!tbp]

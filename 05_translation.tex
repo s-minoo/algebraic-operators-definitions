@@ -94,11 +94,16 @@ for the mapping described by the triples map $\triplesMapIRI$.
 \end{definition}
 
 \begin{definition}
+	\label{def:ptm_subgraph}
 	\normalfont
-	Let $\symRMLGraph$ be an RDF graph and $\triplesMapIRI$ be an IRI.
-	The \textbf{$\triplesMapIRI$-specific parent-triples-map subgraph of $\symRMLGraph$}%
-		, denoted by $\triplesMapGraph{\textsf{PTM}}{\triplesMapIRI}$,
-	is the RDF graph $\triplesMapGraph{\mathsf{PTM}}{\triplesMapIRI} = \symRMLGraph_1 \cup \symRMLGraph_2 \cup \symRMLGraph_3$ where
+	Let $\symRMLGraph$ be an RDF graph and
+		%$\triplesMapIRI$ be an IRI or a blank node.
+		$\triplesMapIRI \in \symAllIRIs \cup \symAllBNodes$.
+	The \textbf{$\triplesMapIRI$-specific par\-ent-triples-map subgraph of $\symRMLGraph$}
+	is
+		%an RDF graph $\symRMLGraph'\! \subseteq \symRMLGraph$ that is defined as
+		the RDF graph
+	$\symRMLGraph'\! = \symRMLGraph_1 \cup \symRMLGraph_2 \cup \symRMLGraph_3$ where
 	\begin{align*}
 		\symRMLGraph_1 = & 
 		\{ (s,p,o) \in \symRMLGraph \,|\, p
@@ -338,7 +343,7 @@ normalized RML document.
 		\Require $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
         \Statex \qquad $\LTB$ - an injective function that maps all literals to blank nodes
         \Ensure a mapping relation
-{\color{red} TODO: I think we can get rid of the use of the rooted subgraph (Definition~\ref{def:rooted_subgraph}; earlier the "$\triplesMapIRI$-specific triples map graph $\triplesMapGraph{TM}{\triplesMapIRI}$") in this algorithm. Almost all cases in which the algorithm checks for a triple in this (sub)graph, the triple has a specific subject IRI/bnode that makes the check unambiguous. The only case in which we don't have that is the one about the graph map. Is it possible to change that such that it also uses a specific subject IRI/bnode?}
+{\color{red} TODO: I think we can get rid of the use of the rooted subgraph (Definition~\ref{def:rooted_subgraph}) in this algorithm. Almost all cases in which the algorithm checks for a triple in this (sub)graph, the triple has a specific subject IRI/bnode that makes the check unambiguous. The only case in which we don't have that is the one about the graph map. Is it possible to change that such that it also uses a specific subject IRI/bnode?}
 		\State $\omega_\mathsf{spog} \gets$ initially empty algebraic expression
 
 		\ForAll{$\triplesMapIRI_\mathsf{tm}\! \in \symAllIRIs \cup \symAllBNodes$ for which there is a triple $(\triplesMapIRI_\mathsf{tm}, \ttlSmaller{rdf:type}, \ttlSmaller{rr:TriplesMap}) \in \symRMLGraph$}
@@ -426,7 +431,8 @@ normalized RML document.
 
 		\EndFor
 		\State $T_\textrm{child} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \text{ and } o \in \symAllLiterals \}$
-		\State $T_\textrm{parent} \gets \{(s,p,o) \in \triplesMapGraph{PTM}{\triplesMapIRI} \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent} \text{ and } o \in \symAllLiterals \}$
+		\State $T_\textrm{parent} \gets \{(s,p,o) \in \symRMLGraph_\mathsf{ptm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent} \text{ and } o \in \symAllLiterals \}$, where $\symRMLGraph_\mathsf{ptm}$ is the \par\hspace{20mm} $\triplesMapIRI_\textsf{tm}$-specific parent-triples-map subgraph of $\symRMLGraph$
+		\Comment{Definition~\ref{def:ptm_subgraph}}
 
 		\ForAll{$(s,p,o) \in (T_\textrm{child} \cup T_\textrm{parent})$}
 		    \State $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$

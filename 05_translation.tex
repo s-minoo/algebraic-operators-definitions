@@ -96,6 +96,7 @@ for the mapping described by the triples map $\triplesMapIRI$.
 \begin{definition}
 	\label{def:ptm_subgraph}
 	\normalfont
+\todo{This definition is not needed anymore. There was only one place where it was used (for $T_p$ in Algorithm~\ref{alg:query_extraction}), which I changed to incorporate the relevant parts directly into the formula in the algorithm.}
 	Let $\symRMLGraph$ be an RDF graph and
 		%$\triplesMapIRI$ be an IRI or a blank node.
 		$\triplesMapIRI \in \symAllIRIs \cup \symAllBNodes$.
@@ -430,11 +431,17 @@ normalized RML document.
 			all substrings of $\lex$ that \par\hspace{16mm} are enclosed by "\{" and "\}"
 
 		\EndFor
-		\State $T_\textrm{child} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \text{ and } o \in \symAllLiterals \}$
-		\State $T_\textrm{parent} \gets \{(s,p,o) \in \symRMLGraph_\mathsf{ptm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent} \text{ and } o \in \symAllLiterals \}$, where $\symRMLGraph_\mathsf{ptm}$ is the \par\hspace{20mm} $\triplesMapIRI_\textsf{tm}$-specific parent-triples-map subgraph of $\symRMLGraph$
-		\Comment{Definition~\ref{def:ptm_subgraph}}
+		\State $T_\textrm{c} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \text{ and } o \in \symAllLiterals \}$
 
-		\ForAll{$(s,p,o) \in (T_\textrm{child} \cup T_\textrm{parent})$}
+%%% The following line is replaced by the next one.
+%%% I'm keeping it here for Min Oo to check and compare,
+%%% but then it can be removed.    -Olaf
+%		\State $T_\textrm{p} \gets \{(s,p,o) \in \symRMLGraph_\mathsf{ptm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent} \text{ and } o \in \symAllLiterals \}$, where $\symRMLGraph_\mathsf{ptm}$ is the \par\hspace{20mm} $\triplesMapIRI_\textsf{tm}$-specific parent-triples-map subgraph of $\symRMLGraph$ \Comment{Definition~\ref{def:ptm_subgraph}}
+
+		\State $T_\textrm{p} \gets \{(s,p,o) \in \symRMLGraph \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent}, o \in \symAllLiterals, \text{ and there is an } s'\! \in \symAllIRIs\cup\symAllBNodes \text{ such}$ \par\hfill $\text{that } (s'\!, \ttlSmaller{rr:joinCondition}, s) \in \symRMLGraph \text{ and } (s'\!, \ttlSmaller{rr:parentTriplesMap}, \triplesMapIRI_\textsf{tm}) \in \symRMLGraph
+		\}$
+
+		\ForAll{$(s,p,o) \in (T_\textrm{c} \cup T_\textrm{p})$}
 		    \State $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$
 		\EndFor
 		\State \Return $Q$

@@ -96,7 +96,10 @@ for the mapping described by the triples map $\triplesMapIRI$.
 \begin{definition}
 	\label{def:rooted_subgraph}
 	\normalfont
-	Let $\symRMLGraph$ be an RDF graph and $\triplesMapIRI$ be an IRI.
+	Let $\symRMLGraph$ be an RDF graph and
+		%$\triplesMapIRI$ be an IRI or a blank node.
+		$\triplesMapIRI \in \symAllIRIs \cup \symAllBNodes$.
+\todo{Min Oo, notice that I have extended this to be not only IRIs but also blank nodes. We need to support blank nodes as potential identifiers for triples maps (as well as for term maps, etc).}
 	The \textbf{$\triplesMapIRI$-rooted subgraph of $\symRMLGraph$}
 	is an RDF graph $\symRMLGraph'\! \subseteq \symRMLGraph$
 	that is defined recursively as follows:
@@ -218,32 +221,34 @@ where $\lex_1 \circ \lex_2$ is the string obtained from concatenating the string
 	\label{alg:rml_termmap_extend_expr}
 	\begin{algorithmic}[1]
 		\Require 
-            $u$ - IRI of the RML term map for which the extend expression is to be created
+            $u$ - IRI or blank node of the term map
+	            %for which the extend expression is to be created
+	            to create the extend expression for
             \Statex \qquad $\symRMLGraph$ - an RDF graph (assumed to describe an RML mapping, incl.\ term map~$u$)
             \Statex \qquad $\LTB$ - an injective function that maps all literals to blank nodes
             \Statex \qquad $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions
 		\Ensure an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})
         \State $\extExpr \gets $ initially empty extend expression
 
-        \If{$\symRMLGraph$ contains a triple $(tm, \texttt{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$}
+        \If{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$}
     		\State $\extExpr \gets a$, where $a$ is the attribute in $\fctDom{\symAttrQueryMap}$ such that $\symAttrQueryMap(a) = \lex$
-		\ElsIf{$\symRMLGraph$ contains a triple $(tm, \texttt{rr:constant}, o)$}
+		\ElsIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:constant}, o)$}
     		\State $\extExpr \gets o$
-		\ElsIf{$\symRMLGraph$ contains a triple $(tm, \texttt{rr:template}, o)$
+		\ElsIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:template}, o)$
 			%such that
 			s.t.\
 		$o$ is a literal $\literalTuple$}
             \State  $\extExpr \gets $ \textsc{Template}($\lex, \symAttrQueryMap$)  \Comment Algorithm~\ref{alg:template_function}
 		\EndIf
 \medskip
-        \If{$\symRMLGraph$ contains the triple $(tm,\texttt{rr:termType}, \texttt{rr:BlankNode})$}
+        \If{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:BlankNode})$}
             \State \Return $\fctToBNode{\extExpr}$
-        \ElsIf{$\symRMLGraph$ contains the triple $(tm,\texttt{rr:termType}, \texttt{rr:IRI})$}
+        \ElsIf{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:IRI})$}
             \State \Return $\fctToIRI{\extExpr}$
-        \ElsIf{$\symRMLGraph$ contains a triple $(tm, \texttt{rr:datatype}, o)$ such that $o \in \symAllIRIs$}
+        \ElsIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:datatype}, o)$ such that $o \in \symAllIRIs$}
             \State \Return $\fctToLiteral{\extExpr, o}$
         \Else 
-            \State \Return $\fctToLiteral{\extExpr, \texttt{xsd:string}}$
+            \State \Return $\fctToLiteral{\extExpr, \ttlSmaller{xsd:string}}$
 		\EndIf
 	\end{algorithmic}
 \end{algorithm}
@@ -317,7 +322,7 @@ and we provide the pseudocode code in Algorithm~\ref{alg:template_function}.
         \Statex \qquad $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions
 		\Ensure an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})
         \State $\substrSeq \gets \fctTempSubStrs{\textit{tmpl}}$ \Comment Definition~\ref{def:tempSubStrs}
-        \State $\extExpr \gets (s_1, \texttt{xsd:string})$, where $s_1$ is the first element in $\substrSeq$
+        \State $\extExpr \gets (s_1, \ttlSmaller{xsd:string})$, where $s_1$ is the first element in $\substrSeq$
         \If{$|\substrSeq| > 1$}
             \ForAll {$i = 2,\dots,|\substrSeq|$}
                 \State $s_i \gets $
@@ -327,7 +332,7 @@ and we provide the pseudocode code in Algorithm~\ref{alg:template_function}.
 	                    %the substring of
                     $s_i$ without the enclosing "\{" and "\}"
                 \Else
-                    \State $\extExpr \gets \fctConcatBig{\extExpr}{(s_i, \texttt{xsd:string})}$
+                    \State $\extExpr \gets \fctConcatBig{\extExpr}{(s_i, \ttlSmaller{xsd:string})}$
                 \EndIf
 		    \EndFor
         \EndIf
@@ -389,46 +394,46 @@ captures the full semantics of the mapping process described in a given
 normalized RML document. 
 
 
-\begin{algorithm}[h!tbp]
-	\caption{Translates an RML mapping into our mapping algebra (Part 1).}
+\begin{algorithm}[t]
+	\caption{Translates an RML mapping into our mapping algebra.}
 	\label{alg:rml2algebra}
 	\begin{algorithmic}[1]
 		\Require $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
         \Statex \qquad $\LTB$ - an injective function that maps all literals to blank nodes
         \Ensure a mapping relation
-
-{\color{red} TODO: this algorithm and the ones that it uses need to be changed to support bnodes in addition to IRIs (as identifier for triples maps, for the various term maps, etc.)}
+{\color{red} TODO: I think we can get rid of the use of the rooted subgraph (Definition~\ref{def:rooted_subgraph}; earlier the "$\triplesMapIRI$-specific triples map graph $\triplesMapGraph{TM}{\triplesMapIRI}$") in this algorithm. Almost all cases in which the algorithm checks for a triple in this (sub)graph, the triple has a specific subject IRI/bnode that makes the check unambiguous. The only case in which we don't have that is the one about the graph map. Is it possible to change that such that it also uses a specific subject IRI/bnode?}
 		\State $\omega_\mathsf{spog} \gets$ initially empty algebraic expression
 
-		\ForAll{IRIs $\triplesMapIRI \in \symAllIRIs$ for which there is a triple $(\triplesMapIRI, \texttt{rdf:type}, \texttt{rr:TriplesMap}) \in \symRMLGraph$}
-			\State $\symRMLGraph_{\triplesMapIRI} \gets$ the $\triplesMapIRI$-rooted subgraph of $\symRMLGraph$ \Comment{Definition~\ref{def:rooted_subgraph}}
+		\ForAll{$\triplesMapIRI_\mathsf{tm}\! \in \symAllIRIs \cup \symAllBNodes$ for which there is a triple $(\triplesMapIRI_\mathsf{tm}, \ttlSmaller{rdf:type}, \ttlSmaller{rr:TriplesMap}) \in \symRMLGraph$}
+
+			\State $\symRMLGraph_\mathsf{tm} \gets$ the $\triplesMapIRI_\mathsf{tm}$-rooted subgraph of $\symRMLGraph$ \Comment{Definition~\ref{def:rooted_subgraph}}
 
 			\State  $\mathit{src} \gets \fctInitSrc{o}$,
 				%where $o \in \symAllIRIs$ such that
 				for
-			$(\triplesMapIRI,\texttt{rr:logicalSource},o) \in \symRMLGraph_{\triplesMapIRI}$
+			$(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:logicalSource},o) \in \symRMLGraph_\mathsf{tm}$
 			\Comment Definition~\ref{def:init_data_source}
 
-			\State  $(\queryExpr,\symAttrQueryMap) \gets$ \textsc{TranslateSourceOperator}($\triplesMapIRI,\symRMLGraph$)
+			\State  $(\queryExpr,\symAttrQueryMap) \gets$ \textsc{TranslateSourceOperator}($\triplesMapIRI_\mathsf{tm},\symRMLGraph$)
 			\Comment{Algorithm~\ref{alg:rml_source_op}}
 
 			\State  $\omega \gets \sourceOp{\mathit{src}}{\queryExpr}{\symAttrQueryMap}$
 
-			\State $u_\textsf{sm} \gets o$, where $o \in \symAllIRIs$ such that $(\triplesMapIRI,\texttt{rr:subjectMap},o) \in \symRMLGraph_{\triplesMapIRI}$
+			\State $u_\textsf{sm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph_\mathsf{tm}$
 
 			\State $\omega \gets \extOpAttr{\subjAttr\!}(\omega)$, where $\extExpr \!=\! \textsc{CreateExtExpr}(u_\textsf{sm}, \symRMLGraph, \LTB, \symAttrQueryMap)$
 			\Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
 
-			\State $u_\textsf{pm} \gets o$, where $o \in \symAllIRIs$ such that $(\triplesMapIRI,\texttt{rr:predicateMap},o) \in \symRMLGraph_{\triplesMapIRI}$
+			\State $u_\textsf{pm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateMap},o) \in \symRMLGraph_\mathsf{tm}$
 
 			\State $\omega \gets \extOpAttr{\predAttr\!}(\omega)$, where $\extExpr \!=\! \textsc{CreateExtExpr}(u_\textsf{pm}, \symRMLGraph, \LTB, \symAttrQueryMap)$
 			\Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
 
-			\State $u_\mathsf{om} \gets o$, where $o \in \symAllIRIs$ such that $(\triplesMapIRI,\texttt{rr:objectMap},o) \in \symRMLGraph_{\triplesMapIRI}$
+			\State $u_\mathsf{om} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:objectMap},o) \in \symRMLGraph_\mathsf{tm}$
 
-			\If{there is a $u_\mathsf{ptm} \in \symAllIRIs$ such that $(u_\mathsf{om},\texttt{rr:parentTriplesMap},u_\mathsf{ptm}) \in \symRMLGraph_{\triplesMapIRI}$}
+			\If{there is a $u_\mathsf{ptm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{om},\ttlSmaller{rr:parentTriplesMap},u_\mathsf{ptm}) \in \symRMLGraph_\mathsf{tm}$}
 
-				\State  $\mathit{src}_\mathsf{ptm} \gets \fctInitSrc{o}$, for $(u_\mathsf{ptm},\texttt{rr:logicalSource},o) \in \triplesMapGraph{TM}{u_\mathsf{ptm}}$
+				\State  $\mathit{src}_\mathsf{ptm} \gets \fctInitSrc{o}$, for $(u_\mathsf{ptm},\ttlSmaller{rr:logicalSource},o) \in \triplesMapGraph{TM}{u_\mathsf{ptm}}$
 				%\Comment Definition~\ref{def:init_data_source}
 
 				\State  $(\queryExpr_\mathsf{ptm},\symAttrQueryMap_\mathsf{ptm}) \gets $ \textsc{TranslateSourceOperator}($u_\mathsf{ptm},\symRMLGraph$)
@@ -437,30 +442,30 @@ normalized RML document.
 				\State  $\omega_\mathsf{ptm} \gets \sourceOp{\mathit{src}_\mathsf{ptm}}{\queryExpr_\mathsf{ptm}}{\symAttrQueryMap_\mathsf{ptm}}$
 
 				\State $\symJoinAttrPairs \gets \emptyset$
-				\ForAll{IRIs $u_\mathsf{jc} \in \symAllIRIs$ for which
+				\ForAll{$u_\mathsf{jc} \in \symAllIRIs \cup \symAllBNodes$ for which
 					%there is a triple
-				$(u_\mathsf{om},\texttt{rr:joinCondition},u_\mathsf{jc}) \in \symRMLGraph_{\triplesMapIRI}$}
+				$(u_\mathsf{om},\ttlSmaller{rr:joinCondition},u_\mathsf{jc}) \in \symRMLGraph_\mathsf{tm}$}
 
-					\State  $\attr \gets \symAttrQueryMap^{-1}(\lex)$, where $(u_\mathsf{jc},\texttt{rr:child},o) \in \symRMLGraph_{\triplesMapIRI}$ with $o = (\lex,\dt) \in \symAllLiterals$
+					\State  $\attr \gets \symAttrQueryMap^{-1}(\lex)$, where $(u_\mathsf{jc},\ttlSmaller{rr:child},o) \in \symRMLGraph_\mathsf{tm}$ with $o = (\lex,\dt) \in \symAllLiterals$
 
-					\State  $\attr'\! \gets \symAttrQueryMap^{-1}(\lex)$, where $(u_\mathsf{jc},\texttt{rr:parent},o) \in \symRMLGraph_{\triplesMapIRI}$ with $o = (\lex,\dt) \in \symAllLiterals$
+					\State  $\attr'\! \gets \symAttrQueryMap^{-1}(\lex)$, where $(u_\mathsf{jc},\ttlSmaller{rr:parent},o) \in \symRMLGraph_\mathsf{tm}$ with $o = (\lex,\dt) \in \symAllLiterals$
 
 					\State  $\symJoinAttrPairs \gets \symJoinAttrPairs \cup \{ (\attr, \attr') \}$
 				\EndFor
 
 				\State  $\omega \gets \fctEquiJoinOp{\omega}{\omega_\mathsf{ptm}}$
 
-				\State $u_\mathsf{sptm} \gets o$, where $o \in \symAllIRIs$ such that $(u_\mathsf{ptm},\texttt{rr:subjectMap},o) \in \symRMLGraph$
+				\State $u_\mathsf{sptm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{ptm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph$
 
 				\State  $\omega \gets \extOpAttr{\objAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\mathsf{sptm}, \symRMLGraph, \LTB, \symAttrQueryMap_\mathsf{ptm})$
 			\Else
 				\State  $\omega \gets \extOpAttr{\objAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\textsf{om}, \symRMLGraph, \LTB, \symAttrQueryMap)$
 			\EndIf
 
-			\If{there is $s \in \symAllIRIs$ and $u_\mathsf{gm} \in \symAllIRIs$ such that $(s,\texttt{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph_{\triplesMapIRI}$}
+			\If{there is $s \in \symAllIRIs \cup \symAllBNodes$ and $u_\mathsf{gm} \in \symAllIRIs \cup \symAllBNodes$ such that $(s,\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph_\mathsf{tm}$}
 				\State $\omega \gets \extOpAttr{\graphAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\mathsf{gm}, \symRMLGraph, \LTB, \symAttrQueryMap)$
 			\Else
-				\State $\omega \gets \extOpAttr{\graphAttr\!}(\omega)$, where $\extExpr$ is the IRI \texttt{rr:defaultGraph}
+				\State $\omega \gets \extOpAttr{\graphAttr\!}(\omega)$, where $\extExpr$ is the IRI \ttlSmaller{rr:defaultGraph}
 			\EndIf
 
 			\State $\omega_\mathsf{spog} \gets \fctUnionBig{\omega_\mathsf{spog}}{ \fctProjectOp{ \{\subjAttr,\predAttr,\objAttr,\graphAttr\} }{\omega} }$
@@ -476,6 +481,7 @@ normalized RML document.
 	\begin{algorithmic}[1]
 		\Require  $\symRMLGraph$ an RDF graph of RML document,
 		\Statex  \qquad $\triplesMapIRI$ the subject IRI of a triples map
+{\color{red} TODO: We need to support blank nodes here too (a triples map may be denoted by a blank node)}
 		\Ensure  A set of query expressions
 
 		\State $\symDataAcc \gets \emptyset$ \Comment Initially empty set of query expressions
@@ -501,6 +507,7 @@ normalized RML document.
 	\label{alg:rml_source_op}
 	\begin{algorithmic}[1]
 		\Require $\triplesMapIRI$ subject IRI of a triples map
+{\color{red} TODO: We need to support blank nodes here too (a triples map may be denoted by a blank node)}
 		\Statex \qquad $\symRMLGraph$ an RDF graph of RML document
 		\Ensure A tuple containing query expression and a partial function $\symAttrUniverse  \rightarrow  \symDataAcc$
 		\State $ls_{iri} \gets o$ for a triple $(s,p,o) \in \symRMLGraph$ where $s = \triplesMapIRI$  and $p= \texttt{rml:logicalSource}$
@@ -546,7 +553,8 @@ label={lst:rml_document}, float=ht]
 
 \begin{definition}
     \label{def:init_data_source}
-    Let $ls_{iri}$ be an IRI of an RML logical source. 
+    Let $ls_{iri}$ be an IRI of an RML logical source.
+\todo{We need to support blank nodes here too!}
     We denote $\fctInitSrc{ls_{iri}}$ as a \textbf{data source}, $\dataSourceTuple$, derived 
     from the configurations of the given logical source~$ls_{iri}$.
 \end{definition}

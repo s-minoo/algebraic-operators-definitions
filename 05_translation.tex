@@ -13,7 +13,7 @@ provide a \textbf{well-defined formal semantics} for RML v1.1.2.
 
 \subsection{Translation Preliminaries}%
 \label{sub:translation_preliminaries}
-Before translating an RDF graph of the RML document into our algebraic expression, a
+Before translating an RDF graph of the RML mappings into our algebraic expression, a
 few preparations are required: 
 i)~normalization of the RDF graph,
 ii)~identification of RDF sub-graph to translate algebraic expressions relevant to a specific triples map, and 
@@ -24,7 +24,7 @@ operator creation.
 
 \subsubsection{RML normalization}%
 \label{ssub:rml_normalization}
-First, the RDF graph of the RML document
+First, the RDF graph of RML mappings
 is \emph{normalized} by applying the following sequence of rewriting steps. We have adopted these steps from Rodríguez-Muro and Rezk~\cite{Mariano2015SPARQL2SQL}, with adaptations specific to RML. None of these steps changes the meaning of the defined mapping.
 \begin{enumerate}
 	\item
@@ -276,13 +276,13 @@ and we provide the pseudocode code in Algorithm~\ref{alg:template_function}.
 		\State \Return $\extExpr$
 	\end{algorithmic}
 \end{algorithm}
-Now we have all the ingredients to translate any given RML document to our 
-algebraic expressions. 
+Now we have all the ingredients to translate any given RDF graph of RML 
+mappings to our algebraic expressions. 
 
 \subsection{Translation Algorithms}%
 \label{sub:translation_algorithms}
-We present the pseudocode of the algorithm to translate a normalized RML document 
-to algebraic expressions in Algorithm~\ref{alg:rml2algebra}. 
+We present the pseudocode of the algorithm to translate a normalized RDF graph
+of RML mappings to algebraic expressions in Algorithm~\ref{alg:rml2algebra}. 
 Given an RDF graph of a \emph{normalized} RML document and for each triples map
 in the RDF graph, the algorithm first generates a Source operator 
 following Algorithm~\ref{alg:rml_source_op} where all the query expressions

@@ -72,7 +72,8 @@ the given triples map $\triplesMapIRI$, while
 from all triples map $\triplesMapIRI'$ that refers to $\triplesMapIRI$ for 
 creating join relations. 
 Together, both RDF graph are used to translate relevant algebraic expressions 
-for the mapping described by the triples map $\triplesMapIRI$. 
+for the mapping described by the triples map $\triplesMapIRI$.
+	\todo{After removing the definition of "$\triplesMapIRI$-specific par\-ent-triples-map subgraph of $\symRMLGraph$", all that remains here is Definition~\ref{def:rooted_subgraph}. I propose to move this definition to the part of the description of the algorithms where this notion of a $\triplesMapIRI$-rooted subgraph of $\symRMLGraph$ is used. Then, we can get rid of this whole part here altogether.}
 
 \begin{definition}
 	\label{def:rooted_subgraph}
@@ -80,54 +81,55 @@ for the mapping described by the triples map $\triplesMapIRI$.
 	Let $\symRMLGraph$ be an RDF graph and
 		%$\triplesMapIRI$ be an IRI or a blank node.
 		$\triplesMapIRI \in \symAllIRIs \cup \symAllBNodes$.
-\todo{Min Oo, notice that I have extended this to be not only IRIs but also blank nodes. We need to support blank nodes as potential identifiers for triples maps (as well as for term maps, etc).}
 	The \textbf{$\triplesMapIRI$-rooted subgraph of $\symRMLGraph$}
 	is an RDF graph $\symRMLGraph'\! \subseteq \symRMLGraph$
 	that is defined recursively as follows:
 	\begin{enumerate}
 		\item $\symRMLGraph'$ contains every triple $(s,p,o) \in \symRMLGraph$ for which it holds that $s = \triplesMapIRI$.
 		\item $\symRMLGraph'$ contains every triple $(s,p,o) \in \symRMLGraph$ for which there
-			%exists
-			is
-		a triple $(s'\!,p'\!,o') \in \symRMLGraph'$ such that $s = o'\!$.
+			%exists a
+			%is a
+			%already exists a
+			is already another
+		triple $(s'\!,p'\!,o') \in \symRMLGraph'$ such that $s = o'\!$.
 	\end{enumerate}
 \end{definition}
 
-\begin{definition}
-	\label{def:ptm_subgraph}
-	\normalfont
-\todo{This definition is not needed anymore. There was only one place where it was used (for $T_p$ in Algorithm~\ref{alg:query_extraction}), which I changed to incorporate the relevant parts directly into the formula in the algorithm.}
-	Let $\symRMLGraph$ be an RDF graph and
-		%$\triplesMapIRI$ be an IRI or a blank node.
-		$\triplesMapIRI \in \symAllIRIs \cup \symAllBNodes$.
-	The \textbf{$\triplesMapIRI$-specific par\-ent-triples-map subgraph of $\symRMLGraph$}
-	is
-		%an RDF graph $\symRMLGraph'\! \subseteq \symRMLGraph$ that is defined as
-		the RDF graph
-	$\symRMLGraph'\! = \symRMLGraph_1 \cup \symRMLGraph_2 \cup \symRMLGraph_3$ where
-	\begin{align*}
-		\symRMLGraph_1 = & 
-		\{ (s,p,o) \in \symRMLGraph \,|\, p
-			%\text{ is the IRI \ttl{rr:parentTriplesMap} and }
-			= \ttl{rr:parentTriplesMap} \text{ and }
-		o = \triplesMapIRI \}
-		,
-		\\
-		\symRMLGraph_2 = & 
-		\{ (s,p,o) \in \symRMLGraph \,|\, p
-			%\text{ is the IRI \ttl{rr:joinCondition} and }
-			= \ttl{rr:joinCondition} \text{ and }
-		s = s' \text{ for some } (s'\!,p'\!,o') \in \symRMLGraph_1 \}
-		,
-		\\
-		\symRMLGraph_3 = & 
-		\{ (s,p,o) \in \symRMLGraph \,|\, p
-			%\text{ is the IRI \ttl{rr:parent} and }
-			= \ttl{rr:parent} \text{ and }
-		s = o' \text{ for some } (s'\!,p'\!,o') \in \symRMLGraph_2 \}
-		.
-	\end{align*}
-\end{definition}
+% \begin{definition}
+% 	\label{def:ptm_subgraph}
+% 	\normalfont
+% \todo{This definition is not needed anymore. There was only one place where it was used (for $T_p$ in Algorithm~\ref{alg:query_extraction}), which I changed to incorporate the relevant parts directly into the formula in the algorithm.}
+% 	Let $\symRMLGraph$ be an RDF graph and
+% 		%$\triplesMapIRI$ be an IRI or a blank node.
+% 		$\triplesMapIRI \in \symAllIRIs \cup \symAllBNodes$.
+% 	The \textbf{$\triplesMapIRI$-specific par\-ent-triples-map subgraph of $\symRMLGraph$}
+% 	is
+% 		%an RDF graph $\symRMLGraph'\! \subseteq \symRMLGraph$ that is defined as
+% 		the RDF graph
+% 	$\symRMLGraph'\! = \symRMLGraph_1 \cup \symRMLGraph_2 \cup \symRMLGraph_3$ where
+% 	\begin{align*}
+% 		\symRMLGraph_1 = & 
+% 		\{ (s,p,o) \in \symRMLGraph \,|\, p
+% 			%\text{ is the IRI \ttl{rr:parentTriplesMap} and }
+% 			= \ttl{rr:parentTriplesMap} \text{ and }
+% 		o = \triplesMapIRI \}
+% 		,
+% 		\\
+% 		\symRMLGraph_2 = & 
+% 		\{ (s,p,o) \in \symRMLGraph \,|\, p
+% 			%\text{ is the IRI \ttl{rr:joinCondition} and }
+% 			= \ttl{rr:joinCondition} \text{ and }
+% 		s = s' \text{ for some } (s'\!,p'\!,o') \in \symRMLGraph_1 \}
+% 		,
+% 		\\
+% 		\symRMLGraph_3 = & 
+% 		\{ (s,p,o) \in \symRMLGraph \,|\, p
+% 			%\text{ is the IRI \ttl{rr:parent} and }
+% 			= \ttl{rr:parent} \text{ and }
+% 		s = o' \text{ for some } (s'\!,p'\!,o') \in \symRMLGraph_2 \}
+% 		.
+% 	\end{align*}
+% \end{definition}
 
 
 \subsubsection{Relevant Extension Functions}%
@@ -432,11 +434,6 @@ normalized RML document.
 
 		\EndFor
 		\State $T_\textrm{c} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \text{ and } o \in \symAllLiterals \}$
-
-%%% The following line is replaced by the next one.
-%%% I'm keeping it here for Min Oo to check and compare,
-%%% but then it can be removed.    -Olaf
-%		\State $T_\textrm{p} \gets \{(s,p,o) \in \symRMLGraph_\mathsf{ptm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent} \text{ and } o \in \symAllLiterals \}$, where $\symRMLGraph_\mathsf{ptm}$ is the \par\hspace{20mm} $\triplesMapIRI_\textsf{tm}$-specific parent-triples-map subgraph of $\symRMLGraph$ \Comment{Definition~\ref{def:ptm_subgraph}}
 
 		\State $T_\textrm{p} \gets \{(s,p,o) \in \symRMLGraph \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent}, o \in \symAllLiterals, \text{ and there is an } s'\! \in \symAllIRIs\cup\symAllBNodes \text{ such}$ \par\hfill $\text{that } (s'\!, \ttlSmaller{rr:joinCondition}, s) \in \symRMLGraph \text{ and } (s'\!, \ttlSmaller{rr:parentTriplesMap}, \triplesMapIRI_\textsf{tm}) \in \symRMLGraph
 		\}$

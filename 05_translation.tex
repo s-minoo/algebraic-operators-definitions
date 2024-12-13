@@ -279,37 +279,8 @@ normalized RML document.
 
 \input{algorithms/extract_queries_algo.tex}
 
-\begin{algorithm}[htbp]
-	\caption{\textsc{CreateSrcOpParam}: Creates
-		%the parameters for a source operator to be created for a given triples map.}
-		parameters for a source operator.}
-	\label{alg:rml_source_op}
-	\begin{algorithmic}[1]
-		\Require $\triplesMapIRI_\textsf{tm}$ - IRI or blank node of the triples map
-	            %for which the source operator is to be created
-	            to create the source operator for
-		\Statex \qquad $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
+\input{algorithms/srcopparam_algo.tex}
 
-		\Ensure a tuple $(\dataSource, \queryExpr, \symAttrQueryMap)$
-			%to be used as
-			of
-		parameters for a source operator (as per Definition~\ref{def:source_operator})
-
-		\State $u_\textsf{ls} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\textsf{tm},\ttlSmaller{rml:logicalSource},o) \in \symRMLGraph$
-
-		\State $\dataSource \gets \fctInitSrc{u_\textsf{ls}}$
-		\Comment Definition~\ref{def:init_data_source}
-
-		\State $\queryExpr \gets \lex$, where $o \in \symAllLiterals$ such that $(u_\textsf{ls},\ttlSmaller{rml:iterator},o) \in \symRMLGraph$, with $o = (\lex,\dt)$
-
-		\State $\symAttrQueryMap \gets$ (initially) empty function from attributes to query expressions
-
-		\ForAll{query expressions $\queryExpr'\! \in $ \textsc{ExtractQueries}($\triplesMapIRI_\textsf{tm}, \symRMLGraph$)}\Comment{Algorithm~\ref{alg:query_extraction}}
-			\State $\symAttrQueryMap \gets \symAttrQueryMap \cup \{ a \rightarrow \queryExpr' \}$, where $\attr$ is a fresh attribute from $\symAttrUniverse \setminus \{ \subjAttr, \predAttr, \objAttr, \graphAttr \}$ that has \par \hspace{24mm} not been used before in the whole translation process
-		\EndFor
-		\State \Return $(\dataSource, \queryExpr, \symAttrQueryMap)$
-	\end{algorithmic}
-\end{algorithm}
 
 
 \begin{lstlisting}[language=rdf, caption={Example RML document, with 1 subject

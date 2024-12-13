@@ -158,45 +158,7 @@ The formal definitions of the following extension functions can be found in Appe
 	$\concat$ is a binary extension function that concatenates two string literals. 
 \end{itemize}
 
-\begin{algorithm}[h!tbp]
-	\caption{\textsc{CreateExtExpr}:
-		%Creates an extend expression for an RML term~map.}
-		Creates an extend expression for a term~map.}
-		%Creates extend expressions for term~maps.}
-	\label{alg:rml_termmap_extend_expr}
-	\begin{algorithmic}[1]
-		\Require 
-            $u$ - IRI or blank node of the term map
-	            %for which the extend expression is to be created
-	            to create the extend expression for
-            \Statex \qquad $\symRMLGraph$ - an RDF graph (assumed to describe an RML mapping, incl.\ term map~$u$)
-            \Statex \qquad $\LTB$ - an injective function that maps all literals to blank nodes
-            \Statex \qquad $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions
-		\Ensure an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})
-        \State $\extExpr \gets $ initially empty extend expression
-
-        \If{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$}
-    		\State $\extExpr \gets a$, where $a$ is the attribute in $\fctDom{\symAttrQueryMap}$ such that $\symAttrQueryMap(a) = \lex$
-		\ElsIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:constant}, o)$}
-    		\State $\extExpr \gets o$
-		\ElsIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:template}, o)$
-			%such that
-			s.t.\
-		$o$ is a literal $\literalTuple$}
-            \State  $\extExpr \gets $ \textsc{Template}($\lex, \symAttrQueryMap$)  \Comment Algorithm~\ref{alg:template_function}
-		\EndIf
-\medskip
-        \If{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:BlankNode})$}
-            \State \Return $\fctToBNode{\extExpr}$
-        \ElsIf{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:IRI})$}
-            \State \Return $\fctToIRI{\extExpr}$
-        \ElsIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:datatype}, o)$ such that $o \in \symAllIRIs$}
-            \State \Return $\fctToLiteral{\extExpr, o}$
-        \Else 
-            \State \Return $\fctToLiteral{\extExpr, \ttlSmaller{xsd:string}}$
-		\EndIf
-	\end{algorithmic}
-\end{algorithm}
+\input{algorithms/extend_algo.tex}
 
 In RML, there are three ways to map data to RDF terms using RML term maps; 
 i) \textbf{constant-valued}~\footnote{\url{https://rml.io/specs/rml/\#constant}} term map, 

@@ -217,6 +217,7 @@ a triple $(s,\ttl{rr:template},(\lex,\ttl{xsd:string}))$, we provide a
 definition for the semantics of processing the template string $\lex$ as
 follows. 
 
+{\color{red}
 \begin{definition}
     \label{def:tempSubStrs}
     \normalfont
@@ -244,6 +245,38 @@ follows.
             \end{enumerate}
     \end{enumerate}
 \end{definition}
+}
+
+{\color{blue}
+\begin{definition}
+	\label{def:tempSubStrs}
+	\normalfont
+	For every string $\mathit{tmpl} \in \symAllStrings$,
+	    %(assumed to be an RML \emph{string template}).
+\todo{TODO: mention the term ``RML \emph{string template}'' in the sentences before this definition.}
+	we write $\tempSubStrs(\mathit{tmpl})$ to denote a sequence~$\substrSeq$ of strings that is constructed by the following four steps.
+	\begin{enumerate}
+		\item
+		Partition $\mathit{tmpl}$ into a sequence~$\substrSeq$ of \emph{query substrings} and \emph{normal substrings} in the order in which these substrings appear in $\mathit{tmpl}$ from left to right,~where
+		\begin{itemize}
+			\item a \emph{query substring} is a substring
+				starting with an opening curly brace (i.e., "\{") and ending with a closing curly brace (i.e., "\}"), and
+				%starting and ending with curly braces (i.e., \{ and \}), and
+				%enclosed in curly braces (i.e., \{ and \}), and
+			\item a \emph{normal substring} is any other substring between two query substrings.
+		\end{itemize}
+
+		\item 
+		If $\substrSeq$ is the empty sequence, insert the empty string as a new substring into~$\substrSeq$.
+
+		\item
+		For every two query substrings $q_1$ and $q_2$ that occur directly after one another in $\substrSeq$, insert the empty string as a new substring between $q_1$ and $q_2$ in $\substrSeq$.
+
+		\item
+		If the first element in $\substrSeq$ is a query substring $q$, insert the empty string as a new substring before $q$ in $\substrSeq$. Similarly, if the last element in $\substrSeq$ is a query substring $q'\!$, insert the empty string as a new substring after $q'$ in $\substrSeq$.
+	\end{enumerate}
+\end{definition}
+}
 
 After the aforementioned processing, $\substrSeq$ is an
 alternating sequence of normal substrings and enclosed query substrings

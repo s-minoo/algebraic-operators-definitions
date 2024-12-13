@@ -113,20 +113,19 @@ WHERE{ ?tm rml:logicalSource ?ls;
    to contain one graph map%
  ).},
 label={lst:sparql_graphmap_norm}]
-DELETE{ ?tm a rrTriplesMap; rml:logicalSource ?ls; rr:subjectMap ?sm;
-            rr:predicateObjectMap ?pom.
-    ?sm rr:graphMap ?gm. 
-    ?pom rr:graphMap ?gm2 . }
-INSERT { [] a rr:TriplesMap; rml:logicalSource ?ls; rr:subjectMap ?sm; 
-            rr:predicateObjectMap ?pom.
-         ?sm rr:graphMap ?gm. 
-    [] a rr:TriplesMap; rml:logicalSource ?ls; rr:subjectMap ?sm; 
-       rr:predicateObjectMap ?pom.
-    ?sm rr:graphMap ?gm2 . }
-WHERE { ?tm rml:logicalSource ?ls; rr:subjectMap ?sm;
-            rr:predicateObjectMap ?pom.
-    ?sm rr:graphMap ?gm. 
-    ?pom rr:graphMap ?gm2 . }
+DELETE { ?tm rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom ;
+            a rrTriplesMap .
+         ?sm   rr:graphMap ?gm. 
+         ?pom  rr:graphMap ?gm2 . }
+INSERT { [] rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom ;
+            a rr:TriplesMap .
+         ?sm rr:graphMap ?gm . 
+         [] rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom ;
+            a rr:TriplesMap .
+         ?sm rr:graphMap ?gm2 . }
+WHERE { ?tm rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom .
+        ?sm   rr:graphMap ?gm . 
+        ?pom  rr:graphMap ?gm2 . }
 \end{lstlisting}
     \end{minipage}
 

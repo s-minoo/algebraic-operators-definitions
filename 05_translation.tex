@@ -379,12 +379,10 @@ normalized RML document.
 		\Require $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
         \Statex \qquad $\LTB$ - an injective function that maps all literals to blank nodes
         \Ensure a mapping relation
-{\color{red} TODO: I think we can get rid of the use of the rooted subgraph (Definition~\ref{def:rooted_subgraph}) in this algorithm. Almost all cases in which the algorithm checks for a triple in this (sub)graph, the triple has a specific subject IRI/bnode that makes the check unambiguous. The only case in which we don't have that is the one about the graph map. Is it possible to change that such that it also uses a specific subject IRI/bnode?}
+
 		\State $\omega_\mathsf{spog} \gets$ initially empty algebraic expression
 
 		\ForAll{$\triplesMapIRI_\mathsf{tm}\! \in \symAllIRIs \cup \symAllBNodes$ for which there is a triple $(\triplesMapIRI_\mathsf{tm}, \ttlSmaller{rdf:type}, \ttlSmaller{rr:TriplesMap}) \in \symRMLGraph$}
-
-			\State $\symRMLGraph_\mathsf{tm} \gets$ the $\triplesMapIRI_\mathsf{tm}$-rooted subgraph of $\symRMLGraph$ \Comment{Definition~\ref{def:rooted_subgraph}}
 
 			\State  $\omega \gets \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap}$\!,
 				%where
@@ -392,24 +390,24 @@ normalized RML document.
 			$(\dataSource, \queryExpr,\symAttrQueryMap) \!=\!$ \textsc{CreateSrcOpParam}($\triplesMapIRI_\mathsf{tm},\symRMLGraph$)
 			\Comment{Algorithm~\ref{alg:rml_source_op}}
 
-			\State $u_\textsf{sm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph_\mathsf{tm}$
+			\State $u_\textsf{sm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph$
 
 			\State $\omega \gets \extOpAttr{\subjAttr\!}(\omega)$, where $\extExpr \!=\! \textsc{CreateExtExpr}(u_\textsf{sm}, \symRMLGraph, \LTB, \symAttrQueryMap)$
 			\Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
 
-			\State $u_\textsf{pm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateMap},o) \in \symRMLGraph_\mathsf{tm}$
+			\State $u_\textsf{pm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateMap},o) \in \symRMLGraph$
 
 			\State $\omega \gets \extOpAttr{\predAttr\!}(\omega)$, where $\extExpr \!=\! \textsc{CreateExtExpr}(u_\textsf{pm}, \symRMLGraph, \LTB, \symAttrQueryMap)$
 			\Comment Algorithm~\ref{alg:rml_termmap_extend_expr}
 
-			\State $u_\mathsf{om} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:objectMap},o) \in \symRMLGraph_\mathsf{tm}$
+			\State $u_\mathsf{om} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:objectMap},o) \in \symRMLGraph$
 
-			\If{there is a $u_\mathsf{ptm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{om},\ttlSmaller{rr:parentTriplesMap},u_\mathsf{ptm}) \in \symRMLGraph_\mathsf{tm}$}
+			\If{there is a $u_\mathsf{ptm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{om},\ttlSmaller{rr:parentTriplesMap},u_\mathsf{ptm}) \in \symRMLGraph$}
 
 				\State $\symJoinAttrPairs \gets \emptyset$
 				\ForAll{$u_\mathsf{jc} \in \symAllIRIs \cup \symAllBNodes$ for which
 					%there is a triple
-				$(u_\mathsf{om},\ttlSmaller{rr:joinCondition},u_\mathsf{jc}) \in \symRMLGraph_\mathsf{tm}$}
+				$(u_\mathsf{om},\ttlSmaller{rr:joinCondition},u_\mathsf{jc}) \in \symRMLGraph$}
 
 					\State  $\attr \gets \symAttrQueryMap^{-1}(\lex)$, where $(u_\mathsf{jc},\ttlSmaller{rr:child},o) \in \symRMLGraph_\mathsf{tm}$ with $o = (\lex,\dt) \in \symAllLiterals$
 
@@ -428,11 +426,10 @@ normalized RML document.
 				\State  $\omega \gets \extOpAttr{\objAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\textsf{om}, \symRMLGraph, \LTB, \symAttrQueryMap)$
 			\EndIf
 
-%%% Min Oo, the following lines demonstrate my idea to replace the if-condition in the line afterwards.
-% 			\State $u_\textsf{pom} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateObjectMap},o) \in \symRMLGraph$
-% 			\If{there is $u_\mathsf{gm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\textsf{pom},\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph$ or $(u_\textsf{sm},\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph$}
+			\State $u_\textsf{pom} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateObjectMap},o) \in \symRMLGraph$
 
-			\If{there is $s \in \symAllIRIs \cup \symAllBNodes$ and $u_\mathsf{gm} \in \symAllIRIs \cup \symAllBNodes$ such that $(s,\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph_\mathsf{tm}$}
+			\If{there is a $u_\mathsf{gm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\textsf{pom},\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph$ \par\hspace{44mm} or $(u_\textsf{sm},\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph$}
+
 				\State $\omega \gets \extOpAttr{\graphAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\mathsf{gm}, \symRMLGraph, \LTB, \symAttrQueryMap)$
 			\Else
 				\State $\omega \gets \extOpAttr{\graphAttr\!}(\omega)$, where $\extExpr$ is the IRI \ttlSmaller{rr:defaultGraph}

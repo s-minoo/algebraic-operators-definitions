@@ -217,37 +217,7 @@ a triple $(s,\ttl{rr:template},(\lex,\ttl{xsd:string}))$, we provide a
 definition for the semantics of processing the template string $\lex$ as
 follows. 
 
-{\color{red}
-\begin{definition}
-    \label{def:tempSubStrs}
-    \normalfont
-    Let $v = (\lex, \dt)$ an input literal string such that $\dt$ is \texttt{xsd:string}.  
-    For ease of reading, we call a substring of $\lex$ an \textbf{enclosed query substring} 
-    if it is the substring starting and ending with the curly braces \{ and \} respectively, as defined in 
-    RML specification, 
-    otherwise it is called as \textbf{normal substring}.
-    $\tempSubStrs$ is a unary function which splits $\lex$ into a sequence~$\substrSeq$
-    of substrings of $\lex$ that contains alternating normal substrings and
-    enclosed query substrings in two pass as follows: 
-    \begin{enumerate}
-        \item  An intermediate sequence~$\substrSeq'$ of substrings is generated that 
-            contains substrings that are \textbf{normal} or \textbf{enclosed query}  
-            substrings in the order that these substrings appear in $\lex$ from 
-            left to right. 
-        \item $\substrSeq'$ is further processed as follows to produce $\substrSeq$: 
-            \begin{enumerate}
-                \item If $\substrSeq'$ is empty, a new empty substring is inserted into $\substrSeq'$.
-                \item For every two enclosed query substrings that occur directly after one another in $\substrSeq'$, a new empty substring is inserted into $\substrSeq'$ in between these two enclosed query substrings.
-                \item If the first element in $\substrSeq'$ is an enclosed query substring, 
-                    a new empty substring is inserted into $\substrSeq'$ as the new first substring.
-                \item If the last element in $\substrSeq'$ is an enclosed query substring, 
-                    a new empty substring is appended to the end of $\substrSeq'$.
-            \end{enumerate}
-    \end{enumerate}
-\end{definition}
-}
 
-{\color{blue}
 \begin{definition}
 	\label{def:tempSubStrs}
 	\normalfont
@@ -276,7 +246,6 @@ follows.
 		If the first element in $\substrSeq$ is a query substring $q$, insert the empty string as a new substring before $q$ in $\substrSeq$. Similarly, if the last element in $\substrSeq$ is a query substring $q'\!$, insert the empty string as a new substring after $q'$ in $\substrSeq$.
 	\end{enumerate}
 \end{definition}
-}
 
 After the aforementioned processing, $\substrSeq$ is an
 alternating sequence of normal substrings and enclosed query substrings

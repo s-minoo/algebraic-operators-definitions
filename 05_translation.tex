@@ -395,6 +395,10 @@ normalized RML document.
 				\State  $\omega \gets \extOpAttr{\objAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\textsf{om}, \symRMLGraph, \LTB, \symAttrQueryMap)$
 			\EndIf
 
+%%% Min Oo, the following lines demonstrate my idea to replace the if-condition in the line afterwards.
+% 			\State $u_\textsf{pom} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateObjectMap},o) \in \symRMLGraph$
+% 			\If{there is $u_\mathsf{gm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\textsf{pom},\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph$ or $(u_\textsf{sm},\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph$}
+
 			\If{there is $s \in \symAllIRIs \cup \symAllBNodes$ and $u_\mathsf{gm} \in \symAllIRIs \cup \symAllBNodes$ such that $(s,\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph_\mathsf{tm}$}
 				\State $\omega \gets \extOpAttr{\graphAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\mathsf{gm}, \symRMLGraph, \LTB, \symAttrQueryMap)$
 			\Else

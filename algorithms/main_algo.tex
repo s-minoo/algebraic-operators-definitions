@@ -18,17 +18,17 @@
 				%where
 				with
 			$(\dataSource, \queryExpr,\symAttrQueryMap) \!=\!$ \textsc{CreateSrcOpParam}($\triplesMapIRI_\mathsf{tm},\symRMLGraph$)
-			\tcc*{Algorithm~\ref{alg:rml_source_op}} \\ 
+			\tcp*{Algorithm~\ref{alg:rml_source_op}} \\ 
 
 			$u_\textsf{sm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph$ \\
 
 			$\omega \gets \extOpAttr{\subjAttr\!}(\omega)$, where $\extExpr \!=\! \textsc{CreateExtExpr}(u_\textsf{sm}, \symRMLGraph, \LTB, \symAttrQueryMap)$
-            \tcc*{Algorithm~\ref{alg:rml_termmap_extend_expr}} \\ 
+            \tcp*{Algorithm~\ref{alg:rml_termmap_extend_expr}} \\ 
 
 			$u_\textsf{pm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateMap},o) \in \symRMLGraph$ \\
 
 			$\omega \gets \extOpAttr{\predAttr\!}(\omega)$, where $\extExpr \!=\! \textsc{CreateExtExpr}(u_\textsf{pm}, \symRMLGraph, \LTB, \symAttrQueryMap)$
-            \tcc*{Algorithm~\ref{alg:rml_termmap_extend_expr}} \\
+            \tcp*{Algorithm~\ref{alg:rml_termmap_extend_expr}} \\
 
 			$u_\mathsf{om} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:objectMap},o) \in \symRMLGraph$ \\
 
@@ -49,7 +49,7 @@
                 }
 
 				$\omega \gets \fctEquiJoinOpBig{\omega}{ \sourceOp{\dataSource_\mathsf{ptm}}{\queryExpr_\mathsf{ptm}}{\symAttrQueryMap_\mathsf{ptm}} }$, where \par\hspace{15mm} $(\dataSource_\mathsf{ptm}, \queryExpr_\mathsf{ptm},\symAttrQueryMap_\mathsf{ptm}) =$ \textsc{CreateSrcOpParam}($u_\mathsf{ptm},\symRMLGraph$)
-				\tcc*{Algorithm~\ref{alg:rml_source_op}} \\
+				\tcp*{Algorithm~\ref{alg:rml_source_op}} \\
 
 				$u_\mathsf{sptm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{ptm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph$ \\
 

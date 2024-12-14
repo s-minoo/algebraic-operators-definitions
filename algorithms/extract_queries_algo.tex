@@ -12,9 +12,9 @@
 
         \KwResult{a set of query expressions}
 
-		$\symRMLGraph_\mathsf{tm} \gets$ the $\triplesMapIRI_\mathsf{tm}$-rooted subgraph of $\symRMLGraph$ \tcc*{Definition~\ref{def:rooted_subgraph}} \\
+		$\symRMLGraph_\mathsf{tm} \gets$ the $\triplesMapIRI_\mathsf{tm}$-rooted subgraph of $\symRMLGraph$ \tcp*{Definition~\ref{def:rooted_subgraph}} \\
 
-        $Q \gets \emptyset$ \tcc*{Initially empty set of query expressions} \\
+        $Q \gets \emptyset$ \tcp*{Initially empty set of query expressions} \\
 
 		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rml:reference},o) \in \symRMLGraph_\mathsf{tm}$}
         {

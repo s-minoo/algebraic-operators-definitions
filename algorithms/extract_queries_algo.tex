@@ -1,37 +1,41 @@
 \begin{algorithm}[htbp]
+    \SetArgSty{textnormal}
+    \DontPrintSemicolon
 	\caption{\textsc{ExtractQueries}: Extract query expressions from triples maps.}
 	\label{alg:query_extraction}
-	\begin{algorithmic}[1]
-		\Require $\triplesMapIRI_\textsf{tm}$ - IRI or blank node of the triples map
+        \KwData{
+            $\triplesMapIRI_\textsf{tm}$ - IRI or blank node of the triples map
 	            %for which query expressions are to be extracted
-	            to extract query expressions from
-		\Statex \qquad $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
+	            to extract query expressions from \\
+		    $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
+        }
 
-		\Ensure  a set of query expressions
+        \KwResult{a set of query expressions}
 
-		\State $\symRMLGraph_\mathsf{tm} \gets$ the $\triplesMapIRI_\mathsf{tm}$-rooted subgraph of $\symRMLGraph$ \Comment{Definition~\ref{def:rooted_subgraph}}
+		$\symRMLGraph_\mathsf{tm} \gets$ the $\triplesMapIRI_\mathsf{tm}$-rooted subgraph of $\symRMLGraph$ \tcc*{Definition~\ref{def:rooted_subgraph}} \\
 
-		\State $Q \gets \emptyset$ \Comment Initially empty set of query expressions
+        $Q \gets \emptyset$ \tcc*{Initially empty set of query expressions} \\
 
 		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rml:reference},o) \in \symRMLGraph_\mathsf{tm}$}
-		    \State $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$
-		\EndFor
+        {
+		    $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$
+        }
 		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rr:template}, o) \in \symRMLGraph_\mathsf{tm}$}
+        {
 			\State $Q \gets Q \cup Q'\!$, where $o = (\lex,\dt)$ and $Q'$
 				is the set of
 				%contains
-			all substrings of $\lex$ that \par\hspace{16mm} are enclosed by "\{" and "\}"
+			all substrings of $\lex$ that are enclosed by "\{" and "\}"
+        }
+		
+		$T_\textrm{c} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \text{ and } o \in \symAllLiterals \}$ \\
 
-		\EndFor
-		\State $T_\textrm{c} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \text{ and } o \in \symAllLiterals \}$
+		$T_\textrm{p} \gets \{(s,p,o) \in \symRMLGraph \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent}, o \in \symAllLiterals, \text{ and there is an } s'\! \in \symAllIRIs\cup\symAllBNodes \text{ such}$ $\text{that } (s'\!, \ttlSmaller{rr:joinCondition}, s) \in \symRMLGraph \text{ and } (s'\!, \ttlSmaller{rr:parentTriplesMap}, \triplesMapIRI_\textsf{tm}) \in \symRMLGraph \}$ \\
 
-		\State $T_\textrm{p} \gets \{(s,p,o) \in \symRMLGraph \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent}, o \in \symAllLiterals, \text{ and there is an } s'\! \in \symAllIRIs\cup\symAllBNodes \text{ such}$ \par\hfill $\text{that } (s'\!, \ttlSmaller{rr:joinCondition}, s) \in \symRMLGraph \text{ and } (s'\!, \ttlSmaller{rr:parentTriplesMap}, \triplesMapIRI_\textsf{tm}) \in \symRMLGraph
-		\}$
-
-		\ForAll{$(s,p,o) \in (T_\textrm{c} \cup T_\textrm{p})$}
-		    \State $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$
-		\EndFor
-		\State \Return $Q$
-	\end{algorithmic}
+        \ForAll{$(s,p,o) \in (T_\textrm{c} \cup T_\textrm{p})$}
+        {
+		    $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$
+        }
+        \Return{$Q$}
 \end{algorithm}
 

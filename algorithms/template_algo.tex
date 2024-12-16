@@ -1,30 +1,32 @@
-
 \begin{algorithm}[htbp]
+    \SetArgSty{textnormal}
+    \DontPrintSemicolon
 	\caption{\textsc{Template}:
 		%Creates an extend expression for resolving an IRI template.}
 		%Creates an extend expression to resolve an IRI template.}
 		%Creates extend expressions for resolving IRI templates.}
 		Creates extend expressions to resolve IRI templates.}
 	\label{alg:template_function}
-	\begin{algorithmic}[1]
-        \Require \textit{tmpl} - a string (assumed to be an RML string template)
-        \Statex \qquad $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions
-		\Ensure an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})
-        \State $\substrSeq \gets \fctTempSubStrs{\textit{tmpl}}$ \Comment Definition~\ref{def:tempSubStrs}
-        \State $\extExpr \gets (s_1, \ttlSmaller{xsd:string})$, where $s_1$ is the first element in $\substrSeq$
-        \If{$|\substrSeq| > 1$}
-            \ForAll {$i = 2,\dots,|\substrSeq|$}
-                \State $s_i \gets $
-                    the $i$-th element in $\substrSeq$
+        \KwData{ 
+            \textit{tmpl} - a string (assumed to be an RML string template) \;
+            $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions
+        }
+        \KwResult{an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})}
+        $\substrSeq \gets \fctTempSubStrs{\textit{tmpl}}$ \tcp*[r]{Definition~\ref{def:tempSubStrs}}
+        $\extExpr \gets (s_1, \ttlSmaller{xsd:string})$, where $s_1$ is the first element in $\substrSeq$ \;
+        \If{$|\substrSeq| > 1$}{
+            \ForAll {$i = 2,\dots,|\substrSeq|$}{
+                $s_i \gets $ the $i$-th element in $\substrSeq$ \; 
                 \If{$s_i$ is a string that starts with "\{" and ends with "\}"}
+                {
                     \State $\extExpr \gets \fctConcatBig{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$, where $\queryExpr$ is
 	                    %the substring of
                     $s_i$ without the enclosing "\{" and "\}"
-                \Else
+                }
+                \Else{
                     \State $\extExpr \gets \fctConcatBig{\extExpr}{(s_i, \ttlSmaller{xsd:string})}$
-                \EndIf
-		    \EndFor
-        \EndIf
-		\State \Return $\extExpr$
-	\end{algorithmic}
+                }
+            }
+        }
+        \Return{$\extExpr$}
 \end{algorithm}

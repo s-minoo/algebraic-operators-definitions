@@ -54,7 +54,6 @@ that maps every string to a unique blank node (which shall become relevant later
 is a mapping relation that is obtained by
 	applying
 operators of our algebra and that can be converted into an RDF dataset as per Definition~\ref{def:generated_dataset}.
-	\todo{TODO: extend the output section of the algorithm to say that the schema of the returned relation contains the attributes $\subjAttr$, $\predAttr$, $\objAttr$, and $\graphAttr$}
 
 \smallskip\noindent\textbf{Normalization Phase.}
 To minimize the
@@ -63,9 +62,7 @@ To minimize the
 %
 	%that the algorithm has to consider, it
 	to be considered, the algorithm
-begins
-	\todo{TODO: Begin the algorithm with the following new first line: \\ $\symRMLGraph_\mathsf{NF} \gets$ normalized version of $\symRMLGraph$ (apply the update queries of Appendix~\ref{appdx:queries} to $\symRMLGraph$) \\ ...and then change the rest of Algorithm~\ref{alg:rml2algebra} to use $\symRMLGraph_\mathsf{NF}$ instead of $\symRMLGraph$ (perhaps also the other algorithms?)}
-by converting the given RML mapping into a \emph{normal form} in which i)~no shortcut properties
+begins by converting the given RML mapping into a \emph{normal form} in which i)~no shortcut properties
 	%for class IRIs and for constant-valued term maps
 are used, ii)~%
 	%every referencing object map has

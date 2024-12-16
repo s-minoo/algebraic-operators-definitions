@@ -1,14 +1,15 @@
 \begin{algorithm}[htbp]
     \SetArgSty{textnormal}
     \DontPrintSemicolon
-	\caption{\textsc{Template}:
-		%Creates an extend expression for resolving an IRI template.}
-		%Creates an extend expression to resolve an IRI template.}
-		%Creates extend expressions for resolving IRI templates.}
-		Creates extend expressions to resolve IRI templates.}
+	\caption{\textsc{Template} -
+		%creates an extend expression for resolving an IRI template.}
+		%creates an extend expression to resolve an IRI template.}
+		%creates extend expressions for resolving IRI templates.}
+		creates extend expressions to resolve IRI templates.}
 	\label{alg:template_function}
-        \KwData{ 
+        \KwData{%
             \textit{tmpl} - a string (assumed to be an RML string template) \;
+            \hspace{10mm}
             $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions
         }
         \KwResult{an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})}
@@ -21,7 +22,9 @@
                 {
                     $\extExpr \gets \fctConcatBig{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$, where $\queryExpr$ is
 	                    %the substring of
-                    $s_i$ without the enclosing "\{" and "\}" \;
+                    $s_i$ without
+                    	%the
+                    enclosing "\{" and "\}" \;
                 }
                 \Else{
                     $\extExpr \gets \fctConcatBig{\extExpr}{(s_i, \ttlSmaller{xsd:string})}$ \;

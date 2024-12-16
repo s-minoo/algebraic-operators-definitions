@@ -1,15 +1,23 @@
 \begin{algorithm}[h!tbp]
     \SetArgSty{textnormal}
     \DontPrintSemicolon
-	\caption{\textsc{CreateExtExpr}:
-		%Creates an extend expression for an RML term~map.}
-		Creates an extend expression for a term~map.}
-		%Creates extend expressions for term~maps.}
+	\caption{\textsc{CreateExtExpr} -
+		%creates an extend expression for an RML term~map.}
+		creates an extend expression for a term~map.}
+		%creates extend expressions for term~maps.}
 	\label{alg:rml_termmap_extend_expr}
-        \KwData{
+        \KwData{%
             $u$ - IRI or blank node of the term map to create the extend expression for \;
-            $\symRMLGraph$ - an RDF graph (assumed to describe an RML mapping, incl.\ term map~$u$)\;
-            $\LTB$ - an injective function that maps all literals to blank nodes \;
+            \hspace{10mm}
+            $\symRMLGraph$ - an RDF graph (assumed to describe
+            	%an RML mapping, incl.\ term map~$u$)\;
+            	the term map~$u$)\;
+            \hspace{10mm}
+            $\LTB$ - an injective function
+            	that maps
+            	%mapping
+            every string to a unique blank~node \;
+            \hspace{10mm}
             $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions \;
         }
         \KwResult{an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})}
@@ -23,8 +31,8 @@
     	    $\extExpr \gets o$
         }
 		\ElseIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:template}, o)$
-			%such that
-			s.t.\
+			such that
+			%s.t.\
 		$o$ is a literal $\literalTuple$}
         {
             $\extExpr \gets $ \textsc{Template}($\lex, \symAttrQueryMap$)  \tcp*[r]{Algorithm~\ref{alg:template_function}}

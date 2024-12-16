@@ -2,14 +2,16 @@
 \begin{algorithm}[htbp]
     \SetArgSty{textnormal}
     \DontPrintSemicolon
-	\caption{\textsc{CreateSrcOpParam}: Creates
+	\caption{\textsc{SrcOpParams} - creates
 		%the parameters for a source operator to be created for a given triples map.}
 		parameters for a source operator.}
 	\label{alg:rml_source_op}
-        \KwData{
+        \KwData{%
             $\triplesMapIRI_\textsf{tm}$ - IRI or blank node of the triples map
 	            %for which the source operator is to be created
-	            to create the source operator for \;
+	            %to create the source operator for \;
+	            to create the operator for \;
+				\hspace{10mm}
 		    $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
         }
 
@@ -29,7 +31,7 @@
 
         \ForAll(\tcp*[f]{Algorithm~\ref{alg:query_extraction}}){query expressions $\queryExpr'\! \in $ \textsc{ExtractQueries}($\triplesMapIRI_\textsf{tm}, \symRMLGraph$)}
         {
-			$\symAttrQueryMap \gets \symAttrQueryMap \cup \{ a \rightarrow \queryExpr' \}$, where $\attr$ is a fresh attribute from $\symAttrUniverse \setminus \{ \subjAttr, \predAttr, \objAttr, \graphAttr \}$ that has not been used before in the whole translation process
+			$\symAttrQueryMap \gets \symAttrQueryMap \cup \{ a \rightarrow \queryExpr' \}$, where $\attr$ is a fresh attribute from $\symAttrUniverse \setminus \{ \subjAttr, \predAttr, \objAttr, \graphAttr \}$ that \hspace*{24mm} has not been used before in the whole translation process
         }
         \Return{$(\dataSource, \queryExpr, \symAttrQueryMap)$}
 \end{algorithm}

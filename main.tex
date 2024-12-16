@@ -1,7 +1,6 @@
 \documentclass[runningheads]{llncs}
 \usepackage[T1]{fontenc}
-\usepackage[linesnumbered,  vlined, ruled]{algorithm2e}
-\usepackage{ amsmath, amssymb}					% packages to get the fonts, symbols used in most math
+\usepackage{amsmath, amssymb}					% packages to get the fonts, symbols used in most math
 %\usepackage{dcolumn}
 \usepackage[english]{babel}
 \usepackage{hyperref}
@@ -27,6 +26,16 @@
 \DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
 \DeclareMathSymbol{\bigtimes}{1}{mathx}{"91}
 
+\usepackage{etoolbox} % For \patchcmd 
+
+\usepackage[linesnumbered, vlined, ruled]{algorithm2e}
+	\SetAlCapHSkip{0px} % to have the caption of the algorithms start at the left margin
+	\SetNlSty{}{}{}     % to avoid bold-font line numbers
+
+\makeatletter
+\patchcmd{\algocf@makecaption@ruled}{\hsize}{\textwidth}{}{} % Caption to stretch to full text width
+\patchcmd{\@algocf@start}{-1.5em}{0em}{}{} % For comments in algorithms to strethc to the right margin
+\makeatother
 
 
 \DeclareRobustCommand{\ojoin}{\rule[0.10ex]{.3em}{.4pt}\llap{\rule[1.40ex]{.3em}{.4pt}}}

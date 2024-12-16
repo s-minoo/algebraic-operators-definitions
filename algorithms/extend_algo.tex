@@ -37,20 +37,27 @@
         {
             $\extExpr \gets $ \textsc{Template}($\lex, \symAttrQueryMap$)  \tcp*[r]{Algorithm~\ref{alg:template_function}}
         }
-		
-        \If{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:BlankNode})$}{
+
+        \medskip
+
+        \lIf{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:BlankNode})$}{%
             \Return{$\fctToBNode{\extExpr}$}
-        }
-        \ElseIf{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:IRI})$}
-        {
+        }%
+        \smallskip
+        \lElseIf{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:IRI})$}
+        {%
              \Return{$\fctToIRI{\extExpr}$}
-         }
-        \ElseIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:datatype}, o)$ such that $o \in \symAllIRIs$}
-        {
-            \Return{$\fctToLiteral{\extExpr, o}$}
-        }
-        \Else 
-        {
+         }%
+        \smallskip
+        \lElseIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:datatype}, o)$
+        	%such that $o \in \symAllIRIs$}
+        	s.t.$o \!\in\! \symAllIRIs$}
+        {%
+            \Return{$\fctToLiteral{\extExpr, o}$}%
+        }%
+        \smallskip
+        \lElse 
+        {%
             \Return{$\fctToLiteral{\extExpr, \ttlSmaller{xsd:string}}$}
         }
 \end{algorithm}

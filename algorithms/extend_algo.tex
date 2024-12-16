@@ -7,13 +7,13 @@
 		%Creates extend expressions for term~maps.}
 	\label{alg:rml_termmap_extend_expr}
         \KwData{
-            $u$ - IRI or blank node of the term map to create the extend expression for \\
-            $\symRMLGraph$ - an RDF graph (assumed to describe an RML mapping, incl.\ term map~$u$)\\
-            $\LTB$ - an injective function that maps all literals to blank nodes \\
-            $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions \\
+            $u$ - IRI or blank node of the term map to create the extend expression for \;
+            $\symRMLGraph$ - an RDF graph (assumed to describe an RML mapping, incl.\ term map~$u$)\;
+            $\LTB$ - an injective function that maps all literals to blank nodes \;
+            $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions \;
         }
         \KwResult{an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})}
-        $\extExpr \gets $ initially empty extend expression \\ 
+        $\extExpr \gets $ initially empty extend expression \; 
         \If{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$}
         {
             $\extExpr \gets a$, where $a$ is the attribute in $\fctDom{\symAttrQueryMap}$ such that $\symAttrQueryMap(a) = \lex$
@@ -27,7 +27,7 @@
 			s.t.\
 		$o$ is a literal $\literalTuple$}
         {
-            $\extExpr \gets $ \textsc{Template}($\lex, \symAttrQueryMap$)  \tcp*{Algorithm~\ref{alg:template_function}}
+            $\extExpr \gets $ \textsc{Template}($\lex, \symAttrQueryMap$)  \tcp*[r]{Algorithm~\ref{alg:template_function}}
         }
 		
         \If{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:BlankNode})$}{

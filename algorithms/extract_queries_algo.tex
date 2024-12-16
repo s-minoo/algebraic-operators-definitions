@@ -6,15 +6,15 @@
         \KwData{
             $\triplesMapIRI_\textsf{tm}$ - IRI or blank node of the triples map
 	            %for which query expressions are to be extracted
-	            to extract query expressions from \\
+	            to extract query expressions from \;
 		    $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
         }
 
         \KwResult{a set of query expressions}
 
-		$\symRMLGraph_\mathsf{tm} \gets$ the $\triplesMapIRI_\mathsf{tm}$-rooted subgraph of $\symRMLGraph$ \tcp*{Definition~\ref{def:rooted_subgraph}} \\
+		$\symRMLGraph_\mathsf{tm} \gets$ the $\triplesMapIRI_\mathsf{tm}$-rooted subgraph of $\symRMLGraph$ \tcp*{Definition~\ref{def:rooted_subgraph}}
 
-        $Q \gets \emptyset$ \tcp*{Initially empty set of query expressions} \\
+        $Q \gets \emptyset$ \tcp*{Initially empty set of query expressions}
 
 		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rml:reference},o) \in \symRMLGraph_\mathsf{tm}$}
         {
@@ -28,9 +28,9 @@
 			all substrings of $\lex$ that are enclosed by "\{" and "\}"
         }
 		
-		$T_\textrm{c} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \text{ and } o \in \symAllLiterals \}$ \\
+		$T_\textrm{c} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \text{ and } o \in \symAllLiterals \}$ \;
 
-		$T_\textrm{p} \gets \{(s,p,o) \in \symRMLGraph \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent}, o \in \symAllLiterals, \text{ and there is an } s'\! \in \symAllIRIs\cup\symAllBNodes \text{ such}$ $\text{that } (s'\!, \ttlSmaller{rr:joinCondition}, s) \in \symRMLGraph \text{ and } (s'\!, \ttlSmaller{rr:parentTriplesMap}, \triplesMapIRI_\textsf{tm}) \in \symRMLGraph \}$ \\
+		$T_\textrm{p} \gets \{(s,p,o) \in \symRMLGraph \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent}, o \in \symAllLiterals, \text{ and there is an } s'\! \in \symAllIRIs\cup\symAllBNodes \text{ such}$ $\text{that } (s'\!, \ttlSmaller{rr:joinCondition}, s) \in \symRMLGraph \text{ and } (s'\!, \ttlSmaller{rr:parentTriplesMap}, \triplesMapIRI_\textsf{tm}) \in \symRMLGraph \}$ \;
 
         \ForAll{$(s,p,o) \in (T_\textrm{c} \cup T_\textrm{p})$}
         {

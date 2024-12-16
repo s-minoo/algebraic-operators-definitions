@@ -1,4 +1,4 @@
-\begin{algorithm}[ht]
+\begin{algorithm}[t!]
     \SetArgSty{textnormal}
     \DontPrintSemicolon
 	\caption{Translates an RML mapping into our mapping algebra.}
@@ -25,12 +25,14 @@
 		\label{line:rml2algebra:main_loop_begin}
 		}
         {
-
 			$\omega \gets \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap}$\!,
 				where
 				%with
-			$(\dataSource, \queryExpr,\symAttrQueryMap) =$ \textsc{SrcOpParams}($\triplesMapIRI_\mathsf{tm},\symRMLGraph_\mathsf{NF}$)%
-            \tcp*{Algorithm~\ref{alg:rml_source_op}}
+			$(\dataSource, \queryExpr) = \textsc{SrcAndRootQuery}(\triplesMapIRI_\mathsf{tm},\symRMLGraph_\mathsf{NF})$
+			\tcp*[f]{Definition~\ref{def:initSrcAndRootQuery}}
+			\hspace*{23mm} and $\symAttrQueryMap = \textsc{ExtractQueries}(\triplesMapIRI_\mathsf{tm},\symRMLGraph_\mathsf{NF})$
+			\tcp*{Algorithm~\ref{alg:query_extraction}}
+			\label{line:rml2algebra:source}
 
 			$u_\textsf{sm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
 
@@ -41,16 +43,16 @@
 			$u_\mathsf{om} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\textsf{pom},\ttlSmaller{rr:objectMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
 
 			$\omega \gets \extOpAttr{\subjAttr\!}(\omega)$,
-				%where
-				with
-			$\extExpr \!=\! \textsc{CreateExtExpr}(u_\textsf{sm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$ 
+				where
+				%with
+			$\extExpr = \textsc{CreateExtExpr}(u_\textsf{sm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$ 
             \tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}} 
 
 			$\omega \gets \extOpAttr{\predAttr\!}(\omega)$,
-				%where
-				with
-			$\extExpr \!=\! \textsc{CreateExtExpr}(u_\textsf{pm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$
-            \tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}} 
+				where
+				%with
+			$\extExpr = \textsc{CreateExtExpr}(u_\textsf{pm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$
+           \;% \tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}} 
 
 			\If{there is a $u_\mathsf{ptm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{om},\ttlSmaller{rr:parentTriplesMap},u_\mathsf{ptm}) \in \symRMLGraph_\mathsf{NF}$}
             {
@@ -68,11 +70,15 @@
 					$\symJoinAttrPairs \gets \symJoinAttrPairs \cup \{ (\attr, \attr') \}$ \;
                 }
 
-				$\omega \!\gets\! \fctEquiJoinOpBig{\omega}{ \sourceOp{\dataSource'\!}{\queryExpr'\!}{\symAttrQueryMap'} }$,
-					%where
-					with
-				$(\dataSource'\!, \queryExpr'\!,\symAttrQueryMap') \!=\! \textsc{SrcOpParams}(u_\mathsf{ptm},\symRMLGraph_\mathsf{NF})$
-               \;% \tcp*[r]{Algorithm~\ref{alg:rml_source_op}} 
+				$\omega \gets\ \fctEquiJoinOpBig{\omega}{ \sourceOp{\dataSource'\!}{\queryExpr'\!}{\symAttrQueryMap'} }$,
+					where
+					%with
+				$\symAttrQueryMap'\! = \textsc{ExtractQueries}(u_\mathsf{ptm},\symRMLGraph_\mathsf{NF})$
+				%\tcp*{Algorithm~\ref{alg:query_extraction}}
+				\hspace*{37mm} and 
+				$(\dataSource'\!, \queryExpr') = \textsc{SrcAndRootQuery}(u_\mathsf{ptm},\symRMLGraph_\mathsf{NF})$
+				%\tcp*[f]{Definition~\ref{def:initSrcAndRootQuery}}
+				\label{line:rml2algebra:sourcePTM}				
 
 				$u_\mathsf{sptm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{ptm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
 

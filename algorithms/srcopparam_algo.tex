@@ -27,11 +27,8 @@
 
 		$\queryExpr \gets \lex$, where $o \in \symAllLiterals$ such that $(u_\textsf{ls},\ttlSmaller{rml:iterator},o) \in \symRMLGraph$, with $o = (\lex,\dt)$ \;
 
-		$\symAttrQueryMap \gets$ (initially) empty function from attributes to query expressions \;
+		$\symAttrQueryMap \gets \textsc{ExtractQueries}(\triplesMapIRI_\textsf{tm}, \symRMLGraph)$
+		\tcp*[r]{Algorithm~\ref{alg:query_extraction}}
 
-        \ForAll(\tcp*[f]{Algorithm~\ref{alg:query_extraction}}){query expressions $\queryExpr'\! \in $ \textsc{ExtractQueries}($\triplesMapIRI_\textsf{tm}, \symRMLGraph$)}
-        {
-			$\symAttrQueryMap \gets \symAttrQueryMap \cup \{ a \rightarrow \queryExpr' \}$, where $\attr$ is a fresh attribute from $\symAttrUniverse \setminus \{ \subjAttr, \predAttr, \objAttr, \graphAttr \}$ that \hspace*{24mm} has not been used before in the whole translation process
-        }
-        \Return{$(\dataSource, \queryExpr, \symAttrQueryMap)$}
+		\Return{$(\dataSource, \queryExpr, \symAttrQueryMap)$}
 \end{algorithm}

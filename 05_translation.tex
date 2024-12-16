@@ -42,7 +42,9 @@ with the concepts~of~RML%
 	~\cite{dimou_ldow_2014,Dimou2024:RMLSpec,IglesiasMolina2023:RMLOntology}%
 .
 
-\smallskip\noindent\textbf{Input and Output.}
+\input{algorithms/main_algo.tex}
+
+\smallskip\noindent\textbf{\itshape Input and Output.}
 Since RML mappings are captured as RDF graphs that use
 	%a dedicated vocabulary (the so-called RML ontology~\cite{IglesiasMolina2023:RMLOntology})%
 	the RML ontology~\cite{IglesiasMolina2023:RMLOntology}%
@@ -55,7 +57,8 @@ is a mapping relation that is obtained by
 	applying
 operators of our algebra and that can be converted into an RDF dataset as per Definition~\ref{def:generated_dataset}.
 
-\smallskip\noindent\textbf{Normalization Phase.}
+
+\smallskip\noindent\textbf{\itshape Normalization Phase.}
 To minimize the
 	%cases and variations of RML
 	variations of RML descriptions
@@ -109,7 +112,7 @@ Appendix~\ref{appdx:queries} captures them formally in terms of update~queries. 
 
 
 % \smallskip
-\noindent\textbf{Main Loop.}
+\noindent\textbf{\itshape Main Loop.}
 After normalization, the algorithm iterates over all triples maps defined by the (normalized) RML mapping (lines~\ref{line:rml2algebra:main_loop_begin}--\ref{line:rml2algebra:main_loop_end}). For each of them, it
 	%defines a mapping relation based on algebra operators (as described below) 
 	combines algebra operators, as described below, to define a mapping relation that, in the end, has the attributes $\subjAttr$, $\predAttr$, $\objAttr$, and $\graphAttr$.
@@ -118,16 +121,111 @@ These mapping relations are combined using union (line~\ref{line:rml2algebra:uni
 	%that, by applying Definition~\ref{def:generated_dataset}, captures all RDF triples produced by the RML mapping for the logical sources.
 
 
-\smallskip\noindent\textbf{Translation of the Logical Source.}
-TODO ... (the description of Algorithms~\ref{alg:rml_source_op} and~\ref{alg:query_extraction} goes here, as well as Definition~\ref{def:init_data_source}) ...
+\smallskip\noindent\textbf{\itshape Translation of the Logical Source.}
+As the first step for each triples map, the algorithm creates a source operator
+	%based on the logical source defined for the triples map~%
+(line~\ref{line:rml2algebra:source}). The first two parameters for this operator---the data source~$\dataSource$ and the query expression $\queryExpr$ for selecting relevant context objects (cf.\ Definition~\ref{def:source_operator})---depend on the logical source defined for the triples map. Since RML is extensible regarding the types of logical sources,
+	%we cannot give a complete formal definition of this aspect of our translation algorithm. Instead, we
+	we have to
+abstract the creation of these two parameters by the following function.
 
-\smallskip\noindent\textbf{Translation of the Subject Map and the Predicate Map.}
+\begin{definition}
+	\label{def:initSrcAndRootQuery}
+	\normalfont
+	Given an IRI or blank node $\triplesMapIRI_\mathsf{tm}$ (assumed to denote an RML triples map) and an RDF graph~$\symRMLGraph$ (assumed to describe an RML mapping, including
+		%the triples map~%
+	$\triplesMapIRI_\mathsf{tm}$),
+	$\textsc{SrcAndRootQuery}(\triplesMapIRI_\mathsf{tm},\symRMLGraph)$ is a pair $(\dataSource, \queryExpr)$ of a data source $\dataSource = \dataSourceTuple$ with $\sourceType = \sourceTypeTuple$ and a query expression~$\queryExpr \in \symDataAcc$, as extracted from the description of the logical source of $\triplesMapIRI_\mathsf{tm}$~in~$\symRMLGraph$.
+\end{definition}
+
+\counterwithout{lstlisting}{chapter}
+\begin{lstlisting}[%
+	language=rdf,
+	caption={RML mapping with
+		%a single
+		one
+	triples map (written in Turtle, prefix decl.\ omitted).},
+	label={lst:rml_example},
+	float=t%
+]
+ex:tm rml:logicalSource [ rml:source "data.csv";
+                          rml:referenceFormulation ql:CSV ];
+      rr:subjectMap [ rr:template "http://example.com/person_{ID}" ];
+      rr:predicateObjectMap [ rr:predicate rdfs:label;
+                              rr:objectMap [rml:reference "Name"] ].
+\end{lstlisting}
+
+\begin{example}
+	\label{ex:initSrcAndRootQuery}
+		%Consider
+		Given
+	an RDF graph $\symRMLGraph_\mathsf{ex}$ that
+		%describes an RML mapping including
+		contains
+	the
+		%following triples.
+		%\begin{align*}
+		%	& \quad (\ttl{ex:tm}, \, \ttl{rml:logicalSource}, \, \ttl{ex:ls}) \in \symRMLGraph_\mathsf{ex}
+		%	\\
+		%	&(\ttl{ex:ls}, \, \ttl{rml:source}, \, \ttl{"data.csv"}) \in \symRMLGraph_\mathsf{ex}
+		%	\\
+		%	&(\ttl{ex:ls}, \, \ttl{rml:referenceFormulation}, \, \ttl{ql:CSV}) \in \symRMLGraph_\mathsf{ex}
+		%\end{align*}
+		%Then%
+		RML mapping of Listing~\ref{lst:rml_example}%
+	, $\textsc{SrcAndRootQuery}(\ttl{ex:tm},\symRMLGraph_\mathsf{ex}) = (\dataSource_\mathsf{ex}', \varepsilon)$ where $\dataSource_\mathsf{ex}' = (\sourceTypeX{\mathsf{csv}},\bigDataObject_\mathsf{ex}')$ such that $\sourceTypeX{\mathsf{csv}}$ is the source type for CSV-based data sources (cf.\ Example~\ref{ex:source_type_csv}), $\bigDataObject_\mathsf{ex}'$ is the CSV file mentioned in the second triple, and $\varepsilon$ is the empty string.
+\end{example}
+
+The third parameter for the source operator---the
+	partial
+function~$\symAttrQueryMap$
+	that maps attributes to query expressions
+	%from attributes to query expressions
+(cf.\ Definition~\ref{def:source_operator})---is populated by
+	%the function \textsc{ExtractQueries}, defined in Algorithm~\ref{alg:query_extraction}. This function
+	Algorithm~\ref{alg:query_extraction}, which
+extracts the query expressions for the given triples map. We emphasize that this extraction focuses only on a triples-map-specific subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Algorithm~\ref{alg:query_extraction})%
+	%. Formally, we define such subgraphs as follows.
+	, which we define formally~as~follows.
+
+\input{algorithms/extract_queries_algo.tex}
+
+\begin{definition}
+	\label{def:rooted_subgraph}
+	\normalfont
+	Let $\symRMLGraph$ be an RDF graph and
+		%$\triplesMapIRI$ be an IRI or a blank node.
+		$\triplesMapIRI \in \symAllIRIs \cup \symAllBNodes$.
+	The \textbf{$\triplesMapIRI$-rooted subgraph of $\symRMLGraph$}
+	is an RDF graph $\symRMLGraph'\! \subseteq \symRMLGraph$
+	that is defined recursively as follows:
+	\begin{enumerate}
+		\item $\symRMLGraph'$ contains every triple $(s,p,o) \in \symRMLGraph$ for which it holds that $s = \triplesMapIRI$.
+		\item $\symRMLGraph'$ contains every triple $(s,p,o) \in \symRMLGraph$ for which there
+			%exists a
+			%is a
+			%already exists a
+			is already another
+		triple $(s'\!,p'\!,o') \in \symRMLGraph'$ such that $s = o'\!$.
+	\end{enumerate}
+\end{definition}
+
+\begin{example}
+	\label{ex:ExtractQueries}
+	For the RDF graph $\symRMLGraph_\mathsf{ex}$ that contains the RML mapping of Listing~\ref{lst:rml_example},
+	$\textsc{ExtractQueries}(\ttl{ex:tm},\symRMLGraph_\mathsf{ex})$ returns $\symAttrQueryMap = \{ \attr_1 \rightarrow \textsf{\small ID}, \attr_2 \rightarrow \textsf{\small Name} \}$,
+	where $\attr_1$ and $\attr_2$ are arbitrary attributes such that $\attr_1 \neq \attr_2$ and $\attr_1, \attr_2 \notin \{ \subjAttr, \predAttr, \objAttr, \graphAttr \}$.
+\end{example}
+
+
+% \smallskip
+\noindent\textbf{\itshape Translation of the Subject Map and the Predicate Map.}
 TODO ... (the description of Algorithms~\ref{alg:rml_termmap_extend_expr} and~\ref{alg:template_function} goes here, as well as Definition~\ref{def:tempSubStrs}) ...
 
-\smallskip\noindent\textbf{Translation of the Object Map.}
+\smallskip\noindent\textbf{\itshape Translation of the Object Map.}
 TODO ...
 
-\smallskip\noindent\textbf{Translation of the Graph Map.}
+\smallskip\noindent\textbf{\itshape Translation of the Graph Map.}
 TODO ...
 
 \bigskip
@@ -397,11 +495,6 @@ At the end of this algorithm, we have an algebraic expression $\omega$ that
 captures the full semantics of the mapping process described in a given 
 normalized RML document. 
 
-\input{algorithms/main_algo.tex}
-%
-\input{algorithms/extract_queries_algo.tex}
-%
-\input{algorithms/srcopparam_algo.tex}
 
 
 

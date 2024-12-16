@@ -9,7 +9,7 @@
         \KwData{
             $\triplesMapIRI_\textsf{tm}$ - IRI or blank node of the triples map
 	            %for which the source operator is to be created
-	            to create the source operator for \\
+	            to create the source operator for \;
 		    $\symRMLGraph$ - an RDF graph (assumed to contain a \emph{normalized} RML description)
         }
 
@@ -18,16 +18,16 @@
 			of
         parameters for a source operator (as per Definition~\ref{def:source_operator})}
 
-		$u_\textsf{ls} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\textsf{tm},\ttlSmaller{rml:logicalSource},o) \in \symRMLGraph$ \\
+		$u_\textsf{ls} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\textsf{tm},\ttlSmaller{rml:logicalSource},o) \in \symRMLGraph$ \;
 
 		$\dataSource \gets \fctInitSrc{u_\textsf{ls}}$
-        \tcp*{Definition~\ref{def:init_data_source}}
+        \tcp*[r]{Definition~\ref{def:init_data_source}}
 
-		$\queryExpr \gets \lex$, where $o \in \symAllLiterals$ such that $(u_\textsf{ls},\ttlSmaller{rml:iterator},o) \in \symRMLGraph$, with $o = (\lex,\dt)$ \\
+		$\queryExpr \gets \lex$, where $o \in \symAllLiterals$ such that $(u_\textsf{ls},\ttlSmaller{rml:iterator},o) \in \symRMLGraph$, with $o = (\lex,\dt)$ \;
 
-		$\symAttrQueryMap \gets$ (initially) empty function from attributes to query expressions \\
+		$\symAttrQueryMap \gets$ (initially) empty function from attributes to query expressions \;
 
-        \ForAll(\tcp{Algorithm~\ref{alg:query_extraction}}){query expressions $\queryExpr'\! \in $ \textsc{ExtractQueries}($\triplesMapIRI_\textsf{tm}, \symRMLGraph$)}
+        \ForAll(\tcp*[f]{Algorithm~\ref{alg:query_extraction}}){query expressions $\queryExpr'\! \in $ \textsc{ExtractQueries}($\triplesMapIRI_\textsf{tm}, \symRMLGraph$)}
         {
 			$\symAttrQueryMap \gets \symAttrQueryMap \cup \{ a \rightarrow \queryExpr' \}$, where $\attr$ is a fresh attribute from $\symAttrUniverse \setminus \{ \subjAttr, \predAttr, \objAttr, \graphAttr \}$ that has not been used before in the whole translation process
         }

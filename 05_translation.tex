@@ -110,9 +110,7 @@ Appendix~\ref{appdx:queries} captures them formally in terms of update~queries. 
 
 % \smallskip
 \noindent\textbf{Main Loop.}
-After normalization,
-	\todo{TODO in the algorithm: replace the initialization of $\omega_\mathsf{spog}$ to be the empty relation with attributes $\subjAttr$, $\predAttr$, $\objAttr$, and $\graphAttr$}
-the algorithm iterates over all triples maps defined by the (normalized) RML mapping (lines~\ref{line:rml2algebra:main_loop_begin}--\ref{line:rml2algebra:main_loop_end}). For each of them, it
+After normalization, the algorithm iterates over all triples maps defined by the (normalized) RML mapping (lines~\ref{line:rml2algebra:main_loop_begin}--\ref{line:rml2algebra:main_loop_end}). For each of them, it
 	%defines a mapping relation based on algebra operators (as described below) 
 	combines algebra operators, as described below, to define a mapping relation that, in the end, has the attributes $\subjAttr$, $\predAttr$, $\objAttr$, and $\graphAttr$.
 These mapping relations are combined using union (line~\ref{line:rml2algebra:union}), resulting in a mapping relation (line~\ref{line:rml2algebra:return})

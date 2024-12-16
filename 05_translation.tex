@@ -1,5 +1,7 @@
-\section{Expressiveness of Mapping Algebra}%
+\section{Algebra-Based Definition of RML}%
 \label{sec:expressiveness}
+
+{\color{red}
 After establishing the formalism of our mapping algebra in
 Section~\ref{sec:mapping_algebra}, we demonstrate its expressiveness by using
 it to define the semantics of the RML mapping language, specifically version
@@ -10,6 +12,70 @@ generates an algebraic expression that captures the semantics of the mappings
 described in the RML document.
 We demonstrate that our mapping algebra is \textbf{at least as expressive as} RML, and 
 provide a \textbf{well-defined formal semantics} for RML v1.1.2. 
+
+\medskip
+\noindent
+}%
+{\color{blue}%
+This section
+	introduces
+	%defines
+an algorithm to convert mappings defined using the mapping language RML (specifically, version~1.1.2~\cite{Dimou2024:RMLSpec}) into our
+	mapping
+algebra.
+	%By providing this algorithm, we show
+	%With this algorithm, we show
+	This algorithm shows
+that \emph{our algebra is at least as expressive as RML}. Moreover, through this algorithm, in combination with the algebra, we provide
+	a
+	%the first
+\emph{formal definition of the semantics of RML mappings}.
+	%To the best of our knowledge, this is the first work that captures the semantics of RML formally.
+	%Regarding the latter, to the best of our knowledge, the semantics of RML has not been captured formally before.
+%
+	Hereafter, we describe the algorithm step by step, while a complete pseudocode representation is given as Algorithm~\ref{alg:rml2algebra}.
+	%A complete pseudocode representation of the algorithm is given as Algorithm~\ref{alg:rml2algebra}, which we describe in the following, step by step.
+For the description, we assume
+	%the reader is familiar
+	familiarity
+with the concepts~of~RML%
+	~\cite{dimou_ldow_2014,Dimou2024:RMLSpec,IglesiasMolina2023:RMLOntology}%
+.
+
+\medskip\noindent\textbf{Input and Output.}
+Since RML mappings are captured as RDF graphs that use
+	%a dedicated vocabulary (the so-called RML ontology~\cite{IglesiasMolina2023:RMLOntology})%
+	the RML ontology~\cite{IglesiasMolina2023:RMLOntology}%
+, the main input to our algorithm is such an RDF graph. As a second input, we assume an injective function~%
+	$\LTB \!: \symAllStrings \rightarrow \symAllBNodes$
+	%$\LTB$
+that maps every string to a unique blank node (which shall become relevant later). The output
+	%of the algorithm
+is a mapping relation that is obtained by
+	applying
+operators of our algebra and that can be converted into an RDF dataset as per Definition~\ref{def:generated_dataset}.
+
+\medskip\noindent\textbf{Normalization Phase.}
+To minimize the cases and variations of RML that the algorithm has to consider, it begins by converting the given RML description into a normal form. This normal form ...
+Every RML description can be converted into the normal form .. following steps .. informal but queries in appendix
+
+\medskip\noindent\textbf{Main Loop.}
+TODO ...
+
+\medskip\noindent\textbf{Translation of the Logical Source.}
+TODO ... (the description of Algorithms~\ref{alg:rml_source_op} and~\ref{alg:query_extraction} goes here, as well as Definition~\ref{def:init_data_source}) ...
+
+\medskip\noindent\textbf{Translation of the Subject Map and the Predicate Map.}
+TODO ... (the description of Algorithms~\ref{alg:rml_termmap_extend_expr} and~\ref{alg:template_function} goes here, as well as Definition~\ref{def:tempSubStrs}) ...
+
+\medskip\noindent\textbf{Translation of the Object Map.}
+TODO ...
+
+\medskip\noindent\textbf{Translation of the Graph Map.}
+TODO ...
+
+\bigskip
+}
 
 \subsection{Translation Preliminaries}%
 \label{sub:translation_preliminaries}

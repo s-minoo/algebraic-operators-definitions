@@ -34,23 +34,23 @@
 
 			$u_\textsf{sm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
 
+			$u_\textsf{pom} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateObjectMap},o) \in \symRMLGraph_\mathsf{NF}$ \; 
+
+			$u_\textsf{pm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\textsf{pom},\ttlSmaller{rr:predicateMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
+
+			$u_\mathsf{om} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\textsf{pom},\ttlSmaller{rr:objectMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
+
 			$\omega \gets \extOpAttr{\subjAttr\!}(\omega)$,
 				%where
 				with
 			$\extExpr \!=\! \textsc{CreateExtExpr}(u_\textsf{sm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$ 
             \tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}} 
 
-			$u_\textsf{pom} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateObjectMap},o) \in \symRMLGraph_\mathsf{NF}$ \; 
-
-			$u_\textsf{pm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\textsf{pom},\ttlSmaller{rr:predicateMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
-
 			$\omega \gets \extOpAttr{\predAttr\!}(\omega)$,
 				%where
 				with
 			$\extExpr \!=\! \textsc{CreateExtExpr}(u_\textsf{pm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$
             \tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}} 
-
-            $u_\mathsf{om} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\textsf{pom},\ttlSmaller{rr:objectMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
 
 			\If{there is a $u_\mathsf{ptm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{om},\ttlSmaller{rr:parentTriplesMap},u_\mathsf{ptm}) \in \symRMLGraph_\mathsf{NF}$}
             {

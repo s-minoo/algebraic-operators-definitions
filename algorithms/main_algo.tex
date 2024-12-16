@@ -21,7 +21,9 @@
 
 		\ForEach{$\triplesMapIRI_\mathsf{tm}\! \in \symAllIRIs \cup \symAllBNodes$ for which
 			%there is a triple
-		$(\triplesMapIRI_\mathsf{tm}, \ttlSmaller{rdf:type}, \ttlSmaller{rr:TriplesMap}) \in \symRMLGraph_\mathsf{NF}$}
+		$(\triplesMapIRI_\mathsf{tm}, \ttlSmaller{rdf:type}, \ttlSmaller{rr:TriplesMap}) \in \symRMLGraph_\mathsf{NF}$%
+		\label{line:rml2algebra:main_loop_begin}
+		}
         {
 
 			$\omega \gets \sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap}$\!,
@@ -92,6 +94,9 @@
             }
 
 			$\omega_\mathsf{spog} \gets \fctUnionBig{\omega_\mathsf{spog}}{ \fctProjectOp{ \{\subjAttr,\predAttr,\objAttr,\graphAttr\} }{\omega} }$ \;
+			\label{line:rml2algebra:union}
+
+        \label{line:rml2algebra:main_loop_end}
         }
-        \Return{$\omega_\mathsf{spog}$}
+        \Return{$\omega_\mathsf{spog}$} \label{line:rml2algebra:return}
 \end{algorithm}

@@ -16,15 +16,15 @@
         $\extExpr \gets (s_1, \ttlSmaller{xsd:string})$, where $s_1$ is the first element in $\substrSeq$ \;
         \If{$|\substrSeq| > 1$}{
             \ForAll {$i = 2,\dots,|\substrSeq|$}{
-                $s_i \gets $ the $i$-th element in $\substrSeq$ \; 
+                $s_i \gets $ the $i$-th element in $\substrSeq$ \;
                 \If{$s_i$ is a string that starts with "\{" and ends with "\}"}
                 {
-                    \State $\extExpr \gets \fctConcatBig{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$, where $\queryExpr$ is
+                    $\extExpr \gets \fctConcatBig{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$, where $\queryExpr$ is
 	                    %the substring of
-                    $s_i$ without the enclosing "\{" and "\}"
+                    $s_i$ without the enclosing "\{" and "\}" \;
                 }
                 \Else{
-                    \State $\extExpr \gets \fctConcatBig{\extExpr}{(s_i, \ttlSmaller{xsd:string})}$
+                    $\extExpr \gets \fctConcatBig{\extExpr}{(s_i, \ttlSmaller{xsd:string})}$ \;
                 }
             }
         }

@@ -18,14 +18,14 @@
 
 		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rml:reference},o) \in \symRMLGraph_\mathsf{tm}$}
         {
-		    $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$
+		    $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$ \;
         }
 		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rr:template}, o) \in \symRMLGraph_\mathsf{tm}$}
         {
-			\State $Q \gets Q \cup Q'\!$, where $o = (\lex,\dt)$ and $Q'$
+			$Q \gets Q \cup Q'\!$, where $o = (\lex,\dt)$ and $Q'$
 				is the set of
 				%contains
-			all substrings of $\lex$ that are enclosed by "\{" and "\}"
+			all substrings of $\lex$ that are enclosed by "\{" and "\}" \;
         }
 		
 		$T_\textrm{c} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \text{ and } o \in \symAllLiterals \}$ \;
@@ -34,7 +34,7 @@
 
         \ForAll{$(s,p,o) \in (T_\textrm{c} \cup T_\textrm{p})$}
         {
-		    $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$
+		    $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$ \;
         }
         \Return{$Q$}
 \end{algorithm}

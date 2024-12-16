@@ -42,7 +42,7 @@ with the concepts~of~RML%
 	~\cite{dimou_ldow_2014,Dimou2024:RMLSpec,IglesiasMolina2023:RMLOntology}%
 .
 
-\medskip\noindent\textbf{Input and Output.}
+\smallskip\noindent\textbf{Input and Output.}
 Since RML mappings are captured as RDF graphs that use
 	%a dedicated vocabulary (the so-called RML ontology~\cite{IglesiasMolina2023:RMLOntology})%
 	the RML ontology~\cite{IglesiasMolina2023:RMLOntology}%
@@ -54,24 +54,85 @@ that maps every string to a unique blank node (which shall become relevant later
 is a mapping relation that is obtained by
 	applying
 operators of our algebra and that can be converted into an RDF dataset as per Definition~\ref{def:generated_dataset}.
+	\todo{TODO: extend the output section of the algorithm to say that the schema of the returned relation contains the attributes $\subjAttr$, $\predAttr$, $\objAttr$, and $\graphAttr$}
 
-\medskip\noindent\textbf{Normalization Phase.}
-To minimize the cases and variations of RML that the algorithm has to consider, it begins by converting the given RML description into a normal form. This normal form ...
-Every RML description can be converted into the normal form .. following steps .. informal but queries in appendix
+\smallskip\noindent\textbf{Normalization Phase.}
+To minimize the
+	%cases and variations of RML
+	variations of RML descriptions
+%
+	%that the algorithm has to consider, it
+	to be considered, the algorithm
+begins
+	\todo{TODO: Begin the algorithm with the following new first line: \\ $\symRMLGraph_\mathsf{NF} \gets$ normalized version of $\symRMLGraph$ (apply the update queries of Appendix~\ref{appdx:queries} to $\symRMLGraph$) \\ ...and then change the rest of Algorithm~\ref{alg:rml2algebra} to use $\symRMLGraph_\mathsf{NF}$ instead of $\symRMLGraph$ (perhaps also the other algorithms?)}
+by converting the given RML mapping into a \emph{normal form} in which i)~no shortcut properties
+	%for class IRIs and for constant-valued term maps
+are used, ii)~%
+	%every referencing object map has
+	all referencing object maps have
+a join condition, and iii)~every triples map has only a single predicate-object map with a single predicate map, a single object map, and at most one graph map%
+	%~(which may be associated either with the predicate-object map itself or with its object map)%
+.
+Every RML mapping can be converted into this normal form by applying the following sequence of rewriting steps, which we have adopted from Rodríguez-Muro and Rezk~\cite{Mariano2015SPARQL2SQL}, with adaptations specific to RML.
+	%Due to space constraints, we present these steps informally, but
+	While we present these steps informally,
+Appendix~\ref{appdx:queries} captures them formally in terms of update~queries. None of these steps changes the meaning of the defined~mapping.
 
-\medskip\noindent\textbf{Main Loop.}
-TODO ...
+\begin{enumerate}
+	\item
+	\label{item:NormalizationStep:ClassExpansion}
+	Every class IRI definition is expanded into a predicate-object map.
+	%(Listing~\ref{lst:sparql_class_expand})
 
-\medskip\noindent\textbf{Translation of the Logical Source.}
+	\item
+	\label{item:NormalizationStep:ConstantsExpansion}
+	All shortcut properties for constant-valued term maps are expanded.
+	%(Listing~\ref{lst:sparql_shortcut})
+
+	\item
+	\label{item:NormalizationStep:POMDuplication}
+	Predicate-object maps with multiple predicate maps or multiple object maps are duplicated to have a single predicate map and a single object map each.
+	%(Listing~\ref{lst:sparql_deduplication})
+
+	\item
+	\label{item:NormalizationStep:JoinRemoval}
+	Referencing object maps without a join condition are replaced by an object map with the subject IRI of the parent triples map as the reference value.
+	%(Listing~\ref{lst:sparql_selfjoin})
+
+	\item
+	\label{item:NormalizationStep:TMDuplication1}
+	Every triples map with multiple predicate-object maps is duplicated such that each of the resulting triples maps has a single predicate-object map~only.
+	%(Listing~\ref{lst:sparql_tm_singlepom})
+
+	\item
+	\label{item:NormalizationStep:TMDuplication2}
+	Every triples map with multiple graph maps is duplicated such that each of the resulting triples maps has one of these graph maps.
+	%(Listing~\ref{lst:sparql_graphmap_norm})
+\end{enumerate}
+
+
+% \smallskip
+\noindent\textbf{Main Loop.}
+After normalization,
+	\todo{TODO in the algorithm: replace the initialization of $\omega_\mathsf{spog}$ to be the empty relation with attributes $\subjAttr$, $\predAttr$, $\objAttr$, and $\graphAttr$}
+the algorithm iterates over all triples maps defined by the (normalized) RML mapping (lines~\ref{line:rml2algebra:main_loop_begin}--\ref{line:rml2algebra:main_loop_end}). For each of them, it
+	%defines a mapping relation based on algebra operators (as described below) 
+	combines algebra operators, as described below, to define a mapping relation that, in the end, has the attributes $\subjAttr$, $\predAttr$, $\objAttr$, and $\graphAttr$.
+These mapping relations are combined using union (line~\ref{line:rml2algebra:union}), resulting in a mapping relation (line~\ref{line:rml2algebra:return})
+	that captures the complete RDF dataset defined by the given RML mapping.
+	%that, by applying Definition~\ref{def:generated_dataset}, captures all RDF triples produced by the RML mapping for the logical sources.
+
+
+\smallskip\noindent\textbf{Translation of the Logical Source.}
 TODO ... (the description of Algorithms~\ref{alg:rml_source_op} and~\ref{alg:query_extraction} goes here, as well as Definition~\ref{def:init_data_source}) ...
 
-\medskip\noindent\textbf{Translation of the Subject Map and the Predicate Map.}
+\smallskip\noindent\textbf{Translation of the Subject Map and the Predicate Map.}
 TODO ... (the description of Algorithms~\ref{alg:rml_termmap_extend_expr} and~\ref{alg:template_function} goes here, as well as Definition~\ref{def:tempSubStrs}) ...
 
-\medskip\noindent\textbf{Translation of the Object Map.}
+\smallskip\noindent\textbf{Translation of the Object Map.}
 TODO ...
 
-\medskip\noindent\textbf{Translation of the Graph Map.}
+\smallskip\noindent\textbf{Translation of the Graph Map.}
 TODO ...
 
 \bigskip

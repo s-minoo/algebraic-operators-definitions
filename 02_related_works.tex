@@ -36,14 +36,14 @@ formalisms to dedicated mapping languages.
 \paragraph{Formalizations in Dedicated Mapping Languages.}
 R2RML~\cite{Seema2012R2RML} is a dedicated mapping language for R2RML mappings,
 which are RDF graphs for mapping relational databases to RDF KG.
-These mappings are usually presented using Turtle syntax.
-R2RML has been used as the basis for several mapping languages which extend its
+%These mappings are usually presented using Turtle syntax.
+R2RML has served as the basis for several mapping languages that extend its
 scope from relational databases to structured or semi-structured
 data~\cite{VanAssche2022DeclarativeRDFgraph}, such as
 RML~\cite{dimou_ldow_2014}, D2RML~\cite{Chortaras2018D2RML}, and
 xR2RML~\cite{michel2015translation}. 
-Thus, it is important to consider the formalization studies conducted on 
-R2RML which can have impact on the languages in the R2RML family.  
+Thus, it is important to consider the formalization studies on 
+R2RML, as they can impact languages within the R2RML family.
 
 Sequeda et al.~\cite{Sequeda2013R2RML} provide formalization to the semantics
 of R2RML using Datalog.
@@ -57,13 +57,11 @@ developers aiming to implement mapping engines that comply with these
 formalisms due to the lack of control-flow description. 
 In contrast, our approach defines algebraic operators in a clear, and concise
 manner, while also introducing control-flow to make it easier to adopt and implement a working mapping engine.
-\todo{For Olaf: Is it a valid argument to not use Datalog-based formalizations? It seems more 
-intuitive to use algebraic expressions as a reference for mapping engine's semantics when developing one.}
 %D2RML and xR2ML do not provide any formal operational semantics for executing
 %the mapping process described in their respective languages nor were there any
 %studies conducted for formalizing these languages.
 Besides R2RML, a few studies on formalization of RML have been published in 
-recent years~\cite{MinOo2023TowardsAlgebra,Iglesias2022ScalingKnowledgeGraph}
+recent years~\cite{MinOo2023TowardsAlgebra,Iglesias2022ScalingKnowledgeGraph}.
 Iglesias et al.~\cite{Iglesias2022ScalingKnowledgeGraph} provide formal
 semantics to the process of KG generation through Horn clauses. 
 However, their primary focus is on optimizing the KG creation process for
@@ -71,15 +69,14 @@ efficiency, with the formalizations created as a side product to support their
 novel optimization techniques.
 Moreover, it would be interesting to explore the application of their
 formalization to mapping languages beyond RML. 
- 
-An initial study explored the provision of formal semantics for the 
+An initial study provided formal semantics for the 
 mapping process in a language-agnostic manner through \emph{algebraic mapping
 operators}~\cite{MinOo2023TowardsAlgebra}.
-This preliminary work does not cover all aspects of the KG generation process that 
-can be described using a dedicated mapping language like RML.
-Notably, it does not provide semantics for joining multiple data sources. 
+This preliminary work does not cover all aspects of the KG generation process
+that can be described using a dedicated mapping language like RML, such as
+joining multiple data sources. 
 Another limitation of this paper is that its definitions are only
-"semi-formal"; meaning that some definitions are either presented informally or rely on
-concepts that are undefined.
+"semi-formal"; meaning that some definitions are either presented informally or
+rely on concepts that are undefined.
 Thus, there is still a lack of study in providing language-agnostic, complete,
-and well-defined semantics to the mapping of heterogeneous data to KG. 
+and well-defined semantics for mapping heterogeneous data to KG. 

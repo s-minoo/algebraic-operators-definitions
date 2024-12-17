@@ -37,6 +37,15 @@
 \patchcmd{\@algocf@start}{-1.5em}{0em}{}{} % For comments in algorithms to strethc to the right margin
 \makeatother
 
+% pargraph spacing
+\makeatletter
+\renewcommand{\paragraph}{%
+  \@startsection{paragraph}{4}%
+  {\z@}{1.5ex \@plus 1ex \@minus .2ex}{-1em}%
+  {\normalfont\normalsize\bfseries}%
+}
+\makeatother
+
 
 \DeclareRobustCommand{\ojoin}{\rule[0.10ex]{.3em}{.4pt}\llap{\rule[1.40ex]{.3em}{.4pt}}}
 \newcommand{\leftouterjoin}{\mathrel{\ojoin\mkern-6.5mu\Join}}

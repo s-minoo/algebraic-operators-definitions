@@ -11,17 +11,10 @@ such as query languages, to support KG construction.
 In this section, we briefly review existing works on formalizations of 
 declarative mapping languages for KG construction. 
 
-%We do not consider repurposed mapping languages in this work since they 
-%inherit the formalizations of the specifications or query languages on which
-%they are based upon, limiting them to the syntax of the parent languages and not 
-%applicable for formalizing a language-agnostic mapping process.
-
-
 \paragraph{Formalizations in Repurposed Mapping Languages.}
 To the best of our knowledge, only SPARQL-based mapping languages have defined
 formal
-semantics~\cite{lefrancois_eswc_2017,Lopes2011XSPARQL,Bischof:2012:XSPARQL,asprino2023knowledge}
-in the category of repurposed mapping languages.
+semantics~\cite{lefrancois_eswc_2017,Lopes2011XSPARQL,Bischof:2012:XSPARQL,asprino2023knowledge}.
 SPARQL-Anything~\cite{asprino2023knowledge} utilizes a two-step approach. 
 First, the authors formalize the Façade-X
 meta-model~\cite{Daga2021FacadeXOpinionated}, which is used to transform
@@ -29,21 +22,17 @@ heterogeneous data into an intermediate RDF graph describing the structure of
 data with their values.
 Lastly, they use SPARQL CONSTRUCT query on the Façade-X RDF graph for 
 generating the KG, ensuring full compatibility with the formal semantics of SPARQL. 
-SPARQL-Generate~\cite{lefrancois_eswc_2017} extends concepts from SPARQL 1.1 to
-define the language, including modifications that support KG generation from
-heterogeneous data.
+SPARQL-Generate~\cite{lefrancois_eswc_2017} extends SPARQL 1.1 to support mapping
+heterogeneous data to KG, thus, inheriting the formal semantics of SPARQL.
 XSPARQL~\cite{Bischof:2012:XSPARQL} combines the semantics of XQuery and SPARQL
 for mapping between XML and RDF data.
-The authors also extend their work to support mapping relational databases to
-RDF data by utilizing the semantics of relational
-algebra~\cite{Lopes2011XSPARQL}. 
-
+The authors extend their work to support mapping relational databases to RDF
+data by utilizing the semantics of relational algebra~\cite{Lopes2011XSPARQL}. 
 The aforementioned works rely on the semantics of the underlying non-mapping
-languages they build upon. 
-We argue that reliance on the semantics of the underlying non-mapping language
-complicates the application of the proposed formalisms in these works to dedicated
-mapping languages specifically designed for mapping heterogeneous data to KGs. 
-    
+languages. 
+However, we argue that such reliance complicates the application of these
+formalisms to dedicated mapping languages.  
+
 \paragraph{Formalizations in Dedicated Mapping Languages.}
 R2RML~\cite{Seema2012R2RML} is a dedicated mapping language for R2RML mappings,
 which are RDF graphs for mapping relational databases to RDF KG.

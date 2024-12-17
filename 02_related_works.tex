@@ -40,8 +40,8 @@ which are RDF graphs for mapping relational databases to RDF KG.
 R2RML has served as the basis for several mapping languages that extend its
 scope from relational databases to structured or semi-structured
 data~\cite{VanAssche2022DeclarativeRDFgraph}, such as
-RML~\cite{dimou_ldow_2014}, D2RML~\cite{Chortaras2018D2RML}, and
-xR2RML~\cite{michel2015translation}. 
+RML~\cite{dimou_ldow_2014}.
+%, D2RML~\cite{Chortaras2018D2RML}, and xR2RML~\cite{michel2015translation}. 
 Thus, it is important to consider the formalization studies on 
 R2RML, as they can impact languages within the R2RML family.
 
@@ -49,14 +49,15 @@ Sequeda et al.~\cite{Sequeda2013R2RML} provide formalization to the semantics
 of R2RML using Datalog.
 The authors prove that the semantics of R2RML can be captured using 57 distinct
 Datalog rules to generate RDF from relational databases. 
-While this formalization is focused on a single type of input data, namely a 
-relational database, our approach is designed to capture arbitrary types of 
+While this formalization is focused on 
+%a single type of input data, namely a 
+relational databases, our approach is designed to capture arbitrary types of 
 heterogeneous data sources for mapping.
-Furthermore, Datalog-based formalization limits the accessibility for
-developers aiming to implement mapping engines that comply with these
-formalisms due to the lack of control-flow description. 
-In contrast, our approach defines algebraic operators in a clear, and concise
-manner, while also introducing control-flow to make it easier to adopt and implement a working mapping engine.
+Furthermore, Datalog-based formalization adds complexity when implementing
+compliant mapping engines due to the lack of control-flow description. 
+In contrast, our approach clearly defines algebraic operators and
+introduces control-flow, making it easier to adopt and implement a functional
+mapping engine.
 %D2RML and xR2ML do not provide any formal operational semantics for executing
 %the mapping process described in their respective languages nor were there any
 %studies conducted for formalizing these languages.

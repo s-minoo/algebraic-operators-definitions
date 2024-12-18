@@ -377,7 +377,11 @@ and predicate maps before~(line~\ref{line:rml2algebra:extend_for_ordinary_object
 
 
 \smallskip\noindent\textbf{\itshape Translation of the Graph Map.}
-TODO ...
+Finally, if the triples map has a graph map, the algorithm adds an extend operator, with attribute~$\graphAttr$, to create IRIs defined by this graph map (lines~\ref{line:rml2algebra:extend_for_graph_map_begin}--\ref{line:rml2algebra:extend_for_graph_map_end}). If the triples map
+	%does not have a
+	has no
+graph map, an extend operator that assigns $\graphAttr$ to the constant IRI \ttl{rr:defaultGraph} is added~(line~\ref{line:rml2algebra:default_graph}).
+
 
 \bigskip
 }

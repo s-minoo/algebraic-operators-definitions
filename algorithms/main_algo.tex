@@ -99,13 +99,16 @@
 
 
 			\If{there is a $u_\mathsf{gm} \in \symAllIRIs \cup \symAllBNodes$ such that
-            $(u_\textsf{sm},\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph_\mathsf{NF}$ or \hspace*{47.5mm} $(u_\textsf{pom},\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph_\mathsf{NF}$}
+            $(u_\textsf{sm},\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph_\mathsf{NF}$ or \hspace*{47.5mm} $(u_\textsf{pom},\ttlSmaller{rr:graphMap},u_\mathsf{gm}) \in \symRMLGraph_\mathsf{NF}$
+            \label{line:rml2algebra:extend_for_graph_map_begin}
+            }
             {
-
 				$\omega \gets \extOpAttr{\graphAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\mathsf{gm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$ \;
             }
+            \label{line:rml2algebra:extend_for_graph_map_end}
             \Else{
 				$\omega \gets \extOpAttr{\graphAttr\!}(\omega)$, where $\extExpr$ is the IRI \ttlSmaller{rr:defaultGraph} \;
+				\label{line:rml2algebra:default_graph}
             }
 
 			$\omega_\mathsf{spog} \gets \fctUnionBig{\omega_\mathsf{spog}}{ \fctProjectOp{ \{\subjAttr,\predAttr,\objAttr,\graphAttr\} }{\omega} }$ \;

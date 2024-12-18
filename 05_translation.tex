@@ -1,6 +1,6 @@
 \section{Algebra-Based Definition of RML}%
 \label{sec:expressiveness}
-{\color{blue}%
+
 This section
 	introduces
 	%defines
@@ -168,7 +168,23 @@ function~$\symAttrQueryMap$
 (cf.\ Definition~\ref{def:source_operator})---is populated by
 	%the function \textsc{ExtractQueries}, defined in Algorithm~\ref{alg:query_extraction}. This function
 	Algorithm~\ref{alg:query_extraction}, which
-extracts the query expressions for the given triples map. We emphasize that this extraction focuses only on a triples-map-specific subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Algorithm~\ref{alg:query_extraction})%
+extracts the query expressions
+	from the term maps of
+	%for
+the given triples map. In particular, the term maps may use query expressions as references (lines~\ref{line:query_extraction:from_references_begin}--\ref{line:query_extraction:from_references_end} of Algorithm~\ref{alg:query_extraction}), in
+	string
+templates (lines~\ref{line:query_extraction:from_templates_begin}--\ref{line:query_extraction:from_templates_end}%
+	%\ of Algorithm~\ref{alg:query_extraction}%
+), and
+	as child and parent queries of
+	%in
+join conditions (lines~\ref{line:query_extraction:from_joins_begin}--\ref{line:query_extraction:from_joins_end}%
+	%\ of Algorithm~\ref{alg:query_extraction}%
+).
+	To focus only on the term maps of the given triples map, the extraction is restricted to the relevant
+	%To focus only on the relevant term maps, the extraction is restricted to the relevant
+	%We emphasize that this extraction focuses only on a triples-map-specific
+subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Algorithm~\ref{alg:query_extraction})%
 	%. Formally, we define such subgraphs as follows.
 	, which we define formally~as~follows.
 
@@ -201,6 +217,7 @@ extracts the query expressions for the given triples map. We emphasize that this
 	where $\attr_1$ and $\attr_2$ are arbitrary attributes such that $\attr_1 \neq \attr_2$ and $\attr_1, \attr_2 \notin \{ \subjAttr, \predAttr, \objAttr, \graphAttr \}$.
 \end{example}
 
+{\color{blue}%
 
 % \smallskip
 \noindent\textbf{\itshape Translation of the Subject Map and the Predicate Map.}

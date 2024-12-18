@@ -19,19 +19,27 @@
 
         $Q \gets \emptyset$ \tcp*{Initially empty set of query expressions}
 
-		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rml:reference},o) \in \symRMLGraph_\mathsf{tm}$}
+		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rml:reference},o) \in \symRMLGraph_\mathsf{tm}$
+		\label{line:query_extraction:from_references_begin}
+		}
         {
 		    $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$ \;
         }
-		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rr:template}, o) \in \symRMLGraph_\mathsf{tm}$}
+        \label{line:query_extraction:from_references_end}
+
+		\ForAll{$s \in \symAllIRIs \cup \symAllBNodes$ and $o \in \symAllLiterals$ for which there is a triple $(s, \ttlSmaller{rr:template}, o) \in \symRMLGraph_\mathsf{tm}$
+		\label{line:query_extraction:from_templates_begin}
+		}
         {
 			$Q \gets Q \cup Q'\!$, where $o = (\lex,\dt)$ and $Q'$
 				is the set of
 				%contains
 			all substrings of $\lex$ that \hspace*{16mm} are enclosed by "\{" and "\}" \;
         }
+        \label{line:query_extraction:from_templates_end}
 		
 		$T_\textrm{c} \gets \{ (s,p,o) \in \symRMLGraph_\mathsf{tm} \, | \, p \text{ is the IRI } \ttlSmaller{rr:child} \text{ and } o \in \symAllLiterals \}$ \;
+		\label{line:query_extraction:from_joins_begin}
 
 		$T_\textrm{p} \gets \{(s,p,o) \in \symRMLGraph \, | \, p \text{ is the IRI } \ttlSmaller{rr:parent}, o \in \symAllLiterals, \text{ and there is an } s'\! \in \symAllIRIs\cup\symAllBNodes \text{ s.t.}$ \hspace*{26mm} $(s'\!, \ttlSmaller{rr:joinCondition}, s) \!\in\! \symRMLGraph \text{ and } (s'\!, \ttlSmaller{rr:parentTriplesMap}, \triplesMapIRI_\textsf{tm}) \!\in\! \symRMLGraph \}$ \;
 
@@ -39,6 +47,7 @@
         {
 		    $Q \gets Q \cup \{ \lex \}$, where $o = (\lex,\dt)$ \;
         }
+        \label{line:query_extraction:from_joins_end}
 
 		$\symAttrQueryMap \gets$ (initially) empty function from attributes to query expressions \;
 

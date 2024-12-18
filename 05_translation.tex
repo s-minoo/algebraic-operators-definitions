@@ -222,7 +222,6 @@ subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Al
 	where $\attr_1$ and $\attr_2$ are arbitrary attributes such that $\attr_1 \neq \attr_2$ and $\attr_1, \attr_2 \notin \{ \subjAttr, \predAttr, \objAttr, \graphAttr \}$.
 \end{example}
 
-{\color{blue}%
 
 % The source operator constructed for the triples map in this step creates a mapping relation with values obtained via the extracted query expressions (along the lines of Example~\ref{ex:source_operator}). This relation can now be extended by using these values to create the RDF terms defined by the term maps of the triples map.
 % \smallskip
@@ -391,9 +390,7 @@ Finally, if the triples map has a graph map, the algorithm adds an extend operat
 	has no
 graph map, an extend operator that assigns $\graphAttr$ to the constant IRI \ttl{rr:defaultGraph} is added~(line~\ref{line:rml2algebra:default_graph}).
 
-
-\bigskip
-}
+%%% done
 
 \subsection{Translation Preliminaries}%
 \label{sub:translation_preliminaries}

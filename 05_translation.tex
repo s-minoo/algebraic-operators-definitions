@@ -169,6 +169,7 @@ function~$\symAttrQueryMap$
 	%the function \textsc{ExtractQueries}, defined in Algorithm~\ref{alg:query_extraction}. This function
 	Algorithm~\ref{alg:query_extraction}, which
 extracts the query expressions
+{\color{blue}
 	from the term maps of
 	%for
 the given triples map. In particular, the term maps may use query expressions as references (lines~\ref{line:query_extraction:from_references_begin}--\ref{line:query_extraction:from_references_end} of Algorithm~\ref{alg:query_extraction}), in
@@ -181,7 +182,7 @@ templates (lines~\ref{line:query_extraction:from_templates_begin}--\ref{line:que
 join conditions (lines~\ref{line:query_extraction:from_joins_begin}--\ref{line:query_extraction:from_joins_end}%
 	%\ of Algorithm~\ref{alg:query_extraction}%
 ).
-	To focus only on the term maps of the given triples map, the extraction is restricted to the relevant
+	To focus only on the term maps of the given triples map, }the extraction is restricted to the relevant
 	%To focus only on the relevant term maps, the extraction is restricted to the relevant
 	%We emphasize that this extraction focuses only on a triples-map-specific
 subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Algorithm~\ref{alg:query_extraction})%
@@ -218,9 +219,14 @@ subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Al
 \end{example}
 
 {\color{blue}%
+	The source operator created for the triples map in the previous step creates
+	%Given the corresponding parameters, the source operator creates
+a mapping relation with values obtained from the data source based on the queries (along the lines of Example~\ref{ex:source_operator}).
 
 % \smallskip
 \noindent\textbf{\itshape Translation of the Subject Map and the Predicate Map.}
+
+
 TODO ... (the description of Algorithms~\ref{alg:rml_termmap_extend_expr} and~\ref{alg:template_function} goes here, as well as Definition~\ref{def:tempSubStrs}) ...
 
 \smallskip\noindent\textbf{\itshape Translation of the Object Map.}

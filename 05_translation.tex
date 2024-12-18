@@ -212,7 +212,7 @@ subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Al
 			%is a
 			%already exists a
 			is already another
-		triple $(s'\!,p'\!,o') \in \symRMLGraph'$ such that $s = o'\!$.
+		triple $(s'\!,p'\!,o') \in \symRMLGraph'$ such that $s = o'$ and $p'$ is not the IRI \ttl{rr:parentTriplesMap}.
 	\end{enumerate}
 \end{definition}
 
@@ -282,7 +282,9 @@ the corresponding template string. To this end, this string is first split into 
 	\normalfont
 	For every string $\mathit{tmpl} \in \symAllStrings$,
 	    %(assumed to be an RML \emph{string template}).
-	we write $\tempSubStrs(\mathit{tmpl})$ to denote a sequence~$\substrSeq$ of strings that is constructed by the following four steps.
+	we write $\tempSubStrs(\mathit{tmpl})$ to denote a sequence~$\substrSeq$ of strings that is constructed by the following
+		two %four
+	steps.
 	\begin{enumerate}
 		\item
 		Partition $\mathit{tmpl}$ into a sequence~$\substrSeq$ of \emph{query substrings} and \emph{normal substrings} in the order in which these substrings appear in $\mathit{tmpl}$ from left to right,~where
@@ -291,34 +293,42 @@ the corresponding template string. To this end, this string is first split into 
 				starting with an opening curly brace (i.e., "\{") and ending with a closing curly brace (i.e., "\}"), and
 				%starting and ending with curly braces (i.e., \{ and \}), and
 				%enclosed in curly braces (i.e., \{ and \}), and
-			\item a \emph{normal substring} is any other substring between two query substrings.
+			\item a \emph{normal substring} is every substring between two query substrings, as well as
+				%the substring before the first query substring and the substring
+				the one before the first and the one
+				%before the first and
+			after the last query substring.
 		\end{itemize}
 
 		\item 
 		If $\substrSeq$ is the empty sequence, insert the empty string as a new substring into~$\substrSeq$.
 
-		\item
-		For every two query substrings $q_1$ and $q_2$ that occur directly after one another in $\substrSeq$, insert the empty string as a new substring between $q_1$ and $q_2$ in $\substrSeq$.
-
-		\item
-		If the first element in $\substrSeq$ is a query substring $q$, insert the empty string as a new substring before $q$ in $\substrSeq$. Similarly, if the last element in $\substrSeq$ is a query substring $q'\!$, insert the empty string as a new substring after $q'$ in $\substrSeq$.
+% 		\item
+% 		For every two query substrings $q_1$ and $q_2$ that occur directly after one another in $\substrSeq$, insert the empty string as a new substring between $q_1$ and $q_2$ in $\substrSeq$.
+% 
+% 		\item
+% 		If the first element in $\substrSeq$ is a query substring $q$, insert the empty string as a new substring before $q$ in $\substrSeq$. Similarly, if the last element in $\substrSeq$ is a query substring $q'\!$, insert the empty string as a new substring after $q'$ in $\substrSeq$.
 	\end{enumerate}
 \end{definition}
 
-	%By the steps in Definition~\ref{def:tempSubStrs}, the
-	By Definition~\ref{def:tempSubStrs}, the
-	%The
+% 	%By the steps in Definition~\ref{def:tempSubStrs}, the
+% 	By Definition~\ref{def:tempSubStrs}, the
+% 	%The
+% %
+% 	%resulting sequence
+% 	%sequence~$\substrSeq$ that Algorithm~\ref{alg:rml_termmap_extend_expr} uses
+% 	sequence~$\substrSeq$ in Algorithm~\ref{alg:rml_termmap_extend_expr}
+% %
+% 	%is not empty, has an odd number of elements,
+% 	has an odd number of elements
+% and alternates between normal substrings and query substrings, beginning with a normal substring (which may be the empty string).
 %
-	%resulting sequence
-	%sequence~$\substrSeq$ that Algorithm~\ref{alg:rml_termmap_extend_expr} uses
-	sequence~$\substrSeq$ in Algorithm~\ref{alg:rml_termmap_extend_expr}
-%
-	%is not empty, has an odd number of elements,
-	has an odd number of elements
-and alternates between normal substrings and query substrings, beginning with a normal substring (which may be the empty string). The extend expression is then created to concatenate the substrings (lines~\ref{line:rml_termmap_extend_expr:first_substring}--\ref{line:rml_termmap_extend_expr:concatenation_end}), where every query substring "\{$q$\}" is replaced by the attribute~$\attr$ for which
-	%it holds that
+The extend expression is then created to concatenate the
+	resulting
+substrings~(lines~\ref{line:rml_termmap_extend_expr:first_substring}--\ref{line:rml_termmap_extend_expr:concatenation_end}), where every query substring "\{$q$\}" is replaced by the attribute~$\attr$ for which
+	it holds that
 $\symAttrQueryMap(\attr) = q$, because that attribute holds the values that the source operator obtains for the query
-	%expression~%
+	expression~%
 $q$.
 
 \begin{example}

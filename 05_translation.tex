@@ -355,7 +355,26 @@ $q$.
 
 
 \smallskip\noindent\textbf{\itshape Translation of the Object Map.}
-TODO ...
+For object (term) maps, the algorithm also has to consider the case of
+	%so-called \emph{referencing object maps}%
+	referencing object maps%
+~(lines~\ref{line:rml2algebra:join_case_begin}--\ref{line:rml2algebra:join_case_end} in Algorithm~\ref{alg:rml2algebra}), which capture a join with
+	RDF terms defined by the subject map
+	%subjects
+of another triples map. In this case, another source operator needs to be added
+	(for this other triples map)
+and
+	the mapping relation created by that source operator needs
+	%its mapping relation
+be joined with the mapping relation produced before (line~\ref{line:rml2algebra:add_equijoin}). To this end, an equijoin operator is used, for which the join attributes are determined based on the join condition defined for the referencing object map~(lines~\ref{line:rml2algebra:init_join_pairs}--\ref{line:rml2algebra:populate_join_pairs_end}).
+%
+Ordinary object maps are handled
+	%in the same way as
+	like
+subject
+	%maps
+and predicate maps before~(line~\ref{line:rml2algebra:extend_for_ordinary_object}).
+
 
 \smallskip\noindent\textbf{\itshape Translation of the Graph Map.}
 TODO ...

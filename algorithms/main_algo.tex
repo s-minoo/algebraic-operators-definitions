@@ -55,10 +55,15 @@
 			\;% \tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}}			
 			\label{line:rml2algebra:extend_for_predicate}
 
-			\If{there is a $u_\mathsf{ptm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{om},\ttlSmaller{rr:parentTriplesMap},u_\mathsf{ptm}) \in \symRMLGraph_\mathsf{NF}$}
+			\If{%
+				there is a $u_\mathsf{ptm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{om},\ttlSmaller{rr:parentTriplesMap},u_\mathsf{ptm}) \in \symRMLGraph_\mathsf{NF}$
+				\label{line:rml2algebra:join_case_begin}
+			}
             {
 
 				$\symJoinAttrPairs \gets \emptyset$ \;
+				\label{line:rml2algebra:init_join_pairs}
+
 				\ForEach{$u_\mathsf{jc} \in \symAllIRIs \cup \symAllBNodes$ for which
 					%there is a triple
 				$(u_\mathsf{om},\ttlSmaller{rr:joinCondition},u_\mathsf{jc}) \in \symRMLGraph_\mathsf{NF}$}
@@ -70,6 +75,7 @@
 
 					$\symJoinAttrPairs \gets \symJoinAttrPairs \cup \{ (\attr, \attr') \}$ \;
                 }
+                \label{line:rml2algebra:populate_join_pairs_end}
 
 				$\omega \gets\ \fctEquiJoinOpBig{\omega}{ \sourceOp{\dataSource'\!}{\queryExpr'\!}{\symAttrQueryMap'} }$,
 					where
@@ -79,14 +85,16 @@
 				\hspace*{37mm} and 
 				$(\dataSource'\!, \queryExpr') = \textsc{SrcAndRootQuery}(u_\mathsf{ptm},\symRMLGraph_\mathsf{NF})$
 				%\tcp*[f]{Definition~\ref{def:initSrcAndRootQuery}}
-				\label{line:rml2algebra:sourcePTM}				
+				\label{line:rml2algebra:add_equijoin}				
 
 				$u_\mathsf{sptm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{ptm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
 
 				$\omega \gets \extOpAttr{\objAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\mathsf{sptm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap')$ \;
             }
+            \label{line:rml2algebra:join_case_end}
             \Else{
 				$\omega \gets \extOpAttr{\objAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\textsf{om}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$ \;
+				\label{line:rml2algebra:extend_for_ordinary_object}
             }
 
 

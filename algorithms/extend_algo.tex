@@ -1,4 +1,3 @@
-\begin{algorithm}[h!tbp]
     \SetArgSty{textnormal}
     \DontPrintSemicolon
 	\caption{\textsc{CreateExtExpr} -
@@ -21,24 +20,73 @@
             $\symAttrQueryMap$ - an injective partial function that maps attributes to query expressions \;
         }
         \KwResult{an extend expression (as per Definition~\ref{def:ExtendExpressions:Syntax})}
-        $\extExpr \gets $ initially empty extend expression \; 
-        \If{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$}
-        {
-            $\extExpr \gets a$, where $a$ is the attribute in $\fctDom{\symAttrQueryMap}$ such that $\symAttrQueryMap(a) = \lex$
-        }
-		\ElseIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:constant}, o)$}
-        {
-    	    $\extExpr \gets o$
-        }
-		\ElseIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:template}, o)$
-			such that
-			%s.t.\
-		$o$ is a literal $\literalTuple$}
-        {
-            $\extExpr \gets $ \textsc{Template}($\lex, \symAttrQueryMap$)  \tcp*[r]{Algorithm~\ref{alg:template_function}}
-        }
 
-        \medskip
+		\lIf{%
+			$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:constant}, o)$
+			\label{line:rml_termmap_extend_expr:from_constant_begin}
+		}
+		{
+			\Return{$o$}
+		}
+		\label{line:rml_termmap_extend_expr:from_constant_end}
+
+		\smallskip
+
+		$\extExpr \gets $ initially empty extend expression \; 
+
+		\If{%
+			$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:reference}, o)$ such that $o$ is a literal $\literalTuple$
+			\label{line:rml_termmap_extend_expr:from_reference_begin}
+		}
+		{
+			$\extExpr \gets a$, where $a$ is the attribute in $\fctDom{\symAttrQueryMap}$ such that $\symAttrQueryMap(a) = \lex$
+		}
+     \label{line:rml_termmap_extend_expr:from_reference_end}
+     
+		\ElseIf{
+			$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:template}, o)$
+				such that
+				%s.t.\
+			$o$ is a literal $\literalTuple$
+			\label{line:rml_termmap_extend_expr:from_template_begin}
+		}
+		{
+			$\substrSeq \gets \fctTempSubStrs{\lex}$ \tcp*[r]{Definition~\ref{def:tempSubStrs}}
+			\label{line:rml_termmap_extend_expr:split_template}
+			
+			$\extExpr \gets (s_1, \ttlSmaller{xsd:string})$, where $s_1$ is the first element in $\substrSeq$ \;\label{line:rml_termmap_extend_expr:first_substring}
+
+			\ForEach
+			(\tcp*[f]{Iterate
+				based on the order
+				%using order
+			in~%
+				%$\substrSeq'$})
+				$\substrSeq$})
+			{$s_i$ in
+				%$\substrSeq'\!$, where $\substrSeq'$ is
+			$\substrSeq$ without the first element
+			\label{line:rml_termmap_extend_expr:concatenation_begin}
+			}
+			{
+				\If{$s_i$ is a string that starts with "\{" and ends with "\}"}
+				{
+					$\extExpr \gets \fctConcatBig{\extExpr}{\symAttrQueryMap^{-1}(\queryExpr)}$, where $\queryExpr$ is
+						%the substring of
+					$s_i$ without
+						%the
+					enclosing "\{" and "\}" \;
+				}
+				\ElseIf{$s_i$ is not the empty string}{
+					$\extExpr \gets \fctConcatBig{\extExpr}{(s_i, \ttlSmaller{xsd:string})}$ \;
+				}
+			}
+			\label{line:rml_termmap_extend_expr:concatenation_end}
+
+		}
+		\label{line:rml_termmap_extend_expr:from_template_end}
+
+		\smallskip
 
         \lIf{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:BlankNode})$}{%
             \Return{$\fctToBNode{\extExpr}$}
@@ -60,4 +108,3 @@
         {%
             \Return{$\fctToLiteral{\extExpr, \ttlSmaller{xsd:string}}$}
         }
-\end{algorithm}

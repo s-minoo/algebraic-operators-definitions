@@ -1,4 +1,3 @@
-\begin{algorithm}[t!]
     \SetArgSty{textnormal}
     \DontPrintSemicolon
 	\caption{Translates an RML mapping into our mapping algebra.}
@@ -45,14 +44,16 @@
 			$\omega \gets \extOpAttr{\subjAttr\!}(\omega)$,
 				where
 				%with
-			$\extExpr = \textsc{CreateExtExpr}(u_\textsf{sm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$ 
-            \tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}} 
+			$\extExpr = \textsc{CreateExtExpr}(u_\textsf{sm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$
+			\tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}}
+			\label{line:rml2algebra:extend_for_subject}
 
 			$\omega \gets \extOpAttr{\predAttr\!}(\omega)$,
 				where
 				%with
 			$\extExpr = \textsc{CreateExtExpr}(u_\textsf{pm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$
-           \;% \tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}} 
+			\;% \tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}}			
+			\label{line:rml2algebra:extend_for_predicate}
 
 			\If{there is a $u_\mathsf{ptm} \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{om},\ttlSmaller{rr:parentTriplesMap},u_\mathsf{ptm}) \in \symRMLGraph_\mathsf{NF}$}
             {
@@ -105,4 +106,3 @@
         \label{line:rml2algebra:main_loop_end}
         }
         \Return{$\omega_\mathsf{spog}$} \label{line:rml2algebra:return}
-\end{algorithm}

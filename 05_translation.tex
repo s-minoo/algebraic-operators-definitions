@@ -26,7 +26,9 @@ with the concepts~of~RML%
 	~\cite{dimou_ldow_2014,Dimou2024:RMLSpec,IglesiasMolina2023:RMLOntology}%
 .
 
+\begin{algorithm}[t!]
 \input{algorithms/main_algo.tex}
+\end{algorithm}
 
 \smallskip\noindent\textbf{\itshape Input and Output.}
 Since RML mappings are captured as RDF graphs that use
@@ -134,7 +136,8 @@ abstract the creation of these two parameters by the following function.
 ]
 ex:tm rml:logicalSource [ rml:source "data.csv";
                           rml:referenceFormulation ql:CSV ];
-      rr:subjectMap [ rr:template "http://example.com/person_{ID}" ];
+      rr:subjectMap [ rr:template "http://example.com/person_{ID}";
+                      rr:termType rr:IRI ];
       rr:predicateObjectMap [ rr:predicate rdfs:label;
                               rr:objectMap [rml:reference "Name"] ].
 \end{lstlisting}
@@ -189,7 +192,9 @@ subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Al
 	%. Formally, we define such subgraphs as follows.
 	, which we define formally~as~follows.
 
+\begin{algorithm}[t]
 \input{algorithms/extract_queries_algo.tex}
+\end{algorithm}
 
 \begin{definition}
 	\label{def:rooted_subgraph}
@@ -219,15 +224,135 @@ subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Al
 \end{example}
 
 {\color{blue}%
-	The source operator created for the triples map in the previous step creates
-	%Given the corresponding parameters, the source operator creates
-a mapping relation with values obtained from the data source based on the queries (along the lines of Example~\ref{ex:source_operator}).
 
+% The source operator constructed for the triples map in this step creates a mapping relation with values obtained via the extracted query expressions (along the lines of Example~\ref{ex:source_operator}). This relation can now be extended by using these values to create the RDF terms defined by the term maps of the triples map.
 % \smallskip
 \noindent\textbf{\itshape Translation of the Subject Map and the Predicate Map.}
+The source operator constructed
+	%for the triples map
+in the previous step creates a mapping relation with values obtained via the extracted query expressions (along the lines of Example~\ref{ex:source_operator}).
+	This relation can now be extended by using these values
+	%These values can then be used
+to create RDF terms as defined by the term maps of the triples map. To this end, for the
+	subject~(term) map and the predicate~(term)
+	%subject map and the predicate
+map, the algorithm adds an extend operator, respectively~(lines~\ref{line:rml2algebra:extend_for_subject}--\ref{line:rml2algebra:extend_for_predicate} in Algorithm~\ref{alg:rml2algebra}). The construction of the extend expressions of these operators
+	(see Definitions~\ref{def:ExtendExpressions:Syntax} and~\ref{def:extend_operator})
+is captured in Algorithm~\ref{alg:rml_termmap_extend_expr} and uses the following extension functions, which are defined formally in Appendix~\ref{appdx:functions}.
+\begin{itemize}
+	\item
+	$\toIRI$
+		%is a unary extension function that
+	converts string literals representing IRIs into these IRIs. 
 
+	\item
+	$\toBNode$%
+		%\ is a unary extension function for which we assume a function $\LTB: \symAllStrings \rightarrow \symAllBNodes$ that is injective. Then, $\toBNode$ uses $\LTB$ to convert string literals into blank nodes.
+		%\ converts string literals into blank nodes, for which we assume the aforementioned injective function $\LTB: \symAllStrings \rightarrow \symAllBNodes$ (see the discussion of the input of Algorithm~\ref{alg:rml2algebra}).
+		%, parameterized by the aforementioned injective function $\LTB$ (see the discussion of the input of Algorithm~\ref{alg:rml2algebra}), converts string literals into blank nodes.
+		, parameterized by the aforementioned function $\LTB$ (see the discussion of the input of Algorithm~\ref{alg:rml2algebra}), converts string literals into blank~nodes.
 
-TODO ... (the description of Algorithms~\ref{alg:rml_termmap_extend_expr} and~\ref{alg:template_function} goes here, as well as Definition~\ref{def:tempSubStrs}) ...
+	\item
+	$\toLiteral$ is a binary extension function that converts string literals into literals with a datatype IRI that is given as the second argument.
+
+	\item
+	$\concat$ is a binary extension function that concatenates two string literals. 
+\end{itemize}
+
+\begin{algorithm}[t]
+\input{algorithms/extend_algo.tex}
+\end{algorithm}
+
+The extend expression
+	%that Algorithm~\ref{alg:rml_termmap_extend_expr} creates for a given term map depends on whether the
+	%that Algorithm~\ref{alg:rml_termmap_extend_expr} creates depends on whether the given
+	created by Algorithm~\ref{alg:rml_termmap_extend_expr} depends on whether the given
+term map is constant-val\-ued
+	%(lines~\ref{line:rml_termmap_extend_expr:from_constant_begin}--\ref{line:rml_termmap_extend_expr:from_constant_end}%
+	(line~\ref{line:rml_termmap_extend_expr:from_constant_begin}%
+%
+	%\ of Algorithm~\ref{alg:rml_termmap_extend_expr}%
+), reference-val\-ued (lines~\ref{line:rml_termmap_extend_expr:from_reference_begin}--\ref{line:rml_termmap_extend_expr:from_reference_end}), or template-val\-ued (lines~\ref{line:rml_termmap_extend_expr:from_template_begin}--\ref{line:rml_termmap_extend_expr:from_template_end}). In the latter case, the extend expression needs to
+	%be created such that its evaluation instantiates
+	be created such that it instantiates
+	%instantiate
+the corresponding template string. To this end, this string is first split into a sequence of substrings (line~\ref{line:rml_termmap_extend_expr:split_template}), defined as follows.
+\begin{definition}
+	\label{def:tempSubStrs}
+	\normalfont
+	For every string $\mathit{tmpl} \in \symAllStrings$,
+	    %(assumed to be an RML \emph{string template}).
+	we write $\tempSubStrs(\mathit{tmpl})$ to denote a sequence~$\substrSeq$ of strings that is constructed by the following four steps.
+	\begin{enumerate}
+		\item
+		Partition $\mathit{tmpl}$ into a sequence~$\substrSeq$ of \emph{query substrings} and \emph{normal substrings} in the order in which these substrings appear in $\mathit{tmpl}$ from left to right,~where
+		\begin{itemize}
+			\item a \emph{query substring} is a substring
+				starting with an opening curly brace (i.e., "\{") and ending with a closing curly brace (i.e., "\}"), and
+				%starting and ending with curly braces (i.e., \{ and \}), and
+				%enclosed in curly braces (i.e., \{ and \}), and
+			\item a \emph{normal substring} is any other substring between two query substrings.
+		\end{itemize}
+
+		\item 
+		If $\substrSeq$ is the empty sequence, insert the empty string as a new substring into~$\substrSeq$.
+
+		\item
+		For every two query substrings $q_1$ and $q_2$ that occur directly after one another in $\substrSeq$, insert the empty string as a new substring between $q_1$ and $q_2$ in $\substrSeq$.
+
+		\item
+		If the first element in $\substrSeq$ is a query substring $q$, insert the empty string as a new substring before $q$ in $\substrSeq$. Similarly, if the last element in $\substrSeq$ is a query substring $q'\!$, insert the empty string as a new substring after $q'$ in $\substrSeq$.
+	\end{enumerate}
+\end{definition}
+
+	%By the steps in Definition~\ref{def:tempSubStrs}, the
+	By Definition~\ref{def:tempSubStrs}, the
+	%The
+%
+	%resulting sequence
+	%sequence~$\substrSeq$ that Algorithm~\ref{alg:rml_termmap_extend_expr} uses
+	sequence~$\substrSeq$ in Algorithm~\ref{alg:rml_termmap_extend_expr}
+%
+	%is not empty, has an odd number of elements,
+	has an odd number of elements
+and alternates between normal substrings and query substrings, beginning with a normal substring (which may be the empty string). The extend expression is then created to concatenate the substrings (lines~\ref{line:rml_termmap_extend_expr:first_substring}--\ref{line:rml_termmap_extend_expr:concatenation_end}), where every query substring "\{$q$\}" is replaced by the attribute~$\attr$ for which
+	%it holds that
+$\symAttrQueryMap(\attr) = q$, because that attribute holds the values that the source operator obtains for the query
+	%expression~%
+$q$.
+
+\begin{example}
+	\label{ex:rml_termmap_extend_expr}
+	Assume
+		%$\symRMLGraph_\mathsf{ex}$ is the RDF graph in Listing~\ref{lst:rml_example}, $b_\mathsf{sm}$ and $b_\mathsf{om}$ are the blank nodes that denote the subject map and the object map in this graph, respectively,
+		$b_\mathsf{sm}$ and $b_\mathsf{om}$ are the blank nodes denoting the subject map and the object map in RDF graph~$\symRMLGraph_\mathsf{ex}$ in Listing~\ref{lst:rml_example}, respectively,
+	and
+		$\symAttrQueryMap = \{ \attr_1 \rightarrow \textsf{\small ID},$ $\attr_2 \rightarrow \textsf{\small Name} \}$
+		%$\symAttrQueryMap$
+	as in Example~\ref{ex:ExtractQueries}.
+	Then, $\textsc{CreateExtExpr}(b_\mathsf{sm}, \symRMLGraph_\mathsf{ex}, \LTB, \symAttrQueryMap)$
+		%returns the extend expression
+		%is the extend expression
+		returns
+	$
+	\toIRI\bigl(
+		\concat\bigl(
+				%(\ttl{"http://example.com/person\_"}, \ttl{xsd:string}),
+				\ell,
+			\attr_1
+		\bigr)
+	\bigr)
+	$
+		where $\ell$ is the literal $(\ttl{"http://example.com/person\_"},$ $\ttl{xsd:string})$%
+	%
+		%, and
+		;
+	$\textsc{CreateExtExpr}(b_\mathsf{om}, \symRMLGraph_\mathsf{ex}, \LTB, \symAttrQueryMap)$
+		%returns
+		is
+	$\fctToLiteral{\attr_2, \ttl{xsd:string}}$.
+\end{example}
+
 
 \smallskip\noindent\textbf{\itshape Translation of the Object Map.}
 TODO ...
@@ -385,7 +510,6 @@ The formal definitions of the following extension functions can be found in Appe
 	$\concat$ is a binary extension function that concatenates two string literals. 
 \end{itemize}
 
-\input{algorithms/extend_algo.tex}
 
 In RML, there are three ways to map data to RDF terms using RML term maps; 
 i) \textbf{constant-valued}~\footnote{\url{https://rml.io/specs/rml/\#constant}} term map, 
@@ -446,7 +570,6 @@ replaced with an attribute $\attr$ such that $\symAttrQueryMap(\attr) = \queryEx
 The result is the extend expression translated from the template-valued term map, 
 and we provide the pseudocode code in Algorithm~\ref{alg:template_function}.
 
-\input{algorithms/template_algo.tex}
 
 Now we have all the ingredients to translate any given RDF graph of RML 
 mappings to our algebraic expressions. 

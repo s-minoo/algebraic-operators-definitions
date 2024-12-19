@@ -236,7 +236,73 @@ to create RDF terms as defined by the term maps of the triples map. To this end,
 	%subject map and the predicate
 map, the algorithm adds an extend operator, respectively~(lines~\ref{line:rml2algebra:extend_for_subject}--\ref{line:rml2algebra:extend_for_predicate} in Algorithm~\ref{alg:rml2algebra}). The construction of the extend expressions of these operators
 	(see Definitions~\ref{def:ExtendExpressions:Syntax} and~\ref{def:extend_operator})
-is captured in Algorithm~\ref{alg:rml_termmap_extend_expr} and uses the following extension functions, which are defined formally in Appendix~\ref{appdx:functions}.
+is captured in Algorithm~\ref{alg:rml_termmap_extend_expr} and uses the following extension functions\PaperVersion{, which are defined formally in Appendix~\ref{appdx:functions}.}\ExtendedVersion{.}
+
+\ExtendedVersion{
+For every $v \in (\symTermUniverse \cup \error)$, $\dt \in (\symTermUniverse \cup \error)$, and $v'\! \in (\symTermUniverse \cup \error)$, we define:
+%
+\begin{equation*}
+	\fctToIRI{v} =
+	\begin{cases}
+		\mathit{lex}
+		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is a valid IRI}
+		\\[-1mm]
+		& \text{and $\dt$ is the IRI \ttl{xsd:string},}
+		\\
+		\error
+		& \text{else.}
+	\end{cases}
+\end{equation*}
+\begin{equation*}
+	\fctToBNode{v} =
+	\begin{cases}
+		\LTB(\lex)
+		& \text{if $v$ is a literal $\literalTuple$
+%such that
+s.t.\
+%
+%$\dt$ is the IRI \ttl{xsd:string}%
+$\dt = \ttl{xsd:string}$%
+        ,}
+        \\ 
+		\error
+		& \text{else.}
+	\end{cases}
+\end{equation*}
+\begin{equation*}
+    \fctToLiteral{v, \dt} = 
+    \begin{cases}
+        (\lex, \dt) &\text{if $v$ is a literal~$(\lex, \dt')$
+%such that
+s.t.\
+%
+%$\dt$ is the IRI \ttl{xsd:string}%
+$\dt = \ttl{xsd:string}$%
+        }, \\
+        \error & \text{else.}
+    \end{cases}
+\end{equation*}
+\begin{equation*}
+    \fctConcat{v}{v'} = 
+    \begin{cases}
+        (\lex \circ \lex'\!, \ttl{xsd:string})  &\text{if $v$ and $v'$ are literals $(\lex,\dt)$ and}
+		\\[-1mm]
+        & \text{$(\lex'\!,\dt')$, respectively,
+          %such that both}
+          such that}
+		\\[-1mm]
+        &
+          %\text{$\dt$ and $\dt'$ are the IRI \ttl{xsd:string},}
+          \dt = \dt'\! = \ttl{xsd:string},
+        \\ 
+        \error &\text{else,}
+		\\
+    \end{cases}
+\end{equation*}
+where $\lex \circ \lex'$ is the string obtained from concatenating the strings $\lex$ and~$\lex'\!$.
+}
+
+\PaperVersion{
 \begin{itemize}
 	\item
 	$\toIRI$
@@ -256,6 +322,7 @@ is captured in Algorithm~\ref{alg:rml_termmap_extend_expr} and uses the followin
 	\item
 	$\concat$ is a binary extension function that concatenates two string literals. 
 \end{itemize}
+}
 
 \begin{algorithm}[t]
 \input{algorithms/extend_algo.tex}

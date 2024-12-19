@@ -1,15 +1,14 @@
 \section{Related Work}%
 \label{sec:related_works}
-{\color{red}
-According to Van Assche et al.~\cite{VanAssche2022DeclarativeRDFgraph},
-declarative mapping languages can be categorized into two categories: 
-i) \emph{dedicated languages} which extend existing mapping languages, 
-such as RML~\cite{dimou_ldow_2014} extending R2RML~\cite{Seema2012R2RML}, 
-or use custom syntaxes, and 
-ii) \emph{repurposed languages} which repurpose existing non-mapping languages, 
-such as query languages, to support KG construction.
-}
+
 {\color{blue}
+As mentioned above, declarative mapping languages for KG construction can be classified into languages that are extensions of other types of languages (mainly, query languages), with XSPARQL~\cite{Bischof:2012:XSPARQL}, SPARQL-Generate~\cite{lefrancois_eswc_2017}, and
+	%SPARQL-Anything%
+	Facade-X%
+~\cite{Daga2021FacadeXOpinionated} being examples of such ``repurposed mapping languages''~\cite{VanAssche2022DeclarativeRDFgraph}, and ``dedicated mapping languages''~\cite{VanAssche2022DeclarativeRDFgraph} that have been created specifically for the purpose of KG construction, with R2RML~\cite{Seema2012R2RML} and RML~\cite{dimou_ldow_2014} as examples.
+}
+
+{\color{red}
 We categorize mapping languages into two categories following the work
 of Van Assche et al.~\cite{VanAssche2022DeclarativeRDFgraph} 
 as follows: 
@@ -20,10 +19,31 @@ ii) \emph{repurposed languages} which repurpose existing non-mapping languages,
 such as query languages, to support KG construction.
 Do note that we adapted the original definition for the category on \emph{dedicated languages}
 to also include R2RML which does not extend any mapping languages.
-}
 In this section, we briefly review existing works on formalizations of 
 declarative mapping languages for KG construction. 
+}
 
+{\color{blue}
+
+Given our focus on formal approaches to capture such languages, for the repurposed ones we notice
+	%that
+they can rely on the formalization of their underlying language.
+	For instance,
+	%Indeed,
+XSPARQL combines the semantics of XQuery and SPARQL for mapping between XML and RDF data~\cite{Bischof:2012:XSPARQL}, and to also support
+	%mapping relational databases to RDF,
+	relational databases,
+the authors extend their work by utilizing the semantics of relational algebra~\cite{Lopes2011XSPARQL}. Similarly, the formalization of SPARQL-Generate~\cite{lefrancois_eswc_2017} builds on the algebra-based formalization of SPARQL and, thus, is similar in spirit to
+	%the approach that we present in this paper,
+	%our approach in this paper,
+	our approach,
+which
+	we see as more relevant for
+	%is focused more on
+dedicated mapping~languages.
+}
+
+{\color{red}
 \paragraph{Formalizations in Repurposed Mapping Languages.}
 To the best of our knowledge, only SPARQL-based mapping languages have defined
 formal
@@ -45,7 +65,25 @@ The aforementioned works rely on the semantics of the underlying non-mapping
 languages. 
 However, we argue that such reliance complicates the application of these
 formalisms to dedicated mapping languages.  
+}
 
+{\color{blue}
+When considering dedicated mapping languages, to the best of our knowledge, only R2RML has a formally defined semantics. That is, Sequeda et al.~\cite{Sequeda2013R2RML} provide such a formalization by means of 57 Datalog rules. As this definition is for R2RML, it is limited to mappings from relational databases to RDF, whereas our formalization in this paper can capture mappings of different types of sources of structured and semi-structured data. Moreover, we argue that an algebraic formalization such as ours has the additional advantage that it can also be utilized to represent a form of logical execution plans in mapping engines.
+
+Besides R2RML, a few studies with formalizations related to RML have been published in recent years~\cite{Iglesias2022ScalingKnowledgeGraph,MinOo2023TowardsAlgebra}.
+%
+Iglesias et al.\
+	%provide a formalization of
+	formalize
+RML-based mapping processes based on Horn clauses~\cite{Iglesias2022ScalingKnowledgeGraph}, where the focus of this formalization is to define optimization techniques presented by the authors.
+%
+Lastly, an initial study to capture the semantics of mappings in a language-agnostic manner through algebraic mapping operators~\cite{MinOo2023TowardsAlgebra} has a very similar goal as our work in this paper. Yet, in contrast to our work, the authors do not cover all aspects of
+	%the mappings that can be described using a
+	popular
+dedicated mapping language such as RML (e.g., joining data from multiple sources) and several of their definitions remain informal or rely on undefined concepts.
+}
+
+{\color{red}
 \paragraph{Formalizations in Dedicated Mapping Languages.}
 R2RML~\cite{Seema2012R2RML} is a dedicated mapping language for R2RML mappings,
 which are RDF graphs for mapping relational databases to RDF KG.
@@ -93,3 +131,4 @@ Another limitation of this paper is that the definitions are only
 \emph{semi-formal}; with some presented informally or relying on undefined concepts.
 Thus, there is still a lack of study in providing language-agnostic, complete,
 and well-defined semantics for mapping heterogeneous data to KG. 
+}

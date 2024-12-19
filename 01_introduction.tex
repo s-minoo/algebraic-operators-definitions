@@ -1,7 +1,10 @@
+\newcommand{\hide}[1]{}
+
 \section{Introduction}%
 \label{sec:introduction}
 %Each comment introduces 1-2 sentences 
 % Context 
+{\color{red}
 Knowledge graphs (KGs) play a vital role in enabling semantic interoperability,
 integration, and querying. 
 They allow systems to execute advanced semantic queries, facilitating the
@@ -32,8 +35,22 @@ implementations~\cite{Freund2024FlexRML,Iglesias2022ScalingKnowledgeGraph,Arenas
 each offering distinct advantages for their own unique use cases (i.e.,
 FlexRML~\cite{Freund2024FlexRML} for KG generation on IoT devices). 
 
+}
+
+{\color{blue}
+Knowledge graphs (KGs) are often created or populated by extracting and transforming data from other sources of structured or semi-structured data. One approach to this end is to
+	%specify the desired mapping using a declarative mapping language ...
+	employ a mapping engine for which the desired mapping from the source data to the KG can be specified using a declarative language.
+		%Several such declarative mapping languages have been 
+		This approach has gained traction in recent years, with applications across diverse domains such as COVID research~\cite{Sakor2023KG4Covid}, railway networks~\cite{rojas2021leveraging}, and incident management in ICT systems~\cite{Tailhardat2024NORIA}. To provide a basis for this approach, several declarative mapping languages, in particular for RDF-based KGs, have been proposed,
+%
+including languages that focus only on a single type of input data sources (e.g., R2RML for relational databases~\cite{Seema2012R2RML}) and, more interestingly, also languages designed for multiple types of input data sources~\cite{VanAssche2022DeclarativeRDFgraph}. The latter can be classified further into mapping-focused extensions of query languages and dedicated languages
+	%that have been
+designed solely for the declarative description of mappings.%
+}%
 
 % what’s the problem
+{\color{red}%
 State-of-the-art mapping engines exhibit varying operational semantics due to
 the lack of well-defined formal foundation in the mapping languages they are
 built upon. 
@@ -41,10 +58,49 @@ This absence of formalizations complicates verifying the correctness of the
 mapping engines and studying the expressiveness of the mapping languages.
 Additionally, it poses challenges in optimizing the mappings described by the
 mapping languages.
+}
+
+
+{\color{blue}
+So far,
+	%the majority
+	most
+of these mapping languages---in particular, the dedicated ones---are defined only informally. Yet, such an informal definition can easily lead to discrepancies between different
+	%implementations of the language.
+	%implementations of such a language.
+	implementations.
+For instance, for
+	%the mapping language
+RML~\cite{dimou_ldow_2014,Dimou2024:RMLSpec}, which has
+	%attracted
+several implementations~\cite{ArenasGuerrero2022MorphKGCScalable,Freund2024FlexRML,Iglesias2022ScalingKnowledgeGraph,MinOo2022RMLStreamer,Scrocca2020Transport}, the introduction of
+	%a collection of
+conformance tests~\cite{Heyvaert2019:RMLTests} has revealed various cases in which
+	%one or another implementation fails
+	different implementations fail
+such a test~\cite{Heyvaert2022:RMLTestReports}. It may be argued that the developers of these implementations
+	%did not interpret the informal definition of RML~\cite{Dimou2024:RMLSpec} as intended by the writers of these definitions.
+	interpreted the informal definition of the language differently.
+	%interpreted the informal definition of RML differently.
+Without a formal definition it is impossible to introduce implementation and optimization techniques that are provably correct%
+	%\ and it is also impossible
+	, or
+to
+	%study computational properties or properly compare different languages or language features in terms of their expressive power.
+	%properly compare fundamental properties of different languages or language features, such as their expressive power.
+	properly compare languages or language features in terms of fundamental properties, such as their expressive~power.
+	%studying fundamental properties of different languages (e.g., expressive power).
+%
+%
+Therefore, the goal of our work in this paper is to provide a solid formal foundation for such declarative mapping languages. Especially, instead of focusing on a single specific language, we aim for a more general formalization approach.
+
+Our main contribution is a language-agnostic algebra to capture definitions of mappings from heterogeneous types of data sources to RDF-based KGs. The basis of this mapping algebra is a variation of the relational data model~(Section~\ref{sec:data_model}), for which we define five types of operators that can be arbitrarily combined into algebra expressions~(Section~\ref{sec:mapping_algebra}).
+}
 
 % why it’s an interesting problem
 
 % what’s my solution + paper outline
+{\color{red}%
 In this paper, we fill the gap in the lack of formalizations in 
 mapping languages by providing mapping language-agnostic
 formalizations with three contributions.
@@ -69,6 +125,8 @@ formal semantics for RML.
 Lastly, as our final contribution, we introduce a few algebraic equivalences
 to show the potential of algebraic expression rewriting and thus, enabling the
 optimizations of mapping heterogeneous data to KG (Section~\ref{sec:equivalences}).
+}
+
 
 %
 % paper outline

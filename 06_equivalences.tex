@@ -25,7 +25,11 @@ that are not used anymore later in the plan.
 
 As a typical example of an algebraic equivalence that an optimizer may use for this purpose, consider the following result, which shows that a project operator over an extend-based subexpression may be pushed
 	%completely
-into this subexpression if the set of projection attributes contains both the extend attribute and the attributes mentioned by the corresponding extend expression (if any).
+into this subexpression if the set of projection attributes contains both the extend attribute and the attributes mentioned by the corresponding extend expression (if any).%
+\PaperVersion{%
+\footnote{We provide the proof of Proposition~\ref{prop:FullProjectPushing} in Appendix~\ref{appdx:proof}. 
+The following propositions in this section can be shown in the same way.}%
+}
 
 \begin{proposition}
 	\label{prop:FullProjectPushing}
@@ -71,11 +75,7 @@ into this subexpression if the set of projection attributes contains both the ex
 \qed
 \end{proof}
 }
-\PaperVersion{
-We provide the proof for Proposition~\ref{prop:FullProjectPushing} in Appendix~\ref{appdx:proof}. 
-This proof also serves as an example on how to construct proofs for the 
-remaining propositions in this section. 
-}
+
 To satisfy the condition for the equivalence in Proposition~\ref{prop:FullProjectPushing} and, thus, to facilitate projection pushing based on this equivalence, in some cases, it may be necessary to first add another projection with additional projection attributes. The following result shows an equivalence that can be used for this purpose.
 
 \begin{proposition}
@@ -185,10 +185,11 @@ may be removed%
 \begin{proposition}
 	\label{prop:ProjectionIntoSource}
 	\normalfont
-	Let $\dataSource = \dataSourceTuple$ be a data source such that \\ 
-	$\sourceType = \sourceTypeTuple$,
+	Let $\dataSource = \dataSourceTuple$ be a data source with
+		%$\sourceType = \sourceTypeTuple$,
+		$\sourceType = (\symSetDataset, \symSetContentA\!, \symSetContentB\!, \symDataAcc,$ $\symDataAcc'\!, \eval, \cbeval, \typeCast)$,
 	$\queryExpr \in \symDataAcc$,
-	$\symAttrQueryMap$ be a partial function \\ 
+	$\symAttrQueryMap$ be a partial function
 	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'$,
 	and $\symProjSet \subseteq \fctDom{\symAttrQueryMap}$.
 	It holds that
@@ -197,7 +198,9 @@ may be removed%
 		=
 		\sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}
 	\end{equation*}
-	where $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$; i.e., $\fctDom{\symAttrQueryMap'} = \symProjSet$ and $\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'}$.
+	where $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$; i.e.,
+		%$\fctDom{\symAttrQueryMap'} = \symProjSet$ and $\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'}$.
+		$\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'} = \symProjSet$.
 \end{proposition}
 
 \ExtendedVersion{

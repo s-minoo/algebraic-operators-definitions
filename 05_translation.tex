@@ -60,166 +60,41 @@ a join condition, and iii)~every triples map has only a single predicate-object 
 	%~(which may be associated either with the predicate-object map itself or with its object map)%
 .
 Every RML mapping can be converted into this normal form by applying the following sequence of rewriting steps, which we have adopted from Rodríguez-Muro and Rezk~\cite{Mariano2015SPARQL2SQL}, with adaptations specific to RML.
-\PaperVersion{While we present these steps informally,
-Appendix~\ref{appdx:queries} captures them formally in terms of update~queries.}
-\ExtendedVersion{We present these steps with the accompanying update~queries which captures the steps formally.}
+While we present these steps informally,
+Appendix~\ref{appdx:queries} captures them formally in terms of update~queries.
 None of these steps changes the meaning of the defined~mapping.
 
 \begin{enumerate}
 	\item
 	\label{item:NormalizationStep:ClassExpansion}
 	Every class IRI definition is expanded into a predicate-object map.
-        \ExtendedVersion{(Listing~\ref{lst:sparql_class_expand})}
+        %\ExtendedVersion{(Listing~\ref{lst:sparql_class_expand})}
 
 	\item
 	\label{item:NormalizationStep:ConstantsExpansion}
 	All shortcut properties for constant-valued term maps are expanded.
-        \ExtendedVersion{(Listing~\ref{lst:sparql_shortcut})}
+        %\ExtendedVersion{(Listing~\ref{lst:sparql_shortcut})}
 
 	\item
 	\label{item:NormalizationStep:POMDuplication}
 	Predicate-object maps with multiple predicate maps or multiple object maps are duplicated to have a single predicate map and a single object map each.
-        \ExtendedVersion{(Listing~\ref{lst:sparql_deduplication})}
+        %\ExtendedVersion{(Listing~\ref{lst:sparql_deduplication})}
 
 	\item
 	\label{item:NormalizationStep:JoinRemoval}
 	Referencing object maps without a join condition are replaced by an object map with the subject IRI of the parent triples map as the reference value.
-        \ExtendedVersion{(Listing~\ref{lst:sparql_selfjoin})}
+        %\ExtendedVersion{(Listing~\ref{lst:sparql_selfjoin})}
 
 	\item
 	\label{item:NormalizationStep:TMDuplication1}
 	Every triples map with multiple predicate-object maps is duplicated such that each of the resulting triples maps has a single predicate-object map~only.
-        \ExtendedVersion{(Listing~\ref{lst:sparql_tm_singlepom})}
+        %\ExtendedVersion{(Listing~\ref{lst:sparql_tm_singlepom})}
 
 	\item
 	\label{item:NormalizationStep:TMDuplication2}
 	Every triples map with multiple graph maps is duplicated such that each of the resulting triples maps has one of these graph maps.
-        \ExtendedVersion{(Listing~\ref{lst:sparql_graphmap_norm})}
+       % \ExtendedVersion{(Listing~\ref{lst:sparql_graphmap_norm})}
 \end{enumerate}
-
-
-
-\ExtendedVersion{
-\begin{figure*}[t]
-        \centering
-	\begin{minipage}[t]{0.43\textwidth}
-		\centering
-		\begin{lstlisting}[language=sparql, label={lst:sparql_class_expand}, caption={Normalization step~\ref{item:NormalizationStep:ClassExpansion} (expand shortcuts for class IRIs%
-			%\ into predicate-object maps%
-		).}]
-DELETE { ?sm rr:class ?sm_class . }
-INSERT { ?tm rr:predicateObjectMap [
-      rr:predicateMap [
-          rr:constant rdf:type ;
-          rr:termType rr:IRI ; ] ;
-      rr:objectMap [
-         rr:termType rr:IRI ;
-         rr:constant ?sm_class ; 
-    ] ; ] . }
-WHERE { ?tm rr:subjectMap ?sm . 
-        ?sm rr:class ?sm_class . }
-\end{lstlisting}
-	\end{minipage}%
-    \hfill%
-    \begin{minipage}[t]{0.53\textwidth}
-        \centering
-        \begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:POMDuplication} (duplicate multi-predicate-object maps
-	%\ into singleton predicate-object maps%
-	\ into singletons%
-).},
-label={lst:sparql_deduplication}]
-DELETE{ ?tm rr:predicateObjectMap  ?pom. 
-  ?pom rr:predicateMap ?pm;
-  rr:objectMap ?om; rr:graphMap ?gm. }
-INSERT{ ?tm rr:predicateObjectMap [
-      rr:predicateMap ?pm;
-      rr:objectMap ?om; 
-      rr:graphMap ?gm; ]. }
-WHERE{ ?tm rr:predicateObjectMap  ?pom. 
-  ?pom rr:predicateMap ?pm. 
-  ?pom rr:objectMap ?om. 
-  OPTIONAL {?pom rr:graphMap ?gm.} } 
-\end{lstlisting}
-    \end{minipage}
-%
-    \begin{minipage}[t]{\textwidth}
-\vspace{-2mm}
-\begin{lstlisting}[language=sparql,  caption={Normalization step~\ref{item:NormalizationStep:ConstantsExpansion} (expand shortcuts
-for constant-valued term maps).},
-label={lst:sparql_shortcut}]
-DELETE {  ?tm   rr:subject ?sm_constant .   ?pompm rr:predicate ?pm_constant .
-          ?termMap rr:graph ?gm_constant .  ?pomom rr:object  ?om_constant .   }
-INSERT { ?tm      rr:subjectMap   [ rr:constant ?sm_constant; ].
-         ?pompm   rr:predicateMap [ rr:constant ?pm_constant; ].
-         ?pomom   rr:objectMap    [ rr:constant ?om_constant; ].
-         ?termMap rr:graphMap     [ rr:constant ?gm_constant; ]. }
-WHERE { { ?tm      rr:subject   ?sm_constant }
-  UNION { ?pompm   rr:predicate ?pm_constant }
-  UNION { ?pomom   rr:object    ?om_constant }
-  UNION { ?termMap rr:graph     ?gm_constant }  }
-\end{lstlisting}
-    \end{minipage}
-\vspace{-2mm}
-    \begin{minipage}[t]{0.4\textwidth}
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:JoinRemoval} (replace referencing object maps
-  that do not have a join condition%
-  %without join conditions%
-).},
-label={lst:sparql_selfjoin}]
-DELETE{ ?om rr:parentTriplesMap ?ptm .}
-INSERT{ ?om rr:reference  ?ref ;
-    rr:template ?template; 
-    rr:constant ?const ;
-    rr:termType rr:IRI . }
-WHERE{ ?om rr:parentTriplesMap ?ptm .
-?ptm rr:subjectMap ?sm . 
-OPTIONAL{?sm rr:reference ?ref .}
-OPTIONAL{?sm rr:template ?template .}
-OPTIONAL{?sm rr:constant ?const .}
-FILTER NOT EXISTS 
-{?om rr:joinCondition ?jc .} } 
-\end{lstlisting}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[t]{0.5\textwidth}
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication1} (duplicate triples maps that contain multiple 
-pred\-i\-cate-ob\-ject maps).},
-label={lst:sparql_tm_singlepom}]
-DELETE{ ?tm a rr:TriplesMap;
-    rml:logicalSource ?ls; rr:subjectMap ?sm;
-    rr:predicateObjectMap ?pom . }
-INSERT{ [] a rr:TriplesMap;
-   rml:logicalSource ?ls;
-   rr:subjectMap ?sm; 
-   rr:predicateObjectMap ?pom. }
-WHERE{ ?tm rml:logicalSource ?ls;
-    rr:subjectMap ?sm;
-    rr:predicateObjectMap ?pom . }
-\end{lstlisting}
-    \end{minipage}
-\end{figure*}
-
-\begin{lstlisting}[language=sparql, float=t, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2} (duplicate triples maps
-   %that contain multiple graph~maps%
-   %containing multiple graph~maps%
-   to contain one graph map%
- ).},
-label={lst:sparql_graphmap_norm}]
-DELETE { ?tm rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom ;
-            a rrTriplesMap .
-         ?sm   rr:graphMap ?gm. 
-         ?pom  rr:graphMap ?gm2 . }
-INSERT { [] rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom ;
-            a rr:TriplesMap .
-         ?sm rr:graphMap ?gm . 
-         [] rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom ;
-            a rr:TriplesMap .
-         ?sm rr:graphMap ?gm2 . }
-WHERE { ?tm rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom .
-        ?sm   rr:graphMap ?gm . 
-        ?pom  rr:graphMap ?gm2 . }
-\end{lstlisting}
-}
 
 % \smallskip
 \noindent\textbf{\itshape Main Loop.}
@@ -360,73 +235,9 @@ to create RDF terms as defined by the term maps of the triples map. To this end,
 	%subject map and the predicate
 map, the algorithm adds an extend operator, respectively~(lines~\ref{line:rml2algebra:extend_for_subject}--\ref{line:rml2algebra:extend_for_predicate} in Algorithm~\ref{alg:rml2algebra}). The construction of the extend expressions of these operators
 	(see Definitions~\ref{def:ExtendExpressions:Syntax} and~\ref{def:extend_operator})
-is captured in Algorithm~\ref{alg:rml_termmap_extend_expr} and uses the following extension functions\PaperVersion{, which are defined formally in Appendix~\ref{appdx:functions}.}\ExtendedVersion{.}
+is captured in Algorithm~\ref{alg:rml_termmap_extend_expr} and uses the following extension functions, which are defined formally in Appendix~\ref{appdx:functions}.
 
-\ExtendedVersion{
-For every $v \in (\symTermUniverse \cup \error)$, $\dt \in (\symTermUniverse \cup \error)$, and $v'\! \in (\symTermUniverse \cup \error)$, we define:
-%
-\begin{equation*}
-	\fctToIRI{v} =
-	\begin{cases}
-		\mathit{lex}
-		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is a valid IRI}
-		\\[-1mm]
-		& \text{and $\dt$ is the IRI \ttl{xsd:string},}
-		\\
-		\error
-		& \text{else.}
-	\end{cases}
-\end{equation*}
-\begin{equation*}
-	\fctToBNode{v} =
-	\begin{cases}
-		\LTB(\lex)
-		& \text{if $v$ is a literal $\literalTuple$
-%such that
-s.t.\
-%
-%$\dt$ is the IRI \ttl{xsd:string}%
-$\dt = \ttl{xsd:string}$%
-        ,}
-        \\ 
-		\error
-		& \text{else.}
-	\end{cases}
-\end{equation*}
-\begin{equation*}
-    \fctToLiteral{v, \dt} = 
-    \begin{cases}
-        (\lex, \dt) &\text{if $v$ is a literal~$(\lex, \dt')$
-%such that
-s.t.\
-%
-%$\dt$ is the IRI \ttl{xsd:string}%
-$\dt = \ttl{xsd:string}$%
-        }, \\
-        \error & \text{else.}
-    \end{cases}
-\end{equation*}
-\begin{equation*}
-    \fctConcat{v}{v'} = 
-    \begin{cases}
-        (\lex \circ \lex'\!, \ttl{xsd:string})  &\text{if $v$ and $v'$ are literals $(\lex,\dt)$ and}
-		\\[-1mm]
-        & \text{$(\lex'\!,\dt')$, respectively,
-          %such that both}
-          such that}
-		\\[-1mm]
-        &
-          %\text{$\dt$ and $\dt'$ are the IRI \ttl{xsd:string},}
-          \dt = \dt'\! = \ttl{xsd:string},
-        \\ 
-        \error &\text{else,}
-		\\
-    \end{cases}
-\end{equation*}
-where $\lex \circ \lex'$ is the string obtained from concatenating the strings $\lex$ and~$\lex'\!$.
-}
 
-\PaperVersion{
 \begin{itemize}
 	\item
 	$\toIRI$
@@ -446,7 +257,6 @@ where $\lex \circ \lex'$ is the string obtained from concatenating the strings $
 	\item
 	$\concat$ is a binary extension function that concatenates two string literals. 
 \end{itemize}
-}
 
 \begin{algorithm}[t]
 \input{algorithms/extend_algo.tex}

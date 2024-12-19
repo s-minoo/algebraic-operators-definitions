@@ -1,11 +1,17 @@
 \begin{abstract}
 % Context (What is needed to understand the "need"?)
-Declarative mapping languages describe the mapping of heterogeneous data 
-to knowledge graph (KG). 
+Declarative mapping languages describe the mapping
+	\todo{"the mapping"? Is there only one?}
+of heterogeneous data
+	\todo{I don't think the point is that the data may be heterogeneous (which it may very well be), but that the types of sources of input data may be heterogeneous.}
+to knowledge graph (KG).
+	\todo{Wrong English. Either: "to a knowledge graph" or ``to knowledge graphs"}
 Different flavours of mapping languages exist and each of these mapping languages
 has diverse implementations.  
 % Need (Why something needed to be done at all?)
-However, due to the lack of language-agnostic well-defined formalizations,
+However, due to the lack of language-agnostic
+	\todo{You focus on the language-agnostic aspect here. Yet, none of the things you mention in the rest of this sentence requires a language-agnostic approach. These things could all be done based on language-specific formalizations.}
+well-defined formalizations,
 there are discrepancies across the different implementations of the same
 mapping language, complications in verifying the correctness of the
 implementations, and difficulty in studying the expressiveness of the
@@ -13,7 +19,9 @@ mapping languages.
 % Task (What was undertaken to address the need? It’s here that you write ‘in this paper, we …’)
 % Object (What the present document does or covers)
 % Findings (What the work done yielded or revealed)
-In this paper, we provide a solid theoretical foundation for current and future
+In this paper, we provide a solid theoretical
+	\todo{I wouldn't say that our contribution is "theoretical".}
+foundation for current and future
 works on mapping heterogeneous data to KG. 
 The main contribution is the formal definitions and a set of algebraic 
 mapping operators.
@@ -28,5 +36,52 @@ optimizations with our formalism.
 %operational semantics of both current and future mapping languages,
 %promoting a more unified approach to constructing knowledge graphs from
 %heterogeneous data sources.
-\keywords{Mapping Algebra \and Formalization \and RML \and Knowledge Graph Construction.}
+%
+% \keywords{Mapping Algebra \and Formalization \and RML \and Knowledge Graph Construction.}
+
+{\color{blue}
+
+\textbf{Abstract.}
+Although they exist since more than ten years already, have attracted diverse implementations, and have been used successfully in a significant number of applications, declarative mapping languages for constructing
+   %RDF-based
+knowledge graphs from heterogeneous types of data sources still lack a solid formal foundation.
+	%The informal nature of existing definitions
+	This
+%
+	%has led to discrepancies between different implementations. Moreover, it makes it impossible to introduce implementation and optimization techniques that are provably correct, and
+	makes it impossible to introduce implementation and optimization techniques that are provably correct and, in fact, has led to discrepancies between different implementations. Moreover,
+it precludes
+	%studying computational properties or properly comparing different languages or language fragments in terms of their expressive power.
+	%properly comparing fundamental properties of different languages (e.g., expressive power).
+	studying fundamental properties of different languages (e.g., expressive power).
+To address this gap, this paper introduces a
+	%(language-agnostic)
+	language-agnostic
+algebra
+	%to capture definitions of mappings from heterogeneous types of data sources to knowledge graphs.
+	for capturing mapping definitions.
+As further contributions, we show that the popular mapping language RML can be translated into our algebra%
+	~(%
+	%,
+%
+	%which has the side effect of providing
+	by which we also provide
+	%which establishes
+%
+	%the first
+	a
+%
+formal definition of the semantics of RML%
+	%\ mappings%
+%
+	%!)
+	)
+	%,
+and we prove several algebraic
+	%equivalences which can be used as rewriting rules
+	rewriting rules that can be used
+to optimize mapping plans based on our algebra.
+
+% Instead of focusing on a single specific mapping language, ..
+}
 \end{abstract}

@@ -1,1 +1,0 @@
-# algebraic-operators-definitions

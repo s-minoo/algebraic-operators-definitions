@@ -1,5 +1,3 @@
-\newcommand{\hide}[1]{}
-
 \section{Introduction}%
 \label{sec:introduction}
 %Each comment introduces 1-2 sentences 
@@ -95,6 +93,27 @@ to
 Therefore, the goal of our work in this paper is to provide a solid formal foundation for such declarative mapping languages. Especially, instead of focusing on a single specific language, we aim for a more general formalization approach.
 
 Our main contribution is a language-agnostic algebra to capture definitions of mappings from heterogeneous types of data sources to RDF-based KGs. The basis of this mapping algebra is a variation of the relational data model~(Section~\ref{sec:data_model}), for which we define five types of operators that can be arbitrarily combined into algebra expressions~(Section~\ref{sec:mapping_algebra}).
+%
+Due to its language-agnostic nature, the algebra can serve as a foundation to
+	%capture the semantics of
+	%define
+various mapping languages formally. As our second contribution, we demonstrate this benefit by providing an algorithm that translates mappings defined using RML into our algebra~(Section~\ref{sec:expressiveness}). Through this algorithm, we show not only that our algebra is at least as expressive as RML, but we also provide a formal definition of the semantics of RML. To the best of our knowledge, this is the first formal approach to capture the RML semantics.
+%
+Another important value of having an algebra that captures declarative mapping definitions is that
+	%this algebra
+	it
+may be used as the basis of a systematic and well-defined approach to plan and to optimize
+	the execution of
+%
+	KG construction processes
+	%mappings
+in mapping engines%
+	%, similar to how algebras of query languages are used to capture logical plans in query engines%
+.
+Related to this option, we make our third contribution: We show several algebraic
+	equivalences which can be used as rewriting rules
+	%rewriting rules that can be used
+to optimize mapping plans that are based on our algebra~(Section~\ref{sec:equivalences}).
 }
 
 % why it’s an interesting problem

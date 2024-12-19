@@ -44,10 +44,38 @@ into this subexpression if the set of projection attributes contains both the ex
 		.
 	\end{equation*}
 \end{proposition}
+\ExtendedVersion{
+\begin{proof}
+		We
+	assume that $( \fctAttrs{\extExpr} \cap \symAttrSubSet ) \subseteq \symProjSet$, and
+		%we
+	let $(\symAttrSubSet_1,\symMappingInst_1) = \fctProjectOpBig{\symProjSet \,\cup\, \{\attr\}\!}{ \fctExtOp{r} }$ and $(\symAttrSubSet_2,\symMappingInst_2) = \fctExtOpBig{ \fctProjectOp{\symProjSet}{r} }$.
+	To show that $(\symAttrSubSet_1,\symMappingInst_1) = (\symAttrSubSet_2,\symMappingInst_2)$ we first note that, by Definition~\ref{def:projection_operator}, it holds that $\symAttrSubSet_1 = \symProjSet \cup \{\attr\}$, and by Definition~\ref{def:extend_operator}, $\symAttrSubSet_2 = \symProjSet \cup \{\attr\}$. Hence, $\symAttrSubSet_1 = \symAttrSubSet_2$ and, thus, it remains to show that $\symMappingInst_1 = \symMappingInst_2$.
 
+	We first show that $\symMappingInst_1 \subseteq \symMappingInst_2$, for which we consider an arbitrary mapping tuple~$\mappingTuple \in \symMappingInst_1$ and show that $\mappingTuple \in \symMappingInst_2$.
+	Given that $\mappingTuple \in \symMappingInst_1$, by Definition~\ref{def:projection_operator}, it holds that i)~$\fctDom{\mappingTuple}=\symProjSet \cup \{\attr\}$ and ii)~there exists a mapping tuple $\mappingTuple'\! \in \fctExtOp{r}$ such that $\mappingTuple(\attr') = \mappingTuple'(\attr')$ for all $\attr'\! \in \symProjSet \cup \{\attr\}$.
+	Since $\mappingTuple'\! \in \fctExtOp{r}$, by Definition~\ref{def:extend_operator}, it holds that i)~$\fctDom{\mappingTuple'} = \symAttrSubSet \cup \{\attr\}$ and ii)~there exists a mapping tuple $\mappingTuple''\! \in r$ such that $\fctEval{\extExpr}{\mappingTuple''} = \mappingTuple'(\attr)$ and $\mappingTuple''(\attr') = \mappingTuple'(\attr')$ for all $\attr'\! \in \symAttrSubSet$.
+	Now, let $\mappingTuple'''$ be the restriction of $\mappingTuple''$ to $\symProjSet$; i.e., $\mappingTuple'''\! = \mappingTuple''[\symProjSet]$, which, by Definition~\ref{def:projection_operator}, also means that $\fctDom{\mappingTuple'''} = \symProjSet$ and $\mappingTuple'''\! \in \fctProjectOp{\symProjSet}{r}$.
+	Then, since $( \fctAttrs{\extExpr} \cap \symAttrSubSet ) \subseteq \symProjSet$ and $\mappingTuple'''(\attr') = \mappingTuple''(\attr')$ for all $\attr' \in \symProjSet$, it holds that $\fctEval{\extExpr}{\mappingTuple'''} = \fctEval{\extExpr}{\mappingTuple''}$.
+	As a consequence, there exists a tuple $\mappingTuple^{(4)}\! \in \fctExtOpBig{ \fctProjectOp{\symProjSet}{r} }$ such that i)~$\fctDom{\mappingTuple^{(4)}} = \fctDom{\mappingTuple'''} \cup \{\attr\}$, ii)~$\mappingTuple^{(4)}(\attr) = \mappingTuple'(\attr)$, and iii)~$\mappingTuple^{(4)}(\attr') = \mappingTuple'''(\attr')$ for all $\attr' \in \symProjSet$.
+	Since $\fctDom{\mappingTuple'''} \cup \{\attr\} = \symProjSet \cup \{\attr\} = \fctDom{\mappingTuple}$ and $\mappingTuple'(\attr) = \mappingTuple(\attr)$ and $\mappingTuple'''(\attr') = \mappingTuple''(\attr') = \mappingTuple'(\attr') = \mappingTuple(\attr')$ for all $\attr' \in \symProjSet$, we can conclude that $\mappingTuple^{(4)}\! = \mappingTuple$ and, thus, $\mappingTuple \in \fctExtOpBig{ \fctProjectOp{\symProjSet}{r} }$; i.e., $\mappingTuple \in \symMappingInst_2$.
+
+	Now we show that $\symMappingInst_1 \supseteq \symMappingInst_2$, for which we consider a
+		%mapping
+	tuple~$\mappingTuple \in \symMappingInst_2$ and show that $\mappingTuple \in \symMappingInst_1$.
+	Given that $\mappingTuple \in \symMappingInst_2$, by Definitions~\ref{def:extend_operator} and~\ref{def:projection_operator}, it holds that i)~$\fctDom{\mappingTuple}=\{\attr\} \cup \symProjSet$ and ii)~there exists a mapping tuple $\mappingTuple'\! \in \fctProjectOp{\symProjSet}{r}$ such that $\mappingTuple(\attr) = \fctEval{\extExpr}{\mappingTuple'}$ and $\mappingTuple(\attr') = \mappingTuple'(\attr')$ for all $\attr'\! \in \symProjSet$.
+	Since $\mappingTuple'\! \in \fctProjectOp{\symProjSet}{r}$, it holds that i)~$\fctDom{\mappingTuple'}=\symProjSet$ and ii)~there exists a mapping tuple $\mappingTuple''\! \in r$ such that $\fctDom{\mappingTuple''} = \symAttrSubSet$ and $\mappingTuple''(\attr') = \mappingTuple'(\attr')$ for all $\attr'\! \in \symProjSet$.
+	Now, let $\mappingTuple'''$ be the mapping tuple for which it holds that i)~$\fctDom{\mappingTuple'''} = \symAttrSubSet \cup \{\attr\}$, ii)~$\mappingTuple'''(\attr) = \fctEval{\extExpr}{\mappingTuple''}$, and iii)~$\mappingTuple'''(\attr') = \mappingTuple''(\attr')$ for all $\attr'\! \in \symAttrSubSet$. Hence, by Definition~\ref{def:extend_operator}, $\mappingTuple'''\! \in \fctExtOp{r}$.
+	Next, let $\mappingTuple^{(4)}$ be the restriction of $\mappingTuple'''$ to $\symProjSet \cup \{\attr\}$; i.e., $\mappingTuple^{(4)}\! = \mappingTuple'''[\symProjSet \cup \{\attr\}]$, which, by Definition~\ref{def:projection_operator}, means that $\mappingTuple^{(4)}\! \in \fctProjectOpBig{\symProjSet \,\cup\, \{\attr\}\!}{ \fctExtOp{r} }$.
+	Putting everything together, we have that i)~$\fctDom{\mappingTuple^{(4)}} = \symProjSet \cup \{\attr\} = \fctDom{\mappingTuple}$, ii)~$\mappingTuple^{(4)}(\attr) = \mappingTuple'''(\attr) = \fctEval{\extExpr}{\mappingTuple''} = \fctEval{\extExpr}{\mappingTuple'} = \mappingTuple(\attr)$, and iii)~$\mappingTuple^{(4)}(\attr') = \mappingTuple'''(\attr') = \mappingTuple''(\attr') = \mappingTuple(\attr)$ for all $\attr'\! \in \symProjSet$. As a consequence, $\mappingTuple^{(4)} = \mappingTuple$ and, thus, $\mappingTuple \in \fctProjectOpBig{\symProjSet \,\cup\, \{\attr\}\!}{ \fctExtOp{r} }$; i.e.,~$\mappingTuple \in \symMappingInst_1$.
+\qed
+\end{proof}
+}
+\PaperVersion{
 We provide the proof for Proposition~\ref{prop:FullProjectPushing} in Appendix~\ref{appdx:proof}. 
 This proof also serves as an example on how to construct proofs for the 
 remaining propositions in this section. 
+}
 To satisfy the condition for the equivalence in Proposition~\ref{prop:FullProjectPushing} and, thus, to facilitate projection pushing based on this equivalence, in some cases, it may be necessary to first add another projection with additional projection attributes. The following result shows an equivalence that can be used for this purpose.
 
 \begin{proposition}

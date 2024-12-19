@@ -2,40 +2,39 @@
 \label{sec:introduction}
 %Each comment introduces 1-2 sentences 
 % Context 
-{\color{red}
-Knowledge graphs (KGs) play a vital role in enabling semantic interoperability,
-integration, and querying. 
-They allow systems to execute advanced semantic queries, facilitating the
-integration and reasoning of the data at hand. 
-The importance of KGs is further amplified by the growing adoption of large language
-models (LLMs) alongside KGs for tasks like retrieval-augmented
-generation~\cite{Xu2024RAGKGLinkedin}. 
-However, many existing data infrastructures lack the capability to generate KGs
-dynamically, and migrating legacy databases with diverse data formats to 
-KG-based systems can be costly for organizations.
-Unlocking the wealth of knowledge in these legacy systems require the generation 
-of KGs from heterogeneous data efficiently. 
-One such approach of generating KGs involves the usage of declarative mapping
-languages~\cite{VanAssche2022DeclarativeRDFgraph}. 
+%{\color{red}
+%Knowledge graphs (KGs) play a vital role in enabling semantic interoperability,
+%integration, and querying. 
+%They allow systems to execute advanced semantic queries, facilitating the
+%integration and reasoning of the data at hand. 
+%The importance of KGs is further amplified by the growing adoption of large language
+%models (LLMs) alongside KGs for tasks like retrieval-augmented
+%generation~\cite{Xu2024RAGKGLinkedin}. 
+%However, many existing data infrastructures lack the capability to generate KGs
+%dynamically, and migrating legacy databases with diverse data formats to 
+%KG-based systems can be costly for organizations.
+%Unlocking the wealth of knowledge in these legacy systems require the generation 
+%of KGs from heterogeneous data efficiently. 
+%One such approach of generating KGs involves the usage of declarative mapping
+%languages~\cite{VanAssche2022DeclarativeRDFgraph}. 
+%
+%Application of declarative mapping languages has gained traction in recent years across
+%diverse domains such as COVID research~\cite{Sakor2023KG4Covid}, railway
+%networks~\cite{rojas2021leveraging}, and incident management in ICT
+%systems~\cite{Tailhardat2024NORIA}. 
+%A plethora of mapping languages exist to support these practical applications. 
+%On one hand, query-based languages like SPARQL-Generate~\cite{lefrancois_eswc_2017} aim to
+%extend SPARQL for KG generation from heterogeneous data. 
+%On the other hand, dedicated mapping languages, such as the RDF Mapping Language
+%(RML)~\cite{dimou_ldow_2014}, use custom syntax. 
+%Furthermore, a single mapping language can have multiple implementations for
+%generating KGs. For example, RML has several
+%implementations~\cite{Freund2024FlexRML,Iglesias2022ScalingKnowledgeGraph,ArenasGuerrero2022MorphKGCScalable,MinOo2022RMLStreamer,Scrocca2020Transport},
+%each offering distinct advantages for their own unique use cases (i.e.,
+%FlexRML~\cite{Freund2024FlexRML} for KG generation on IoT devices). 
+%
+%}
 
-Application of declarative mapping languages has gained traction in recent years across
-diverse domains such as COVID research~\cite{Sakor2023KG4Covid}, railway
-networks~\cite{rojas2021leveraging}, and incident management in ICT
-systems~\cite{Tailhardat2024NORIA}. 
-A plethora of mapping languages exist to support these practical applications. 
-On one hand, query-based languages like SPARQL-Generate~\cite{lefrancois_eswc_2017} aim to
-extend SPARQL for KG generation from heterogeneous data. 
-On the other hand, dedicated mapping languages, such as the RDF Mapping Language
-(RML)~\cite{dimou_ldow_2014}, use custom syntax. 
-Furthermore, a single mapping language can have multiple implementations for
-generating KGs. For example, RML has several
-implementations~\cite{Freund2024FlexRML,Iglesias2022ScalingKnowledgeGraph,ArenasGuerrero2022MorphKGCScalable,MinOo2022RMLStreamer,Scrocca2020Transport},
-each offering distinct advantages for their own unique use cases (i.e.,
-FlexRML~\cite{Freund2024FlexRML} for KG generation on IoT devices). 
-
-}
-
-{\color{blue}
 Knowledge graphs (KGs) are often created or populated by extracting and transforming data from other sources of structured or semi-structured data. One approach to this end is to
 	%specify the desired mapping using a declarative mapping language ...
 	employ a mapping engine for which the desired mapping from the source data to the KG can be specified using a declarative language.
@@ -45,21 +44,19 @@ Knowledge graphs (KGs) are often created or populated by extracting and transfor
 including languages that focus only on a single type of input data sources (e.g., R2RML for relational databases~\cite{Seema2012R2RML}) and, more interestingly, also languages designed for multiple types of input data sources~\cite{VanAssche2022DeclarativeRDFgraph}. The latter can be classified further into mapping-focused extensions of query languages and dedicated languages
 	%that have been
 designed solely for the declarative description of mappings.%
-}%
 
 % what’s the problem
-{\color{red}%
-State-of-the-art mapping engines exhibit varying operational semantics due to
-the lack of well-defined formal foundation in the mapping languages they are
-built upon. 
-This absence of formalizations complicates verifying the correctness of the
-mapping engines and studying the expressiveness of the mapping languages.
-Additionally, it poses challenges in optimizing the mappings described by the
-mapping languages.
-}
+%{\color{red}%
+%State-of-the-art mapping engines exhibit varying operational semantics due to
+%the lack of well-defined formal foundation in the mapping languages they are
+%built upon. 
+%This absence of formalizations complicates verifying the correctness of the
+%mapping engines and studying the expressiveness of the mapping languages.
+%Additionally, it poses challenges in optimizing the mappings described by the
+%mapping languages.
+%}
 
 
-{\color{blue}
 So far,
 	%the majority
 	most
@@ -114,37 +111,36 @@ Related to this option, we make our third contribution: We show several algebrai
 	equivalences which can be used as rewriting rules
 	%rewriting rules that can be used
 to optimize mapping plans that are based on our algebra~(Section~\ref{sec:equivalences}).
-}
 
 % why it’s an interesting problem
 
 % what’s my solution + paper outline
-{\color{red}%
-In this paper, we fill the gap in the lack of formalizations in 
-mapping languages by providing mapping language-agnostic
-formalizations with three contributions.
-The first contribution is the introduction of formal definitions and the proposal
-of a set of algebraic mapping operators.
-These operators can be composed to formally define the mapping of
-heterogeneous data to KG in a language-agnostic manner
-(Sections~\ref{sec:data_model} and~\ref{sec:mapping_algebra}).
-A language-agnostic formalization of mapping heterogeneous data to KG lays the
-foundation for a unified mapping engine that can work with the user's preferred
-mapping language. 
-This approach ensures verified correctness and enables optimizations across
-various mapping languages.
-The second contribution demonstrates the expressiveness of our formalisms by
-applying them to a specific mapping language. 
-Specifically, we present an algorithm that translates RML documents into
-expressions composed of the algebraic operators defined in our formalism
-(Section~\ref{sec:expressiveness}). 
-This algorithm shows that our formalism can represent every mapping definable
-in RML, proving it to be at least as expressive as RML while also providing
-formal semantics for RML. 
-Lastly, as our final contribution, we introduce a few algebraic equivalences
-to show the potential of algebraic expression rewriting and thus, enabling the
-optimizations of mapping heterogeneous data to KG (Section~\ref{sec:equivalences}).
-}
+%{\color{red}%
+%In this paper, we fill the gap in the lack of formalizations in 
+%mapping languages by providing mapping language-agnostic
+%formalizations with three contributions.
+%The first contribution is the introduction of formal definitions and the proposal
+%of a set of algebraic mapping operators.
+%These operators can be composed to formally define the mapping of
+%heterogeneous data to KG in a language-agnostic manner
+%(Sections~\ref{sec:data_model} and~\ref{sec:mapping_algebra}).
+%A language-agnostic formalization of mapping heterogeneous data to KG lays the
+%foundation for a unified mapping engine that can work with the user's preferred
+%mapping language. 
+%This approach ensures verified correctness and enables optimizations across
+%various mapping languages.
+%The second contribution demonstrates the expressiveness of our formalisms by
+%applying them to a specific mapping language. 
+%Specifically, we present an algorithm that translates RML documents into
+%expressions composed of the algebraic operators defined in our formalism
+%(Section~\ref{sec:expressiveness}). 
+%This algorithm shows that our formalism can represent every mapping definable
+%in RML, proving it to be at least as expressive as RML while also providing
+%formal semantics for RML. 
+%Lastly, as our final contribution, we introduce a few algebraic equivalences
+%to show the potential of algebraic expression rewriting and thus, enabling the
+%optimizations of mapping heterogeneous data to KG (Section~\ref{sec:equivalences}).
+%}
 
 
 %

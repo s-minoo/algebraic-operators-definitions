@@ -63,7 +63,7 @@
 \input{algccommands.tex}
 \input{listingslang.tex}
 \input{macro.tex}
-% \newcommand{\ExtendedVersion}[1]{#1}\newcommand{\PaperVersion}[1]{}
+%\newcommand{\ExtendedVersion}[1]{#1}\newcommand{\PaperVersion}[1]{}
 \newcommand{\PaperVersion}[1]{#1}\newcommand{\ExtendedVersion}[1]{}
 %% color coding to see diff
 % \newcommand{\ExtendedVersion}[1]{{\color{blue}#1}}\newcommand{\PaperVersion}[1]{#1}
@@ -145,6 +145,8 @@ Company X and owns stock in Company Y. Author C is a member of committee Z.
 \bibliography{bibliography}
 
 \clearpage
+\PaperVersion{
 \input{08_appendix.tex}
+}
 
 \end{document}

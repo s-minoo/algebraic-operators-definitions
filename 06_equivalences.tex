@@ -1,6 +1,9 @@
 \section{Algebraic Equivalences}%
 \label{sec:equivalences}
 
+\vspace{-1mm} % Layout Adjustment
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+
 In addition to providing a basis to formally define the semantics of a mapping language such as RML, our mapping algebra may also be used as a foundation for implementing such languages in mapping tools.
 	More precisely,
 	%That is,
@@ -10,9 +13,13 @@ to internally represent the plans that they create for converting data according
 	~(with the provable guarantee that the rewritten plans produce the same result!)%
 . While an extensive study of such optimization opportunities is beyond the scope of this paper, in this section we show a number of such equivalences and describe how they may be relevant for a plan optimizer.
 
+\vspace{-3mm} % Layout Adjustment
+
 \subsection{Projection Pushing}
 
-\PaperVersion{One such}\ExtendedVersion{The first} group of equivalences focuses on pushing
+\vspace{-2mm} % Layout Adjustment
+
+The first group of equivalences focuses on pushing
 	project operators
 	%projections
 deeper into a given plan. This may be useful to reduce the size of intermediate mapping relations in terms of
@@ -40,7 +47,10 @@ The following propositions in this section can be shown in the same way.}%
 		%such that $\attr \notin \symAttrSubSet$,
 	$\extExpr$ be an extend expression, and
 	$\symProjSet \subseteq \symAttrSubSet$ be a non-empty subset of the attributes of $r$.
-	If $( \fctAttrs{\extExpr} \cap \symAttrSubSet ) \subseteq \symProjSet$, then it holds that
+	If $( \fctAttrs{\extExpr} \cap \symAttrSubSet ) \subseteq \symProjSet$, then it holds that%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{equation*}
 		\fctProjectOpBig{\symProjSet \,\cup\, \{\attr\}\!}{ \fctExtOp{r} }
 		=
@@ -56,7 +66,10 @@ To satisfy the condition for the equivalence in Proposition~\ref{prop:FullProjec
 	\normalfont
 	Let $r = \mappingRel$ be a mapping relation and
 	$\symProjSet \subseteq \symAttrSubSet$ be a non-empty subset of the attributes of $r$.
-	For every $\symProjSet'\! \subseteq \symAttrSubSet$, it holds that
+	For every $\symProjSet'\! \subseteq \symAttrSubSet$, it holds that%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{equation*}
 		\fctProjectOp{\symProjSet}{r}
 		=
@@ -65,7 +78,7 @@ To satisfy the condition for the equivalence in Proposition~\ref{prop:FullProjec
 	\end{equation*}
 \end{proposition}
 
-
+\ExtendedVersion{ %Extended version start
 As a corollary of
 	the previous two results,
 	%Propositions~\ref{prop:FullProjectPushing} and~\ref{prop:ProjectSplitting},
@@ -80,12 +93,16 @@ it is possible to push some projection attributes into an extend-based subexpres
 		such that $\attr \notin \symAttrSubSet$,
 	$\extExpr$ be an extend expression, and
 	$\symProjSet \subseteq \symAttrSubSet \cup \{\attr\}$.
-	It holds that
+	It holds that%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{equation*}
 		\fctProjectOpBig{\symProjSet}{ \fctExtOp{r} }
 		=
 		\fctProjectOpBig{\symProjSet}{ \fctExtOpBig{ \fctProjectOp{\symProjSet'\!}{r} } }
 		,
+\vspace{-2mm} % Layout Adjustment
 	\end{equation*}
 	where $\symProjSet'\! = \bigl(\symProjSet \setminus \{\attr\} \bigr) \cup \bigl(\fctAttrs{\extExpr} \cap \symAttrSubSet \bigr)$.
 	%%% Note that doing "\ {a}" is important because P may contain the new
@@ -97,6 +114,8 @@ it is possible to push some projection attributes into an extend-based subexpres
 \end{corollary}
 
 We emphasize that, while the equivalence in Corollary~\ref{corr:PartialProjectPushing} does not eliminate the initial project operator, applying another projection already before the extend operator may still lead to efficiency gains due to reduced memory requirements, in particular if the added projection can be pushed down further.
+
+} % Extended version end
 
 While further equivalences for projection pushing can be shown (e.g., into a join),
 	%which we consider as future work,
@@ -112,16 +131,29 @@ may be removed%
 	\normalfont
 	Let $\dataSource = \dataSourceTuple$ be a data source with
 		%$\sourceType = \sourceTypeTuple$,
-		$\sourceType = (\symSetDataset, \symSetContentA\!, \symSetContentB\!, \symDataAcc,$ $\symDataAcc'\!, \eval, \cbeval, \typeCast)$,
+		$\sourceType = (\symSetDataset, \symSetContentA\!,$ $\symSetContentB\!, \symDataAcc, \symDataAcc'\!, \eval, \cbeval, \typeCast)$,
+	%
+		let
 	$\queryExpr \in \symDataAcc$,
+		let
 	$\symAttrQueryMap$ be a partial function
-	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'$,
-	and $\symProjSet \subseteq \fctDom{\symAttrQueryMap}$.
-	It holds that
+	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'$,~%
+	and
+%
+\PaperVersion{%
+\newpage\noindent   % Layout Adjustment
+}%
+%
+	$\symProjSet \subseteq \fctDom{\symAttrQueryMap}$.
+	It holds that%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{equation*}
 		\fctProjectOpBig{\symProjSet}{ \sourceOpDflt }
 		=
 		\sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}
+\vspace{-2mm} % Layout Adjustment
 	\end{equation*}
 	where $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$; i.e.,
 		%$\fctDom{\symAttrQueryMap'} = \symProjSet$ and $\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'}$.
@@ -129,6 +161,7 @@ may be removed%
 \end{proposition}
 
 
+\ExtendedVersion{ %Extended version start
 	As a final (and not particularly surprising) example, a
 	%Not surprisingly, a
 	%A
@@ -149,12 +182,19 @@ plan) if its set of projection attributes coincides with the attributes of the i
 	\end{equation*}
 \end{proposition}
 
+} % Extended version end
 
-\ExtendedVersion{ %Extended version start
+
+\vspace{-3mm} % Layout Adjustment
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+
 \subsection{Pushing or Pulling Extend Operators}
+
+\vspace{-1mm} % Layout Adjustment
+
 For the second group of equivalences that may be useful when optimizing mapping plans, we focus on extend operators that may be placed either on top of a join-based subplan or under the corresponding join operator (i.e., into one of the two inputs of the join).
-	This decision may affect the efficiency of the plan. For instance, if the mapping relation~$r_1$ in $\fctEquiJoinOpBig{ \fctExtOp{r_1} }{ r_2 }$ contains many tuples but only very few of them have join partners in $r_2$ and, thus, the result of this join consists of a few tuples only, then it would be more efficient to extend only these few tuples instead of extending all tuples of $r_1$, including all the ones that are essentially filtered out by the join. In other words, it would be more efficient to pull the extend operator out of the join. In contrast, however, if most of the tuples in $r_1$ have multiple join partners in $r_2$ and, thus, the result of the join contains many more tuples than $r_1$, then it would be more efficient to apply the extend operator directly to $r_1$ rather than pulling it out of the join. Hence, depending on the selectivity of the join, a plan optimizer may decide to keep an extend operator under a join, to pull it out, or also to push an extend optimizer that is currently on top of a join into that join. The following result shows an equivalence that can be used for this purpose (in either direction).
-	%Depending on where such an extend operator is placed and how selective the corresponding join is, the extend expression of the extend operator may have to be evaluated for a greater or a smaller number of mapping tuples, making the extend operator a more or less costly element of the overall mapping plan. Therefore, a plan optimizer may decide to pull an extend operator out of a join, or also to push an extend optimizer that is currently on top of a join into that join. The following result shows an equivalence that provides a formal basis for such a plan rewriting (in either direction).
+	%This decision may affect the efficiency of the plan. For instance, if the mapping relation~$r_1$ in $\fctEquiJoinOpBig{ \fctExtOp{r_1} }{ r_2 }$ contains many tuples but only very few of them have join partners in $r_2$ and, thus, the result of this join consists of a few tuples only, then it would be more efficient to extend only these few tuples instead of extending all tuples of $r_1$, including all the ones that are essentially filtered out by the join. In other words, it would be more efficient to pull the extend operator out of the join. In contrast, however, if most of the tuples in $r_1$ have multiple join partners in $r_2$ and, thus, the result of the join contains many more tuples than $r_1$, then it would be more efficient to apply the extend operator directly to $r_1$ rather than pulling it out of the join. Hence, depending on the selectivity of the join, a plan optimizer may decide to keep an extend operator under a join, to pull it out, or also to push an extend optimizer that is currently on top of a join into that join. The following result shows an equivalence that can be used for this purpose (in either direction).
+	Depending on where such an extend operator is placed and how selective the corresponding join is, the extend expression of the extend operator may have to be evaluated for a greater or a smaller number of mapping tuples, making the extend operator a more or less costly element of the overall mapping plan. Therefore, a plan optimizer may decide to pull an extend operator out of a join, or also to push an extend optimizer that is currently on top of a join into that join. The following result shows an equivalence that provides a formal basis for such a plan rewriting (in either direction).
 
 \begin{proposition}
 	\label{prop:ExtendAndJoin}
@@ -163,19 +203,27 @@ For the second group of equivalences that may be useful when optimizing mapping 
 	let $\symJoinAttrPairs \subseteq \symAttrSubSet_{1} \times \symAttrSubSet_{2}$,
 	let $\attr \in \symAttrUniverse$ be an attribute such that $\attr \notin \symAttrSubSet_1 \cup \symAttrSubSet_2$, and
 	let $\extExpr$ be an extend expression.
-	If $\fctAttrs{\extExpr} \cap \symAttrSubSet_2 = \emptyset$, then it holds that
+	If
+\ExtendedVersion{
+	$\fctAttrs{\extExpr} \cap \symAttrSubSet_2 = \emptyset$, then it holds that
 	\begin{equation*}
 		\fctExtOpBig{ \fctEquiJoinOp{r_1}{r_2} }
 		=
 		\fctEquiJoinOpBig{ \fctExtOp{r_1} }{r_2}
 		,
 	\end{equation*}
-	and if $\fctAttrs{\extExpr} \cap \symAttrSubSet_1 = \emptyset$, then it holds that
+	and if
+}
+	$\fctAttrs{\extExpr} \cap \symAttrSubSet_1 = \emptyset$, then it holds that%
+%
+\vspace{-1mm} % Layout Adjustment
+%
 	\begin{equation*}
 		\fctExtOpBig{ \fctEquiJoinOp{r_1}{r_2} }
 		=
 		\fctEquiJoinOpBig{r_1}{ \fctExtOp{r_2} }
 		.
+\vspace{-1mm} % Layout Adjustment
 	\end{equation*}
 \end{proposition}
 
@@ -190,7 +238,10 @@ is to swap two subsequent extend operators, as shown by the following result.
 	Let $r = \mappingRel$ be a mapping relation,
 	$\attr_1,\attr_2 \in \symAttrUniverse$ be two different attributes that are not in $\symAttrSubSet$ (i.e., $\attr_1 \neq \attr_2$ and $\attr_1,\attr_2 \notin \symAttrSubSet$), and
 	$\extExpr_1$ and $\extExpr_2$ be two extend expressions.
-	If $\attr_1 \notin \fctAttrs{\extExpr_2}$ and $\attr_2 \notin \fctAttrs{\extExpr_1}$, it holds that
+	If $\attr_1 \notin \fctAttrs{\extExpr_2}$ and $\attr_2 \notin \fctAttrs{\extExpr_1}$, it holds that%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{equation*}
 		\fctExtOpXBig{\attr_1}{\extExpr_1}{ \fctExtOpX{\attr_2}{\extExpr_2}{r} }
 		=
@@ -198,6 +249,4 @@ is to swap two subsequent extend operators, as shown by the following result.
 		.
 	\end{equation*}
 \end{proposition}
-
-} % Extended version end
 

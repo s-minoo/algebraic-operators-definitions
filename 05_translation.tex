@@ -1,5 +1,10 @@
+\vspace{-4mm} % Layout Adjustment
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+
 \section{Algebra-Based Definition of RML}%
 \label{sec:expressiveness}
+
+\vspace{-2mm} % Layout Adjustment
 
 This section
 	introduces
@@ -105,6 +110,7 @@ These mapping relations are combined using union (line~\ref{line:rml2algebra:uni
 	that captures the complete RDF dataset defined by the given RML mapping.
 	%that, by applying Definition~\ref{def:generated_dataset}, captures all RDF triples produced by the RML mapping for the logical sources.
 
+\enlargethispage{\baselineskip}%  % Layout Adjustment
 
 \smallskip\noindent\textbf{\itshape Translation of the Logical Source.}
 As the first step for each triples map, the algorithm creates a source operator
@@ -125,6 +131,7 @@ abstract the creation of these two parameters by the following function.
 
 \counterwithout{lstlisting}{chapter}
 \begin{lstlisting}[%
+	belowskip=-0.9 \baselineskip,  % Layout Adjustment
 	language=rdf,
 	caption={RML mapping with
 		%a single
@@ -140,6 +147,9 @@ ex:tm rml:logicalSource [ rml:source "data.csv";
       rr:predicateObjectMap [ rr:predicate rdfs:label;
                               rr:objectMap [rml:reference "Name"] ].
 \end{lstlisting}
+
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+\vspace{-2mm} % Layout Adjustment
 
 \begin{example}
 	\label{ex:initSrcAndRootQuery}
@@ -202,7 +212,10 @@ subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Al
 		$\triplesMapIRI \in \symAllIRIs \cup \symAllBNodes$.
 	The \textbf{$\triplesMapIRI$-rooted subgraph of $\symRMLGraph$}
 	is an RDF graph $\symRMLGraph'\! \subseteq \symRMLGraph$
-	that is defined recursively as follows:
+	that is defined recursively as follows:%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{enumerate}
 		\item $\symRMLGraph'$ contains every triple $(s,p,o) \in \symRMLGraph$ for which it holds that $s = \triplesMapIRI$.
 		\item $\symRMLGraph'$ contains every triple $(s,p,o) \in \symRMLGraph$ for which there
@@ -236,8 +249,9 @@ to create RDF terms as defined by the term maps of the triples map. To this end,
 map, the algorithm adds an extend operator, respectively~(lines~\ref{line:rml2algebra:extend_for_subject}--\ref{line:rml2algebra:extend_for_predicate} in Algorithm~\ref{alg:rml2algebra}). The construction of the extend expressions of these operators
 	(see Definitions~\ref{def:ExtendExpressions:Syntax} and~\ref{def:extend_operator})
 is captured in Algorithm~\ref{alg:rml_termmap_extend_expr} and uses the following extension functions, which are defined formally in Appendix~\ref{appdx:functions}.
-
-
+%
+\vspace{-2mm} % Layout Adjustment
+%
 \begin{itemize}
 	\item
 	$\toIRI$
@@ -276,6 +290,10 @@ term map is constant-val\-ued
 	be created such that it instantiates
 	%instantiate
 the corresponding template string. To this end, this string is first split into a sequence of substrings (line~\ref{line:rml_termmap_extend_expr:split_template}), defined as follows.
+
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+\vspace{-1mm} % Layout Adjustment
+
 \begin{definition}
 	\label{def:tempSubStrs}
 	\normalfont
@@ -283,7 +301,10 @@ the corresponding template string. To this end, this string is first split into 
 	    %(assumed to be an RML \emph{string template}).
 	we write $\tempSubStrs(\mathit{tmpl})$ to denote a sequence~$\substrSeq$ of strings that is constructed by the following
 		two %four
-	steps.
+	steps.%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{enumerate}
 		\item
 		Partition $\mathit{tmpl}$ into a sequence~$\substrSeq$ of \emph{query substrings} and \emph{normal substrings} in the order in which these substrings appear in $\mathit{tmpl}$ from left to right,~where
@@ -324,7 +345,7 @@ the corresponding template string. To this end, this string is first split into 
 %
 The extend expression is then created to concatenate the
 	resulting
-substrings~(lines~\ref{line:rml_termmap_extend_expr:first_substring}--\ref{line:rml_termmap_extend_expr:concatenation_end}), where every query substring "\{$q$\}" is replaced by the attribute~$\attr$ for which
+substrings (lines~\ref{line:rml_termmap_extend_expr:first_substring}--\ref{line:rml_termmap_extend_expr:concatenation_end}), where every query substring "\{$q$\}" is replaced by the attribute~$\attr$ for which
 	it holds that
 $\symAttrQueryMap(\attr) = q$, because that attribute holds the values that the source operator obtains for the query
 	expression~%
@@ -362,6 +383,8 @@ $q$.
 	$\fctToLiteral{\attr_2, \ttl{xsd:string}}$.
 \end{example}
 
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+\vspace{-1mm} % Layout Adjustment
 
 \smallskip\noindent\textbf{\itshape Translation of the Object Map.}
 For object (term) maps, the algorithm also has to consider the case of

@@ -1,5 +1,10 @@
+\vspace{-2mm} % Layout Adjustment
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+
 \section{Mapping Algebra}%
 \label{sec:mapping_algebra}
+
+% \vspace{-2mm} % Layout Adjustment
 
 % {
 % \color{gray}
@@ -37,6 +42,9 @@ and $\graphAttr$ (see Definition~\ref{def:generated_dataset}).}
 \subsection{Source Operator}%
 \label{sub:source_operator}
 
+\vspace{-2mm} % Layout Adjustment
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+
 The basis of every expression that defines a mapping using our algebra are
 operators that establish a relational view of each source of input data. 
 From the perspective of the algebra, these \emph{source operators} are nullary
@@ -68,11 +76,14 @@ the language. In practice, each such language is designed to be used for a speci
 %Some languages may also be repurposed to be used for different kinds of data objects.
 Therefore, we define the notion of the \emph{types of data sources} considered for the source operators of our algebra as a structure that specifies the relevant kinds of data objects and the corresponding evaluation semantics of the languages to be used for data sources of such a type.
 
+\vspace{-1mm} % Layout Adjustment
+
 \begin{definition}
 	\label{def:source_type}
 	\normalfont
 	A \textbf{source type} is a tuple $\sourceTypeTuple$
-	where
+	where%
+\vspace{-2mm} % Layout Adjustment
 	\begin{itemize}
 		\item
 		      $\symSetDataset \subseteq \symDataObjUni$,
@@ -91,10 +102,13 @@ Therefore, we define the notion of the \emph{types of data sources} considered f
 		\item
 		      $\typeCast$ is a partial function $\typeCast \!: \symSetContentB\! \rightarrow \symAllLiterals$,
 	\end{itemize}
+\vspace{-2mm} % Layout Adjustment
 	where $\overline{\symSetContentA}$, resp.\ $\overline{\symSetContentB}$, is the set of all
 	%possible
 	sequences of data objects in $\symSetContentA\!$, resp.\ $\symSetContentB\!$.
 \end{definition}
+
+\vspace{-4mm} % Layout Adjustment
 
 \begin{definition}
 	\label{def:data_source}
@@ -106,6 +120,8 @@ Therefore, we define the notion of the \emph{types of data sources} considered f
 	and
 	$\bigDataObject \in \symSetDataset$.
 \end{definition}
+
+\vspace{-1mm} % Layout Adjustment
 
 As per Definitions~\ref{def:source_type}%
 \ and~%
@@ -129,6 +145,8 @@ While a formal definition of concrete source types is beyond the scope of this p
 %The
 following two examples outline informally how JSON-based data sources and CSV-based data sources may be captured within our abstraction.
 
+\vspace{-1mm} % Layout Adjustment
+
 \begin{example}
 	\label{ex:source_type_json}
 	To define $\sourceTypeX{\mathsf{json}} = \sourceTypeTupleXXX{\mathsf{json}}{\mathsf{jp}}{\mathsf{jp}}$ as a source type for JSON-based data sources, we let $\symSetDatasetX{\mathsf{json}}$ be
@@ -146,6 +164,8 @@ following two examples outline informally how JSON-based data sources and CSV-ba
 	That is, for a JSON document $\bigDataObject \in \symSetDatasetX{\mathsf{json}}$ and a query $\queryExpr \in \symDataAccX{\mathsf{jp}}$, $\evalX{\mathsf{jp}}(\bigDataObject,\queryExpr)$ returns the elements of $\bigDataObject$ selected by $\queryExpr$. If $\queryExpr'\! \in \symDataAccX{\mathsf{jp}}'$, and assume $\dataObject \in \symSetContentAX{\mathsf{jp}}$ is a JSON object within $\bigDataObject$, then $\cbevalX{\mathsf{jp}}(\bigDataObject,\dataObject,\queryExpr')$ returns the elements of $\bigDataObject$ that can be reached from $\dataObject$ as per the traversal specified by $\queryExpr'\!$.
 	Finally, $\typeCastX{\mathsf{json}}$ maps JSON values to RDF literals. For instance, string values may be mapped to \ttl{xsd:string} literals, numeric values that are integers may be mapped to \ttl{xsd:integer} literals, etc.
 \end{example}
+
+\vspace{-3mm} % Layout Adjustment
 
 \begin{example}
 	\label{ex:source_type_csv}
@@ -174,16 +194,24 @@ following two examples outline informally how JSON-based data sources and CSV-ba
 	%$\typeCastX{\mathsf{csv}}$ maps all string values in $\symSetContentBX{\mathsf{jp}}$ to \ttl{xsd:string} literals.
 \end{example}
 
+\vspace{-3mm} % Layout Adjustment
+
 \begin{example}
 	\label{ex:running_ex_source_type}
 	As the basis of a running example for the rest of this section, we assume a
 		%CSV-based
 	data source $\dataSource_\mathsf{ex} = (\sourceTypeX{\mathsf{csv}},\bigDataObject_\mathsf{ex})$ where $\bigDataObject_\mathsf{ex}$ is a CSV file with four columns, named \textsf{\small id}, \textsf{\small firstname},
-	\textsf{\small lastname}, and \textsf{\small age}, and the following two rows:
+	\textsf{\small lastname}, and \textsf{\small age}, and the following two rows:%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{equation*}
         (\ttl{1}, \ttl{Alice}, \ttl{Lee}, \ttl{23}) \quad \text{ and } \quad (\ttl{2}, \ttl{Bob}, \ttl{Malice}, \ttl{unknown})
         .
+\vspace{-2mm} % Layout Adjustment
 	\end{equation*}
+%
+%
 	If we write $\dataObject_1$ to denote the first of these rows,
 		%by the definitions in Example~\ref{ex:source_type_csv},
 		%we have that
@@ -192,6 +220,9 @@ following two examples outline informally how JSON-based data sources and CSV-ba
 		%value
 	\ttl{Alice}, and $\typeCastX{\mathsf{csv}}(\ttl{Alice})$ is the RDF literal $(\ttl{"Alice"}, \ttl{xsd:string})$. 
 \end{example}
+
+\vspace{-1mm} % Layout Adjustment
+\enlargethispage{\baselineskip}%  % Layout Adjustment
 
 % Furthermore, we also provide a running example that is used throughout the rest
 % of this section to provide a practical example after defining each operator.
@@ -229,24 +260,33 @@ queries, where these queries are meant to select the values that a mapping tuple
 %
 Formally, we define the mapping relation produced by a source operator as follows.
 
+\vspace{-1mm} % Layout Adjustment
+
 \begin{definition}
 	\label{def:source_operator}
 	\normalfont
 	Let $\dataSource = \dataSourceTuple$ be a data source with
-	%$\sourceType = \sourceTypeTuple$,
-	$\sourceType = (\symSetDataset, \symSetContentA\!, \symSetContentB\!, \symDataAcc, \symDataAcc'\!,$ $\eval, \cbeval, \typeCast)$,
-    $\queryExpr \in \symDataAcc$, and
+		%$\sourceType = \sourceTypeTuple$,
+		%$\sourceType = (\symSetDataset, \symSetContentA\!, \symSetContentB\!, \symDataAcc, \symDataAcc'\!,$ $\eval, \cbeval, \typeCast)$,
+		$\sourceType = (\symSetDataset, \symSetContentA\!, \symSetContentB\!,$ $\symDataAcc, \symDataAcc'\!, \eval, \cbeval, \typeCast)$,
+	%
+		let
+	$\queryExpr \in \symDataAcc$, and
+		let
 	$\symAttrQueryMap$ be a partial function
 	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'\!$.
 	The \textbf{$(\queryExpr, \symAttrQueryMap)$-spe\-cif\-ic mapping relation obtained from $\dataSource$}, denoted by $\sourceOpDflt$, is the mapping relation $\mappingRel$ such that $\symAttrSubSet = \fctDom{\symAttrQueryMap}$ and
+
 	\begin{align*}
 		\symMappingInst = \big\{ \{\attr_1 \rightarrow \fctTypeCast{\var_1}, \dots, \attr_n \rightarrow \fctTypeCast{\var_n} \} \ \big| \
 		 & \dataObject \in \symDataSeq \text{ and}
 		\\[-1mm]
 		 & ((\attr_1 , \var_1), \dots, (\attr_n , \var_n)) \in X_d \big\}
 		,
+\\[-6mm] % Layout Adjustment
 	\end{align*}
-	where $\symDataSeq = \fctEval{\bigDataObject}{\queryExpr}$ and
+	where $\symDataSeq = \fctEval{\bigDataObject}{\queryExpr}$ and%
+\vspace{-2mm} % Layout Adjustment
 	\begin{equation*}
 		X_d = \bigtimes_{\attr \in \fctDom{\symAttrQueryMap}}
 		\big\{ (\attr, \var) \ \big| \
@@ -267,7 +307,10 @@ Formally, we define the mapping relation produced by a source operator as follow
 		$\symAttrQueryMap_\mathsf{ex} =$ $\{\attr_1 \rightarrow \textsf{\small id}, \attr_2 \rightarrow \textsf{\small firstname}, \attr_3 \rightarrow \textsf{\small age}\}$
 	is the
 		%mapping
-	relation $\big(\{ \attr_1, \attr_2, \attr_3\}, \{\mappingTuple_1,\mappingTuple_2\}\big)$~with
+	relation $\big(\{ \attr_1, \attr_2, \attr_3\}, \{\mappingTuple_1,\mappingTuple_2\}\big)$~with%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{align*}
 		\mappingTuple_1 = \big\{
 		& \attr_1 \rightarrow (\ttl{"1"}, \ttl{xsd:string}),
@@ -288,8 +331,14 @@ Formally, we define the mapping relation produced by a source operator as follow
 \end{example}
 
 
+\vspace{-4mm} % Layout Adjustment
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+
 \subsection{Extend Operator}%
 \label{sub:extend_operator}
+
+\vspace{-2mm} % Layout Adjustment
+
 Extend operators are unary operators that
 	can be used to
 extend a mapping relation with an additional attribute. The values that the tuples of the relation shall have for this attribute are specified
@@ -300,13 +349,18 @@ a so-called \emph{extend expression} that can be formed using \emph{extension fu
 \begin{definition}
 	\label{def:ExtensionFunction}
 	\normalfont
-		An \textbf{extension function} is a function $\extFunc$ of the form $$\extFunc \!: \extFuncType \times \dots \times \extFuncType \rightarrow \extFuncType.$$
+		An \textbf{extension function} is a function $\extFunc$ of the form
+\vspace{-2mm} % Layout Adjustment
+		$$\extFunc \!: \extFuncType \times \dots \times \extFuncType \rightarrow \extFuncType.$$
 		%Every function $\extFunc\!: \extFuncType \times \dots \times \extFuncType \rightarrow \extFuncType$ is an \textbf{extension function}.
 \end{definition}
 
 \begin{example}
 	\label{ex:ExtensionFunction:toInt}
-	A concrete example of such an extension function may be a unary function called \texttt{toInt} that converts \ttl{xsd:string} literals representing integers into \ttl{xsd:integer} literals. Formally, for every $v \in (\symTermUniverse \cup \error)$, we define:
+	A concrete example of such an extension function may be a unary function called \texttt{toInt} that converts \ttl{xsd:string} literals representing integers into \ttl{xsd:integer} literals. Formally, for every $v \in (\symTermUniverse \cup \error)$, we define:%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{equation*}
 		\texttt{toInt}(v) \!=\!
 		\begin{cases}
@@ -360,7 +414,10 @@ a so-called \emph{extend expression} that can be formed using \emph{extension fu
 	\label{def:ExtendExpressions:Syntax}
 	\normalfont
 		%An \textbf{extend expression}~$\extExpr$ is an expression that is defined recursively as follows:
-		\textbf{Extend expressions} are defined recursively as follows:
+		\textbf{Extend expressions} are defined recursively as follows:%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{enumerate}
 		\item
 		Every RDF term in $\symTermUniverse$ is an extend expression.
@@ -381,7 +438,10 @@ a so-called \emph{extend expression} that can be formed using \emph{extension fu
 	% 	\end{equation*}
 \end{definition}
 
-For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote the set of all attributes mentioned in $\extExpr$. Formally, this set is defined recursively as follows.
+For every extend expression~$\extExpr$, we write $\fctAttrs{\extExpr}$ to denote the set of all attributes mentioned in $\extExpr$. Formally, this set is defined recursively as follows.%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 \begin{enumerate}
 	\item If $\extExpr$ is an RDF term, then $\fctAttrs{\extExpr} = \emptyset$.
 	\item If $\extExpr$ is an attribute $\attr \in \symAttrUniverse$, then $\fctAttrs{\extExpr} = \{\attr\}$.
@@ -394,7 +454,7 @@ While Definition~\ref{def:ExtendExpressions:Syntax} introduces the syntax of ext
 	\label{def:ExtendExpressions:Semantics}
 	\normalfont
 	Let $\extExpr$ be an extend expression and $\mappingTuple$ be a mapping tuple.
-	The \textbf{evaluation of $\extExpr$ over $\mappingTuple$}, denoted by $\fctEval{\extExpr}{\mappingTuple}$, is either an RDF term or the error value ($\error$), and is determined recursively as follows:
+	The \textbf{evaluation of $\extExpr$ over $\mappingTuple$}, denoted by $\fctEval{\extExpr}{\mappingTuple}$, is either an RDF term or the error value ($\error$), and is determined recursively as follows:%
 %
 % 	\begin{enumerate}
 % 		\item If $\extExpr$ is an RDF term $x$, then $\fctEval{\extExpr}{\mappingTuple} = x$.
@@ -405,6 +465,8 @@ While Definition~\ref{def:ExtendExpressions:Syntax} introduces the syntax of ext
 % 		\item If $\extExpr$ is a tuple $\extFuncTuple$ such that the extend function~$\extFunc$ is not an $n$-ary function, then
 % 		      $\fctEval{\extExpr}{\mappingTuple} =  \error$.
 % 	\end{enumerate}
+%
+\vspace{-2mm} % Layout Adjustment
 %
 	\begin{equation*}
 		\fctEval{\extExpr}{\mappingTuple} =
@@ -454,16 +516,21 @@ Now we can define the semantics of extend operators as follows.
 
 \begin{example}
 	\label{ex:extend_operator}
-	Let $r$ be the mapping relation
-		%defined by the source operator in
-		of
-	Example~\ref{ex:source_operator}. We may extend this relation with an attribute $\attr_4$ for which each of the
+		%Let $r$ be the mapping relation
+		%	%defined by the source operator in
+		%	of
+		%Example~\ref{ex:source_operator}. We may extend this relation
+		We may extend the mapping relation~$r$ of Example~\ref{ex:source_operator}
+	with an attribute $\attr_4$ for which each of the
 		two tuples of $r$
 		%tuple
 	gets the value obtained by applying the extend expression~%
 		%$\extExpr_\mathsf{ex} = (\ttl{toInt}, \attr_3)$
 		$\extExpr_\mathsf{ex}$
-	of Example~\ref{ex:ExtendExpressions:Semantics}. This operation can be captured as $\fctExtOpX{\attr_4}{\extExpr_\mathsf{ex}}{r}$ and results in the mapping relation $\big(\{ \attr_1, \attr_2, \attr_3, \attr_4\}, \{\mappingTuple_1',\mappingTuple_2'\}\big)$ with
+	of Example~\ref{ex:ExtendExpressions:Semantics}. This operation can be captured as $\fctExtOpX{\attr_4}{\extExpr_\mathsf{ex}}{r}$ and results in the mapping relation $\big(\{ \attr_1, \attr_2, \attr_3, \attr_4\}, \{\mappingTuple_1',\mappingTuple_2'\}\big)$ with%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{equation*}
 		\mappingTuple_1' = \mappingTuple_1 \cup \{
         \attr_4 \rightarrow (\ttl{"23"}, \ttl{xsd:integer})
@@ -481,7 +548,12 @@ While the example shows how extend operators can be used to convert literals fro
 , creating IRIs from other attribute values, and applying arbitrary functions to one or more other attribute values.
 
 
+\vspace{-2mm} % Layout Adjustment
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+
 \subsection{Relational Algebra Operators}
+
+\vspace{-2mm} % Layout Adjustment
 
 In addition to the operators introduced above, any operator of the relational algebra can also be used for mapping relations. For instance, the following definition introduces the notion of \emph{projection}, adapted to mapping relations.
 
@@ -505,6 +577,9 @@ In addition to the operators introduced above, any operator of the relational al
 	the
 		%mapping
 	relation $\big(\{ \attr_2, \attr_4\}, \{\mappingTuple_1'',\mappingTuple_2''\}\big)$~with 
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{align*}
         \mappingTuple_1'' &= \big\{ \attr_2 \rightarrow (\ttl{"Alice"}, \ttl{xsd:string}), \, \attr_4 \rightarrow (\ttl{"23"}, \ttl{xsd:integer}) \big\}
         \text{ and}
@@ -564,7 +639,10 @@ As two more examples of adopting traditional relational algebra operators for ma
 	denoted by $\fctEquiJoinOp{r_{1}}{r_{2}}$, is the mapping relation
 	$(\symAttrSubSet, \symMappingInst)$
 	such that $\symAttrSubSet = \symAttrSubSet_{1} \cup \symAttrSubSet_{2}$
-	and
+	and%
+%
+\vspace{-2mm} % Layout Adjustment
+%
 	\begin{equation*}
 		\symMappingInst =  \{ \mappingTuple_1 \cup \mappingTuple_2 \ | \
 		\mappingTuple_1 \in \symMappingInst_{1} \text { and }
@@ -617,17 +695,23 @@ As two more examples of adopting traditional relational algebra operators for ma
 % \end{definition}
 
 
+
+
+% \begin{definition}
+% 	\label{def:union_operator}
+% 	\normalfont
+% 	Let $r_{1} = \mappingRelSpec{1}$ and
+% 	$r_{2} = \mappingRelSpec{2}$ be mapping relations
+% 	such that $\symAttrSubSet_1 = \symAttrSubSet_2$.
+% 		The \textbf{union of $r_{1}$ and $r_{2}$}, denoted by $\fctUnion{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
+% 		%The \textbf{union of $r_{1}$ and $r_{2}$} is the mapping relation $\fctUnion{r_{1}}{r_{2}} = (\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
+% 		%$\fctUnion{r_{1}}{r_{2}}$ is the mapping relation $(\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
+% \end{definition}
+
 \begin{definition}
 	\label{def:union_operator}
 	\normalfont
-	Let $r_{1} = \mappingRelSpec{1}$ and
-	$r_{2} = \mappingRelSpec{2}$ be mapping relations
-	such that $\symAttrSubSet_1 = \symAttrSubSet_2$.
-		The \textbf{union of $r_{1}$ and $r_{2}$}, denoted by $\fctUnion{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
-		%The \textbf{union of $r_{1}$ and $r_{2}$} is the mapping relation $\fctUnion{r_{1}}{r_{2}} = (\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
-		%$\fctUnion{r_{1}}{r_{2}}$ is the mapping relation $(\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
+	The \textbf{union} of mapping relations $r_{1} = \mappingRelSpec{1}$ and $r_{2} = \mappingRelSpec{2}$, denoted by $\fctUnion{r_{1}}{r_{2}}$, is the mapping relation $(\symAttrSubSet_1, \symMappingInst_1 \cup \symMappingInst_2)$.
 \end{definition}
-
-
 
 

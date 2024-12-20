@@ -1,16 +1,56 @@
+\vspace{-3mm} % Layout Adjustment
+
 \section{Concluding Remarks and Future Work}%
 \label{sec:conclude_remark_fw}
 
-In this paper, we provide a set of language-agnostic algebra for 
-formalizing the semantics of mapping heterogeneous types of data sources to KG.
-%This formalism provides the basis for implementing a mapping engine that is capable of supporting multiple declarative mapping languages without changes to the implementation.
-Additionally, we show that our formalism is at least as expressive as RML 
-for mapping heterogeneous data to KG, and as a consequence, we formalize the semantics of RML.
-Lastly, we provide a set of algebraic rewriting rules to show that mapping plans
-generated, as a result of our formalism, are optimizable.
-As future work, this algebraic foundation opens the door to three 
-frontiers in the domain of KG generation from heterogeneous types of data sources;
-i) provably correct implementations of mapping engines, 
-ii) further studies into the optimizations of mapping plans based on this formalism, and
-iii) expansion upon this formalism to capture the semantics of all existing 
-mapping languages. 
+\vspace{-2mm} % Layout Adjustment
+
+The work presented in this paper opens the door for several new directions of research in the domain of
+	%KG construction from heterogeneous types of data sources.
+	mappings-based KG construction.
+First and foremost, our approach may be
+	%adopted
+	used
+to formalize
+	%the semantics of
+other mapping languages besides RML. In this context we emphasize that, while the five types of
+	%algebra
+operators
+	%that we define
+	defined
+in this paper are sufficient to capture the expressive power of RML,
+	%as shown by our translation algorithm in Section~\ref{sec:expressiveness},
+the algebra may easily be extended with additional types of operators if needed for a particular language or
+	%other use cases.
+	use case.
+Similarly, the
+	%set of
+algebraic equivalences
+	shown in this paper
+	%that we show
+may be complemented with further equivalences%
+	%, related not only to the two use cases that we outline but also for other possible optimization ideas%
+. A natural next step then is to
+	%develop and evaluate
+	%study
+	develop
+concrete implementation and optimization techniques based on the algebra and the equivalences. Given the language-agnostic nature of the algebra,
+	%such techniques can become relevant for multiple languages.
+	%resulting implementations may even support multiple different mapping~languages.
+	%it even becomes trivial for resulting implementations to support multiple~languages.
+	it even becomes trivial for resulting engines to support multiple~languages.
+
+% In this paper, we provide a set of language-agnostic algebra for 
+% formalizing the semantics of mapping heterogeneous types of data sources to KG.
+% 	\todo{Mention that the algebra may easily be extended with additional types of operators if needed for particular use cases.}
+% %This formalism provides the basis for implementing a mapping engine that is capable of supporting multiple declarative mapping languages without changes to the implementation.
+% Additionally, we show that our formalism is at least as expressive as RML 
+% for mapping heterogeneous data to KG, and as a consequence, we formalize the semantics of RML.
+% Lastly, we provide a set of algebraic rewriting rules to show that mapping plans
+% generated, as a result of our formalism, are optimizable.
+% As future work, this algebraic foundation opens the door to three 
+% frontiers in the domain of KG generation from heterogeneous types of data sources;
+% i) provably correct implementations of mapping engines, 
+% ii) further studies into the optimizations of mapping plans based on this formalism, and
+% iii) expansion upon this formalism to capture the semantics of all existing 
+% mapping languages. 

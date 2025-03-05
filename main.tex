@@ -8,6 +8,7 @@
 \usepackage{latexsym}
 \usepackage{listings}
 \usepackage{booktabs}
+
 % T1 fonts will be used to generate the final print and online PDFs,
 % so please use T1 fonts in your manuscript whenever possible.
 % Other font encondings may result in incorrect characters.
@@ -26,7 +27,8 @@
 \DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
 \DeclareMathSymbol{\bigtimes}{1}{mathx}{"91}
 
-\usepackage{etoolbox} % For \patchcmd 
+\usepackage{etoolbox} % For \patchcmd
+\usepackage{orcidlink} % to use \orcidlink{...} instead of \orcidID{...}
 
 \usepackage[linesnumbered, vlined, ruled]{algorithm2e}
 	\SetAlCapHSkip{0px} % to have the caption of the algorithms start at the left margin
@@ -83,32 +85,28 @@
 
 \begin{document}												% end of preamble and beginning of text that will be printed
 
-\title{An Algebraic Foundation \\ for Knowledge Graph Construction%
-\vspace{-3mm} % Layout Adjustment
-}
+\title{\texorpdfstring{An Algebraic Foundation \\ for Knowledge Graph Construction}{An Algebraic Foundation for Knowledge Graph Construction}}
 \titlerunning{An Algebraic Foundation for Knowledge Graph Construction}
 
 % If the paper title is too long for the running head, you can set
 % an abbreviated paper title here
 %
 \author{%
-% Sitt Min Oo\inst{1}\orcidID{0000-0001-9157-7507}
-% \and
-% Olaf Hartig\inst{2}\orcidID{0000-0002-1741-2090}%
-Anonymous Authors
+Sitt Min Oo\inst{1}\orcidlink{0000-0001-9157-7507}
+\and
+Olaf Hartig\inst{2}\orcidlink{0000-0002-1741-2090}%
 }
 %
-%\authorrunning{S. Min Oo and O. Hartig}
-\authorrunning{Anonymous Authors}
+\authorrunning{S. Min Oo and O. Hartig}
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
 %
 \institute{
-% Ghent University - imec, Ghent, Belgium \\
-% \email{x.sittminoo@ugent.be}\\
-% \and
-% Linköping University, Linköping, Sweden \\
-% \email{olaf.hartig@liu.se}
+Ghent University - imec, Ghent, Belgium \\
+\email{x.sittminoo@ugent.be}
+\and
+Linköping University, Linköping, Sweden \\
+\email{olaf.hartig@liu.se}
 }
 %
 \maketitle              % typeset the header of the contribution
@@ -126,12 +124,20 @@ Anonymous Authors
 \input{07_conclusion.tex}
 
 
-% \begin{credits}
-% \subsubsection{\ackname} A bold run-in heading in small font size at the end of the paper is
+\begin{credits}
+\subsubsection{\ackname}
+% A bold run-in heading in small font size at the end of the paper is
 % used for general acknowledgments, for example: This study was funded
 % by X (grant number Y).
-% 
-% \subsubsection{\discintname}
+%
+	%The work presented in this paper
+	%The presented work
+	This work
+was supported by the European Union's Horizon Europe research and innovation programme under grant agreement no.\ 101058682%
+	%\ (Onto-DESIDE)%
+ .
+
+\subsubsection{\discintname}
 % It is now necessary to declare any competing interests or to specifically
 % state that the authors have no competing interests. Please place the
 % statement with a bold run-in heading in small font size beneath the
@@ -141,7 +147,11 @@ Anonymous Authors
 % relevant to the content of this article. Or: Author A has received research
 % grants from Company W. Author B has received a speaker honorarium from
 % Company X and owns stock in Company Y. Author C is a member of committee Z.
-% \end{credits}
+%
+The authors have no competing interests to declare%
+	%\ that are relevant to the content of this article%
+.
+\end{credits}
 
 \bibliographystyle{splncs04}
 \bibliography{bibliography}

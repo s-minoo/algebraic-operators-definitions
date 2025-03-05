@@ -549,7 +549,7 @@ Now we can define the semantics of extend operators as follows.
 \end{example}
 
 
-While the example shows how extend operators can be used to convert literals from one datatype to another, other use cases including adding the same constant RDF term to all tuples of a mapping relation%
+While the example shows how extend operators can be used to convert literals from one datatype to another, other use cases include: adding the same constant RDF term to all tuples of a mapping relation%
 , creating IRIs from other attribute values, and applying arbitrary functions to one or more other attribute values.
 
 
@@ -577,7 +577,7 @@ In addition to the operators introduced above, any operator of the relational al
 
 \begin{example}
 	\label{ex:projection_operator}
-		Let $r$ is the mapping relation of Example~\ref{ex:extend_operator}. Assuming that further steps of a potential mapping process that involve this relation use only the attributes $\attr_2$ and $\attr_4$ of $r$, we may project away the rest of the attributes. To this end, we use $\fctProjectOp{\{\attr_2, \attr_4\}}{r}$ and obtain
+		Let $r$ be the mapping relation of Example~\ref{ex:extend_operator}. Assuming that further steps of a potential mapping process that involve this relation use only the attributes $\attr_2$ and $\attr_4$ of $r$, we may project away the rest of the attributes. To this end, we use $\fctProjectOp{\{\attr_2, \attr_4\}}{r}$ and obtain
 		%If $r$ is the mapping relation of Example~\ref{ex:extend_operator} and $\symProjSet_\mathsf{ex} = \{\attr_2, \attr_4\}$, then $\fctProjectOp{\symProjSet_\mathsf{ex}}{r}$ is
 	the
 		%mapping

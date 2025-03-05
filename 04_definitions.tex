@@ -179,11 +179,11 @@ following two examples outline informally how JSON-based data sources and CSV-ba
 	%define
 	introduce
 	$\sourceTypeX{\mathsf{csv}} = \sourceTypeTupleX{\mathsf{csv}}$ as follows.
-	$\symSetDatasetX{\mathsf{sv}}$ is the infinite set of all possible CSV files,
-	$\symSetContentAX{\mathsf{jp}}$ is the infinite set of all possible rows of CSV files,
-	$\symSetContentBX{\mathsf{jp}} \subset \symAllStrings$ is the infinite set of strings that may be values within CSV files, and
+	$\symSetDatasetX{\mathsf{csv}}$ is the infinite set of all possible CSV files,
+	$\symSetContentAX{\mathsf{csv}}$ is the infinite set of all possible rows of CSV files,
+	$\symSetContentBX{\mathsf{csv}} \subset \symAllStrings$ is the infinite set of strings that may be values within CSV files, and
 	the $\typeCastX{\mathsf{csv}}$ function maps all these string values
-	in $\symSetContentBX{\mathsf{jp}}$
+	in $\symSetContentBX{\mathsf{csv}}$
 	to \ttl{xsd:string} literals.
 	As the language $\symDataAccX{\mathsf{csv}}$, we may use the singleton set that contains (only) the empty string~$\varepsilon$, and $\symDataAcc'_{\mathsf{csv}} \subset \symAllStrings$ is the set of all strings that may be used as column names in CSV files. Informally, $\evalX{\mathsf{csv}}$ and $\cbevalX{\mathsf{csv}}$ may then be defined as follows. For
 	%the empty string~$\varepsilon$ and

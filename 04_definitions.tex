@@ -67,7 +67,11 @@ In practice,
 there are different kinds of data objects, even within the context of the same type of data source, and data objects may be nested within one another. For instance,
 %in the context of JSON documents, each JSON object may be seen as a data object, and so may each named field within a JSON object and also the name and the value of such a field.
 each line of a CSV file may be seen as a data object, and so may each value within such a line, as well as the CSV file as a whole.
-In our abstraction, any particular kind of data objects is considered as a specific subset of $\symDataObjUni$, and to indicate that a data object~$\dataObject \in \symDataObjUni$ is contained in another data object~$\bigDataObject \in \symDataObjUni$, we write $\dataObject \containedIn \bigDataObject$.
+In our abstraction, any particular kind of data objects is considered as a specific subset of $\symDataObjUni$%
+	%%% I decided to remove the following part of this sentence because we do not really need this containment relationship for anything in our formalization. -Olaf
+	%, and to indicate that a data object~$\dataObject \in \symDataObjUni$ is contained in another data object~$\bigDataObject \in \symDataObjUni$, we write $\dataObject \containedIn \bigDataObject$%
+.
+
 
 The set $\symDataAccUni$ captures possible \emph{query languages} to retrieve data objects from other data objects. We consider each such language $\symDataAcc \in \symDataAccUni$ as a set, where every element $\queryExpr \in \symDataAcc$ is one of the expressions
 admitted by
@@ -161,7 +165,7 @@ following two examples outline informally how JSON-based data sources and CSV-ba
 	$\symDataAccX{\mathsf{jp}}$ is the set of all JSONPath expressions that begin with the selector for the root element (i.e., \texttt{\$}), and
 	$\symDataAccX{\mathsf{jp}}'$ are all JSONPath expressions that do not begin with~\texttt{\$}.
 	Then, $\evalX{\mathsf{jp}}$ and $\cbevalX{\mathsf{jp}}$ capture the evaluation semantics of JSONPath.
-	That is, for a JSON document $\bigDataObject \in \symSetDatasetX{\mathsf{json}}$ and a query $\queryExpr \in \symDataAccX{\mathsf{jp}}$, $\evalX{\mathsf{jp}}(\bigDataObject,\queryExpr)$ returns the elements of $\bigDataObject$ selected by $\queryExpr$. If $\queryExpr'\! \in \symDataAccX{\mathsf{jp}}'$, and assume $\dataObject \containedIn \symSetContentAX{\mathsf{jp}}$ is a JSON object within $\bigDataObject$, then $\cbevalX{\mathsf{jp}}(\bigDataObject,\dataObject,\queryExpr')$ returns the elements of $\bigDataObject$ that can be reached from $\dataObject$ as per the traversal specified by $\queryExpr'\!$.
+	That is, for a JSON document $\bigDataObject \in \symSetDatasetX{\mathsf{json}}$ and a query $\queryExpr \in \symDataAccX{\mathsf{jp}}$, $\evalX{\mathsf{jp}}(\bigDataObject,\queryExpr)$ returns the elements of $\bigDataObject$ selected by $\queryExpr$. If $\queryExpr'\! \in \symDataAccX{\mathsf{jp}}'$, and assume $\dataObject \in \symSetContentAX{\mathsf{jp}}$ is a JSON object within $\bigDataObject$, then $\cbevalX{\mathsf{jp}}(\bigDataObject,\dataObject,\queryExpr')$ returns the elements of $\bigDataObject$ that can be reached from $\dataObject$ as per the traversal specified by $\queryExpr'\!$.
 	Finally, $\typeCastX{\mathsf{json}}$ maps JSON values to RDF literals. For instance, string values may be mapped to \ttl{xsd:string} literals, numeric values that are integers may be mapped to \ttl{xsd:integer} literals, etc.
 \end{example}
 

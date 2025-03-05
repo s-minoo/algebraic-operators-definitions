@@ -39,7 +39,11 @@ with the concepts~of~RML%
 Since RML mappings are captured as RDF graphs that use
 	%a dedicated vocabulary (the so-called RML ontology~\cite{IglesiasMolina2023:RMLOntology})%
 	the RML ontology~\cite{IglesiasMolina2023:RMLOntology}%
-, the main input to our algorithm is such an RDF graph. As a second input, we assume an injective function~%
+, the main input to our algorithm is such an RDF graph%
+	%~(for which we assume it uses IRIs of the RML ontology only in the way as intended by that ontology)%
+	%~(we assume this graph uses IRIs of the RML ontology only in the way as intended by that ontology)%
+	~(we assume it uses IRIs of the RML ontology only in the way as intended by that ontology)%
+. As a second input, we assume an injective function~%
 	$\LTB \!: \symAllStrings \rightarrow \symAllBNodes$
 	%$\LTB$
 that maps every string to a unique blank node (which shall become relevant later). The output

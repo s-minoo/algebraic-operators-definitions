@@ -61,6 +61,13 @@
 			}
             {
 
+				$\omega'\! \gets \sourceOp{\dataSource'\!}{\queryExpr'\!}{\symAttrQueryMap'}$\!, where
+				$(\dataSource'\!, \queryExpr') = \textsc{SrcAndRootQuery}(u_\mathsf{ptm},\symRMLGraph_\mathsf{NF})$
+				%\tcp*[f]{Definition~\ref{def:initSrcAndRootQuery}}
+				\hspace*{25mm} and $\symAttrQueryMap'\! = \textsc{ExtractQueries}(u_\mathsf{ptm},\symRMLGraph_\mathsf{NF})$
+				\tcp*{Algorithm~\ref{alg:query_extraction}}
+				\label{line:rml2algebra:source2}
+
 				$\symJoinAttrPairs \gets \emptyset$ \;
 				\label{line:rml2algebra:init_join_pairs}
 
@@ -71,21 +78,14 @@
 
 					$\attr \gets \symAttrQueryMap^{-1}(\lex)$, where $(u_\mathsf{jc},\ttlSmaller{rr:child},o) \in \symRMLGraph_\mathsf{NF}$ with $o = (\lex,\dt) \in \symAllLiterals$ \;
 
-					$\attr'\! \gets \symAttrQueryMap^{-1}(\lex)$, where $(u_\mathsf{jc},\ttlSmaller{rr:parent},o) \in \symRMLGraph_\mathsf{NF}$ with $o = (\lex,\dt) \in \symAllLiterals$ \;
+					$\attr'\! \gets \symAttrQueryMap'^{-1}(\lex)$, where $(u_\mathsf{jc},\ttlSmaller{rr:parent},o) \in \symRMLGraph_\mathsf{NF}$ with $o = (\lex,\dt) \in \symAllLiterals$ \;
 
 					$\symJoinAttrPairs \gets \symJoinAttrPairs \cup \{ (\attr, \attr') \}$ \;
                 }
                 \label{line:rml2algebra:populate_join_pairs_end}
 
-				$\omega \gets\ \fctEquiJoinOpBig{\omega}{ \sourceOp{\dataSource'\!}{\queryExpr'\!}{\symAttrQueryMap'} }$,
-					where
-					%with
-				$\symAttrQueryMap'\! = \textsc{ExtractQueries}(u_\mathsf{ptm},\symRMLGraph_\mathsf{NF})$
-				%\tcp*{Algorithm~\ref{alg:query_extraction}}
-				\hspace*{37mm} and 
-				$(\dataSource'\!, \queryExpr') = \textsc{SrcAndRootQuery}(u_\mathsf{ptm},\symRMLGraph_\mathsf{NF})$
-				%\tcp*[f]{Definition~\ref{def:initSrcAndRootQuery}}
-				\label{line:rml2algebra:add_equijoin}				
+				$\omega \gets \fctEquiJoinOpBig{\omega}{\omega'}$
+				\label{line:rml2algebra:add_equijoin}
 
 				$u_\mathsf{sptm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{ptm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
 

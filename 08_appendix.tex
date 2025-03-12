@@ -91,16 +91,16 @@ FILTER NOT EXISTS
 \begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication1} (duplicate triples maps that contain multiple 
 pred\-i\-cate-ob\-ject maps).},
 label={lst:sparql_tm_singlepom}]
-DELETE{ ?tm a rr:TriplesMap;
-    rml:logicalSource ?ls; rr:subjectMap ?sm;
-    rr:predicateObjectMap ?pom . }
-INSERT{ [] a rr:TriplesMap;
-   rml:logicalSource ?ls;
-   rr:subjectMap ?sm; 
-   rr:predicateObjectMap ?pom. }
-WHERE{ ?tm rml:logicalSource ?ls;
-    rr:subjectMap ?sm;
-    rr:predicateObjectMap ?pom . }
+DELETE{ ?tm a rr:TriplesMap ;
+            rml:logicalSource ?ls ;
+            rr:subjectMap ?sm ;
+            rr:predicateObjectMap ?pom . }
+INSERT{ [] rml:logicalSource ?ls ;
+           rr:subjectMap ?sm ; 
+           rr:predicateObjectMap ?pom . }
+WHERE{ ?tm rml:logicalSource ?ls ;
+           rr:subjectMap ?sm ;
+           rr:predicateObjectMap ?pom . }
 \end{lstlisting}
     \end{minipage}
 \vspace{-2mm}

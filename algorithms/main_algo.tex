@@ -19,8 +19,9 @@
 			the empty mapping relation $( \{ \subjAttr, \predAttr, \objAttr, \graphAttr\}, \emptyset )$ \;
 
 		\ForEach{$\triplesMapIRI_\mathsf{tm}\! \in \symAllIRIs \cup \symAllBNodes$ for which
-			%there is a triple
-		$(\triplesMapIRI_\mathsf{tm}, \ttlSmaller{rdf:type}, \ttlSmaller{rr:TriplesMap}) \in \symRMLGraph_\mathsf{NF}$%
+			there are triples
+		$(\triplesMapIRI_\mathsf{tm}, \ttlSmaller{rdf:type}, \ttlSmaller{rr:TriplesMap}) \in \symRMLGraph_\mathsf{NF}$ and
+		$(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateObjectMap},o) \in \symRMLGraph_\mathsf{NF}$ with $o \in \symAllIRIs \cup \symAllBNodes$%
 		\label{line:rml2algebra:main_loop_begin}
 		}
         {

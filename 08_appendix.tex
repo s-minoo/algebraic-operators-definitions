@@ -105,22 +105,56 @@ WHERE{ ?tm rml:logicalSource ?ls;
     \end{minipage}
 \vspace{-2mm}
     \begin{minipage}[t]{\textwidth}
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2} (duplicate triples maps
+\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2}.1 (duplicate triples maps with subject maps in cases in which the associated pred\-i\-cate-ob\-ject maps may contain multiple graph~maps).},
+label={lst:sparql_graphmap_norm}]
+DELETE { ?tm rr:predicateObjectMap ?pom .
+         ?pom rr:graphMap ?pom_gm .       }
+INSERT { [] rml:logicalSource ?ls ;
+            rr:subjectMap [
+                 rr:reference ?ref ;
+                 rr:template ?template ;
+                 rr:constant ?const ;
+                 rr:termType ?ttype ;
+                 rr:graphMap ?pom_gm ] ; 
+            rr:predicateObjectMap ?pom .  }
+WHERE { ?tm rml:logicalSource ?ls; 
+            rr:subjectMap ?sm; 
+            rr:predicateObjectMap ?pom .
+        ?pom rr:graphMap ?pom_gm .
+        OPTIONAL { ?sm rr:reference ?ref }
+        OPTIONAL { ?sm rr:template ?template }
+        OPTIONAL { ?sm rr:constant ?const }
+        OPTIONAL { ?sm rr:termType ?ttype }  }
+
+\end{lstlisting}
+    \end{minipage}
+\vspace{-2mm}
+    \begin{minipage}[t]{\textwidth}
+\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2}.2 (duplicate subject maps
    %that contain multiple graph~maps%
    %containing multiple graph~maps%
    to contain one graph map%
  ).},
 label={lst:sparql_graphmap_norm}]
-DELETE { ?tm rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom ;
-            a rrTriplesMap .
-         ?sm   rr:graphMap ?gm. 
-         ?pom  rr:graphMap ?gm2 . }
-INSERT { [] rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom ;
-            a rr:TriplesMap .
-         ?sm rr:graphMap ?gm2 . }
-WHERE { ?tm rml:logicalSource ?ls ; rr:subjectMap ?sm ; rr:predicateObjectMap ?pom .
-        ?sm   rr:graphMap ?gm . 
-        ?pom  rr:graphMap ?gm2 . }
+DELETE { ?tm rr:subjectMap ?sm .
+         ?sm rr:graphMap ?gm .  }
+INSERT { [] rml:logicalSource ?ls ;
+            rr:subjectMap [
+                 rr:reference ?ref ;
+                 rr:template ?template ;
+                 rr:constant ?const ;
+                 rr:termType ?ttype ;
+                 rr:graphMap ?gm ] ;
+            rr:predicateObjectMap ?pom . }
+WHERE { ?tm rml:logicalSource ?ls ;
+            rr:subjectMap ?sm ;
+            rr:predicateObjectMap ?pom .
+        ?sm rr:graphMap ?gm , ?gm2 .
+        FILTER ( ?gm != ?gm2 )
+        OPTIONAL { ?sm rr:reference ?ref }
+        OPTIONAL { ?sm rr:template ?template }
+        OPTIONAL { ?sm rr:constant ?const }
+        OPTIONAL { ?sm rr:termType ?ttype }  }
 \end{lstlisting}
     \end{minipage}
 

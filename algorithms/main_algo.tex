@@ -18,10 +18,8 @@
 			%initially empty algebraic expression \;
 			the empty mapping relation $( \{ \subjAttr, \predAttr, \objAttr, \graphAttr\}, \emptyset )$ \;
 
-		\ForEach{$\triplesMapIRI_\mathsf{tm}\! \in \symAllIRIs \cup \symAllBNodes$ for which
-			there are triples
-		$(\triplesMapIRI_\mathsf{tm}, \ttlSmaller{rdf:type}, \ttlSmaller{rr:TriplesMap}) \in \symRMLGraph_\mathsf{NF}$ and
-		$(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateObjectMap},o) \in \symRMLGraph_\mathsf{NF}$ with $o \in \symAllIRIs \cup \symAllBNodes$%
+		\ForEach{$\triplesMapIRI_\mathsf{tm}\! \in \symAllIRIs \cup \symAllBNodes$ for which there exists $o \in \symAllIRIs \cup \symAllBNodes$ such that $\symRMLGraph_\mathsf{NF}$ contains \hspace*{55mm}
+		the triple $(\triplesMapIRI_\mathsf{tm},\ttlSmaller{rr:predicateObjectMap},o)$%
 		\label{line:rml2algebra:main_loop_begin}
 		}
         {

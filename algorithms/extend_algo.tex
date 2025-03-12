@@ -97,14 +97,28 @@
              \Return{$\fctToIRI{\extExpr}$}
          }%
         \smallskip
-        \lElseIf{$\symRMLGraph$ contains a triple $(u, \ttlSmaller{rr:datatype}, o)$
+        \lElseIf{$\symRMLGraph$ contains
+        	%a triple 
+        $(u, \ttlSmaller{rr:datatype}, o)$
         	%such that $o \in \symAllIRIs$}
-        	s.t.$o \!\in\! \symAllIRIs$}
+        	%s.t.$o \!\in\! \symAllIRIs$}
+        	with $o \in \symAllIRIs$}
         {%
             \Return{$\fctToLiteral{\extExpr, o}$}%
         }%
         \smallskip
+        \lElseIf{$\symRMLGraph$ contains $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:Literal})$}
+        {%
+             \Return{$\fctToLiteral{\extExpr, \ttlSmaller{xsd:string}}$}%
+         }%
+        \smallskip
+        \lElseIf{$\symRMLGraph$ contains $(t,\ttlSmaller{rr:objectMap}, u)$ with $t \in \symAllIRIs \cup \symAllBNodes$
+        \textbf{and} $\symRMLGraph$ contains \hspace*{15mm} \phantom{ } \hspace*{8mm} $(u,\ttlSmaller{rml:reference}, o)$ with $o \in \symAllLiterals$}
+        {%
+             \Return{$\fctToLiteral{\extExpr, \ttlSmaller{xsd:string}}$}
+         }%
+        \smallskip
         \lElse 
         {%
-            \Return{$\fctToLiteral{\extExpr, \ttlSmaller{xsd:string}}$}
+            \Return{$\fctToIRI{\extExpr}$}
         }

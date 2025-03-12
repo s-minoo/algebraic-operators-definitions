@@ -115,17 +115,18 @@ INSERT { [] rml:logicalSource ?ls ;
                  rr:template ?template ;
                  rr:constant ?const ;
                  rr:termType ?ttype ;
+                 rr:graphMap ?sm_gm ;
                  rr:graphMap ?pom_gm ] ; 
             rr:predicateObjectMap ?pom .  }
 WHERE { ?tm rml:logicalSource ?ls; 
             rr:subjectMap ?sm; 
             rr:predicateObjectMap ?pom .
         ?pom rr:graphMap ?pom_gm .
+        OPTIONAL { ?sm rr:graphMap ?sm_gm }
         OPTIONAL { ?sm rr:reference ?ref }
         OPTIONAL { ?sm rr:template ?template }
         OPTIONAL { ?sm rr:constant ?const }
         OPTIONAL { ?sm rr:termType ?ttype }  }
-
 \end{lstlisting}
     \end{minipage}
 \vspace{-2mm}

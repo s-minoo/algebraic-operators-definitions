@@ -105,7 +105,7 @@ WHERE{ ?tm rml:logicalSource ?ls;
     \end{minipage}
 \vspace{-2mm}
     \begin{minipage}[t]{\textwidth}
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2}.1 (duplicate triples maps with subject maps in cases in which the associated pred\-i\-cate-ob\-ject maps may contain multiple graph~maps).},
+\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2}a (duplicate triples maps with subject maps in cases in which the associated pred\-i\-cate-ob\-ject maps may contain multiple graph~maps).},
 label={lst:sparql_graphmap_norm}]
 DELETE { ?tm rr:predicateObjectMap ?pom .
          ?pom rr:graphMap ?pom_gm .       }
@@ -130,14 +130,13 @@ WHERE { ?tm rml:logicalSource ?ls;
     \end{minipage}
 \vspace{-2mm}
     \begin{minipage}[t]{\textwidth}
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2}.2 (duplicate subject maps
+\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2}b (duplicate subject maps
    %that contain multiple graph~maps%
    %containing multiple graph~maps%
    to contain one graph map%
  ).},
 label={lst:sparql_graphmap_norm}]
-DELETE { ?tm rr:subjectMap ?sm .
-         ?sm rr:graphMap ?gm .  }
+DELETE { ?sm rr:graphMap ?gm . }
 INSERT { [] rml:logicalSource ?ls ;
             rr:subjectMap [
                  rr:reference ?ref ;

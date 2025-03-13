@@ -5,6 +5,8 @@
         \KwData{%
             $\symRMLGraph$ - an RDF graph (assumed to describe an RML mapping) \;
             \hspace{10mm}
+            $\baseIRI$ - an IRI considered as base IRI \;
+            \hspace{10mm}
             $\LTB$ - an injective function
             	that maps
             	%mapping
@@ -43,14 +45,15 @@
 			$\omega \gets \extOpAttr{\subjAttr\!}(\omega)$,
 				where
 				%with
-			$\extExpr = \textsc{CreateExtExpr}(u_\textsf{sm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$
-			\tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}}
+			$\extExpr = \textsc{CreateExtExpr}(u_\textsf{sm}, \symRMLGraph_\mathsf{NF}, \baseIRI, \LTB, \symAttrQueryMap)$
+			%\tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}}
+			\tcp*[r]{Alg.\ref{alg:rml_termmap_extend_expr}}
 			\label{line:rml2algebra:extend_for_subject}
 
 			$\omega \gets \extOpAttr{\predAttr\!}(\omega)$,
 				where
 				%with
-			$\extExpr = \textsc{CreateExtExpr}(u_\textsf{pm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$
+			$\extExpr = \textsc{CreateExtExpr}(u_\textsf{pm}, \symRMLGraph_\mathsf{NF}, \baseIRI, \LTB, \symAttrQueryMap)$
 			\;% \tcp*[r]{Algorithm~\ref{alg:rml_termmap_extend_expr}}			
 			\label{line:rml2algebra:extend_for_predicate}
 
@@ -88,11 +91,11 @@
 
 				$u_\mathsf{sptm} \gets o$, where $o \in \symAllIRIs \cup \symAllBNodes$ such that $(u_\mathsf{ptm},\ttlSmaller{rr:subjectMap},o) \in \symRMLGraph_\mathsf{NF}$ \;
 
-				$\omega \gets \extOpAttr{\objAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\mathsf{sptm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap')$ \;
+				$\omega \gets \extOpAttr{\objAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\mathsf{sptm}, \symRMLGraph_\mathsf{NF}, \baseIRI, \LTB, \symAttrQueryMap')$ \;
             }
             \label{line:rml2algebra:join_case_end}
             \Else{
-				$\omega \gets \extOpAttr{\objAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\textsf{om}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$ \;
+				$\omega \gets \extOpAttr{\objAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\textsf{om}, \symRMLGraph_\mathsf{NF}, \baseIRI, \LTB, \symAttrQueryMap)$ \;
 				\label{line:rml2algebra:extend_for_ordinary_object}
             }
 
@@ -102,7 +105,7 @@
             \label{line:rml2algebra:extend_for_graph_map_begin}
             }
             {
-				$\omega \gets \extOpAttr{\graphAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\mathsf{gm}, \symRMLGraph_\mathsf{NF}, \LTB, \symAttrQueryMap)$ \;
+				$\omega \gets \extOpAttr{\graphAttr\!}(\omega)$, where $\extExpr = \textsc{CreateExtExpr}(u_\mathsf{gm}, \symRMLGraph_\mathsf{NF}, \baseIRI, \LTB, \symAttrQueryMap)$ \;
             }
             \label{line:rml2algebra:extend_for_graph_map_end}
             \Else{

@@ -95,6 +95,7 @@
 \newcommand{\initSrc}{\texttt{initSrc}}
 \newcommand{\concat}{\texttt{concat}}
 \newcommand{\concatSeq}{\texttt{concatSeq}}
+\newcommand{\baseIRI}{\mathit{base}}
 \newcommand{\literal}{\ell}
 \newcommand{\lex}{\mathit{lex}}
 \newcommand{\dt}{\mathit{dt}}
@@ -130,7 +131,7 @@
 \newcommand{\fctRenameOpBig}[1]{\renameOp\bigl(#1\bigr)}
 \newcommand{\fctEquiJoinOp}[2]{\equiJoinOp(#1, #2)}
 \newcommand{\fctEquiJoinOpBig}[2]{\equiJoinOp\bigl(#1, #2\bigr)}
-\newcommand{\fctToIRI}[1]{\toIRI(#1)}
+\newcommand{\fctToIRI}[2]{\toIRI(#1,#2)} % arguments: term, base IRI
 \newcommand{\fctToBNode}[1]{\toBNode(#1)}
 \newcommand{\fctToLiteral}[1]{\toLiteral(#1)}
 \newcommand{\fctTemplate}[1]{\template(#1)}

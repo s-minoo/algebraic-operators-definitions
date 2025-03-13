@@ -43,7 +43,7 @@ Since RML mappings are captured as RDF graphs that use
 	%~(for which we assume it uses IRIs of the RML ontology only in the way as intended by that ontology)%
 	%~(we assume this graph uses IRIs of the RML ontology only in the way as intended by that ontology)%
 	~(we assume it uses IRIs of the RML ontology only in the way as intended by that ontology)%
-. As a second input, we assume an injective function~%
+. A second input is an IRI considered as a base for resolving relative IRIs~\cite{Dimou2024:RMLSpec}. As a third input, we assume an injective function~%
 	$\LTB \!: \symAllStrings \rightarrow \symAllBNodes$
 	%$\LTB$
 that maps every string to a unique blank node (which shall become relevant later). The output
@@ -360,31 +360,53 @@ $q$.
 	Assume
 		%$\symRMLGraph_\mathsf{ex}$ is the RDF graph in Listing~\ref{lst:rml_example}, $b_\mathsf{sm}$ and $b_\mathsf{om}$ are the blank nodes that denote the subject map and the object map in this graph, respectively,
 		$b_\mathsf{sm}$ and $b_\mathsf{om}$ are the blank nodes denoting the subject map and the object map in RDF graph~$\symRMLGraph_\mathsf{ex}$ in Listing~\ref{lst:rml_example}, respectively,
+	%
+		$\baseIRI$ is an arbitrary base IRI,
 	and
 		$\symAttrQueryMap = \{ \attr_1 \rightarrow \textsf{\small ID},$ $\attr_2 \rightarrow \textsf{\small Name} \}$
 		%$\symAttrQueryMap$
 	as in Example~\ref{ex:ExtractQueries}.
-	Then, $\textsc{CreateExtExpr}(b_\mathsf{sm}, \symRMLGraph_\mathsf{ex}, \LTB, \symAttrQueryMap)$
-		%returns the extend expression
-		%is the extend expression
-		returns
+		Then,
+% 	$\textsc{CreateExtExpr}(b_\mathsf{sm}, \symRMLGraph_\mathsf{ex}, \baseIRI, \LTB, \symAttrQueryMap)$%
+% 		%, with an arbitrary base IRI $\baseIRI$,%
+% 		%, i.e., Algorithm~\ref{alg:rml_termmap_extend_expr},%
+% 		\ in Algorithm~\ref{alg:rml_termmap_extend_expr}%
+% 	\ returns
+% 		%the extend expression
+% 		the expression
+% 	$
+% 	\toIRI\bigl(
+% 		\concat\bigl(
+% 				%(\ttl{"http://example.com/person\_"}, \ttl{xsd:string}),
+% 				\ell,
+% 			\attr_1
+% 		\bigr),
+% 		\baseIRI
+% 	\bigr)
+% 	$
+% 		where $\ell$ is the literal $(\ttl{"http://example.com/person\_"},$ $\ttl{xsd:string})$%
+% 	%
+% 		%, and
+% 		; moreover,
+% 		%;
+% 	$\textsc{CreateExtExpr}(b_\mathsf{om}, \symRMLGraph_\mathsf{ex}, \baseIRI, \LTB, \symAttrQueryMap)$
+% 		returns
+% 		%is
+% 	$\fctToLiteral{\attr_2, \ttl{xsd:string}}$.
+%
+	$\textsc{CreateExtExpr}(b_\mathsf{om}, \symRMLGraph_\mathsf{ex}, \baseIRI, \LTB, \symAttrQueryMap)$ returns the extend expression $\fctToLiteral{\attr_2, \ttl{xsd:string}}$. Moreover, $\textsc{CreateExtExpr}(b_\mathsf{sm}, \symRMLGraph_\mathsf{ex}, \baseIRI, \LTB, \symAttrQueryMap)$ returns
+		the extend expression
 	$
 	\toIRI\bigl(
 		\concat\bigl(
 				%(\ttl{"http://example.com/person\_"}, \ttl{xsd:string}),
 				\ell,
 			\attr_1
-		\bigr)
+		\bigr),
+		\baseIRI
 	\bigr)
 	$
-		where $\ell$ is the literal $(\ttl{"http://example.com/person\_"},$ $\ttl{xsd:string})$%
-	%
-		%, and
-		;
-	$\textsc{CreateExtExpr}(b_\mathsf{om}, \symRMLGraph_\mathsf{ex}, \LTB, \symAttrQueryMap)$
-		%returns
-		is
-	$\fctToLiteral{\attr_2, \ttl{xsd:string}}$.
+	where $\ell$ is the literal $(\ttl{"http://example.com/person\_"},$ $\ttl{xsd:string})$.
 \end{example}
 
 \enlargethispage{\baselineskip}%  % Layout Adjustment

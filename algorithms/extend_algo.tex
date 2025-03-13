@@ -12,6 +12,8 @@
             	%an RML mapping, incl.\ term map~$u$)\;
             	the term map~$u$)\;
             \hspace{10mm}
+            $\baseIRI$ - an IRI considered as base IRI \;
+            \hspace{10mm}
             $\LTB$ - an injective function
             	that maps
             	%mapping
@@ -94,7 +96,7 @@
         \smallskip
         \lElseIf{$\symRMLGraph$ contains the triple $(u,\ttlSmaller{rr:termType}, \ttlSmaller{rr:IRI})$}
         {%
-             \Return{$\fctToIRI{\extExpr}$}
+             \Return{$\fctToIRI{\extExpr}{\baseIRI}$}
          }%
         \smallskip
         \lElseIf{$\symRMLGraph$ contains
@@ -120,5 +122,5 @@
         \smallskip
         \lElse 
         {%
-            \Return{$\fctToIRI{\extExpr}$}
+            \Return{$\fctToIRI{\extExpr}{\baseIRI}$}
         }

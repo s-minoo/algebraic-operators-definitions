@@ -165,15 +165,23 @@ WHERE { ?tm rml:logicalSource ?ls ;
 
 % \vspace{-2mm}
 
-For every $v \in (\symTermUniverse \cup \error)$, $\dt \in (\symTermUniverse \cup \error)$, and $v'\! \in (\symTermUniverse \cup \error)$, we define:
+For every $v \in (\symTermUniverse \cup \error)$, $\dt \in (\symTermUniverse \cup \error)$, $v'\! \in (\symTermUniverse \cup \error)$, 
+and $\baseIRI \in \symAllIRIs$, we define:
 %
 \begin{equation*}
-	\fctToIRI{v} =
+	\fctToIRI{v}{\baseIRI} =
 	\begin{cases}
 		\mathit{lex}
-		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is a valid IRI}
+		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is}
 		\\[-1mm]
-		& \text{and $\dt$ is the IRI \ttl{xsd:string},}
+		& \text{a valid IRI and $\dt$ is the IRI \ttl{xsd:string},}
+		\\
+		\baseIRI \circ \mathit{lex}
+		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is not}
+		\\[-1mm]
+		& \text{a valid IRI, but $\baseIRI \circ \mathit{lex}$ is a valid IRI, and}
+		\\[-1mm]
+		& \text{$\dt$ is the IRI \ttl{xsd:string},}
 		\\
 		\error
 		& \text{else.}

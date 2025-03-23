@@ -10,7 +10,7 @@
 \vspace{-2em}
 	\begin{minipage}[t]{0.43\textwidth}
 		\centering
-		\begin{lstlisting}[language=sparql, label={lst:sparql_class_expand}, caption={Normalization step~\ref{item:NormalizationStep:ClassExpansion} (expand shortcuts for class IRIs%
+		\begin{lstlisting}[columns=fullflexible, language=sparql, label={lst:sparql_class_expand}, caption={Normalization step~\ref{item:NormalizationStep:ClassExpansion} (expand shortcuts for class IRIs%
 			%\ into predicate-object maps%
 		).}]
 DELETE { ?sm rr:class ?sm_class . }
@@ -29,7 +29,7 @@ WHERE { ?tm rr:subjectMap ?sm .
     \hfill%
     \begin{minipage}[t]{0.53\textwidth}
         \centering
-        \begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:POMDuplication} (duplicate multi-predicate-object maps
+        \begin{lstlisting}[columns=fullflexible, language=sparql, caption={Normalization step~\ref{item:NormalizationStep:POMDuplication} (duplicate multi-predicate-object maps
 	%\ into singleton predicate-object maps%
 	\ into singletons%
 ).},
@@ -50,7 +50,7 @@ WHERE{ ?tm rr:predicateObjectMap  ?pom.
 %
     \begin{minipage}[t]{\textwidth}
 \vspace{-2mm}
-\begin{lstlisting}[language=sparql,  caption={Normalization step~\ref{item:NormalizationStep:ConstantsExpansion} (expand shortcuts
+\begin{lstlisting}[columns=fullflexible, language=sparql,  caption={Normalization step~\ref{item:NormalizationStep:ConstantsExpansion} (expand shortcuts
 for constant-valued term maps).},
 label={lst:sparql_shortcut}]
 DELETE {  ?tm   rr:subject ?sm_constant .   ?pompm rr:predicate ?pm_constant .
@@ -67,7 +67,7 @@ WHERE { { ?tm      rr:subject   ?sm_constant }
     \end{minipage}
 \vspace{-2mm}
     \begin{minipage}[t]{0.4\textwidth}
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:JoinRemoval} (replace referencing object maps
+\begin{lstlisting}[columns=fullflexible, language=sparql, caption={Normalization step~\ref{item:NormalizationStep:JoinRemoval} (replace referencing object maps
   that do not have a join condition%
   %without join conditions%
 ).},
@@ -88,7 +88,7 @@ FILTER NOT EXISTS
     \end{minipage}
     \hfill
     \begin{minipage}[t]{0.5\textwidth}
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication1} (duplicate triples maps that contain multiple 
+\begin{lstlisting}[columns=fullflexible, language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication1} (duplicate triples maps that contain multiple 
 pred\-i\-cate-ob\-ject maps).},
 label={lst:sparql_tm_singlepom}]
 DELETE{ ?tm a rr:TriplesMap ;
@@ -104,8 +104,8 @@ WHERE{ ?tm rml:logicalSource ?ls ;
 \end{lstlisting}
     \end{minipage}
 \vspace{-2mm}
-    \begin{minipage}[t]{\textwidth}
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2}a (duplicate triples maps with subject maps in cases in which the associated pred\-i\-cate-ob\-ject maps may contain multiple graph~maps).},
+    \begin{minipage}[t]{0.5\textwidth}
+\begin{lstlisting}[columns=fullflexible, language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2}a (duplicate triples maps with subject maps in cases in which the associated pred\-i\-cate-ob\-ject maps may contain multiple graph~maps).},
 label={lst:sparql_graphmap_norm}]
 DELETE { ?tm rr:predicateObjectMap ?pom .
          ?pom rr:graphMap ?pom_gm .       }
@@ -129,9 +129,9 @@ WHERE { ?tm rml:logicalSource ?ls;
         OPTIONAL { ?sm rr:termType ?ttype }  }
 \end{lstlisting}
     \end{minipage}
-\vspace{-2mm}
-    \begin{minipage}[t]{\textwidth}
-\begin{lstlisting}[language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2}b (duplicate subject maps
+    \hspace{2mm}
+    \begin{minipage}[t]{0.5\textwidth}
+\begin{lstlisting}[columns=fullflexible, language=sparql, caption={Normalization step~\ref{item:NormalizationStep:TMDuplication2}b (duplicate subject maps
    %that contain multiple graph~maps%
    %containing multiple graph~maps%
    to contain one graph map%

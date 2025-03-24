@@ -54,6 +54,8 @@
 \newcommand{\rightouterjoin}{\mathrel{\Join\mkern-6.5mu\ojoin}}
 \newcommand{\fullouterjoin}{\mathrel{\ojoin\mkern-6.5mu\Join\mkern-6.5mu\ojoin}}
 
+\newcounter{querycnt}
+\newcommand{\QueryLabel}[2]{\noindent\small\textbf{Query~\refstepcounter{querycnt}\arabic{querycnt}.} #2 \label{#1}}
 
 \definecolor{eclipseStrings}{RGB}{42,0.0,255}
 \definecolor{eclipseKeywords}{RGB}{127,0,85}

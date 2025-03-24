@@ -7,116 +7,123 @@
 %\section{SPARQL Update Queries for Normalized RML}
 \label{appdx:queries}
 
-	\begin{minipage}[t]{0.43\textwidth}
+\vspace{-2mm}
+
+\noindent
+	\begin{minipage}[t]{0.44\textwidth}
 		{
 		\fontsize{6}{6.5}
 		\begin{verbatim}
 DELETE { ?sm rr:class ?sm_class . }
 INSERT { ?tm rr:predicateObjectMap [
-      rr:predicateMap [
-          rr:constant rdf:type ;
-          rr:termType rr:IRI ; ] ;
-      rr:objectMap [
-         rr:termType rr:IRI ;
-         rr:constant ?sm_class ; 
-    ] ; ] . }
+                 rr:predicateMap [
+                     rr:termType rr:IRI ;
+                     rr:constant rdf:type ] ;
+                 rr:objectMap [
+                     rr:termType rr:IRI ;
+                     rr:constant ?sm_class ] ] }
 WHERE { ?tm rr:subjectMap ?sm . 
         ?sm rr:class ?sm_class . }
 		\end{verbatim}
 		}
-		\vspace{-2mm}
+		\vspace{-3mm}
 		\QueryLabel{lst:sparql_class_expand}{Normalization step~\ref{item:NormalizationStep:ClassExpansion} (expand shortcuts for class IRIs%
 			%\ into predicate-object maps%
 		).}
 	\end{minipage}%
     \hfill%
-    \begin{minipage}[t]{0.53\textwidth}
+    \begin{minipage}[t]{0.52\textwidth}
         {
         \fontsize{6}{6.5}
         \begin{verbatim}
-DELETE{ ?tm rr:predicateObjectMap  ?pom. 
-  ?pom rr:predicateMap ?pm;
-  rr:objectMap ?om; rr:graphMap ?gm. }
-INSERT{ ?tm rr:predicateObjectMap [
-      rr:predicateMap ?pm;
-      rr:objectMap ?om; 
-      rr:graphMap ?gm; ]. }
-WHERE{ ?tm rr:predicateObjectMap  ?pom. 
-  ?pom rr:predicateMap ?pm. 
-  ?pom rr:objectMap ?om. 
-  OPTIONAL {?pom rr:graphMap ?gm.} } 
+DELETE { ?tm rr:predicateObjectMap  ?pom. 
+         ?pom rr:predicateMap ?pm ;
+              rr:objectMap ?om ;  rr:graphMap ?gm }
+INSERT { ?tm rr:predicateObjectMap [
+                     rr:predicateMap ?pm ;
+                     rr:objectMap ?om ; 
+                     rr:graphMap ?gm ] }
+WHERE {    ?tm rr:predicateObjectMap ?pom .
+           ?pom rr:predicateMap ?pm ;
+           ?pom rr:objectMap ?om
+ OPTIONAL {?pom rr:graphMap ?gm} } 
         \end{verbatim}
         }
-        \vspace{-4mm}
+        \vspace{-5mm}
         \QueryLabel{lst:sparql_deduplication}{Normalization step~\ref{item:NormalizationStep:POMDuplication} (duplicate multi-predicate-object maps
             %\ into singleton predicate-object maps%
             \ into singletons%
         ).}
     \end{minipage}
-%
-    \begin{minipage}[t]{\textwidth}
+
+\vspace{-2mm}
 {
 \fontsize{6}{6.5}
 \begin{verbatim}
 DELETE {  ?tm   rr:subject ?sm_constant .   ?pompm rr:predicate ?pm_constant .
           ?termMap rr:graph ?gm_constant .  ?pomom rr:object  ?om_constant .   }
-INSERT { ?tm      rr:subjectMap   [ rr:constant ?sm_constant; ].
-         ?pompm   rr:predicateMap [ rr:constant ?pm_constant; ].
-         ?pomom   rr:objectMap    [ rr:constant ?om_constant; ].
-         ?termMap rr:graphMap     [ rr:constant ?gm_constant; ]. }
+INSERT { ?tm      rr:subjectMap   [ rr:constant ?sm_constant ].
+         ?pompm   rr:predicateMap [ rr:constant ?pm_constant ].
+         ?pomom   rr:objectMap    [ rr:constant ?om_constant ].
+         ?termMap rr:graphMap     [ rr:constant ?gm_constant ]. }
 WHERE { { ?tm      rr:subject   ?sm_constant }
   UNION { ?pompm   rr:predicate ?pm_constant }
   UNION { ?pomom   rr:object    ?om_constant }
   UNION { ?termMap rr:graph     ?gm_constant }  }
 \end{verbatim}
 }
+\vspace{-2mm}
 \QueryLabel{lst:sparql_shortcut}{Normalization step~\ref{item:NormalizationStep:ConstantsExpansion} (expand shortcuts for constant-valued term maps).}
-    \end{minipage}
 
+\vspace{2mm}
+\noindent
+    \begin{minipage}[t]{0.55\textwidth}
+{
+\fontsize{6}{6.5}
+\begin{verbatim}
+DELETE { ?om rr:parentTriplesMap ?ptm }
+INSERT { ?om rr:reference  ?ref ;
+             rr:template ?template; 
+             rr:constant ?const ;
+             rr:termType rr:IRI . }
+WHERE { ?om rr:parentTriplesMap ?ptm .
+        ?ptm rr:subjectMap ?sm . 
+  OPTIONAL{ ?sm rr:reference ?ref }
+  OPTIONAL{ ?sm rr:template ?template }
+  OPTIONAL{ ?sm rr:constant ?const }
+  FILTER NOT EXISTS { ?om rr:joinCondition ?jc } } 
+\end{verbatim}
+}
+\vspace{-3mm}
+\QueryLabel{lst:sparql_selfjoin}{Normalization step~\ref{item:NormalizationStep:JoinRemoval} (replace referencing object maps
+    %that do not have a join condition%
+    without join conditions%
+).}
+    \end{minipage}%
+    \hfill%
     \begin{minipage}[t]{0.4\textwidth}
 {
 \fontsize{6}{6.5}
 \begin{verbatim}
-DELETE{ ?om rr:parentTriplesMap ?ptm .}
-INSERT{ ?om rr:reference  ?ref ;
-    rr:template ?template; 
-    rr:constant ?const ;
-    rr:termType rr:IRI . }
-WHERE{ ?om rr:parentTriplesMap ?ptm .
-?ptm rr:subjectMap ?sm . 
-OPTIONAL{?sm rr:reference ?ref .}
-OPTIONAL{?sm rr:template ?template .}
-OPTIONAL{?sm rr:constant ?const .}
-FILTER NOT EXISTS 
-{?om rr:joinCondition ?jc .} } 
-\end{verbatim}
-}
-\QueryLabel{lst:sparql_selfjoin}{Normalization step~\ref{item:NormalizationStep:JoinRemoval} (replace referencing object maps
-  that do not have a join condition%
-  %without join conditions%
-).}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[t]{0.5\textwidth}
-{
-\fontsize{6}{6.5}
-\begin{verbatim}
-DELETE{ ?tm a rr:TriplesMap ;
-            rml:logicalSource ?ls ;
+DELETE { ?tm rdf:type rr:TriplesMap ;
+             rml:logicalSource ?ls ;
+             rr:subjectMap ?sm ;
+             rr:predicateObjectMap ?pom }
+INSERT { [] rml:logicalSource ?ls ;
+            rr:subjectMap ?sm ; 
+            rr:predicateObjectMap ?pom }
+WHERE { ?tm rml:logicalSource ?ls ;
             rr:subjectMap ?sm ;
-            rr:predicateObjectMap ?pom . }
-INSERT{ [] rml:logicalSource ?ls ;
-           rr:subjectMap ?sm ; 
-           rr:predicateObjectMap ?pom . }
-WHERE{ ?tm rml:logicalSource ?ls ;
-           rr:subjectMap ?sm ;
-           rr:predicateObjectMap ?pom . }
+            rr:predicateObjectMap ?pom }
 \end{verbatim}
 }
-\QueryLabel{lst:sparql_tm_singlepom}{Normalization step~\ref{item:NormalizationStep:TMDuplication1} (duplicate triples maps that contain multiple pred\-i\-cate-ob\-ject maps).}
+\vspace{-3mm}
+\QueryLabel{lst:sparql_tm_singlepom}{Normalization step~\ref{item:NormalizationStep:TMDuplication1} (duplicate triples maps that contain multiple pred.-ob\-ject maps).}
     \end{minipage}
-\vspace{-2mm}
-    \begin{minipage}[t]{0.5\textwidth}
+
+\vspace{2mm}
+\noindent
+    \begin{minipage}[t]{0.55\textwidth}
 {
 \fontsize{6}{6.5}
 \begin{verbatim}
@@ -131,80 +138,67 @@ INSERT { [] rml:logicalSource ?ls ;
                  rr:graphMap ?sm_gm ;
                  rr:graphMap ?pom_gm ] ; 
             rr:predicateObjectMap ?pom .  }
-WHERE { ?tm rml:logicalSource ?ls; 
-            rr:subjectMap ?sm; 
+WHERE { ?tm rml:logicalSource ?ls ; 
+            rr:subjectMap ?sm ; 
             rr:predicateObjectMap ?pom .
         ?pom rr:graphMap ?pom_gm .
-        OPTIONAL { ?sm rr:graphMap ?sm_gm }
-        OPTIONAL { ?sm rr:reference ?ref }
-        OPTIONAL { ?sm rr:template ?template }
-        OPTIONAL { ?sm rr:constant ?const }
-        OPTIONAL { ?sm rr:termType ?ttype }  }
+  OPTIONAL { ?sm rr:graphMap ?sm_gm }
+  OPTIONAL { ?sm rr:reference ?ref }
+  OPTIONAL { ?sm rr:template ?template }
+  OPTIONAL { ?sm rr:constant ?const }
+  OPTIONAL { ?sm rr:termType ?ttype }     }
 \end{verbatim}
 }
-\QueryLabel{lst:sparql_graphmap_norm:1}{Normalization step~\ref{item:NormalizationStep:TMDuplication2}a (duplicate triples maps with subject maps in cases in which the associated pred\-i\-cate-ob\-ject maps may contain multiple graph~maps).}
-    \end{minipage}
-    \hspace{2mm}
-    \begin{minipage}[t]{0.5\textwidth}
+\vspace{-2mm}
+\QueryLabel{lst:sparql_graphmap_norm:1}{Normalization step~\ref{item:NormalizationStep:TMDuplication2}a (duplicate triples maps with subject maps
+    %in cases in which the associated pred\-i\-cate-ob\-ject maps may
+    where the pred\-i\-cate-ob\-ject maps
+contain multiple graph~maps).}
+    \end{minipage}%
+    \hfill%
+    \begin{minipage}[t]{0.4\textwidth}
 {
 \fontsize{6}{6.5}
 \begin{verbatim}
-DELETE { ?sm rr:graphMap ?gm . }
+DELETE { ?sm rr:graphMap ?gm1 . }
 INSERT { [] rml:logicalSource ?ls ;
             rr:subjectMap [
                  rr:reference ?ref ;
                  rr:template ?template ;
                  rr:constant ?const ;
                  rr:termType ?ttype ;
-                 rr:graphMap ?gm ] ;
-            rr:predicateObjectMap ?pom . }
+                 rr:graphMap ?gm1 ] ;
+            rr:predicateObjectMap ?pom }
 WHERE { ?tm rml:logicalSource ?ls ;
             rr:subjectMap ?sm ;
             rr:predicateObjectMap ?pom .
-        ?sm rr:graphMap ?gm , ?gm2 .
-        FILTER ( ?gm != ?gm2 )
-        OPTIONAL { ?sm rr:reference ?ref }
-        OPTIONAL { ?sm rr:template ?template }
-        OPTIONAL { ?sm rr:constant ?const }
-        OPTIONAL { ?sm rr:termType ?ttype }  }
+        ?sm rr:graphMap ?gm1 ;
+            rr:graphMap ?gm2
+        FILTER ( ?gm1 != ?gm2 )
+  OPTIONAL { ?sm rr:reference ?ref }
+  OPTIONAL { ?sm rr:template ?template }
+  OPTIONAL { ?sm rr:constant ?const }
+  OPTIONAL { ?sm rr:termType ?ttype }  }
 \end{verbatim}
 }
+\vspace{-2mm}
 \QueryLabel{lst:sparql_graphmap_norm:2}{Normalization step~\ref{item:NormalizationStep:TMDuplication2}b (duplicate subject maps
-   %that contain multiple graph~maps%
+   that contain multiple graph~maps%
    %containing multiple graph~maps%
-   to contain one graph map%
+   %to contain one graph map%
  ).}
     \end{minipage}
 
-
-% \vspace{-3mm}
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+\vspace{-3mm}
 
 \section{Definition of Relevant Extension Functions} \label{appdx:functions}
 
-% \vspace{-2mm}
+\vspace{-2mm}
 
 For every $v \in (\symTermUniverse \cup \error)$, $\dt \in (\symTermUniverse \cup \error)$, $v'\! \in (\symTermUniverse \cup \error)$, 
 and $\baseIRI \in \symAllIRIs$, we define:
 %
-\begin{equation*}
-	\fctToIRI{v}{\baseIRI} =
-	\begin{cases}
-		\mathit{lex}
-		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is}
-		\\[-1mm]
-		& \text{a valid IRI and $\dt$ is the IRI \ttl{xsd:string},}
-		\\
-		\baseIRI \circ \mathit{lex}
-		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is not}
-		\\[-1mm]
-		& \text{a valid IRI, but $\baseIRI \circ \mathit{lex}$ is a valid IRI, and}
-		\\[-1mm]
-		& \text{$\dt$ is the IRI \ttl{xsd:string},}
-		\\
-		\error
-		& \text{else.}
-	\end{cases}
-\end{equation*}
 \begin{equation*}
 	\fctToBNode{v} =
 	\begin{cases}
@@ -221,8 +215,8 @@ $\dt = \ttl{xsd:string}$%
 		& \text{else.}
 	\end{cases}
 \end{equation*}
-\begin{equation*}
-    \fctToLiteral{v, \dt} = 
+\begin{align*}
+    \fctToLiteral{v, \dt} &= 
     \begin{cases}
         (\lex, \dt) &\text{if $v$ is a literal~$(\lex, \dt')$
 %such that
@@ -233,9 +227,26 @@ $\dt = \ttl{xsd:string}$%
         }, \\
         \error & \text{else.}
     \end{cases}
-\end{equation*}
-\begin{equation*}
-    \fctConcat{v}{v'} = 
+\\
+	\fctToIRI{v}{\baseIRI} &=
+	\begin{cases}
+		\mathit{lex}
+		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is}
+		\\[-1mm]
+		& \text{a valid IRI and $\dt$ is the IRI \ttl{xsd:string},}
+		\\
+		\baseIRI \circ \mathit{lex}
+		& \text{if $v$ is a literal $\literalTuple$ such that $\lex$ is not}
+		\\[-1mm]
+		& \text{a valid IRI, but $\baseIRI \circ \mathit{lex}$ is a valid IRI, and}
+		\\[-1mm]
+		& \text{$\dt$ is the IRI \ttl{xsd:string},}
+		\\
+		\error
+		& \text{else.}
+	\end{cases}
+\\
+    \fctConcat{v}{v'} &= 
     \begin{cases}
         (\lex \circ \lex'\!, \ttl{xsd:string})  &\text{if $v$ and $v'$ are literals $(\lex,\dt)$ and}
 		\\[-1mm]
@@ -250,7 +261,7 @@ $\dt = \ttl{xsd:string}$%
         \error &\text{else,}
 		\\
     \end{cases}
-\end{equation*}
+\end{align*}
 where $\lex \circ \lex'$ is the string obtained from concatenating the strings $\lex$ and~$\lex'\!$.
 
 

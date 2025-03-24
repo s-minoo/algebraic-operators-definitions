@@ -1,8 +1,10 @@
+\vspace{-3mm} % Layout Adjustment
+
 \section{Algebraic Equivalences}%
 \label{sec:equivalences}
 
-\vspace{-1mm} % Layout Adjustment
-\enlargethispage{\baselineskip}%  % Layout Adjustment
+\vspace{-2mm} % Layout Adjustment
+% \enlargethispage{\baselineskip}%  % Layout Adjustment
 
 In addition to providing a basis to formally define the semantics of a mapping language such as RML, our mapping algebra may also be used as a foundation for implementing such languages in mapping tools.
 	More precisely,
@@ -33,10 +35,9 @@ that are not used anymore later in the plan.
 As a typical example of an algebraic equivalence that an optimizer may use for this purpose, consider the following result, which shows that a project operator over an extend-based subexpression may be pushed
 	%completely
 into this subexpression if the set of projection attributes contains both the extend attribute and the attributes mentioned by the corresponding extend expression (if any).%
-\PaperVersion{%
-\footnote{We provide the proof of Proposition~\ref{prop:FullProjectPushing} in Appendix~\ref{appdx:proof}. 
-The following propositions in this section can be shown in the same way.}%
-}
+\footnote{We provide the proof of Proposition~\ref{prop:FullProjectPushing} in Appendix~\ref{appdx:proof}. The following propositions in this section can be shown in the same way.}
+
+\vspace{-1mm} % Layout Adjustment
 
 \begin{proposition}
 	\label{prop:FullProjectPushing}
@@ -59,7 +60,11 @@ The following propositions in this section can be shown in the same way.}%
 	\end{equation*}
 \end{proposition}
 
+\vspace{-1mm} % Layout Adjustment
+
 To satisfy the condition for the equivalence in Proposition~\ref{prop:FullProjectPushing} and, thus, to facilitate projection pushing based on this equivalence, in some cases, it may be necessary to first add another projection with additional projection attributes. The following result shows an equivalence that can be used for this purpose.
+
+\vspace{-1mm} % Layout Adjustment
 
 \begin{proposition}
 	\label{prop:ProjectSplitting}
@@ -77,6 +82,8 @@ To satisfy the condition for the equivalence in Proposition~\ref{prop:FullProjec
 		.
 	\end{equation*}
 \end{proposition}
+
+\vspace{-1mm} % Layout Adjustment
 
 \ExtendedVersion{ %Extended version start
 As a corollary of
@@ -126,6 +133,8 @@ may be removed%
 	, as shown by the following result%
 .
 
+\vspace{-1mm} % Layout Adjustment
+
 \begin{proposition}
 	\label{prop:ProjectionIntoSource}
 	\normalfont
@@ -139,13 +148,16 @@ may be removed%
 	$\symAttrQueryMap$ be a partial function
 	$\symAttrQueryMap \!: \symAttrUniverse  \rightarrow \symDataAcc'$,~%
 	and
-%
-\PaperVersion{%
-\newpage\noindent   % Layout Adjustment
-}%
-%
 	$\symProjSet \subseteq \fctDom{\symAttrQueryMap}$.
-	It holds that%
+	It holds that
+\PaperVersion{%
+$
+		\fctProjectOpBig{\symProjSet}{ \sourceOpDflt }
+		=
+		\sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}
+$,
+}%
+\ExtendedVersion{
 %
 \vspace{-2mm} % Layout Adjustment
 %
@@ -155,6 +167,7 @@ may be removed%
 		\sourceOp{\dataSource}{\queryExpr}{\symAttrQueryMap'}
 \vspace{-2mm} % Layout Adjustment
 	\end{equation*}
+}%
 	where $\symAttrQueryMap'$ is the restriction of $\symAttrQueryMap$ to $\symProjSet$; i.e.,
 		%$\fctDom{\symAttrQueryMap'} = \symProjSet$ and $\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'}$.
 		$\symAttrQueryMap'(\attr) = \symAttrQueryMap(\attr)$ for all $\attr \in \fctDom{\symAttrQueryMap'} = \symProjSet$.
@@ -181,17 +194,24 @@ plan) if its set of projection attributes coincides with the attributes of the i
 		.
 	\end{equation*}
 \end{proposition}
-
+%
 } % Extended version end
 
 
-\vspace{-3mm} % Layout Adjustment
+\vspace{-5mm} % Layout Adjustment
 \enlargethispage{\baselineskip}%  % Layout Adjustment
 
 \subsection{Pushing or Pulling Extend Operators}
 
 \vspace{-1mm} % Layout Adjustment
 
+\PaperVersion{%
+The extended version of this paper shows a second group of equivalences which focus on moving extend operators either on top of a join-based subplan or under the corresponding join operator (i.e., into one of the
+	%two
+inputs of the join)~\cite{ExtendedVersion}.
+}
+\ExtendedVersion{
+%
 For the second group of equivalences that may be useful when optimizing mapping plans, we focus on extend operators that may be placed either on top of a join-based subplan or under the corresponding join operator (i.e., into one of the two inputs of the join).
 \ExtendedVersion{%
 	This decision may affect the efficiency of the plan. For instance, if the mapping relation~$r_1$ in $\fctEquiJoinOpBig{ \fctExtOp{r_1} }{ r_2 }$ contains many tuples but only very few of them have join partners in $r_2$ and, thus, the result of this join consists of a few tuples only, then it would be more efficient to extend only these few tuples instead of extending all tuples of $r_1$, including all the ones that are essentially filtered out by the join. In other words, it would be more efficient to pull the extend operator out of the join. In contrast, however, if most of the tuples in $r_1$ have multiple join partners in $r_2$ and, thus, the result of the join contains many more tuples than $r_1$, then it would be more efficient to apply the extend operator directly to $r_1$ rather than pulling it out of the join. Hence, depending on the selectivity of the join, a plan optimizer may decide to keep an extend operator under a join, to pull it out, or also to push an extend operator that is currently on top of a join into that join. The following result shows an equivalence that can be used for this purpose (in either direction).
@@ -253,4 +273,5 @@ is to swap two subsequent extend operators, as shown by the following result.
 		.
 	\end{equation*}
 \end{proposition}
-
+%
+} % Extended version end

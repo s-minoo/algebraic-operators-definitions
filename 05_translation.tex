@@ -68,6 +68,7 @@ are used, ii)~%
 a join condition, and iii)~every triples map has only a single predicate-object map with a single predicate map, a single object map, and at most one graph map%
 	%~(which may be associated either with the predicate-object map itself or with its object map)%
 .
+\enlargethispage{\baselineskip}%  % Layout Adjustment
 Every RML mapping can be converted into this normal form by applying the following sequence of rewriting steps, which we have adopted from Rodríguez-Muro and Rezk~\cite{Mariano2015SPARQL2SQL}, with adaptations specific to RML.
 While we present these steps informally,
 Appendix~\ref{appdx:queries} captures them formally in terms of update~queries.
@@ -102,7 +103,7 @@ None of these steps changes the meaning of the defined~mapping.
 	\item
 	\label{item:NormalizationStep:TMDuplication2}
 	Every triples map with multiple graph maps is duplicated such that each of the resulting triples maps has one of these graph maps.
-       % \ExtendedVersion{(Listing~\ref{lst:sparql_graphmap_norm})}
+       % \ExtendedVersion{(Listings~\ref{lst:sparql_graphmap_norm:1} and~\ref{lst:sparql_graphmap_norm:2})}
 \end{enumerate}
 
 % \smallskip
@@ -133,26 +134,26 @@ abstract the creation of these two parameters by the following function.
 	$\textsc{SrcAndRootQuery}(\triplesMapIRI_\mathsf{tm},\symRMLGraph)$ is a pair $(\dataSource, \queryExpr)$ of a data source $\dataSource = \dataSourceTuple$ with $\sourceType = \sourceTypeTuple$ and a query expression~$\queryExpr \in \symDataAcc$, as extracted from the description of the logical source of $\triplesMapIRI_\mathsf{tm}$~in~$\symRMLGraph$.
 \end{definition}
 
-\counterwithout{lstlisting}{chapter}
-\begin{lstlisting}[%
-	belowskip=-0.9 \baselineskip,  % Layout Adjustment
-	language=rdf,
-	caption={RML mapping with
-		%a single
-		one
-	triples map (written in Turtle, prefix decl.\ omitted).},
-	label={lst:rml_example},
-	float=t%
-]
-ex:tm rml:logicalSource [ rml:source "data.csv";
-                          rml:referenceFormulation ql:CSV ];
-      rr:subjectMap [ rr:template "http://example.com/person_{ID}";
-                      rr:termType rr:IRI ];
-      rr:predicateObjectMap [ rr:predicate rdfs:label;
-                              rr:objectMap [rml:reference "Name"] ].
-\end{lstlisting}
+% \counterwithout{lstlisting}{chapter}
+% \begin{lstlisting}[%
+% 	belowskip=-0.9 \baselineskip,  % Layout Adjustment
+% 	language=rdf,
+% 	caption={RML mapping with
+% 		%a single
+% 		one
+% 	triples map (written in Turtle, prefix decl.\ omitted).},
+% 	label={lst:rml_example},
+% 	float=t%
+% ]
+% ex:tm rml:logicalSource [ rml:source "data.csv";
+%                           rml:referenceFormulation ql:CSV ];
+%       rr:subjectMap [ rr:template "http://example.com/person_{ID}";
+%                       rr:termType rr:IRI ];
+%       rr:predicateObjectMap [ rr:predicate rdfs:label;
+%                               rr:objectMap [rml:reference "Name"] ].
+% \end{lstlisting}
 
-\enlargethispage{\baselineskip}%  % Layout Adjustment
+% \enlargethispage{\baselineskip}%  % Layout Adjustment
 \vspace{-2mm} % Layout Adjustment
 
 \begin{example}
@@ -163,17 +164,17 @@ ex:tm rml:logicalSource [ rml:source "data.csv";
 		%describes an RML mapping including
 		contains
 	the
-		%following triples.
-		%\begin{align*}
-		%	& \quad (\ttl{ex:tm}, \, \ttl{rml:logicalSource}, \, \ttl{ex:ls}) \in \symRMLGraph_\mathsf{ex}
-		%	\\
-		%	&(\ttl{ex:ls}, \, \ttl{rml:source}, \, \ttl{"data.csv"}) \in \symRMLGraph_\mathsf{ex}
-		%	\\
-		%	&(\ttl{ex:ls}, \, \ttl{rml:referenceFormulation}, \, \ttl{ql:CSV}) \in \symRMLGraph_\mathsf{ex}
-		%\end{align*}
-		%Then%
-		RML mapping of Listing~\ref{lst:rml_example}%
+		%RML mapping of Listing~\ref{lst:rml_example}%
+		following RML mapping%
 	, $\textsc{SrcAndRootQuery}(\ttl{ex:tm},\symRMLGraph_\mathsf{ex}) = (\dataSource_\mathsf{ex}', \varepsilon)$ where $\dataSource_\mathsf{ex}' = (\sourceTypeX{\mathsf{csv}},\bigDataObject_\mathsf{ex}')$ such that $\sourceTypeX{\mathsf{csv}}$ is the source type for CSV-based data sources (cf.\ Example~\ref{ex:source_type_csv}), $\bigDataObject_\mathsf{ex}'$ is the CSV file mentioned in the second triple, and $\varepsilon$ is the empty string.
+	{\scriptsize%
+	\begin{verbatim}
+ex:tm rml:logicalSource [ rml:source "data.csv";  rml:referenceFormulation ql:CSV ];
+      rr:subjectMap [ rr:template "http://example.com/person_{ID}";  rr:termType rr:IRI ];
+      rr:predicateObjectMap [ rr:predicate rdfs:label;
+                              rr:objectMap [rml:reference "Name"] ].
+	\end{verbatim}%
+	}
 \end{example}
 
 The third parameter for the source operator---the
@@ -231,13 +232,19 @@ subgraph of the given RDF graph (line~\ref{line:query_extraction:subgraph} of Al
 	\end{enumerate}
 \end{definition}
 
+\vspace{-3mm} % Layout Adjustment
+
 \begin{example}
 	\label{ex:ExtractQueries}
-	For the RDF graph $\symRMLGraph_\mathsf{ex}$ that contains the RML mapping of Listing~\ref{lst:rml_example},
+	For the RDF graph $\symRMLGraph_\mathsf{ex}$ that contains the RML mapping of
+		%Listing~\ref{lst:rml_example},
+		Example~\ref{ex:initSrcAndRootQuery},
 	$\textsc{ExtractQueries}(\ttl{ex:tm},\symRMLGraph_\mathsf{ex})$ returns $\symAttrQueryMap = \{ \attr_1 \rightarrow \textsf{\small ID}, \attr_2 \rightarrow \textsf{\small Name} \}$,
 	where $\attr_1$ and $\attr_2$ are arbitrary attributes such that $\attr_1 \neq \attr_2$ and $\attr_1, \attr_2 \notin \{ \subjAttr, \predAttr, \objAttr, \graphAttr \}$.
 \end{example}
 
+\enlargethispage{\baselineskip}%  % Layout Adjustment
+\vspace{-1mm} % Layout Adjustment
 
 % The source operator constructed for the triples map in this step creates a mapping relation with values obtained via the extracted query expressions (along the lines of Example~\ref{ex:source_operator}). This relation can now be extended by using these values to create the RDF terms defined by the term maps of the triples map.
 % \smallskip
@@ -289,11 +296,12 @@ term map is constant-val\-ued
 	(line~\ref{line:rml_termmap_extend_expr:from_constant_begin}%
 %
 	%\ of Algorithm~\ref{alg:rml_termmap_extend_expr}%
-), reference-val\-ued (lines~\ref{line:rml_termmap_extend_expr:from_reference_begin}--\ref{line:rml_termmap_extend_expr:from_reference_end}), or template-val\-ued (lines~\ref{line:rml_termmap_extend_expr:from_template_begin}--\ref{line:rml_termmap_extend_expr:from_template_end}). In the latter case, the extend expression needs to
-	%be created such that its evaluation instantiates
-	be created such that it instantiates
-	%instantiate
-the corresponding template string. To this end, this string is first split into a sequence of substrings (line~\ref{line:rml_termmap_extend_expr:split_template}), defined as follows.
+), reference-val\-ued (lines~\ref{line:rml_termmap_extend_expr:from_reference_begin}--\ref{line:rml_termmap_extend_expr:from_reference_end}), or template-val\-ued (lines~\ref{line:rml_termmap_extend_expr:from_template_begin}--\ref{line:rml_termmap_extend_expr:from_template_end}). In the latter case,
+	%%the extend expression needs to be created such that its evaluation instantiates the corresponding template string. To this end, this string
+	\ExtendedVersion{the extend expression needs to be created such that it instantiates the corresponding template string. To this end, this string}
+	%%the extend expression needs to instantiate the corresponding template string. To this end, this string
+	\PaperVersion{the corresponding template string}
+is first split into a sequence of substrings (line~\ref{line:rml_termmap_extend_expr:split_template}), defined as follows.
 
 \enlargethispage{\baselineskip}%  % Layout Adjustment
 \vspace{-1mm} % Layout Adjustment
@@ -359,7 +367,9 @@ $q$.
 	\label{ex:rml_termmap_extend_expr}
 	Assume
 		%$\symRMLGraph_\mathsf{ex}$ is the RDF graph in Listing~\ref{lst:rml_example}, $b_\mathsf{sm}$ and $b_\mathsf{om}$ are the blank nodes that denote the subject map and the object map in this graph, respectively,
-		$b_\mathsf{sm}$ and $b_\mathsf{om}$ are the blank nodes denoting the subject map and the object map in RDF graph~$\symRMLGraph_\mathsf{ex}$ in Listing~\ref{lst:rml_example}, respectively,
+		$b_\mathsf{sm}$ and $b_\mathsf{om}$ are the blank nodes denoting the subject map and the object map in RDF graph~$\symRMLGraph_\mathsf{ex}$ in
+			%Listing~\ref{lst:rml_example}, respectively,
+			Example~\ref{ex:initSrcAndRootQuery}, respectively,
 	%
 		$\baseIRI$ is an arbitrary base IRI,
 	and
